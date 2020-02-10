@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {SafeAreaView, View} from 'react-native';
-import {BottomNavigation, Icon} from 'react-native-material-ui';
+import {BottomNavigation, Icon, Badge} from 'react-native-material-ui';
 import AuthComponent from '../Login';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import ImportAd from '../ImportAd';
@@ -133,7 +133,12 @@ const MainContainer = props => {
             },
           }}
           key="grade"
-          icon={<Icon name="grade" size={30} />}
+          icon={
+            <>
+              <Icon name="grade" size={30} />
+              <Badge text="3" />
+            </>
+          }
           active={activeView === 'grade'}
           //   label="Lotteries"
           onPress={handlePress('grade')}
@@ -154,7 +159,12 @@ const MainContainer = props => {
             },
           }}
           key="profile"
-          icon={<Icon name="account-circle" size={30} />}
+          icon={
+            <>
+              <Icon name="account-circle" size={30} />
+              <Badge text="3" />
+            </>
+          }
           active={activeView === 'profile'}
           //   label="Settings"
           onPress={handlePress('profile')}

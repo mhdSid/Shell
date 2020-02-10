@@ -1,5 +1,12 @@
 import React, {useState, useEffect, createRef} from 'react';
-import {View, Picker, ScrollView, Text, Image} from 'react-native';
+import {
+  View,
+  Picker,
+  ScrollView,
+  Text,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
@@ -14,6 +21,7 @@ import {
   currencies,
 } from '../../Constants/Countries';
 import {adStatuses, adCategories} from '../../Constants/Ads';
+import isUndefined from 'lodash/isUndefined';
 
 const adImages = [0, 1, 2, 3, 4];
 const adTypes = {};
@@ -89,6 +97,14 @@ const ImportAd = props => {
   const navigateToAuth = () => {
     navigate('profile')();
   };
+
+  if (isUndefined(_loggedIn) && isUndefined(user)) {
+    return (
+      <View style={sharedStyles.loading}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
 
   if (!loggedIn && !user) {
     return (

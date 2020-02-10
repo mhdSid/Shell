@@ -88,7 +88,7 @@ const AuthComponent = props => {
   const handleError = error => {
     const message =
       (error && error.message) || 'A an error has occured. Please try again.';
-    invoke(props, 'logout');
+    invoke(props, 'logout', {loggedIn: false, user: false});
     setLoggedIn(false);
     setLoading(false);
     setVerificationId(undefined);
@@ -281,7 +281,8 @@ const AuthComponent = props => {
 
         console.log('handleLogout should be loggedout');
 
-        invoke(props, 'logout');
+        invoke(props, 'logout', {loggedIn: false, user: false});
+
         setLoggedIn(false);
         setLoading(false);
       },
@@ -634,7 +635,7 @@ const mapStateToProps = ({authReducer}) => {
 const mapDispatchToProps = dispatch => {
   return {
     login: payload => dispatch(loginAction(payload)),
-    logout: () => dispatch(logoutAction()),
+    logout: payload => dispatch(logoutAction(payload)),
   };
 };
 
