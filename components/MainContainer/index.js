@@ -1,0 +1,167 @@
+import React, {useState} from 'react';
+import {SafeAreaView, View} from 'react-native';
+import {BottomNavigation, Icon} from 'react-native-material-ui';
+import AuthComponent from '../Login';
+import sharedStyles from '../../assets/styles/sharedStyles';
+import ImportAd from '../ImportAd';
+import SearchComponent from '../Search';
+import HomeComponent from '../Home';
+let navigate;
+
+const MainContainer = props => {
+  const [activeView, setActiveView] = useState('home');
+
+  const handlePress = type => {
+    return () => {
+      setActiveView(type);
+    };
+  };
+
+  navigate = handlePress;
+
+  return (
+    <>
+      {/* <Toolbar
+        leftElement="arrow-back"
+        onLeftElementPress={() => this.props.navigation.goBack()}
+        centerElement="Bottom navigation"
+      /> */}
+      <SafeAreaView style={sharedStyles.container}>
+        {activeView !== 'profile' &&
+          activeView !== 'add-circle-outline' &&
+          activeView !== 'search' &&
+          activeView !== 'home' && (
+            <View style={sharedStyles.innerContainer}>
+              <Icon name={activeView} size={54} />
+            </View>
+          )}
+
+        {activeView === 'profile' && <AuthComponent />}
+        {activeView === 'home' && <HomeComponent />}
+        {activeView === 'search' && <SearchComponent />}
+        {activeView === 'add-circle-outline' && <ImportAd {...props} />}
+      </SafeAreaView>
+      <BottomNavigation
+        active={activeView}
+        style={{
+          container: {
+            padding: 0,
+            margin: 0,
+            shadowOpacity: 0,
+            borderTopWidth: 0.5,
+          },
+        }}>
+        <BottomNavigation.Action
+          style={{
+            container: {
+              paddingBottom: 12,
+              paddingTop: 12,
+              paddingLeft: 0,
+              paddingRight: 0,
+            },
+            icon: {
+              color: activeView === 'home' ? '#b69cf6' : '#d8d8d8',
+            },
+            label: {
+              color: activeView === 'home' ? '#b69cf6' : '#d8d8d8',
+              display: 'none',
+            },
+          }}
+          // key="home"
+          icon={<Icon name="home" size={30} />}
+          active={activeView === 'home'}
+          //   label="Home"
+          onPress={handlePress('home')}
+        />
+        <BottomNavigation.Action
+          style={{
+            container: {
+              paddingBottom: 12,
+              paddingTop: 12,
+              paddingLeft: 0,
+              paddingRight: 0,
+            },
+            icon: {
+              color: activeView === 'search' ? '#b69cf6' : '#d8d8d8',
+            },
+            label: {
+              color: activeView === 'search' ? '#b69cf6' : '#d8d8d8',
+            },
+          }}
+          key="search"
+          icon={<Icon name="search" size={30} />}
+          active={activeView === 'search'}
+          //   label="Home"
+          onPress={handlePress('search')}
+        />
+        <BottomNavigation.Action
+          style={{
+            container: {
+              paddingBottom: 5,
+              paddingTop: 5,
+              paddingLeft: 0,
+              paddingRight: 0,
+            },
+            icon: {
+              color:
+                activeView === 'add-circle-outline' ? '#b69cf6' : '#d8d8d8',
+            },
+            label: {
+              color:
+                activeView === 'add-circle-outline' ? '#b69cf6' : '#d8d8d8',
+            },
+          }}
+          key="add-circle-outline"
+          icon={<Icon name="add-circle-outline" size={40} />}
+          active={activeView === 'add-circle-outline'}
+          //   label="Add"
+          onPress={handlePress('add-circle-outline')}
+        />
+        <BottomNavigation.Action
+          style={{
+            container: {
+              paddingBottom: 12,
+              paddingTop: 12,
+              paddingLeft: 0,
+              paddingRight: 0,
+            },
+            icon: {
+              color: activeView === 'grade' ? '#b69cf6' : '#d8d8d8',
+            },
+            label: {
+              color: activeView === 'grade' ? '#b69cf6' : '#d8d8d8',
+            },
+          }}
+          key="grade"
+          icon={<Icon name="grade" size={30} />}
+          active={activeView === 'grade'}
+          //   label="Lotteries"
+          onPress={handlePress('grade')}
+        />
+        <BottomNavigation.Action
+          style={{
+            container: {
+              paddingBottom: 12,
+              paddingTop: 12,
+              paddingLeft: 0,
+              paddingRight: 0,
+            },
+            icon: {
+              color: activeView === 'profile' ? '#b69cf6' : '#d8d8d8',
+            },
+            label: {
+              color: activeView === 'profile' ? '#b69cf6' : '#d8d8d8',
+            },
+          }}
+          key="profile"
+          icon={<Icon name="account-circle" size={30} />}
+          active={activeView === 'profile'}
+          //   label="Settings"
+          onPress={handlePress('profile')}
+        />
+      </BottomNavigation>
+    </>
+  );
+};
+
+export {MainContainer, navigate};

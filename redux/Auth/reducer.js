@@ -1,0 +1,35 @@
+import {authActions} from './actions';
+
+const initialState = {
+  loggedIn: undefined,
+  user: undefined,
+  country: 'LB',
+};
+
+const authReducer = (state = initialState, action) => {
+  console.log('authReducer: ', action);
+
+  switch (action.type) {
+    case authActions.LOGIN: {
+      return {
+        ...state,
+        ...action.payload,
+      };
+    }
+
+    case authActions.LOGOUT: {
+      return {
+        ...initialState,
+        ...action.payload,
+      };
+    }
+
+    default: {
+      return {
+        ...initialState,
+      };
+    }
+  }
+};
+
+export default authReducer;
