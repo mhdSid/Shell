@@ -24,6 +24,10 @@ const sharedStyles = StyleSheet.create({
     backgroundColor: '#000000',
     opacity: 0.2,
   },
+  pickerView: {
+    width: '70%',
+    alignSelf: 'center',
+  },
   // authContainer: {
   //   justifyContent: 'center',
   // },

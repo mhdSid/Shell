@@ -36,10 +36,12 @@ const AuthComponent = props => {
   const [showSettings, setShowSettings] = useState(false);
 
   const [year, setYear] = useState('2020');
-  const [month, setMonth] = useState('12');
+  const [month, setMonth] = useState('April');
   const [day, setDay] = useState('31');
   const [gender, setGender] = useState('Male');
-  const [country, setCountry] = useState(countryCodeList[serverCountryCode]);
+  const [country, setCountry] = useState(
+    (user && user.country) || countryCodeList[serverCountryCode],
+  );
   const [perfecture, setPerfecture] = useState(
     perfecturesList[countryCodeList[serverCountryCode]],
   );
@@ -415,32 +417,36 @@ const AuthComponent = props => {
           </View>
 
           <Text style={sharedStyles.label}>Country</Text>
-          <Picker
-            mode="dropdown"
-            selectedValue={country}
-            // style={sharedStyles.dobViewItem}
-            onValueChange={updateCountry}>
-            {countries.map((_country, index) => (
-              <Picker.Item key={index} label={_country} value={_country} />
-            ))}
-          </Picker>
+          <View style={sharedStyles.pickerView}>
+            <Picker
+              mode="dropdown"
+              selectedValue={country}
+              // style={sharedStyles.dobViewItem}
+              onValueChange={updateCountry}>
+              {countries.map((_country, index) => (
+                <Picker.Item key={index} label={_country} value={_country} />
+              ))}
+            </Picker>
+          </View>
 
           {perfecture && (
             <>
               <Text style={sharedStyles.label}>Perfecture</Text>
-              <Picker
-                mode="dropdown"
-                selectedValue={perfecture}
-                // style={sharedStyles.dobViewItem}
-                onValueChange={updatePerfecture}>
-                {perfectures[country].map((_perfecture, index) => (
-                  <Picker.Item
-                    key={index}
-                    label={_perfecture}
-                    value={_perfecture}
-                  />
-                ))}
-              </Picker>
+              <View style={sharedStyles.pickerView}>
+                <Picker
+                  mode="dropdown"
+                  selectedValue={perfecture}
+                  // style={sharedStyles.dobViewItem}
+                  onValueChange={updatePerfecture}>
+                  {perfectures[country].map((_perfecture, index) => (
+                    <Picker.Item
+                      key={index}
+                      label={_perfecture}
+                      value={_perfecture}
+                    />
+                  ))}
+                </Picker>
+              </View>
             </>
           )}
 

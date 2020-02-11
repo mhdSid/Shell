@@ -1,0 +1,142 @@
+const ENTRIES1 = [
+  {
+    title: 'Beautiful and dramatic Antelope Canyon',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+    illustration: 'https://i.imgur.com/UYiroysl.jpg',
+    id: 'a1',
+  },
+  {
+    title: 'Earlier this morning, NYC',
+    subtitle: 'Lorem ipsum dolor sit amet',
+    illustration: 'https://i.imgur.com/UPrs1EWl.jpg',
+    id: 'a2',
+  },
+  {
+    title: 'White Pocket Sunset',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
+    illustration: 'https://i.imgur.com/MABUbpDl.jpg',
+    id: 'a3',
+  },
+  {
+    title: 'Acrocorinth, Greece',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+    illustration: 'https://i.imgur.com/KZsmUi2l.jpg',
+    id: 'a4',
+  },
+  {
+    title: 'The lone tree, majestic landscape of New Zealand',
+    subtitle: 'Lorem ipsum dolor sit amet',
+    illustration: 'https://i.imgur.com/2nCt3Sbl.jpg',
+    id: 'a5',
+  },
+  {
+    title: 'Middle Earth, Germany',
+    subtitle: 'Lorem ipsum dolor sit amet',
+    illustration: 'https://i.imgur.com/lceHsT6l.jpg',
+    id: 'a6',
+  },
+  {
+    title: 'Favourites landscapes 1',
+    subtitle: 'Lorem ipsum dolor sit amet',
+    illustration: 'https://i.imgur.com/SsJmZ9jl.jpg',
+    id: 'a7',
+  },
+  {
+    title: 'Favourites landscapes 2',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+    illustration: 'https://i.imgur.com/5tj6S7Ol.jpg',
+    id: 'a8',
+  },
+  {
+    title: 'Favourites landscapes 3',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat',
+    illustration: 'https://i.imgur.com/pmSqIFZl.jpg',
+    id: 'a9',
+  },
+  {
+    title: 'Favourites landscapes 4',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+    illustration: 'https://i.imgur.com/cA8zoGel.jpg',
+    id: 'a10',
+  },
+  {
+    title: 'Favourites landscapes 5',
+    subtitle: 'Lorem ipsum dolor sit amet',
+    illustration: 'https://i.imgur.com/pewusMzl.jpg',
+    id: 'a11',
+  },
+  {
+    title: 'Favourites landscapes 6',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat',
+    illustration: 'https://i.imgur.com/l49aYS3l.jpg',
+    id: 'a12',
+  },
+  {
+    title: 'Favourites landscapes 1',
+    subtitle: 'Lorem ipsum dolor sit amet',
+    illustration: 'https://i.imgur.com/SsJmZ9jl.jpg',
+    id: 'a13',
+  },
+  {
+    title: 'Favourites landscapes 2',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+    illustration: 'https://i.imgur.com/5tj6S7Ol.jpg',
+    id: 'a14',
+  },
+  {
+    title: 'Favourites landscapes 3',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat',
+    illustration: 'https://i.imgur.com/pmSqIFZl.jpg',
+    id: 'a15',
+  },
+  {
+    title: 'Favourites landscapes 4',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+    illustration: 'https://i.imgur.com/cA8zoGel.jpg',
+    id: 'a16',
+  },
+  {
+    title: 'Favourites landscapes 5',
+    subtitle: 'Lorem ipsum dolor sit amet',
+    illustration: 'https://i.imgur.com/pewusMzl.jpg',
+    id: 'a17',
+  },
+  {
+    title: 'Favourites landscapes 6',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat',
+    illustration: 'https://i.imgur.com/l49aYS3l.jpg',
+    id: 'a18',
+  },
+  {
+    title: 'Favourites landscapes 1',
+    subtitle: 'Lorem ipsum dolor sit amet',
+    illustration: 'https://i.imgur.com/SsJmZ9jl.jpg',
+    id: 'a19',
+  },
+  {
+    title: 'Favourites landscapes 2',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+    illustration: 'https://i.imgur.com/5tj6S7Ol.jpg',
+    id: 'a20',
+  },
+  {
+    title: 'Favourites landscapes 3',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat',
+    illustration: 'https://i.imgur.com/pmSqIFZl.jpg',
+    id: 'a21',
+  },
+  {
+    title: 'Favourites landscapes 4',
+    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+    illustration: 'https://i.imgur.com/cA8zoGel.jpg',
+    id: 'a22',
+  },
+  {
+    title: 'Favourites landscapes 5',
+    subtitle: 'Lorem ipsum dolor sit amet',
+    illustration: 'https://i.imgur.com/pewusMzl.jpg',
+    id: '23a',
+  },
+];
+
+export {ENTRIES1};

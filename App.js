@@ -5,8 +5,9 @@ import {Provider} from 'react-redux';
 import {store, persistor} from './redux/store';
 import sharedStyles from './assets/styles/sharedStyles';
 import Pinger from './components/Pinger';
-import {MainContainer} from './components/MainContainer';
+import MainContainer from './components/MainContainer';
 import {ThemeContext, getTheme} from 'react-native-material-ui'; // COLOR,
+import Loading from './components/Loading';
 
 const uiTheme = {
   palette: {
@@ -70,11 +71,6 @@ const uiTheme = {
 };
 
 const App = () => {
-  const Loading = (
-    <SafeAreaView style={sharedStyles.loading}>
-      <ActivityIndicator />
-    </SafeAreaView>
-  );
   return (
     <ThemeContext.Provider value={getTheme(uiTheme)}>
       <Provider store={store}>

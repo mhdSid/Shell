@@ -6,9 +6,13 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import ImportAd from '../ImportAd';
 import SearchComponent from '../Search';
 import HomeComponent from '../Home';
-let navigate;
+import Lotteries from '../Lotteries';
+import {connect} from 'react-redux';
+export let navigate;
 
 const MainContainer = props => {
+  const {user, loggedIn} = props;
+
   const [activeView, setActiveView] = useState('home');
 
   const handlePress = type => {
@@ -27,15 +31,7 @@ const MainContainer = props => {
         centerElement="Bottom navigation"
       /> */}
       <SafeAreaView style={sharedStyles.container}>
-        {activeView !== 'profile' &&
-          activeView !== 'add-circle-outline' &&
-          activeView !== 'search' &&
-          activeView !== 'home' && (
-            <View style={sharedStyles.innerContainer}>
-              <Icon name={activeView} size={54} />
-            </View>
-          )}
-
+        {activeView === 'grade' && <Lotteries />}
         {activeView === 'profile' && <AuthComponent />}
         {activeView === 'home' && <HomeComponent />}
         {activeView === 'search' && <SearchComponent />}
@@ -56,7 +52,7 @@ const MainContainer = props => {
             container: {
               paddingBottom: 12,
               paddingTop: 12,
-              paddingLeft: 0,
+              paddingLeft: 10,
               paddingRight: 0,
             },
             icon: {
@@ -134,10 +130,14 @@ const MainContainer = props => {
           }}
           key="grade"
           icon={
-            <>
+            loggedIn === true && user ? (
+              <>
+                <Icon name="grade" size={30} />
+                <Badge text="3" />
+              </>
+            ) : (
               <Icon name="grade" size={30} />
-              <Badge text="3" />
-            </>
+            )
           }
           active={activeView === 'grade'}
           //   label="Lotteries"
@@ -149,7 +149,7 @@ const MainContainer = props => {
               paddingBottom: 12,
               paddingTop: 12,
               paddingLeft: 0,
-              paddingRight: 0,
+              paddingRight: 10,
             },
             icon: {
               color: activeView === 'profile' ? '#b69cf6' : '#d8d8d8',
@@ -160,10 +160,14 @@ const MainContainer = props => {
           }}
           key="profile"
           icon={
-            <>
+            loggedIn === true && user ? (
+              <>
+                <Icon name="account-circle" size={30} />
+                <Badge text="3" />
+              </>
+            ) : (
               <Icon name="account-circle" size={30} />
-              <Badge text="3" />
-            </>
+            )
           }
           active={activeView === 'profile'}
           //   label="Settings"
@@ -174,4 +178,16 @@ const MainContainer = props => {
   );
 };
 
-export {MainContainer, navigate};
+const mapStateToProps = ({authReducer}) => {
+  return {
+    loggedIn: authReducer.loggedIn,
+    user: authReducer.user,
+  };
+};
+
+const mapDispatchToProps = () => {
+  return {};
+};
+
+// eslint-disable-next-line prettier/prettier
+export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);

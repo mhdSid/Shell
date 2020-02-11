@@ -10,7 +10,7 @@ const SearchComponent = () => {
         },
       }}
       // leftElement="menu"
-      centerElement="Search For Ads"
+      centerElement="Search"
       searchable={{
         autoFocus: true,
         placeholder: 'Search',

@@ -13,7 +13,6 @@ import {connect} from 'react-redux';
 import {Button, RadioButton, Card, Icon} from 'react-native-material-ui';
 import {TextField} from 'react-native-material-textfield';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {navigate} from '../MainContainer';
 import ImagePicker from 'react-native-image-picker';
 import {
   perfectures,
@@ -22,6 +21,8 @@ import {
 } from '../../Constants/Countries';
 import {adStatuses, adCategories} from '../../Constants/Ads';
 import isUndefined from 'lodash/isUndefined';
+import NoAuth from '../NoAuth';
+import Loading from '../Loading';
 
 const adImages = [0, 1, 2, 3, 4];
 const adTypes = {};
@@ -94,38 +95,12 @@ const ImportAd = props => {
     };
   };
 
-  const navigateToAuth = () => {
-    navigate('profile')();
-  };
-
   if (isUndefined(_loggedIn) && isUndefined(user)) {
-    return (
-      <View style={sharedStyles.loading}>
-        <ActivityIndicator />
-      </View>
-    );
+    return <Loading />;
   }
 
   if (!loggedIn && !user) {
-    return (
-      <View
-        style={[
-          sharedStyles.importAdContainerNoAuth,
-          sharedStyles.importAdNoAuthContainer,
-        ]}>
-        <Text style={sharedStyles.label}>
-          Please login or signup to add new item
-        </Text>
-        <View style={sharedStyles.loginBtn}>
-          <Button
-            raised={true}
-            primary
-            text={'Login/Signup'}
-            onPress={navigateToAuth}
-          />
-        </View>
-      </View>
-    );
+    return <NoAuth />;
   }
 
   if (loggedIn === true && user) {
@@ -183,29 +158,33 @@ const ImportAd = props => {
           </View>
 
           <Text style={sharedStyles.label}>Perfecture</Text>
-          <Picker
-            mode="dropdown"
-            selectedValue={perfecture}
-            // style={sharedStyles.dobViewItem}
-            onValueChange={updatePerfecture}>
-            {perfectures[userCountry].map((_perfecture, index) => (
-              <Picker.Item
-                key={index}
-                label={_perfecture}
-                value={_perfecture}
-              />
-            ))}
-          </Picker>
+          <View style={sharedStyles.pickerView}>
+            <Picker
+              mode="dropdown"
+              selectedValue={perfecture}
+              // style={sharedStyles.dobViewItem}
+              onValueChange={updatePerfecture}>
+              {perfectures[userCountry].map((_perfecture, index) => (
+                <Picker.Item
+                  key={index}
+                  label={_perfecture}
+                  value={_perfecture}
+                />
+              ))}
+            </Picker>
+          </View>
 
           <Text style={sharedStyles.label}>Category</Text>
-          <Picker
-            mode="dropdown"
-            selectedValue={adCategory}
-            onValueChange={updateAdCategory}>
-            {adCategories.map((_category, index) => (
-              <Picker.Item key={index} label={_category} value={_category} />
-            ))}
-          </Picker>
+          <View style={sharedStyles.pickerView}>
+            <Picker
+              mode="dropdown"
+              selectedValue={adCategory}
+              onValueChange={updateAdCategory}>
+              {adCategories.map((_category, index) => (
+                <Picker.Item key={index} label={_category} value={_category} />
+              ))}
+            </Picker>
+          </View>
 
           {/* {adType && (
             <>
@@ -226,14 +205,16 @@ const ImportAd = props => {
           )} */}
 
           <Text style={sharedStyles.label}>Status</Text>
-          <Picker
-            mode="dropdown"
-            selectedValue={adStatus}
-            onValueChange={updateAdStatus}>
-            {adStatuses.map((_status, index) => (
-              <Picker.Item key={index} label={_status} value={_status} />
-            ))}
-          </Picker>
+          <View style={sharedStyles.pickerView}>
+            <Picker
+              mode="dropdown"
+              selectedValue={adStatus}
+              onValueChange={updateAdStatus}>
+              {adStatuses.map((_status, index) => (
+                <Picker.Item key={index} label={_status} value={_status} />
+              ))}
+            </Picker>
+          </View>
 
           <View style={sharedStyles.mobileContainer}>
             <Text style={sharedStyles.label}>Price</Text>
