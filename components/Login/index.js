@@ -1,17 +1,17 @@
 import React, {createRef, useState, useEffect} from 'react';
 import invoke from 'lodash/invoke';
-import {View, Picker, ScrollView, Text, ActivityIndicator} from 'react-native';
+import {
+  View,
+  Picker,
+  ScrollView,
+  Text,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {TextField} from 'react-native-material-textfield';
-import {
-  Button,
-  RadioButton,
-  Drawer,
-  Avatar,
-  Dialog,
-  DialogDefaultActions,
-} from 'react-native-material-ui';
+import {Button, RadioButton, Drawer, Avatar} from 'react-native-material-ui';
 import {login, logout, verify, signup} from '../../services/auth';
 import {loginAction, logoutAction} from '../../redux/Auth/actions';
 import sharedStyles from '../../assets/styles/sharedStyles';
@@ -97,9 +97,56 @@ const AuthComponent = props => {
     // setUser(null);
 
     if (message) {
-      alert(message);
+      Alert.alert(message);
     }
     return;
+  };
+
+  /*
+   * First submit Handler
+   */
+  const onSubmitSuccess = (email, password) => {
+    return data => {
+      const {error, user: authUser} = data;
+      if (error) {
+        return handleError(error);
+      }
+      const {
+        verificationId: _verificationId,
+        emailVerified,
+        signedUp,
+        email: __email,
+        password: __password,
+      } = authUser;
+
+      // should should confirmation button and go to sign up screen afterwards
+      if (emailVerified === false && _verificationId) {
+        setEmail(email);
+        setPassword(password);
+        setLoading(false);
+        // show confirmation button and request to /authenticate/email/verify with email and password again and verification id
+        setVerificationId(_verificationId);
+      }
+      // user exists in the database and can login normally
+      else if (emailVerified === true && _verificationId) {
+        if (signedUp === false) {
+          setVerificationId(_verificationId);
+          setShowSignup(true);
+          setEmail(__email);
+          setPassword(__password);
+          setLoading(false);
+          return;
+        }
+        setLoggedIn(true);
+        invoke(props, 'login', {
+          loggedIn: true,
+          user: authUser,
+        });
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    };
   };
 
   const handleSubmit = () => {
@@ -111,93 +158,63 @@ const AuthComponent = props => {
     if (email && password) {
       setLoading(true);
       login({email, password}).then(
-        data => {
-          console.log('handleSubmit: ', data, invoke);
-
-          const {error, user: authUser} = data;
-
-          if (error) {
-            return handleError(error);
-          }
-
-          const {
-            verificationId: _verificationId,
-            emailVerified,
-            signedUp,
-            email: __email,
-            password: __password,
-          } = authUser;
-
-          // should should confirmation button and go to sign up screen afterwards
-          if (emailVerified === false && _verificationId) {
-            setEmail(email);
-            setPassword(password);
-            console.log('should show confirmation button');
-            setLoading(false);
-            // show confirmation button and request to /authenticate/email/verify with email and password again and verification id
-            setVerificationId(_verificationId);
-          }
-          // user exists in the database and can login normally
-          else if (emailVerified === true && _verificationId) {
-            if (signedUp === false) {
-              setVerificationId(_verificationId);
-              setShowSignup(true);
-              setEmail(__email);
-              setPassword(__password);
-              setLoading(false);
-              return;
-            }
-            setLoggedIn(true);
-            invoke(props, 'login', {
-              loggedIn: true,
-              user: authUser,
-            });
-            setLoading(false);
-          } else {
-            setLoading(false);
-          }
-        },
-        () => {
-          handleError();
-        },
+        onSubmitSuccess(email, password),
+        handleError,
       );
     }
   };
 
+  /*
+   * Verify user Handler
+   */
   // show confirmation button and request to /authenticate/email/verify with email and password again and verification id
-  const handleVerifyUser = () => {
-    // const {current: emailField} = emailRef;
-    // const {current: passField} = passwordRef;
-    // const email = emailField.value();
-    // const password = passField.value();
+  const onVerifyUserSuccess = data => {
+    const {error, user: authUser} = data;
+    if (error) {
+      return handleError(error);
+    }
+    const {verificationId: _verificationId, emailVerified} = authUser;
+    if (emailVerified === true && _verificationId) {
+      setLoading(false);
+      setShowSignup(true);
+    }
+  };
 
+  const handleVerifyUser = () => {
     if (_email && _password && verificationId) {
       setLoading(true);
       verify({email: _email, password: _password, verificationId}).then(
-        data => {
-          console.log('handleVerifyUser: ', data);
-          const {error, user: authUser} = data;
-
-          if (error) {
-            return handleError(error);
-          }
-
-          const {verificationId: _verificationId, emailVerified} = authUser;
-
-          if (emailVerified === true && _verificationId) {
-            // setLoggedIn(true);
-            // invoke(props, 'login', {
-            //   loggedIn: true,
-            //   user: authUser,
-            // });
-            setLoading(false);
-            setShowSignup(true);
-          }
-        },
-        () => {
-          handleError();
-        },
+        onVerifyUserSuccess,
+        handleError,
       );
+    }
+  };
+
+  /*
+   * signup Handler
+   */
+  const onSignupSuccess = data => {
+    const {error, user: authUser} = data;
+    if (error) {
+      return handleError(error);
+    }
+    const {verificationId: _verificationId, emailVerified, signedUp} = authUser;
+    if (
+      emailVerified === true &&
+      _verificationId &&
+      _verificationId === verificationId &&
+      authUser.email === _email &&
+      signedUp === true
+    ) {
+      setShowSignup(false);
+      setVerificationId(undefined);
+
+      setLoggedIn(true);
+      invoke(props, 'login', {
+        loggedIn: true,
+        user: authUser,
+      });
+      setLoading(false);
     }
   };
 
@@ -208,7 +225,6 @@ const AuthComponent = props => {
     const lastName = lastNameField.value();
     const {current: mobileField} = mobileRef;
     const mobile = mobileField.value();
-
     if (
       _email &&
       _password &&
@@ -231,67 +247,23 @@ const AuthComponent = props => {
         firstName,
         lastName,
       };
-
-      console.log(newUser);
       setLoading(true);
-      signup(newUser).then(
-        data => {
-          const {error, user: authUser} = data;
-
-          if (error) {
-            return handleError(error);
-          }
-
-          const {
-            verificationId: _verificationId,
-            emailVerified,
-            signedUp,
-          } = authUser;
-
-          if (
-            emailVerified === true &&
-            _verificationId &&
-            _verificationId === verificationId &&
-            authUser.email === _email &&
-            signedUp === true
-          ) {
-            setShowSignup(false);
-            setVerificationId(undefined);
-
-            setLoggedIn(true);
-            invoke(props, 'login', {
-              loggedIn: true,
-              user: authUser,
-            });
-            setLoading(false);
-          }
-        },
-        () => {
-          handleError();
-        },
-      );
+      signup(newUser).then(onSignupSuccess, handleError);
     }
+  };
+
+  /*
+   * Logout Handler
+   */
+  const onLogoutSuccess = () => {
+    invoke(props, 'logout', {loggedIn: false, user: false});
+    setLoggedIn(false);
+    setLoading(false);
   };
 
   const handleLogout = () => {
     setLoading(true);
-    console.log('handleLogout');
-
-    logout().then(
-      () => {
-        console.log('handleLogout logout');
-
-        console.log('handleLogout should be loggedout');
-
-        invoke(props, 'logout', {loggedIn: false, user: false});
-
-        setLoggedIn(false);
-        setLoading(false);
-      },
-      () => {
-        handleError();
-      },
-    );
+    logout().then(onLogoutSuccess, handleError);
   };
 
   const handleShowSettings = () => {
@@ -316,8 +288,6 @@ const AuthComponent = props => {
   }
 
   if (showSignup === true && verificationId) {
-    console.log('showing sign up ui');
-
     return (
       <ScrollView>
         <View style={[sharedStyles.signupView, sharedStyles.loginContainer]}>
@@ -353,7 +323,7 @@ const AuthComponent = props => {
             <Text style={sharedStyles.label}>Phone Number</Text>
             <TextField
               label="Mobile"
-              // keyboardType="phone-pad"
+              keyboardType="phone-pad"
               // formatText={formatText}
               // onSubmitEditing={onSubmit}
               tintColor={'#b69cf6'}
@@ -465,7 +435,6 @@ const AuthComponent = props => {
   }
 
   if (verificationId) {
-    console.log('showing verification button');
     return (
       <View style={sharedStyles.loginContainer}>
         <View style={sharedStyles.loginBtn}>
@@ -485,8 +454,6 @@ const AuthComponent = props => {
   }
 
   if (loggedIn && user) {
-    console.log('showing logout button');
-
     return (
       <View
         style={
@@ -586,8 +553,6 @@ const AuthComponent = props => {
       </View>
     );
   }
-
-  console.log('showing login/signup default ui');
 
   return (
     <View style={sharedStyles.loginContainer}>

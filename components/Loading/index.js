@@ -8,4 +8,8 @@ const Loading = (
   </SafeAreaView>
 );
 
-export default Loading;
+const LoadingComponent = () => {
+  return <Loading />;
+};
+
+export {LoadingComponent, Loading};

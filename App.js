@@ -1,13 +1,11 @@
 import React from 'react';
-import {ActivityIndicator, SafeAreaView} from 'react-native';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Provider} from 'react-redux';
 import {store, persistor} from './redux/store';
-import sharedStyles from './assets/styles/sharedStyles';
 import Pinger from './components/Pinger';
 import MainContainer from './components/MainContainer';
 import {ThemeContext, getTheme} from 'react-native-material-ui'; // COLOR,
-import Loading from './components/Loading';
+import {Loading} from './components/Loading';
 
 const uiTheme = {
   palette: {

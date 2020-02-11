@@ -103,6 +103,12 @@ const sharedStyles = StyleSheet.create({
     fontSize: 18,
     color: '#b69cf6',
   },
+  noAuthLabel: {
+    fontWeight: 'bold',
+    fontSize: 16,
+
+    textAlign: 'center',
+  },
   currenyLabel: {
     fontWeight: 'bold',
     fontSize: 14,

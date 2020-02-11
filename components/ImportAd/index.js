@@ -1,16 +1,9 @@
 import React, {useState, useEffect, createRef} from 'react';
-import {
-  View,
-  Picker,
-  ScrollView,
-  Text,
-  Image,
-  ActivityIndicator,
-} from 'react-native';
+import {View, Picker, ScrollView, Text, Image, Alert} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {Button, RadioButton, Card, Icon} from 'react-native-material-ui';
+import {Button, Icon} from 'react-native-material-ui';
 import {TextField} from 'react-native-material-textfield';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import ImagePicker from 'react-native-image-picker';
@@ -22,7 +15,7 @@ import {
 import {adStatuses, adCategories} from '../../Constants/Ads';
 import isUndefined from 'lodash/isUndefined';
 import NoAuth from '../NoAuth';
-import Loading from '../Loading';
+import {LoadingComponent} from '../Loading';
 
 const adImages = [0, 1, 2, 3, 4];
 const adTypes = {};
@@ -56,28 +49,28 @@ const ImportAd = props => {
   }, [_loggedIn, authUser]);
 
   const handleConfirm = () => {
-    alert('Confirm');
+    Alert.alert('Confirm');
     setLoading(true);
     setLoading(false);
   };
 
   const updateAdCategory = value => {
-    alert('updateAdCategory: ' + value);
+    Alert.alert('updateAdCategory: ' + value);
     setAdCategory(value);
   };
 
   const updateAdType = value => {
-    alert('updateAdType: ' + value);
+    Alert.alert('updateAdType: ' + value);
     setAdType(value);
   };
 
   const updateAdStatus = value => {
-    alert('updateAdStatus: ' + value);
+    Alert.alert('updateAdStatus: ' + value);
     setAdStatus(value);
   };
 
   const updatePerfecture = value => {
-    alert('updatePerfecture: ' + value);
+    Alert.alert('updatePerfecture: ' + value);
     setPerfecture(value);
   };
 
@@ -96,7 +89,7 @@ const ImportAd = props => {
   };
 
   if (isUndefined(_loggedIn) && isUndefined(user)) {
-    return <Loading />;
+    return <LoadingComponent />;
   }
 
   if (!loggedIn && !user) {

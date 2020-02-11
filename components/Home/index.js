@@ -1,33 +1,30 @@
 import React, {PureComponent, useState} from 'react';
-import {
-  Toolbar,
-  ListItem,
-  Snackbar,
-  Drawer,
-  Avatar,
-  Card,
-} from 'react-native-material-ui';
-import {
-  ScrollView,
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  FlatList,
-} from 'react-native';
+import {Toolbar, ListItem} from 'react-native-material-ui';
+import {View, Text, Image, FlatList} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
-import {ENTRIES1} from '../../Constants/CarouselEntries';
+import Carousel from 'react-native-snap-carousel';
 import {
   sliderStyles,
-  colors,
   sliderWidth,
   itemWidth,
 } from '../../assets/styles/sliderEntry';
+import {connect} from 'react-redux';
+import AdDetails from '../AdDetails';
+import invoke from 'lodash/invoke';
+import PropTypes from 'prop-types';
 
 class CarouselItem extends PureComponent {
+  static propTypes = {
+    item: PropTypes.object,
+    onItemPress: PropTypes.func,
+  };
+  handleItemPress = () => {
+    const {item} = this.props;
+    invoke(this.props, 'onItemPress', item);
+  };
+
   render() {
-    const {item, index} = this.props;
+    const {item} = this.props;
     const {illustration, title, subtitle} = item;
     const even = true;
     const uppercaseTitle = title ? (
@@ -44,9 +41,7 @@ class CarouselItem extends PureComponent {
       <TouchableBounce
         activeOpacity={1}
         style={sliderStyles.slideInnerContainer}
-        onPress={() => {
-          alert(`You've clicked '${title}'`);
-        }}>
+        onPress={this.handleItemPress}>
         <View style={sliderStyles.shadow} />
         <View
           style={[
@@ -81,33 +76,37 @@ class CarouselItem extends PureComponent {
   }
 }
 
-const renderCarouselItem = ({item, index}) => {
-  return <CarouselItem item={item} index={index} />;
+const renderCarouselItem = onItemPress => {
+  return ({item}) => {
+    return <CarouselItem onItemPress={onItemPress} item={item} />;
+  };
 };
 
-const CarouselComponent = () => (
-  <View style={sliderStyles.exampleContainer}>
-    <Carousel
-      // ref={c => (slider1Ref = c)}
-      data={ENTRIES1}
-      renderItem={renderCarouselItem}
-      sliderWidth={sliderWidth}
-      itemWidth={itemWidth}
-      hasParallaxImages={false}
-      firstItem={1}
-      inactiveSlideScale={0.94}
-      inactiveSlideOpacity={0.7}
-      // inactiveSlideShift={20}
-      containerCustomStyle={sliderStyles.slider}
-      contentContainerCustomStyle={sliderStyles.sliderContentContainer}
-      // loop={true}
-      loopClonesPerSide={2}
-      // autoplay={true}
-      // autoplayDelay={500}
-      // autoplayInterval={3000}
-      // onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
-    />
-    {/* <Pagination
+const CarouselComponent = props => {
+  const {items, onItemPress} = props;
+  return (
+    <View style={sliderStyles.exampleContainer}>
+      <Carousel
+        // ref={c => (slider1Ref = c)}
+        data={items}
+        renderItem={renderCarouselItem(onItemPress)}
+        sliderWidth={sliderWidth}
+        itemWidth={itemWidth}
+        hasParallaxImages={false}
+        firstItem={1}
+        inactiveSlideScale={0.94}
+        inactiveSlideOpacity={0.7}
+        // inactiveSlideShift={20}
+        containerCustomStyle={sliderStyles.slider}
+        contentContainerCustomStyle={sliderStyles.sliderContentContainer}
+        // loop={true}
+        loopClonesPerSide={2}
+        // autoplay={true}
+        // autoplayDelay={500}
+        // autoplayInterval={3000}
+        // onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
+      />
+      {/* <Pagination
      dotsLength={ENTRIES1.length}
      activeDotIndex={0}
      containerStyle={sharedStyles.paginationContainer}
@@ -119,11 +118,21 @@ const CarouselComponent = () => (
      carouselRef={slider1Ref}
      tappableDots={!!slider1Ref}
    /> */}
-  </View>
-);
+    </View>
+  );
+};
 
-const HomeComponent = () => {
+CarouselComponent.propTypes = {
+  item: PropTypes.object,
+  onItemPress: PropTypes.func,
+};
+
+const HomeComponent = props => {
+  const {ads} = props;
+
   const [isList, setIsList] = useState(false);
+  const [showAdDetails, setShowAdDetails] = useState(false);
+  const [selectedAd, setSelectedAd] = useState(undefined);
 
   // const {slider1ActiveSlide} = this.state;
   // let slider1Ref;
@@ -131,6 +140,21 @@ const HomeComponent = () => {
   const changeViewStyle = label => {
     console.log(label);
     setIsList(!isList);
+  };
+
+  const onAdsDetailsClose = () => {
+    setShowAdDetails(false);
+  };
+
+  const handleShowAdsDetails = item => {
+    setShowAdDetails(true);
+    setSelectedAd(item);
+  };
+
+  const handleShowAdsDetailsFlatList = item => {
+    return () => {
+      handleShowAdsDetails(item);
+    };
   };
 
   return (
@@ -153,11 +177,13 @@ const HomeComponent = () => {
       />
       {/* <ScrollView> */}
       {/* <View> */}
-      {!isList && <CarouselComponent />}
+      {!isList && (
+        <CarouselComponent items={ads} onItemPress={handleShowAdsDetails} />
+      )}
       {isList && (
         <FlatList
           showsVerticalScrollIndicator={false}
-          data={ENTRIES1}
+          data={ads}
           keyExtractor={item => item.id}
           renderItem={({item}) => (
             <ListItem
@@ -172,16 +198,36 @@ const HomeComponent = () => {
                 primaryText: item.title,
                 secondaryText: item.subtitle,
               }}
-              onPress={() => {}}
+              onPress={handleShowAdsDetailsFlatList(item)}
             />
           )}
         />
       )}
 
+      {showAdDetails && (
+        <AdDetails onClose={onAdsDetailsClose} item={selectedAd} />
+      )}
       {/* </View> */}
       {/* </ScrollView> */}
     </View>
   );
 };
 
-export default HomeComponent;
+HomeComponent.propTypes = {
+  ads: PropTypes.array,
+};
+
+const mapStateToProps = ({adsReducer}) => {
+  return {
+    ads: adsReducer.ads,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    // navigate: payload => dispatch(navigate(payload)),
+  };
+};
+
+// eslint-disable-next-line prettier/prettier
+export default connect(mapStateToProps, mapDispatchToProps)(HomeComponent);
