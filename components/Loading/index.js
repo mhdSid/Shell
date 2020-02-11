@@ -9,7 +9,7 @@ const Loading = (
 );
 
 const LoadingComponent = () => {
-  return <Loading />;
+  return <>{Loading}</>;
 };
 
 export {LoadingComponent, Loading};
