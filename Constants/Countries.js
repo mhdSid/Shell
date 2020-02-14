@@ -607,6 +607,10 @@ const currencies = {
   Russia: '₽(RUB)',
   Qatar: 'QAR',
   Dubai: 'AED',
+  JP: '¥(JPY)',
+  LB: 'LBP',
+  Jp: '¥(JPY)',
+  Lb: 'LBP',
 };
 
 export {countries, perfectures, perfecturesList, countryCodeList, currencies};

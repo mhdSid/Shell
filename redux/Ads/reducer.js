@@ -10,9 +10,16 @@ const adsReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case adActions.importAd: {
+      let {ads} = state;
+      if (Array.isArray(action.payload)) {
+        ads = ads.concat(action.payload);
+      } else {
+        ads = [...ads, action.payload];
+      }
+
       return {
         ...state,
-        ...action.payload,
+        ads,
       };
     }
 

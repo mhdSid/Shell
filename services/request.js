@@ -64,19 +64,18 @@ const request = async options => {
     },
   };
 
-  // if (cookie) {
-  //   reqData.headers = {
-  //     ...reqData.headers,
-  //     cookie: decodeURIComponent(cookie),
-  //   };
-
-  //   console.log('cookie is: ', decodeURIComponent(cookie));
-  // }
+  if (body instanceof FormData) {
+    reqData.headers['Content-Type'] =
+      'multipart/form-data; boundary=----WebKitFormBoundarybAbXQzJABEgSJzxT';
+    console.log('is instance form data');
+    reqData.headers.Accept =
+      'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9';
+  }
 
   if (!isUndefined(body) && !isNill(body) && Object.keys(body).length > 0) {
     reqData = {
       ...reqData,
-      body: JSON.stringify(options.body),
+      body: body instanceof FormData ? body : JSON.stringify(options.body), // body instanceof FormData ? body :
     };
   }
 

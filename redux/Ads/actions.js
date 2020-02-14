@@ -2,9 +2,9 @@ const adActions = {
   importAd: 'AD_IMPORT',
 };
 
-const importAd = payload => ({
+const addAd = payload => ({
   type: adActions.importAd,
   payload,
 });
 
-export {adActions, importAd};
+export {adActions, addAd};

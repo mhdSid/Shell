@@ -1,6 +1,6 @@
-import React, {PureComponent, useState} from 'react';
+import React, {PureComponent, useState, useEffect} from 'react';
 import {Toolbar, ListItem} from 'react-native-material-ui';
-import {View, Text, Image, FlatList} from 'react-native';
+import {View, Text, Image, FlatList, Alert} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import Carousel from 'react-native-snap-carousel';
 import {
@@ -12,6 +12,7 @@ import {connect} from 'react-redux';
 import AdDetails from '../AdDetails';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
+import {getAds} from '../../services/ads';
 
 class CarouselItem extends PureComponent {
   static propTypes = {
@@ -25,13 +26,13 @@ class CarouselItem extends PureComponent {
 
   render() {
     const {item} = this.props;
-    const {illustration, title, subtitle} = item;
+    const {image, name, description} = item;
     const even = true;
-    const uppercaseTitle = title ? (
+    const uppercaseTitle = name ? (
       <Text
         style={[sliderStyles.title, even ? sliderStyles.titleEven : {}]}
         numberOfLines={2}>
-        {title.toUpperCase()}
+        {name.toUpperCase()}
       </Text>
     ) : (
       false
@@ -48,7 +49,7 @@ class CarouselItem extends PureComponent {
             sliderStyles.imageContainer,
             even ? sliderStyles.imageContainerEven : {},
           ]}>
-          {<Image source={{uri: illustration}} style={sliderStyles.image} />}
+          {<Image source={{uri: image}} style={sliderStyles.image} />}
           <View
             style={[
               sliderStyles.radiusMask,
@@ -68,7 +69,7 @@ class CarouselItem extends PureComponent {
               even ? sliderStyles.subtitleEven : {},
             ]}
             numberOfLines={2}>
-            {subtitle}
+            {description}
           </Text>
         </View>
       </TouchableBounce>
@@ -93,7 +94,7 @@ const CarouselComponent = props => {
         sliderWidth={sliderWidth}
         itemWidth={itemWidth}
         hasParallaxImages={false}
-        firstItem={1}
+        firstItem={0}
         inactiveSlideScale={0.94}
         inactiveSlideOpacity={0.7}
         // inactiveSlideShift={20}
@@ -128,11 +129,45 @@ CarouselComponent.propTypes = {
 };
 
 const HomeComponent = props => {
-  const {ads} = props;
+  const {ads: _ads} = props;
 
+  const [ads, setAds] = useState(_ads);
   const [isList, setIsList] = useState(false);
   const [showAdDetails, setShowAdDetails] = useState(false);
   const [selectedAd, setSelectedAd] = useState(undefined);
+
+  const handleError = error => {
+    const message =
+      (error && error.message) || 'A an error has occured. Please try again.';
+    // invoke(props, 'logout', {loggedIn: false, user: false});
+    // setLoggedIn(false);
+    // setLoading(false);
+    // setVerificationId(undefined);
+    // setUser(null);
+
+    if (message) {
+      Alert.alert(message);
+    }
+    return;
+  };
+
+  const onGetAdsSuccess = data => {
+    console.log(
+      'onGetAdsSuccessonGetAdsSuccessonGetAdsSuccessonGetAdsSuccessonGetAdsSuccess: ',
+      data,
+    );
+    const {error, ads: serverAds} = data;
+
+    if (error) {
+      return handleError(error);
+    }
+    setAds(serverAds);
+    invoke(props, 'addAd', serverAds);
+  };
+
+  useEffect(() => {
+    getAds().then(onGetAdsSuccess, handleError);
+  }, [_ads]);
 
   // const {slider1ActiveSlide} = this.state;
   // let slider1Ref;
@@ -191,12 +226,12 @@ const HomeComponent = props => {
               leftElement={
                 <Image
                   style={{width: 50, height: 50}}
-                  source={{uri: item.illustration}}
+                  source={{uri: item.image}}
                 />
               }
               centerElement={{
-                primaryText: item.title,
-                secondaryText: item.subtitle,
+                primaryText: item.name,
+                secondaryText: item.description,
               }}
               onPress={handleShowAdsDetailsFlatList(item)}
             />

@@ -63,6 +63,11 @@ const adTypes = {
   Sports: [],
 };
 
+const mimeTypes = {
+  '.jpg': 'image/jpeg',
+  '.png': 'image/png',
+};
+
 const adStatuses = [
   'Unused',
   'Nearly Used',
@@ -71,4 +76,4 @@ const adStatuses = [
   'Overall Bad Condition',
 ].sort();
 
-export {adCategories, adStatuses};
+export {adCategories, adStatuses, mimeTypes};

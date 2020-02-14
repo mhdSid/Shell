@@ -34,11 +34,17 @@ const AdDetails = props => {
         />
 
         <View style={sharedStyles.innerContainer}>
-          <Text>
-            Ad Details
-            {item.title}
-            {item.subtitle}
-          </Text>
+          <Text>{item.name}</Text>
+          <Text>{item.description}</Text>
+          <Text>{item.id}</Text>
+          <Text>{item.category}</Text>
+          <Text>{item.image}</Text>
+          <Text>{`${item.currency} ${item.price}`}</Text>
+          <Text>{item.country}</Text>
+          <Text>{item.perfecture}</Text>
+          <Text>{item.publishDate}</Text>
+          <Text>{item.status}</Text>
+          <Text>{item.userId}</Text>
         </View>
       </SafeAreaView>
     </Modal>

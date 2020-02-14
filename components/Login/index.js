@@ -21,7 +21,7 @@ import {
   perfecturesList,
   countryCodeList,
 } from '../../Constants/Countries';
-import {months, days, years} from '../../Constants/Dates';
+import {months, days, years, monthsNumbers} from '../../Constants/Dates';
 import isUndefined from 'lodash/isUndefined';
 
 const AuthComponent = props => {
@@ -37,10 +37,12 @@ const AuthComponent = props => {
 
   const [year, setYear] = useState('2020');
   const [month, setMonth] = useState('April');
-  const [day, setDay] = useState('31');
+  const [day, setDay] = useState('01');
   const [gender, setGender] = useState('Male');
   const [country, setCountry] = useState(
-    (user && user.country) || countryCodeList[serverCountryCode],
+    (serverCountryCode && countryCodeList[serverCountryCode]) ||
+      (user && user.country) ||
+      'Japan',
   );
   const [perfecture, setPerfecture] = useState(
     perfecturesList[countryCodeList[serverCountryCode]],
@@ -239,7 +241,7 @@ const AuthComponent = props => {
         email: _email,
         password: _password,
         verificationId,
-        dob: new Date(`${year}/${month}/${day}`),
+        dob: new Date(`${year}/${monthsNumbers[month]}/${day}`),
         gender,
         mobile,
         country,
