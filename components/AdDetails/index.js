@@ -6,7 +6,7 @@ import {Button, Icon} from 'react-native-material-ui';
 import {Toolbar} from 'react-native-material-ui';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
-import {CachedImage} from 'react-native-cached-image';
+import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 
 const AdDetails = props => {
   const {item} = props;

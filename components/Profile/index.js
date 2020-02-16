@@ -41,7 +41,7 @@ import MyLotteries from '../MyLotteries';
 import AppInfo from '../AppInfo';
 import {phoneNumbersRegexs, emailsRegex} from '../../Constants/Regexes';
 import {loadingPopup, Loading} from '../Loading';
-import {CachedImage} from 'react-native-cached-image';
+import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 
 const AuthComponent = props => {
   const {loggedIn: _loggedIn, country: serverCountryCode, user} = props;

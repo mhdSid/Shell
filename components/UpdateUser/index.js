@@ -23,7 +23,7 @@ import {
 } from '../../Constants/Countries';
 import {update} from '../../services/auth';
 import {loadingPopup} from '../Loading';
-import {CachedImage} from 'react-native-cached-image';
+import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 
 const UpdateUser = props => {
   const {user} = props;

@@ -15,7 +15,7 @@ import PropTypes from 'prop-types';
 import {getAds} from '../../services/ads';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Loading} from '../Loading';
-import {CachedImage} from 'react-native-cached-image';
+import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 
 class CarouselItem extends PureComponent {
   static propTypes = {

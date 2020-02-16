@@ -28,7 +28,7 @@ import {importAd} from '../../services/ads';
 import {addAd} from '../../redux/Ads/actions';
 import invoke from 'lodash/invoke';
 import AdDetails from '../AdDetails';
-import {CachedImage} from 'react-native-cached-image';
+import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 
 // import Buffer from 'buffer';
 

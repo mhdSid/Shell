@@ -246,7 +246,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
-  - react-native-fetch-blob (from `../node_modules/react-native-fetch-blob/react-native-fetch-blob.podspec`)
+  - react-native-fetch-blob (from `../lib/CachedImage//react-native-fetch-blob/react-native-fetch-blob.podspec`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -298,7 +298,7 @@ EXTERNAL SOURCES:
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-fetch-blob:
-    :path: "../node_modules/react-native-fetch-blob/react-native-fetch-blob.podspec"
+    :path: "../lib/CachedImage//react-native-fetch-blob/react-native-fetch-blob.podspec"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-netinfo:
@@ -363,6 +363,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 42877b7f278fe2d73feae39560167453537504c7
+PODFILE CHECKSUM: e056becb6a11a899037591b850772c4f4eabdae0
 
 COCOAPODS: 1.8.4
