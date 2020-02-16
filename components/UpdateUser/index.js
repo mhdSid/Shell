@@ -6,7 +6,6 @@ import {
   ScrollView,
   View,
   Text,
-  Image,
   Picker,
   Alert,
 } from 'react-native';
@@ -24,6 +23,7 @@ import {
 } from '../../Constants/Countries';
 import {update} from '../../services/auth';
 import {loadingPopup} from '../Loading';
+import {CachedImage} from 'react-native-cached-image';
 
 const UpdateUser = props => {
   const {user} = props;
@@ -138,7 +138,7 @@ const UpdateUser = props => {
     setModalVisible(false);
   };
 
-  const handleSubmit = () => {
+  const handleUpdateUser = () => {
     const {current: mobileField} = mobileRef;
     const {current: firstNameField} = firstNameRef;
     const {current: lastNameField} = lastNameRef;
@@ -233,10 +233,10 @@ const UpdateUser = props => {
           style={{container: sharedStyles.toolbarContainerPaddingRight}}
           leftElement="arrow-back"
           onLeftElementPress={handleCloseModal}
-          onRightElementPress={handleSubmit}
           rightElement={
             <Button
               color="white"
+              onPress={handleUpdateUser}
               disabled={loading || !userDataChanged}
               raised
               text="Save"
@@ -268,8 +268,9 @@ const UpdateUser = props => {
                     <Icon name="image" size={35} color="white" />
                   )}
                   {(image || user.image) && (
-                    <Image
+                    <CachedImage
                       style={[sharedStyles.adImage, sharedStyles.userImage]}
+                      cache="force-cache"
                       source={{uri: image || user.image}}
                     />
                   )}
@@ -365,7 +366,7 @@ const UpdateUser = props => {
                 raised={true}
                 primary
                 text={'Confirm'}
-                onPress={handleSubmit}
+                onPress={handleUpdateUser}
               />
             </View>
           </View>

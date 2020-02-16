@@ -4,14 +4,16 @@ import {connect} from 'react-redux';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import NoAuth from '../NoAuth';
 import isUndefined from 'lodash/isUndefined';
-import {Loading} from '../Loading';
+import {Loading, loadingPopup} from '../Loading';
 import PropTypes from 'prop-types';
+import {Toolbar} from 'react-native-material-ui';
 
 const Lotteries = props => {
   const {loggedIn: _loggedIn, user: authUser, lotteries} = props;
 
   const [loggedIn, setLoggedIn] = useState(_loggedIn);
   const [user, setUser] = useState(authUser);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoggedIn(_loggedIn);
@@ -27,8 +29,17 @@ const Lotteries = props => {
   }
 
   return (
-    <View style={sharedStyles.innerContainer}>
-      <Text>{!lotteries && 'No Lotteries available'}</Text>
+    <View style={sharedStyles.fullheightView}>
+      <Toolbar
+        style={{container: sharedStyles.toolbarContainer}}
+        centerElement="Lotteries"
+      />
+
+      <View style={sharedStyles.innerContainer}>
+        {loading && loadingPopup}
+
+        <Text>{!lotteries && 'No Lotteries available'}</Text>
+      </View>
     </View>
   );
 };

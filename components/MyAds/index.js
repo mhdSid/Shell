@@ -29,6 +29,7 @@ const MyAds = props => {
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}
           leftElement="arrow-back"
+          centerElement="My Ads"
           onLeftElementPress={handleCloseModal}
         />
         {loading && loadingPopup}

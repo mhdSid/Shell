@@ -64,7 +64,7 @@ const Settings = props => {
               <Drawer.Section
                 style={{
                   container: {
-                    marginTop: -20,
+                    marginTop: -10,
                     paddingLeft: 80,
                     // justifyContent: 'center',
                     // alignItems: 'center'

@@ -29,6 +29,7 @@ const MyLotteries = props => {
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}
           leftElement="arrow-back"
+          centerElement="My Lotteries"
           onLeftElementPress={handleCloseModal}
         />
         {loading && loadingPopup}

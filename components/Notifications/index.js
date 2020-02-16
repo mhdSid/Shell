@@ -29,6 +29,7 @@ const Notifications = props => {
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}
           leftElement="arrow-back"
+          centerElement="Notifications"
           onLeftElementPress={handleCloseModal}
         />
         {loading && loadingPopup}

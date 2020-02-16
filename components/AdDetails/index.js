@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import {Text, View, Modal, SafeAreaView, ScrollView, Image} from 'react-native';
+import {Text, View, Modal, SafeAreaView, ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Button, Icon} from 'react-native-material-ui';
 import {Toolbar} from 'react-native-material-ui';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
+import {CachedImage} from 'react-native-cached-image';
 
 const AdDetails = props => {
   const {item} = props;
@@ -80,7 +81,8 @@ const AdDetails = props => {
               // aspectRatio: 3 / 2,
               // height: 'auto',
             }}>
-            <Image
+            <CachedImage
+              cache="force-cache"
               source={{
                 uri: images[currentPhotoIndex],
                 cache: 'force-cache',
@@ -89,7 +91,7 @@ const AdDetails = props => {
                 //   'Cache-Control': 'only-if-cached',
                 // },
               }}
-              style={{flex: 1, aspectRatio: 3 / 2}}
+              style={sharedStyles.adDetailsImage}
             />
             {images.length > 1 && (
               <>

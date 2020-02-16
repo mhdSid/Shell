@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {SafeAreaView} from 'react-native';
+import {SafeAreaView, View} from 'react-native';
 import {BottomNavigation, Icon, Badge} from 'react-native-material-ui';
-import AuthComponent from '../Login';
+import AuthComponent from '../Profile';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import ImportAd from '../ImportAd';
 import SearchComponent from '../Search';
@@ -24,7 +24,7 @@ const MainContainer = props => {
   navigate = handlePress;
 
   return (
-    <>
+    <View style={sharedStyles.fullheightView}>
       <SafeAreaView style={sharedStyles.container}>
         {activeView === 'grade' && <Lotteries />}
         {activeView === 'profile' && <AuthComponent />}
@@ -169,7 +169,7 @@ const MainContainer = props => {
           onPress={handlePress('profile')}
         />
       </BottomNavigation>
-    </>
+    </View>
   );
 };
 

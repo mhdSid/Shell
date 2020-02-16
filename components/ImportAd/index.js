@@ -4,7 +4,6 @@ import {
   Picker,
   ScrollView,
   Text,
-  Image,
   Alert,
   KeyboardAvoidingView,
 } from 'react-native';
@@ -29,6 +28,7 @@ import {importAd} from '../../services/ads';
 import {addAd} from '../../redux/Ads/actions';
 import invoke from 'lodash/invoke';
 import AdDetails from '../AdDetails';
+import {CachedImage} from 'react-native-cached-image';
 
 // import Buffer from 'buffer';
 
@@ -163,7 +163,7 @@ const ImportAd = props => {
     };
   };
 
-  const handleConfirm = () => {
+  const handleUploadAd = () => {
     // Alert.alert('Confirm');
     // setLoading(false);
 
@@ -267,8 +267,7 @@ const ImportAd = props => {
 
   if (loggedIn === true && user) {
     return (
-      <>
-        {loading && loadingPopup}
+      <View style={sharedStyles.fullheightView}>
         <KeyboardAvoidingView
           behavior="padding"
           enabled
@@ -281,9 +280,9 @@ const ImportAd = props => {
             leftElement={<Icon color="white" name="add-box" />}
             // leftElement="arrow-back"
             // onLeftElementPress={handleCloseModal}
-            onRightElementPress={handleConfirm}
             rightElement={
               <Button
+                onPress={handleUploadAd}
                 disabled={loading || !adDataChanged}
                 raised
                 text="Save"
@@ -291,6 +290,8 @@ const ImportAd = props => {
               />
             }
           />
+          {loading && loadingPopup}
+
           <ScrollView showsVerticalScrollIndicator={false}>
             <View
               style={[
@@ -359,8 +360,9 @@ const ImportAd = props => {
                         <Icon name="image" size={35} color="white" />
                       )}
                       {images[index] && (
-                        <Image
+                        <CachedImage
                           style={sharedStyles.adImage}
+                          cache="force-cache"
                           source={{uri: images[index]}}
                         />
                       )}
@@ -438,7 +440,7 @@ const ImportAd = props => {
                   raised={true}
                   primary
                   text={'Confirm'}
-                  onPress={handleConfirm}
+                  onPress={handleUploadAd}
                 />
               </View>
             </View>
@@ -447,7 +449,7 @@ const ImportAd = props => {
         {showAdDetails && (
           <AdDetails onClose={onAdsDetailsClose} item={selectedAd} />
         )}
-      </>
+      </View>
     );
   }
 };

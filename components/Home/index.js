@@ -1,6 +1,6 @@
 import React, {PureComponent, useState, useEffect} from 'react';
 import {Toolbar, ListItem} from 'react-native-material-ui';
-import {View, Text, Image, FlatList, Alert} from 'react-native';
+import {View, Text, FlatList, Alert} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import Carousel from 'react-native-snap-carousel';
 import {
@@ -14,6 +14,8 @@ import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {getAds} from '../../services/ads';
 import sharedStyles from '../../assets/styles/sharedStyles';
+import {Loading} from '../Loading';
+import {CachedImage} from 'react-native-cached-image';
 
 class CarouselItem extends PureComponent {
   static propTypes = {
@@ -51,7 +53,8 @@ class CarouselItem extends PureComponent {
             even ? sliderStyles.imageContainerEven : {},
           ]}>
           {images && images[0] ? (
-            <Image
+            <CachedImage
+              cache="force-cache"
               source={{
                 uri: images[0],
                 cache: 'force-cache',
@@ -148,6 +151,8 @@ const HomeComponent = props => {
   const [isList, setIsList] = useState(false);
   const [showAdDetails, setShowAdDetails] = useState(false);
   const [selectedAd, setSelectedAd] = useState(undefined);
+  const [loading, setLoading] = useState(false);
+
   let unMounted = false;
 
   const handleError = error => {
@@ -178,11 +183,17 @@ const HomeComponent = props => {
       }
       setAds(serverAds);
       invoke(props, 'addAd', serverAds);
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
+  const fetchAds = () => {
     getAds().then(onGetAdsSuccess, handleError);
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    fetchAds();
     return () => {
       unMounted = true;
     };
@@ -212,7 +223,7 @@ const HomeComponent = props => {
   };
 
   return (
-    <View style={sharedStyles.homeContainer}>
+    <View style={sharedStyles.fullheightView}>
       <Toolbar
         style={{container: sharedStyles.toolbarContainer}}
         // leftElement="menu"
@@ -223,13 +234,14 @@ const HomeComponent = props => {
         rightElement={isList ? 'view-carousel' : 'view-list'}
         onRightElementPress={changeViewStyle}
       />
-      {/* <ScrollView> */}
-      {/* <View> */}
+      {loading && Loading}
       {!isList && (
         <CarouselComponent items={ads} onItemPress={handleShowAdsDetails} />
       )}
       {isList && (
         <FlatList
+          refreshing={loading}
+          onRefresh={fetchAds}
           showsVerticalScrollIndicator={false}
           data={ads}
           keyExtractor={item => item.id}
@@ -238,8 +250,9 @@ const HomeComponent = props => {
               divider
               leftElement={
                 item.images && item.images[0] ? (
-                  <Image
+                  <CachedImage
                     style={{width: 50, height: 50}}
+                    cache="force-cache"
                     source={{
                       uri: item.images[0],
                       cache: 'force-cache',

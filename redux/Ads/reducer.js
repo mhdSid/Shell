@@ -1,11 +1,11 @@
 import {adActions} from './actions';
 import {ENTRIES1} from '../../Constants/CarouselEntries';
 
-let set = new Set(ENTRIES1);
-set = Array.from(set);
+// let set = new Set(ENTRIES1);
+// set = Array.from(set);
 
 const initialState = {
-  ads: set,
+  ads: [],
 };
 
 const adsReducer = (state = initialState, action) => {

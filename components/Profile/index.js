@@ -5,9 +5,7 @@ import {
   Picker,
   ScrollView,
   Text,
-  ActivityIndicator,
   Alert,
-  Image,
   KeyboardAvoidingView,
 } from 'react-native';
 import PropTypes from 'prop-types';
@@ -43,6 +41,7 @@ import MyLotteries from '../MyLotteries';
 import AppInfo from '../AppInfo';
 import {phoneNumbersRegexs, emailsRegex} from '../../Constants/Regexes';
 import {loadingPopup, Loading} from '../Loading';
+import {CachedImage} from 'react-native-cached-image';
 
 const AuthComponent = props => {
   const {loggedIn: _loggedIn, country: serverCountryCode, user} = props;
@@ -436,7 +435,7 @@ const AuthComponent = props => {
 
   if (showSignup === true && verificationId) {
     return (
-      <>
+      <View style={sharedStyles.fullheightView}>
         {loading && loadingPopup}
 
         <KeyboardAvoidingView
@@ -598,13 +597,13 @@ const AuthComponent = props => {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
-      </>
+      </View>
     );
   }
 
   if (verificationId) {
     return (
-      <>
+      <View style={sharedStyles.fullheightView}>
         {loading && loadingPopup}
 
         <View style={sharedStyles.loginContainer}>
@@ -616,18 +615,19 @@ const AuthComponent = props => {
               onPress={handleVerifyUser}
               disabled={loading}
             />
-            <Text style={sharedStyles.verificationLabel}>
-              Please check your inbox in order to verify your email
-            </Text>
           </View>
+
+          <Text style={sharedStyles.verificationLabel}>
+            Please check your inbox in order to verify your email
+          </Text>
         </View>
-      </>
+      </View>
     );
   }
 
   if (loggedIn && user) {
     return (
-      <>
+      <View style={sharedStyles.fullheightView}>
         {loading && loadingPopup}
 
         <View
@@ -637,18 +637,30 @@ const AuthComponent = props => {
           }>
           <Drawer>
             <Drawer.Header
+              image={
+                <CachedImage
+                  cache="force-cache"
+                  blurRadius={15}
+                  source={{uri: user.image}}
+                  style={sharedStyles.profileBlurredImage}>
+                  <View style={sharedStyles.profileBlur} />
+                </CachedImage>
+              }
               style={{
                 contentContainer: {
-                  backgroundColor: '#b69cf6',
+                  // backgroundColor: '#b69cf6',
                   paddingTop: 20,
                   // paddingLeft: 15,
                 },
               }}>
               <Drawer.Header.Account
                 style={{
-                  accountContainer: {
-                    backgroundColor: '#b69cf6',
+                  container: {
+                    zIndex: 100,
                   },
+                  // accountContainer: {
+                  //   // backgroundColor: '#b69cf6',
+                  // },
                   avatarsContainer: {
                     marginBottom: 10,
                   },
@@ -657,8 +669,9 @@ const AuthComponent = props => {
                   <Avatar
                     image={
                       user.image ? (
-                        <Image
+                        <CachedImage
                           style={sharedStyles.profileImage}
+                          cache="force-cache"
                           source={{uri: user.image}}
                         />
                       ) : (
@@ -675,11 +688,32 @@ const AuthComponent = props => {
                 footer={{
                   dense: true,
                   centerElement: {
-                    primaryText: `${user.firstName} ${user.lastName} - ${user.gameStatus} . ${user.gamePoints} Points`,
-                    secondaryText: `${user.email} - ${user.perfecture}, ${user.country}`,
+                    primaryText: (
+                      <Text style={{color: '#d9d9d9'}}>
+                        {`${user.firstName} ${user.lastName} - ${user.gameStatus} • ${user.gamePoints} Points`}
+                      </Text>
+                    ),
+                    secondaryText: (
+                      <Text
+                        style={{
+                          color: '#d9d9d9',
+                        }}>{`${user.email} - ${user.perfecture}, ${user.country}`}</Text>
+                    ),
                   },
-                  rightElement: 'edit',
-                  onRightElementPress: handleShowUpdateUser,
+                  rightElement: (
+                    <Button
+                      onPress={handleShowUpdateUser}
+                      icon="edit"
+                      text=""
+                      primary
+                    />
+                    // <Icon
+                    //   style={{marginRight: 10}}
+                    //   color="#d9d9d9"
+                    //   name="edit"
+                    // />
+                  ),
+                  // onRightElementPress: ,
                 }}
               />
             </Drawer.Header>
@@ -730,12 +764,12 @@ const AuthComponent = props => {
             />
           )}
         </View>
-      </>
+      </View>
     );
   }
 
   return (
-    <>
+    <View style={sharedStyles.fullheightView}>
       {loading && loadingPopup}
 
       <View style={sharedStyles.loginContainer}>
@@ -771,7 +805,7 @@ const AuthComponent = props => {
           />
         </View>
       </View>
-    </>
+    </View>
   );
 };
 

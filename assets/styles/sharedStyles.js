@@ -12,31 +12,33 @@ const flex = {
   display: 'flex',
 };
 
+const toolbarStyles = {
+  height: 50,
+  zIndex: 9999,
+};
+
 const sharedStyles = StyleSheet.create({
+  /* ToolBar */
+  toolbarContainer: {
+    ...toolbarStyles,
+  },
+  toolbarContainerPadding: {
+    paddingHorizontal: 15,
+    ...toolbarStyles,
+  },
+  toolbarContainerPaddingRight: {
+    paddingRight: 15,
+    ...toolbarStyles,
+  },
+  /* End ToolBar */
+
+  /* Loading */
   loading: {
-    flex: 1,
-    padding: 20,
+    // padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
     ...fullWidthHeight,
     zIndex: 1000,
-  },
-  toolbarContainer: {
-    height: 55,
-    zIndex: 9999,
-  },
-  toolbarContainerPadding: {
-    paddingHorizontal: 15,
-    height: 55,
-    zIndex: 9999,
-  },
-  toolbarContainerPaddingRight: {
-    paddingRight: 15,
-    height: 55,
-    zIndex: 9999,
-  },
-  homeContainer: {
-    height: '100%',
   },
   loadingPopup: {
     height: '100%',
@@ -56,6 +58,34 @@ const sharedStyles = StyleSheet.create({
     opacity: 0.9,
     zIndex: 1000,
   },
+  /* End Loading */
+
+  fullheightView: {
+    width: '100%',
+    height: '100%',
+  },
+  adDetailsImage: {
+    flex: 1,
+    aspectRatio: 3 / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileBlur: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'black',
+    top: 0,
+    left: 0,
+    zIndex: 1,
+    opacity: 0.55,
+  },
+
+  profileBlurredImage: {
+    width: '100%',
+    height: '100%',
+  },
+
   pickerView: {
     width: '70%',
     alignSelf: 'center',
