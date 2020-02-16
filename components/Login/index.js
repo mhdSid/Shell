@@ -46,7 +46,7 @@ import {loadingPopup, Loading} from '../Loading';
 
 const AuthComponent = props => {
   const {loggedIn: _loggedIn, country: serverCountryCode, user} = props;
-  console.log('authComponent: ', user);
+  // console.log('authComponent: ', user);
 
   const [loggedIn, setLoggedIn] = useState(_loggedIn);
   const [_email, setEmail] = useState(undefined);
@@ -104,7 +104,7 @@ const AuthComponent = props => {
     setShowUpdateUser(false);
   };
 
-  console.log(perfecture, 'serverCountryCode: ', serverCountryCode);
+  // console.log(perfecture, 'serverCountryCode: ', serverCountryCode);
 
   const emailRef = createRef();
   const passwordRef = createRef();

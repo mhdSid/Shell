@@ -25,7 +25,7 @@ const logout = async () => {
     endpoint: 'users/authenticate/logout',
     method: 'GET',
   });
-  console.log('logououououoout ', data);
+  // console.log('logououououoout ', data);
   return data;
 };
 
@@ -34,7 +34,7 @@ const ping = async () => {
     endpoint: 'users/authenticate/ping',
     method: 'GET',
   });
-  console.log('logououououoout ', data);
+  // console.log('logououououoout ', data);
   return data;
 };
 

@@ -9,14 +9,14 @@ import {setLang} from '../../redux/Settings/actions';
 
 const Settings = props => {
   const {lang} = props;
-  console.log('SettingsSettingsSettingsSettingsSettings: ', lang);
+  // console.log('SettingsSettingsSettingsSettingsSettings: ', lang);
 
   const [modalVisible, setModalVisible] = useState(true);
   const [showLanguages, setShowLanguages] = useState(false);
 
   const handleSetLanguage = value => {
     return () => {
-      console.log(value);
+      // console.log(value);
       invoke(props, 'setLang', value);
     };
   };

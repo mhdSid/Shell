@@ -27,7 +27,7 @@ import {loadingPopup} from '../Loading';
 
 const UpdateUser = props => {
   const {user} = props;
-  console.log('UpdateUserUpdateUserUpdateUserUpdateUser: ', user);
+  // console.log('UpdateUserUpdateUserUpdateUserUpdateUser: ', user);
 
   const [country, setCountry] = useState((user && user.country) || 'Japan');
   const [perfecture, setPerfecture] = useState(perfecturesList[country]);
@@ -230,9 +230,19 @@ const UpdateUser = props => {
       onDismiss={onModalDismiss}>
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
-          style={{container: sharedStyles.toolbarContainer}}
+          style={{container: sharedStyles.toolbarContainerPaddingRight}}
           leftElement="arrow-back"
           onLeftElementPress={handleCloseModal}
+          onRightElementPress={handleSubmit}
+          rightElement={
+            <Button
+              color="white"
+              disabled={loading || !userDataChanged}
+              raised
+              text="Save"
+              icon="done-all"
+            />
+          }
         />
         {loading && loadingPopup}
 

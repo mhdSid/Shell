@@ -192,7 +192,7 @@ const HomeComponent = props => {
   // let slider1Ref;
 
   const changeViewStyle = label => {
-    console.log(label);
+    // console.log(label);
     setIsList(!isList);
   };
 
@@ -215,7 +215,7 @@ const HomeComponent = props => {
     <View style={sharedStyles.homeContainer}>
       <Toolbar
         style={{container: sharedStyles.toolbarContainer}}
-        leftElement="menu"
+        // leftElement="menu"
         centerElement="Shell"
         // onLeftElementPress={label => {
         //   alert('onLeftElementPress');

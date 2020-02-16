@@ -19,7 +19,7 @@ const SearchComponent = () => {
       //   },
       // }}
       onRightElementPress={label => {
-        console.log(label);
+        // console.log(label);
       }}
     />
   );

@@ -23,8 +23,16 @@ const sharedStyles = StyleSheet.create({
   },
   toolbarContainer: {
     height: 55,
-    borderBottomColor: 'black',
-    borderBottomWidth: 2,
+    zIndex: 9999,
+  },
+  toolbarContainerPadding: {
+    paddingHorizontal: 15,
+    height: 55,
+    zIndex: 9999,
+  },
+  toolbarContainerPaddingRight: {
+    paddingRight: 15,
+    height: 55,
     zIndex: 9999,
   },
   homeContainer: {
@@ -48,34 +56,13 @@ const sharedStyles = StyleSheet.create({
     opacity: 0.9,
     zIndex: 1000,
   },
-  backdrop: {
-    backgroundColor: '#000000',
-    opacity: 0.2,
-  },
   pickerView: {
     width: '70%',
     alignSelf: 'center',
   },
-  // authContainer: {
-  //   justifyContent: 'center',
-  // },
-  // signupScrollContainer: {
-  //   // padding: 10,
-  //   // paddingRight: 25,
-  // },
-  // importAdView: {
-  //   marginBottom: 100,
-  // },
-  // signupView: {
-  //   // marginTop: 80,
-  //   // paddingBottom: 100,
-  //   // marginBottom: 20,
-  // },
   imageBtnContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    // display: 'flex',
-    // display: 'block',
   },
   profileImage: {
     width: 65,
@@ -171,121 +158,57 @@ const sharedStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   dobView: {
-    // flex: 1,
-    // alignSelf: 'flex-start',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     height: 0,
   },
   genderView: {
-    // flex: 1,
-    // alignSelf: 'flex-start',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // height: 0,
-    // marginTop: 70,
-    // marginBottom: 70,
-  },
-  nameView: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-  nameViewItem: {
-    width: '45%',
-    // flex: 1,
-    margin: 0,
-    padding: 0,
   },
   dobViewItem: {
     flex: 1,
-    // width: '33.335%',
     margin: 0,
     padding: 0,
-    // height: 20,
   },
-  // appContainer: {
-  //   backgroundColor: '#ffecec',
-  // },
-  // // isLoading: {
-  //   backgroundColor: 'rgba(0, 0, 0, .2)',
-  // },
-  // loadingIndicator: {
-  //   position: 'absolute',
-  //   left: 0,
-  //   right: 0,
-  //   bottom: 0,
-  //   top: 0,
-  // },
   innerContainer: {
     ...flex,
     padding: 20,
   },
-  // loadingContainer: {
-  //   position: 'absolute',
-  //   left: 0,
-  //   right: 0,
-  //   bottom: 0,
-  //   top: 0,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   backgroundColor: 'rgba(0, 0, 0, .2)',
-  //   ...fullWidthHeight,
-  //   zIndex: 100,
-  // },
   importAdContainerNoAuth: {
     paddingTop: 40,
     paddingBottom: 20,
     paddingLeft: 20,
     paddingRight: 20,
     ...flex,
-    // justifyContent: 'space-between',
     justifyContent: 'center',
-    //
   },
   importAdContainer: {
-    paddingTop: 40,
-    paddingBottom: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
-    ...flex,
-    // justifyContent: 'space-between',
-    justifyContent: 'flex-start',
-    //
+    marginBottom: 50,
   },
   loggedInContainer: {
     ...flex,
   },
   loginContainer: {
-    // flex: 1,
     paddingTop: 40,
     paddingBottom: 30,
     paddingLeft: 30,
     paddingRight: 30,
     ...flex,
-    // justifyContent: 'space-between',
     justifyContent: 'flex-start',
-    // alignItems: 'flex-start',
-  },
-  keyboardPaddingBottom: {
-    // paddingBottom: 35,
   },
   updateUserContainer: {
-    // flex: 1,
     paddingTop: 10,
   },
   container: {
-    // flex: 1,
     paddingTop: 40,
     paddingBottom: 20,
     paddingLeft: 20,
     paddingRight: 20,
     ...flex,
-    // justifyContent: 'space-between',
     justifyContent: 'flex-start',
-    // alignItems: 'flex-start',
   },
   loginBtn: {
     marginTop: 20,

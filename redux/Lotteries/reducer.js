@@ -5,7 +5,7 @@ const initialState = {
 };
 
 const lotteriesReducer = (state = initialState, action) => {
-  console.log('lotteriesReducer: ', action);
+  // console.log('lotteriesReducer: ', action);
 
   switch (action.type) {
     // case adActions.importAd: {

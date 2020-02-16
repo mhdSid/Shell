@@ -11,7 +11,7 @@ import {
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {Button, Icon} from 'react-native-material-ui';
+import {Button, Icon, Toolbar} from 'react-native-material-ui';
 import {TextField} from 'react-native-material-textfield';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import ImagePicker from 'react-native-image-picker';
@@ -129,7 +129,7 @@ const ImportAd = props => {
   };
 
   const handleError = (nameField, descriptionField, priceField) => {
-    error => {
+    return error => {
       const message =
         (error && error.message) || 'A an error has occured. Please try again.';
       // invoke(props, 'logout', {loggedIn: false, user: false});
@@ -147,8 +147,8 @@ const ImportAd = props => {
   };
 
   const importAdSuccess = (nameField, descriptionField, priceField) => {
-    data => {
-      console.log('importAdimportAdimportAd response: ', data);
+    return data => {
+      // console.log('importAdimportAdimportAd response: ', data);
       const {error, newAd} = data;
 
       if (error || !newAd) {
@@ -159,7 +159,7 @@ const ImportAd = props => {
 
       invoke(props, 'addAd', newAd);
       handleShowAdsDetails(newAd);
-      console.log('SUUUUUCESSSSSSSSS handleConfirm', newAd);
+      // console.log('SUUUUUCESSSSSSSSS handleConfirm', newAd);
     };
   };
 
@@ -273,8 +273,30 @@ const ImportAd = props => {
           behavior="padding"
           enabled
           keyboardVerticalOffset={25}>
+          <Toolbar
+            style={{
+              container: sharedStyles.toolbarContainerPadding,
+            }}
+            centerElement="Let's Add"
+            leftElement={<Icon color="white" name="add-box" />}
+            // leftElement="arrow-back"
+            // onLeftElementPress={handleCloseModal}
+            onRightElementPress={handleConfirm}
+            rightElement={
+              <Button
+                disabled={loading || !adDataChanged}
+                raised
+                text="Save"
+                icon="done-all"
+              />
+            }
+          />
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={sharedStyles.loginContainer}>
+            <View
+              style={[
+                sharedStyles.loginContainer,
+                sharedStyles.importAdContainer,
+              ]}>
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>Product Name</Text>
                 <TextField
