@@ -113,12 +113,8 @@ const ImportAd = props => {
     setShowAdDetails(true);
   };
 
-  const setDefault = () => {
+  const setDefault = (nameField, descriptionField, priceField) => {
     setLoading(false);
-
-    const {current: nameField} = adNameRef;
-    const {current: descriptionField} = descriptionRef;
-    const {current: priceField} = priceRef;
 
     nameField.setValue('');
     descriptionField.setValue('');
@@ -132,35 +128,39 @@ const ImportAd = props => {
     setPriceChanged(false);
   };
 
-  const handleError = error => {
-    const message =
-      (error && error.message) || 'A an error has occured. Please try again.';
-    // invoke(props, 'logout', {loggedIn: false, user: false});
-    // setLoggedIn(false);
-    setDefault();
+  const handleError = (nameField, descriptionField, priceField) => {
+    error => {
+      const message =
+        (error && error.message) || 'A an error has occured. Please try again.';
+      // invoke(props, 'logout', {loggedIn: false, user: false});
+      // setLoggedIn(false);
+      setDefault(nameField, descriptionField, priceField);
 
-    // setVerificationId(undefined);
-    // setUser(null);
+      // setVerificationId(undefined);
+      // setUser(null);
 
-    if (message) {
-      Alert.alert(message);
-    }
-    return;
+      if (message) {
+        Alert.alert(message);
+      }
+      return;
+    };
   };
 
-  const importAdSuccess = data => {
-    console.log('importAdimportAdimportAd response: ', data);
-    const {error, newAd} = data;
+  const importAdSuccess = (nameField, descriptionField, priceField) => {
+    data => {
+      console.log('importAdimportAdimportAd response: ', data);
+      const {error, newAd} = data;
 
-    if (error || !newAd) {
-      return handleError(error);
-    }
+      if (error || !newAd) {
+        return handleError(nameField, descriptionField, priceField)(error);
+      }
 
-    setDefault();
+      setDefault(nameField, descriptionField, priceField);
 
-    invoke(props, 'addAd', newAd);
-    handleShowAdsDetails(newAd);
-    console.log('SUUUUUCESSSSSSSSS handleConfirm', newAd);
+      invoke(props, 'addAd', newAd);
+      handleShowAdsDetails(newAd);
+      console.log('SUUUUUCESSSSSSSSS handleConfirm', newAd);
+    };
   };
 
   const handleConfirm = () => {
@@ -198,7 +198,10 @@ const ImportAd = props => {
         userId: authUser.id,
         country: authUser.country,
         currency: userCurrency,
-      }).then(importAdSuccess, handleError);
+      }).then(
+        importAdSuccess(nameField, descriptionField, priceField),
+        handleError(nameField, descriptionField, priceField),
+      );
     }
   };
 
