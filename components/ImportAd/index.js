@@ -1,5 +1,13 @@
 import React, {useState, useEffect, createRef} from 'react';
-import {View, Picker, ScrollView, Text, Image, Alert} from 'react-native';
+import {
+  View,
+  Picker,
+  ScrollView,
+  Text,
+  Image,
+  Alert,
+  KeyboardAvoidingView,
+} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
@@ -15,7 +23,7 @@ import {
 import {adStatuses, adCategories, mimeTypes} from '../../Constants/Ads';
 import isUndefined from 'lodash/isUndefined';
 import NoAuth from '../NoAuth';
-import {LoadingComponent} from '../Loading';
+import {LoadingComponent, loadingPopup} from '../Loading';
 // import ImgToBase64 from 'react-native-image-base64';
 import {importAd} from '../../services/ads';
 import {addAd} from '../../redux/Ads/actions';
@@ -28,7 +36,7 @@ const adImages = [0, 1, 2, 3, 4];
 // const adTypes = {};
 
 const ImportAd = props => {
-  console.log('IMPORT AD PROPS: ', props);
+  // console.log('IMPORT AD PROPS: ', props);
 
   const {loggedIn: _loggedIn, user: authUser} = props;
   const userCountry = authUser && authUser.country;
@@ -40,12 +48,18 @@ const ImportAd = props => {
   const [adStatus, setAdStatus] = useState('No Noticable Scratches or Dirt');
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
-  const [base64Images, setBase64Images] = useState([]);
+  const [imageFiles, setImageFiles] = useState([]);
   const [perfecture, setPerfecture] = useState(
     userCountry && perfecturesList[userCountry],
   );
   const [showAdDetails, setShowAdDetails] = useState(false);
   const [selectedAd, setSelectedAd] = useState(undefined);
+
+  const [adDataChanged, setADataChanged] = useState(false);
+  const [imagesChanged, setImagesChanged] = useState(false);
+  const [adNameChanged, setAdNameChanged] = useState(false);
+  const [descriptionChanged, setDescriptionChanged] = useState(false);
+  const [priceChanged, setPriceChanged] = useState(false);
 
   const userCurrency = userCountry && currencies[userCountry];
 
@@ -56,7 +70,39 @@ const ImportAd = props => {
   useEffect(() => {
     setLoggedIn(_loggedIn);
     setUser(authUser);
-  }, [_loggedIn, authUser]);
+    setADataChanged(
+      imagesChanged && adNameChanged && descriptionChanged && priceChanged,
+    );
+  }, [
+    _loggedIn,
+    authUser,
+    imagesChanged,
+    adNameChanged,
+    descriptionChanged,
+    priceChanged,
+  ]);
+
+  const handleAdNameChangeText = value => {
+    if (value && value.length > 5) {
+      setAdNameChanged(true);
+    } else {
+      setAdNameChanged(false);
+    }
+  };
+  const handleDescriptionChangeText = value => {
+    if (value && value.length > 20) {
+      setDescriptionChanged(true);
+    } else {
+      setDescriptionChanged(false);
+    }
+  };
+  const handlePriceChangeText = value => {
+    if (value && value.length > 1) {
+      setPriceChanged(true);
+    } else {
+      setPriceChanged(false);
+    }
+  };
 
   const onAdsDetailsClose = () => {
     setShowAdDetails(false);
@@ -67,12 +113,32 @@ const ImportAd = props => {
     setShowAdDetails(true);
   };
 
+  const setDefault = () => {
+    setLoading(false);
+
+    const {current: nameField} = adNameRef;
+    const {current: descriptionField} = descriptionRef;
+    const {current: priceField} = priceRef;
+
+    nameField.setValue('');
+    descriptionField.setValue('');
+    priceField.setValue('');
+    setImages([]);
+
+    setADataChanged(false);
+    setImagesChanged(false);
+    setAdNameChanged(false);
+    setDescriptionChanged(false);
+    setPriceChanged(false);
+  };
+
   const handleError = error => {
     const message =
       (error && error.message) || 'A an error has occured. Please try again.';
     // invoke(props, 'logout', {loggedIn: false, user: false});
     // setLoggedIn(false);
-    setLoading(false);
+    setDefault();
+
     // setVerificationId(undefined);
     // setUser(null);
 
@@ -82,26 +148,19 @@ const ImportAd = props => {
     return;
   };
 
-  const importAdSuccess = (nameField, descriptionField, priceField) => {
-    return data => {
-      console.log('importAdimportAdimportAd response: ', data);
-      const {error, newAd} = data;
+  const importAdSuccess = data => {
+    console.log('importAdimportAdimportAd response: ', data);
+    const {error, newAd} = data;
 
-      if (error || !newAd) {
-        return handleError(error);
-      }
+    if (error || !newAd) {
+      return handleError(error);
+    }
 
-      nameField.setValue('');
-      descriptionField.setValue('');
-      priceField.setValue('');
+    setDefault();
 
-      invoke(props, 'addAd', newAd);
-      handleShowAdsDetails(newAd);
-
-      console.log('SUUUUUCESSSSSSSSS handleConfirm', newAd);
-
-      setLoading(false);
-    };
+    invoke(props, 'addAd', newAd);
+    handleShowAdsDetails(newAd);
+    console.log('SUUUUUCESSSSSSSSS handleConfirm', newAd);
   };
 
   const handleConfirm = () => {
@@ -123,26 +182,15 @@ const ImportAd = props => {
       perfecture &&
       adStatus &&
       adCategory &&
-      base64Images &&
-      userCurrency
+      imageFiles &&
+      userCurrency &&
+      adDataChanged
     ) {
       setLoading(true);
-      // console.log({
-      //   name,
-      //   description,
-      //   images: base64Images.filter(Boolean),
-      //   perfecture,
-      //   category: adCategory,
-      //   status: adStatus,
-      //   price,
-      //   userId: authUser.id,
-      //   country: authUser.country,
-      //   currency: userCurrency,
-      // });
       importAd({
         name,
         description,
-        image: base64Images.filter(Boolean),
+        image: imageFiles.filter(Boolean),
         perfecture,
         category: adCategory,
         status: adStatus,
@@ -150,10 +198,7 @@ const ImportAd = props => {
         userId: authUser.id,
         country: authUser.country,
         currency: userCurrency,
-      }).then(
-        importAdSuccess(nameField, descriptionField, priceField),
-        handleError,
-      );
+      }).then(importAdSuccess, handleError);
     }
   };
 
@@ -188,16 +233,6 @@ const ImportAd = props => {
           images[index] = imagePath;
           setImages([...images]);
 
-          // ImgToBase64.getBase64String(imagePath)
-          //   .then(base64String => {
-          //     console.log(
-          //       'base64Stringbase64Stringbase64String: ',
-          //       // base64String,
-          //     );
-          // // const buffer = new Buffer.Buffer(base64String, 'base64');
-          // const buffer = new Buffer.Buffer.from(base64String, 'ascii');
-          // const buff = new Buffer.Buffer.from('fhqwhgads', 'utf8');
-          // console.log(buff.type);
           const imageName = imagePath.slice(
             imagePath.lastIndexOf('/') + 1,
             imagePath.length,
@@ -205,32 +240,15 @@ const ImportAd = props => {
 
           const typeRegex = imageName.match(/\.jpg|png|jpeg/);
 
-          base64Images[index] = {
+          imageFiles[index] = {
             uri: response.uri,
-            // base64: base64String,
             type: mimeTypes[typeRegex[0]],
             name: imageName,
-            // encoding: '7bit',
           };
 
-          console.log([...base64Images]);
+          setImagesChanged(true);
 
-          setBase64Images([...base64Images]);
-          // console.log(base64Images);
-          // let bufferString = '<Buffer ';
-          // buff.data.map((item, _index) => {
-          //   bufferString += ` ${item}`;
-          //   if (index === buff.data.length - 1) {
-          //     bufferString += '>';
-          //   }
-          // });
-          // console.log(bufferString);
-
-          // console.log(buffer);
-          // })
-          // .catch(err => {
-          //   console.log('errrror base 64 image: base64String error: ', err);
-          // });
+          setImageFiles([...imageFiles]);
         }
       });
     };
@@ -246,94 +264,120 @@ const ImportAd = props => {
 
   if (loggedIn === true && user) {
     return (
-      <View>
-        <ScrollView>
-          <View
-            style={[sharedStyles.importAdView, sharedStyles.loginContainer]}>
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>Product Name</Text>
-              <TextField
-                label="Ad Name"
-                // keyboardType="phone-pad"
-                // formatText={formatText}
-                // onSubmitEditing={onSubmit}
-                tintColor={'#b69cf6'}
-                // baseColor="#7f0000"
-                ref={adNameRef}
-                disabled={loading}
-              />
-            </View>
-
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>Description</Text>
-              <TextField
-                label="Description"
-                // keyboardType="phone-pad"
-                // formatText={formatText}
-                // onSubmitEditing={onSubmit}
-                tintColor={'#b69cf6'}
-                // baseColor="#7f0000"
-                ref={descriptionRef}
-                disabled={loading}
-              />
-            </View>
-
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>Images</Text>
-              <View style={sharedStyles.imageBtnContainer}>
-                {adImages.map(index => (
-                  <TouchableBounce
-                    key={index}
-                    onPress={handleChoosePhoto(index)}
-                    style={sharedStyles.imageBtn}>
-                    {!images[index] && (
-                      <Icon name="image" size={35} color="white" />
-                    )}
-                    {images[index] && (
-                      <Image
-                        style={sharedStyles.adImage}
-                        source={{uri: images[index]}}
-                      />
-                    )}
-                  </TouchableBounce>
-                ))}
+      <>
+        {loading && loadingPopup}
+        <KeyboardAvoidingView
+          behavior="padding"
+          enabled
+          keyboardVerticalOffset={25}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={sharedStyles.loginContainer}>
+              <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>Product Name</Text>
+                <TextField
+                  label="Ad Name"
+                  // keyboardType="phone-pad"
+                  // formatText={formatText}
+                  // onSubmitEditing={onSubmit}
+                  onChangeText={handleAdNameChangeText}
+                  tintColor={'#b69cf6'}
+                  // baseColor="#7f0000"
+                  ref={adNameRef}
+                  disabled={loading}
+                />
               </View>
-            </View>
 
-            <Text style={sharedStyles.label}>Perfecture</Text>
-            <View style={sharedStyles.pickerView}>
-              <Picker
-                mode="dropdown"
-                selectedValue={perfecture}
-                // style={sharedStyles.dobViewItem}
-                onValueChange={updatePerfecture}>
-                {perfectures[userCountry].map((_perfecture, index) => (
-                  <Picker.Item
-                    key={index}
-                    label={_perfecture}
-                    value={_perfecture}
-                  />
-                ))}
-              </Picker>
-            </View>
+              <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>Description</Text>
+                <TextField
+                  label="Description"
+                  // keyboardType="phone-pad"
+                  // formatText={formatText}
+                  // onSubmitEditing={onSubmit}
+                  onChangeText={handleDescriptionChangeText}
+                  tintColor={'#b69cf6'}
+                  // baseColor="#7f0000"
+                  ref={descriptionRef}
+                  disabled={loading}
+                />
+              </View>
 
-            <Text style={sharedStyles.label}>Category</Text>
-            <View style={sharedStyles.pickerView}>
-              <Picker
-                mode="dropdown"
-                selectedValue={adCategory}
-                onValueChange={updateAdCategory}>
-                {adCategories.map((_category, index) => (
-                  <Picker.Item
-                    key={index}
-                    label={_category}
-                    value={_category}
-                  />
-                ))}
-              </Picker>
-            </View>
+              <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>Price</Text>
+                <View style={sharedStyles.priceContainer}>
+                  <Text style={sharedStyles.currenyLabel}>{userCurrency}</Text>
+                  <View style={sharedStyles.adPriceTextfieldContainer}>
+                    <TextField
+                      label="Price"
+                      keyboardType="phone-pad"
+                      // formatText={formatText}
+                      // onSubmitEditing={onSubmit}
+                      tintColor={'#b69cf6'}
+                      onChangeText={handlePriceChangeText}
+                      // baseColor="#7f0000"
+                      ref={priceRef}
+                      disabled={loading}
+                    />
+                  </View>
+                </View>
+              </View>
 
-            {/* {adType && (
+              <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>Images</Text>
+                <View style={sharedStyles.imageBtnContainer}>
+                  {adImages.map(index => (
+                    <TouchableBounce
+                      key={index}
+                      onPress={handleChoosePhoto(index)}
+                      style={sharedStyles.imageBtn}>
+                      {!images[index] && (
+                        <Icon name="image" size={35} color="white" />
+                      )}
+                      {images[index] && (
+                        <Image
+                          style={sharedStyles.adImage}
+                          source={{uri: images[index]}}
+                        />
+                      )}
+                    </TouchableBounce>
+                  ))}
+                </View>
+              </View>
+
+              <Text style={sharedStyles.label}>Perfecture</Text>
+              <View style={sharedStyles.pickerView}>
+                <Picker
+                  mode="dropdown"
+                  selectedValue={perfecture}
+                  // style={sharedStyles.dobViewItem}
+                  onValueChange={updatePerfecture}>
+                  {perfectures[userCountry].map((_perfecture, index) => (
+                    <Picker.Item
+                      key={index}
+                      label={_perfecture}
+                      value={_perfecture}
+                    />
+                  ))}
+                </Picker>
+              </View>
+
+              <Text style={sharedStyles.label}>Category</Text>
+              <View style={sharedStyles.pickerView}>
+                <Picker
+                  mode="dropdown"
+                  selectedValue={adCategory}
+                  onValueChange={updateAdCategory}>
+                  {adCategories.map((_category, index) => (
+                    <Picker.Item
+                      key={index}
+                      label={_category}
+                      value={_category}
+                    />
+                  ))}
+                </Picker>
+              </View>
+
+              {/* {adType && (
             <>
               <Text style={sharedStyles.label}>Perfecture</Text>
               <Picker
@@ -351,52 +395,34 @@ const ImportAd = props => {
             </>
           )} */}
 
-            <Text style={sharedStyles.label}>Status</Text>
-            <View style={sharedStyles.pickerView}>
-              <Picker
-                mode="dropdown"
-                selectedValue={adStatus}
-                onValueChange={updateAdStatus}>
-                {adStatuses.map((_status, index) => (
-                  <Picker.Item key={index} label={_status} value={_status} />
-                ))}
-              </Picker>
-            </View>
+              <Text style={sharedStyles.label}>Status</Text>
+              <View style={sharedStyles.pickerView}>
+                <Picker
+                  mode="dropdown"
+                  selectedValue={adStatus}
+                  onValueChange={updateAdStatus}>
+                  {adStatuses.map((_status, index) => (
+                    <Picker.Item key={index} label={_status} value={_status} />
+                  ))}
+                </Picker>
+              </View>
 
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>Price</Text>
-              <View style={sharedStyles.priceContainer}>
-                <Text style={sharedStyles.currenyLabel}>{userCurrency}</Text>
-                <View style={sharedStyles.adPriceTextfieldContainer}>
-                  <TextField
-                    label="Price"
-                    keyboardType="phone-pad"
-                    // formatText={formatText}
-                    // onSubmitEditing={onSubmit}
-                    tintColor={'#b69cf6'}
-                    // baseColor="#7f0000"
-                    ref={priceRef}
-                    disabled={loading}
-                  />
-                </View>
+              <View style={sharedStyles.loginBtn}>
+                <Button
+                  disabled={loading || !adDataChanged}
+                  raised={true}
+                  primary
+                  text={'Confirm'}
+                  onPress={handleConfirm}
+                />
               </View>
             </View>
-
-            <View style={sharedStyles.loginBtn}>
-              <Button
-                disabled={loading}
-                raised={true}
-                primary
-                text={'Confirm'}
-                onPress={handleConfirm}
-              />
-            </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </KeyboardAvoidingView>
         {showAdDetails && (
           <AdDetails onClose={onAdsDetailsClose} item={selectedAd} />
         )}
-      </View>
+      </>
     );
   }
 };

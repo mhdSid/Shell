@@ -1,6 +1,7 @@
 const authActions = {
   LOGIN: 'AUTH_LOGIN',
   LOGOUT: 'AUTH_LOGOUT',
+  UPDATE: 'AUTH_UPDATE',
 };
 
 const loginAction = payload => ({
@@ -13,4 +14,9 @@ const logoutAction = payload => ({
   payload,
 });
 
-export {authActions, loginAction, logoutAction};
+const updateAction = payload => ({
+  type: authActions.UPDATE,
+  payload,
+});
+
+export {authActions, loginAction, logoutAction, updateAction};

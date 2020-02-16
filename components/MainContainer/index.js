@@ -25,11 +25,6 @@ const MainContainer = props => {
 
   return (
     <>
-      {/* <Toolbar
-        leftElement="arrow-back"
-        onLeftElementPress={() => this.props.navigation.goBack()}
-        centerElement="Bottom navigation"
-      /> */}
       <SafeAreaView style={sharedStyles.container}>
         {activeView === 'grade' && <Lotteries />}
         {activeView === 'profile' && <AuthComponent />}

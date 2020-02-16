@@ -88,4 +88,47 @@ const signup = async props => {
   return data;
 };
 
-export {login, logout, ping, verify, signup};
+const update = async props => {
+  const {
+    mobile,
+    country,
+    perfecture,
+    firstName,
+    lastName,
+    image,
+    id,
+    email,
+  } = props;
+
+  const formData = new FormData();
+  if (mobile) {
+    formData.append('mobile', mobile);
+  }
+  if (country) {
+    formData.append('country', country);
+  }
+  if (image) {
+    formData.append('image', image);
+  }
+  if (perfecture) {
+    formData.append('perfecture', perfecture);
+  }
+  if (firstName) {
+    formData.append('firstName', firstName);
+  }
+  if (lastName) {
+    formData.append('lastName', lastName);
+  }
+  formData.append('id', id);
+  formData.append('email', email);
+
+  const data = await request({
+    endpoint: 'users/authenticate/update',
+    method: 'POST',
+    body: formData,
+  });
+
+  return data;
+};
+
+export {login, logout, ping, verify, signup, update};

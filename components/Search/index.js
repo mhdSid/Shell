@@ -1,14 +1,11 @@
 import React from 'react';
 import {Toolbar} from 'react-native-material-ui';
+import sharedStyles from '../../assets/styles/sharedStyles';
 
 const SearchComponent = () => {
   return (
     <Toolbar
-      style={{
-        container: {
-          height: 60,
-        },
-      }}
+      style={{container: sharedStyles.toolbarContainer}}
       // leftElement="menu"
       centerElement="Search"
       searchable={{

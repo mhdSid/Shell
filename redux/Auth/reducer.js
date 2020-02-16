@@ -17,6 +17,17 @@ const authReducer = (state = initialState, action) => {
       };
     }
 
+    case authActions.UPDATE: {
+      const user = {
+        ...state.user,
+        ...action.payload,
+      };
+      return {
+        ...state,
+        user,
+      };
+    }
+
     case authActions.LOGOUT: {
       return {
         ...initialState,

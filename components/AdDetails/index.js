@@ -1,51 +1,187 @@
 import React, {useState} from 'react';
-import {Text, View, Modal, SafeAreaView} from 'react-native';
+import {Text, View, Modal, SafeAreaView, ScrollView, Image} from 'react-native';
 import {connect} from 'react-redux';
 import sharedStyles from '../../assets/styles/sharedStyles';
+import {Button, Icon} from 'react-native-material-ui';
 import {Toolbar} from 'react-native-material-ui';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 
 const AdDetails = props => {
   const {item} = props;
+  const {
+    name,
+    description,
+    id,
+    category,
+    currency,
+    price,
+    country,
+    perfecture,
+    publishDate,
+    cancelDate,
+    status,
+    userId,
+    cancelled,
+    available,
+    lotteryUserIds,
+    winnerUserId,
+    currentCollectedPrice,
+  } = item;
+  let {images} = item;
+  images = images.filter(Boolean);
   const [modalVisible, setModalVisible] = useState(true);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+
+  const handleMovePreviousPhoto = () => {
+    let index = currentPhotoIndex;
+    index = index <= 0 ? images.length - 1 : --index;
+    setCurrentPhotoIndex(index);
+  };
+
+  const handleMoveNextPhoto = () => {
+    let index = currentPhotoIndex;
+    index = index >= images.length - 1 ? 0 : ++index;
+    setCurrentPhotoIndex(index);
+  };
+
+  const onModalDissmiss = () => {
+    invoke(props, 'onClose');
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
 
   return (
     <Modal
       animationType="slide"
       transparent={false}
       visible={modalVisible}
-      onDismiss={() => {
-        invoke(props, 'onClose');
-      }}>
+      onDismiss={onModalDissmiss}>
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
-          style={{
-            container: {
-              height: 55,
-              borderBottomColor: 'black',
-              borderBottomWidth: 2,
-            },
-          }}
+          style={{container: sharedStyles.toolbarContainer}}
           leftElement="arrow-back"
-          onLeftElementPress={() => {
-            setModalVisible(false);
-          }}
+          onLeftElementPress={handleCloseModal}
         />
 
-        <View style={sharedStyles.innerContainer}>
-          <Text>{item.name}</Text>
-          <Text>{item.description}</Text>
-          <Text>{item.id}</Text>
-          <Text>{item.category}</Text>
-          <Text>{item.image}</Text>
-          <Text>{`${item.currency} ${item.price}`}</Text>
-          <Text>{item.country}</Text>
-          <Text>{item.perfecture}</Text>
-          <Text>{item.publishDate}</Text>
-          <Text>{item.status}</Text>
-          <Text>{item.userId}</Text>
-        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View
+            style={{
+              // height: '45%',
+              display: 'flex',
+              flexDirection: 'row',
+              // justifyContent: 'center',
+              // alignItems: 'center',
+              // position: 'absolute',
+              // top: 0,
+              // left: 0,
+              // aspectRatio: 3 / 2,
+              // height: 'auto',
+            }}>
+            <Image
+              source={{
+                uri: images[currentPhotoIndex],
+                cache: 'force-cache',
+                // headers: {
+                //   Pragma: 'only-if-cached',
+                //   'Cache-Control': 'only-if-cached',
+                // },
+              }}
+              style={{flex: 1, aspectRatio: 3 / 2}}
+            />
+            {images.length > 1 && (
+              <>
+                <Button
+                  text=""
+                  // icon="white"
+                  icon={
+                    <Icon
+                      size={50}
+                      style={{
+                        alignSelf: 'center',
+                        marginTop: -6,
+                        marginLeft: -5,
+                      }}
+                      name="chevron-left"
+                      color="white"
+                    />
+                  }
+                  size={50}
+                  onPress={handleMovePreviousPhoto}
+                  style={{
+                    container: {
+                      position: 'absolute',
+                      left: 0,
+                      paddingHorizontal: 0,
+                      paddingVertical: 0,
+                      borderRadius: 0,
+                      width: 35,
+                      alignSelf: 'center',
+                      backgroundColor: 'black',
+                    },
+                  }}
+                />
+                <Button
+                  text=""
+                  icon={
+                    <Icon
+                      size={50}
+                      name="chevron-right"
+                      color="white"
+                      style={{
+                        alignSelf: 'center',
+                        marginTop: -6,
+                        marginLeft: -2,
+                      }}
+                    />
+                  }
+                  onPress={handleMoveNextPhoto}
+                  style={{
+                    container: {
+                      position: 'absolute',
+                      right: 0,
+                      width: 35,
+                      borderRadius: 0,
+                      paddingVertical: 0,
+                      paddingHorizontal: 0,
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      alignSelf: 'center',
+                      backgroundColor: 'black',
+                    },
+                  }}
+                />
+              </>
+            )}
+          </View>
+          <View style={sharedStyles.innerContainer}>
+            <Text>{`${currency} ${price}`}</Text>
+            <Text>
+              Current Collected Price:
+              {` ${currency} ${currentCollectedPrice || 0}`}
+            </Text>
+
+            <Text>{name}</Text>
+            <Text>{description}</Text>
+            <Text>{id}</Text>
+            <Text>{category}</Text>
+            {images &&
+              images.map((image, index) => <Text key={index}>{image}</Text>)}
+            <Text>{country}</Text>
+            <Text>{perfecture}</Text>
+            <Text>{publishDate}</Text>
+            <Text>{status}</Text>
+            <Text>{userId}</Text>
+            <Text>{cancelled}</Text>
+            <Text>{available}</Text>
+            <Text>{cancelDate}</Text>
+            <Text>{lotteryUserIds}</Text>
+            <Text>{winnerUserId}</Text>
+          </View>
+        </ScrollView>
       </SafeAreaView>
     </Modal>
   );

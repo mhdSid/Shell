@@ -13,6 +13,7 @@ import AdDetails from '../AdDetails';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {getAds} from '../../services/ads';
+import sharedStyles from '../../assets/styles/sharedStyles';
 
 class CarouselItem extends PureComponent {
   static propTypes = {
@@ -26,7 +27,7 @@ class CarouselItem extends PureComponent {
 
   render() {
     const {item} = this.props;
-    const {image, name, description} = item;
+    const {images, name, description} = item;
     const even = true;
     const uppercaseTitle = name ? (
       <Text
@@ -49,7 +50,19 @@ class CarouselItem extends PureComponent {
             sliderStyles.imageContainer,
             even ? sliderStyles.imageContainerEven : {},
           ]}>
-          {<Image source={{uri: image}} style={sliderStyles.image} />}
+          {images && images[0] ? (
+            <Image
+              source={{
+                uri: images[0],
+                cache: 'force-cache',
+                // headers: {
+                //   Pragma: 'only-if-cached',
+                //   'Cache-Control': 'only-if-cached',
+                // },
+              }}
+              style={sliderStyles.image}
+            />
+          ) : null}
           <View
             style={[
               sliderStyles.radiusMask,
@@ -135,6 +148,7 @@ const HomeComponent = props => {
   const [isList, setIsList] = useState(false);
   const [showAdDetails, setShowAdDetails] = useState(false);
   const [selectedAd, setSelectedAd] = useState(undefined);
+  let unMounted = false;
 
   const handleError = error => {
     const message =
@@ -152,21 +166,26 @@ const HomeComponent = props => {
   };
 
   const onGetAdsSuccess = data => {
-    console.log(
-      'onGetAdsSuccessonGetAdsSuccessonGetAdsSuccessonGetAdsSuccessonGetAdsSuccess: ',
-      data,
-    );
-    const {error, ads: serverAds} = data;
+    if (!unMounted) {
+      // console.log(
+      //   'onGetAdsSuccessonGetAdsSuccessonGetAdsSuccessonGetAdsSuccessonGetAdsSuccess: ',
+      //   data,
+      // );
+      const {error, ads: serverAds} = data;
 
-    if (error) {
-      return handleError(error);
+      if (error) {
+        return handleError(error);
+      }
+      setAds(serverAds);
+      invoke(props, 'addAd', serverAds);
     }
-    setAds(serverAds);
-    invoke(props, 'addAd', serverAds);
   };
 
   useEffect(() => {
     getAds().then(onGetAdsSuccess, handleError);
+    return () => {
+      unMounted = true;
+    };
   }, [_ads]);
 
   // const {slider1ActiveSlide} = this.state;
@@ -193,17 +212,11 @@ const HomeComponent = props => {
   };
 
   return (
-    <View style={{height: '100%'}}>
+    <View style={sharedStyles.homeContainer}>
       <Toolbar
-        style={{
-          container: {
-            height: 55,
-            borderBottomColor: 'black',
-            borderBottomWidth: 2,
-          },
-        }}
+        style={{container: sharedStyles.toolbarContainer}}
         leftElement="menu"
-        centerElement="WinAd"
+        centerElement="Shell"
         // onLeftElementPress={label => {
         //   alert('onLeftElementPress');
         // }}
@@ -224,10 +237,19 @@ const HomeComponent = props => {
             <ListItem
               divider
               leftElement={
-                <Image
-                  style={{width: 50, height: 50}}
-                  source={{uri: item.image}}
-                />
+                item.images && item.images[0] ? (
+                  <Image
+                    style={{width: 50, height: 50}}
+                    source={{
+                      uri: item.images[0],
+                      cache: 'force-cache',
+                      // headers: {
+                      //   Pragma: 'only-if-cached',
+                      //   'Cache-Control': 'only-if-cached',
+                      // },
+                    }}
+                  />
+                ) : null
               }
               centerElement={{
                 primaryText: item.name,

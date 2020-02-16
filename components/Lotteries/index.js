@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import NoAuth from '../NoAuth';
 import isUndefined from 'lodash/isUndefined';
-import {LoadingComponent} from '../Loading';
+import {Loading} from '../Loading';
 import PropTypes from 'prop-types';
 
 const Lotteries = props => {
@@ -19,7 +19,7 @@ const Lotteries = props => {
   }, [_loggedIn, authUser]);
 
   if (isUndefined(_loggedIn) && isUndefined(user)) {
-    return <LoadingComponent />;
+    return Loading;
   }
 
   if (!loggedIn && !user) {

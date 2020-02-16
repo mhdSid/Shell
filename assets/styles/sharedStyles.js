@@ -19,6 +19,34 @@ const sharedStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     ...fullWidthHeight,
+    zIndex: 1000,
+  },
+  toolbarContainer: {
+    height: 55,
+    borderBottomColor: 'black',
+    borderBottomWidth: 2,
+    zIndex: 9999,
+  },
+  homeContainer: {
+    height: '100%',
+  },
+  loadingPopup: {
+    height: '100%',
+    width: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    margin: 'auto',
+    alignSelf: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    backgroundColor: 'white',
+    opacity: 0.9,
+    zIndex: 1000,
   },
   backdrop: {
     backgroundColor: '#000000',
@@ -35,19 +63,27 @@ const sharedStyles = StyleSheet.create({
   //   // padding: 10,
   //   // paddingRight: 25,
   // },
-  importAdView: {
-    marginBottom: 100,
-  },
-  signupView: {
-    // marginTop: 80,
-    // paddingBottom: 100,
-    marginBottom: 20,
-  },
+  // importAdView: {
+  //   marginBottom: 100,
+  // },
+  // signupView: {
+  //   // marginTop: 80,
+  //   // paddingBottom: 100,
+  //   // marginBottom: 20,
+  // },
   imageBtnContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     // display: 'flex',
     // display: 'block',
+  },
+  profileImage: {
+    width: 65,
+    height: 65,
+    borderRadius: 65 / 2,
+  },
+  userImageBtnContainer: {
+    justifyContent: 'center',
   },
   priceContainer: {
     display: 'flex',
@@ -71,16 +107,24 @@ const sharedStyles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: '#c4aff7',
   },
+  updateUserImgBtn: {
+    width: 100,
+    height: 100,
+    borderRadius: 100 / 2,
+  },
   adImage: {
     flex: 1,
     width: '100%',
     height: '100%',
   },
+  userImage: {
+    borderRadius: 100 / 2,
+  },
   dobContainer: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    marginBottom: 190,
+    marginBottom: 200,
     top: 90,
   },
   genderContainer: {
@@ -224,6 +268,13 @@ const sharedStyles = StyleSheet.create({
     // justifyContent: 'space-between',
     justifyContent: 'flex-start',
     // alignItems: 'flex-start',
+  },
+  keyboardPaddingBottom: {
+    // paddingBottom: 35,
+  },
+  updateUserContainer: {
+    // flex: 1,
+    paddingTop: 10,
   },
   container: {
     // flex: 1,

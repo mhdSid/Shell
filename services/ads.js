@@ -11,8 +11,6 @@ const getAds = async () => {
 
 const importAd = async props => {
   const {
-    // email,
-    // password,
     name,
     description,
     image,
@@ -28,15 +26,13 @@ const importAd = async props => {
   const formData = new FormData();
   formData.append('name', name);
   formData.append('description', description);
-  // formData.append('file', {
-  //   ...image[0],
-  // });
-  formData.append('image', {
-    ...image[0],
-  });
-  // formData.append('file', {
-  //   ...image[0],
-  // });
+
+  if (Array.isArray(image)) {
+    image.forEach(item => {
+      formData.append('image', item);
+    });
+  }
+
   formData.append('category', category);
   formData.append('perfecture', perfecture);
   formData.append('currency', currency);
@@ -44,25 +40,11 @@ const importAd = async props => {
   formData.append('price', price);
   formData.append('userId', userId);
   formData.append('country', country);
-  console.log(formData);
-  console.log(formData.getParts());
 
   const data = await request({
     endpoint: 'ads/add',
     method: 'POST',
     body: formData,
-    /*{
-      name,
-      description,
-      image,
-      currency,
-      category,
-      perfecture,
-      status,
-      price,
-      userId,
-      country,
-    },*/
   });
 
   return data;

@@ -67,17 +67,61 @@ const request = async options => {
   if (body instanceof FormData) {
     reqData.headers['Content-Type'] =
       'multipart/form-data; boundary=----WebKitFormBoundarybAbXQzJABEgSJzxT';
-    console.log('is instance form data');
-    reqData.headers.Accept =
-      'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9';
   }
 
   if (!isUndefined(body) && !isNill(body) && Object.keys(body).length > 0) {
     reqData = {
       ...reqData,
-      body: body instanceof FormData ? body : JSON.stringify(options.body), // body instanceof FormData ? body :
+      body: body instanceof FormData ? body : JSON.stringify(options.body),
     };
   }
+
+  // if (onProgress) {
+  //   return new Promise((resolve, reject) => {
+  //     let xhr = new XMLHttpRequest();
+  //     xhr.open(
+  //       reqData.method,
+  //       `https://halogen-proxy-239213.appspot.com/${endpoint}`,
+  //       true,
+  //     );
+
+  //     xhr.setRequestHeader('Accept', 'application/json');
+  //     xhr.setRequestHeader(
+  //       'Content-Type',
+  //       'multipart/form-data; boundary=----WebKitFormBoundarybAbXQzJABEgSJzxT',
+  //     );
+  //     xhr.onprogress = onProgress;
+
+  //     xhr.onreadystatechange = () => {
+  //       if (xhr.readyState === 4 && xhr.status === 200) {
+  //         let data = xhr.response;
+
+  //         if (data.data || data.error || data.user) {
+  //           console.log('response: ', data);
+  //           data = decrypt(data.data || data.error || data.user, password);
+
+  //           data = JSON.parse(data.toString(CryptoJS.enc.Utf8));
+
+  //           if (
+  //             typeof data !== 'undefined' &&
+  //             data !== null &&
+  //             Object.keys(data).length > 0
+  //           ) {
+  //             data = {...data};
+  //             xhr.onprogress = null;
+  //             xhr.onreadystatechange = null;
+  //             xhr = null;
+  //             resolve(data);
+  //           }
+  //         } else {
+  //           reject();
+  //         }
+  //       }
+  //     };
+
+  //     xhr.send(body);
+  //   });
+  // }
 
   const response = await fetch(
     `https://halogen-proxy-239213.appspot.com/${endpoint}`,

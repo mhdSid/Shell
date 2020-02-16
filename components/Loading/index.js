@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, SafeAreaView} from 'react-native';
+import {ActivityIndicator, SafeAreaView, View} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 
 const Loading = (
@@ -12,4 +12,10 @@ const LoadingComponent = () => {
   return <>{Loading}</>;
 };
 
-export {LoadingComponent, Loading};
+const loadingPopup = (
+  <View style={sharedStyles.loadingPopup}>
+    <LoadingComponent />
+  </View>
+);
+
+export {LoadingComponent, Loading, loadingPopup};
