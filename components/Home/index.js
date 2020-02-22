@@ -1,6 +1,6 @@
 import React, {PureComponent, useState, useEffect} from 'react';
 import {Toolbar, ListItem} from 'react-native-material-ui';
-import {View, Text, FlatList, Alert} from 'react-native';
+import {View, Text, FlatList, Alert, ScrollView} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import Carousel from 'react-native-snap-carousel';
 import {
@@ -16,6 +16,8 @@ import {getAds} from '../../services/ads';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Loading} from '../Loading';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
+import {addAd} from '../../redux/Ads/actions';
+import About from '../About';
 
 class CarouselItem extends PureComponent {
   static propTypes = {
@@ -29,7 +31,7 @@ class CarouselItem extends PureComponent {
 
   render() {
     const {item} = this.props;
-    const {images, name, description} = item;
+    const {images, name} = item;
     const even = true;
     const uppercaseTitle = name ? (
       <Text
@@ -85,7 +87,7 @@ class CarouselItem extends PureComponent {
               even ? sliderStyles.subtitleEven : {},
             ]}
             numberOfLines={2}>
-            {description}
+            {`${item.currency} ${item.price}`}
           </Text>
         </View>
       </TouchableBounce>
@@ -104,6 +106,9 @@ const CarouselComponent = props => {
   return (
     <View style={sliderStyles.exampleContainer}>
       <Carousel
+        // enableSnap={true}
+        shouldOptimizeUpdates={true}
+        // useScrollView={true}
         // ref={c => (slider1Ref = c)}
         data={items}
         renderItem={renderCarouselItem(onItemPress)}
@@ -146,12 +151,17 @@ CarouselComponent.propTypes = {
 
 const HomeComponent = props => {
   const {ads: _ads} = props;
+  console.log('HomeComponent', _ads);
 
   const [ads, setAds] = useState(_ads);
   const [isList, setIsList] = useState(false);
+  const [isCarousel, setIsCarousel] = useState(false);
+  const [isCard, setIsCard] = useState(true);
   const [showAdDetails, setShowAdDetails] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [selectedAd, setSelectedAd] = useState(undefined);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [fetchId, setFetchId] = useState(0);
 
   let unMounted = false;
 
@@ -181,7 +191,7 @@ const HomeComponent = props => {
       if (error) {
         return handleError(error);
       }
-      setAds(serverAds);
+      // setAds(serverAds);
       invoke(props, 'addAd', serverAds);
       setLoading(false);
     }
@@ -192,8 +202,24 @@ const HomeComponent = props => {
   };
 
   useEffect(() => {
+    if (Array.isArray(ads) && ads.length > 0) {
+      setLoading(false);
+    }
+  }, [ads]);
+
+  useEffect(() => {
     setLoading(true);
     fetchAds();
+    return () => {
+      unMounted = true;
+    };
+  }, [fetchId]);
+
+  useEffect(() => {
+    if (Array.isArray(_ads) && _ads.length > 0) {
+      setLoading(true);
+      setAds(_ads);
+    }
     return () => {
       unMounted = true;
     };
@@ -202,13 +228,30 @@ const HomeComponent = props => {
   // const {slider1ActiveSlide} = this.state;
   // let slider1Ref;
 
-  const changeViewStyle = label => {
-    // console.log(label);
-    setIsList(!isList);
+  const changeViewStyle = () => {
+    if (isCard) {
+      setIsList(true);
+      setIsCard(false);
+      setIsCarousel(false);
+    }
+    if (isList) {
+      setIsList(false);
+      setIsCard(false);
+      setIsCarousel(true);
+    }
+    if (isCarousel) {
+      setIsList(false);
+      setIsCard(true);
+      setIsCarousel(false);
+    }
   };
 
   const onAdsDetailsClose = () => {
     setShowAdDetails(false);
+  };
+
+  const onAboutClose = () => {
+    setShowAbout(false);
   };
 
   const handleShowAdsDetails = item => {
@@ -222,20 +265,66 @@ const HomeComponent = props => {
     };
   };
 
+  const handleLeftElementPress = () => {
+    setShowAbout(true);
+  };
+
   return (
     <View style={sharedStyles.fullheightView}>
       <Toolbar
         style={{container: sharedStyles.toolbarContainer}}
-        // leftElement="menu"
+        leftElement="help"
         centerElement="Shell"
-        // onLeftElementPress={label => {
-        //   alert('onLeftElementPress');
-        // }}
-        rightElement={isList ? 'view-carousel' : 'view-list'}
+        onLeftElementPress={handleLeftElementPress}
+        rightElement={
+          isCard ? 'view-list' : isList ? 'view-carousel' : 'view-comfy'
+        }
         onRightElementPress={changeViewStyle}
       />
       {loading && Loading}
-      {!isList && (
+      {isCard && (
+        <FlatList
+          refreshing={loading}
+          onRefresh={fetchAds}
+          showsVerticalScrollIndicator={false}
+          data={ads}
+          contentContainerStyle={sharedStyles.homeAdsContainer}
+          numColumns={3}
+          // style={sharedStyles.homeAdsContainer}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => (
+            <TouchableBounce
+              style={sharedStyles.homeCardItem}
+              onPress={handleShowAdsDetailsFlatList(item)}>
+              <CachedImage
+                style={sharedStyles.homeCardItemImage}
+                source={{uri: item.images[0]}}
+              />
+              <View style={sharedStyles.homeCardItemTextContainer}>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode={'tail'}
+                  style={sharedStyles.homeCardItemText}>
+                  {item.name}
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode={'tail'}
+                  style={sharedStyles.homeCardItemText}>
+                  {item.category}
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode={'tail'}
+                  style={
+                    sharedStyles.homeCardItemText
+                  }>{`${item.currency} ${item.price}`}</Text>
+              </View>
+            </TouchableBounce>
+          )}
+        />
+      )}
+      {isCarousel && (
         <CarouselComponent items={ads} onItemPress={handleShowAdsDetails} />
       )}
       {isList && (
@@ -266,7 +355,7 @@ const HomeComponent = props => {
               }
               centerElement={{
                 primaryText: item.name,
-                secondaryText: item.description,
+                secondaryText: `${item.currency} ${item.price}`,
               }}
               onPress={handleShowAdsDetailsFlatList(item)}
             />
@@ -277,6 +366,7 @@ const HomeComponent = props => {
       {showAdDetails && (
         <AdDetails onClose={onAdsDetailsClose} item={selectedAd} />
       )}
+      {showAbout && <About onClose={onAboutClose} />}
       {/* </View> */}
       {/* </ScrollView> */}
     </View>
@@ -295,7 +385,7 @@ const mapStateToProps = ({adsReducer}) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    // navigate: payload => dispatch(navigate(payload)),
+    addAd: payload => dispatch(addAd(payload)),
   };
 };
 

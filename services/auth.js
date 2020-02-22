@@ -63,7 +63,7 @@ const signup = async props => {
     gender,
     mobile,
     country,
-    perfecture,
+    prefecture,
     firstName,
     lastName,
   } = props;
@@ -79,7 +79,7 @@ const signup = async props => {
       gender,
       mobile,
       country,
-      perfecture,
+      prefecture,
       firstName,
       lastName,
     },
@@ -92,7 +92,7 @@ const update = async props => {
   const {
     mobile,
     country,
-    perfecture,
+    prefecture,
     firstName,
     lastName,
     image,
@@ -110,8 +110,8 @@ const update = async props => {
   if (image) {
     formData.append('image', image);
   }
-  if (perfecture) {
-    formData.append('perfecture', perfecture);
+  if (prefecture) {
+    formData.append('prefecture', prefecture);
   }
   if (firstName) {
     formData.append('firstName', firstName);

@@ -20,8 +20,11 @@ const adsReducer = (state = initialState, action) => {
         ENTRIES1.forEach(item => {
           newSet.add(item);
         });
-        action.payload.forEach(item => {
-          newSet.add(item);
+        action.payload.forEach(ad => {
+          newSet.add({
+            ...ad,
+            images: ad.images.filter(Boolean),
+          });
         });
       } else {
         ENTRIES1.forEach(item => {
@@ -29,10 +32,14 @@ const adsReducer = (state = initialState, action) => {
         });
         newSet.add(action.payload);
       }
+      console.log('adsReducer: ', ads);
+
       ads = Array.from(newSet);
 
+      console.log('adsReducer: ', ads);
+
       return {
-        ...state,
+        // ...state,
         ads,
       };
     }

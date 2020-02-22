@@ -13,7 +13,7 @@ const flex = {
 };
 
 const toolbarStyles = {
-  height: 50,
+  height: 55,
   zIndex: 9999,
 };
 
@@ -21,6 +21,10 @@ const sharedStyles = StyleSheet.create({
   /* ToolBar */
   toolbarContainer: {
     ...toolbarStyles,
+  },
+  aboutToolbarContainer: {
+    ...toolbarStyles,
+    // backgroundColor: 'white',
   },
   toolbarContainerPadding: {
     paddingHorizontal: 15,
@@ -203,6 +207,16 @@ const sharedStyles = StyleSheet.create({
     margin: 0,
     padding: 0,
   },
+  adDetailsContainer: {
+    padding: 20,
+    backgroundColor: 'rgba(0,0,0,.1)',
+    ...flex,
+  },
+  aboutContainer: {
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    ...flex,
+  },
   innerContainer: {
     ...flex,
     padding: 20,
@@ -229,6 +243,16 @@ const sharedStyles = StyleSheet.create({
     ...flex,
     justifyContent: 'flex-start',
   },
+  homeAdsContainer: {
+    paddingTop: 20,
+    paddingHorizontal: 5,
+    paddingBottom: 20,
+    // padding: 20,
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    // ...fullWidthHeight,
+  },
   updateUserContainer: {
     paddingTop: 10,
   },
@@ -240,8 +264,37 @@ const sharedStyles = StyleSheet.create({
     ...flex,
     justifyContent: 'flex-start',
   },
+  // appContainer: {
+  //   borderLeftWidth: 5,
+  //   borderRightWidth: 5,
+  //   borderLeftColor: '#b69cf6',
+  //   borderRightColor: '#b69cf6',
+  // },
   loginBtn: {
     marginTop: 20,
+  },
+  homeCardItem: {
+    width: '31%',
+    flexGrow: 1,
+    margin: 2,
+    borderWidth: 2,
+    borderRadius: 4,
+    borderColor: '#b69cf6',
+  },
+  homeCardItemImage: {
+    aspectRatio: 3 / 5,
+    borderRadius: 2,
+  },
+  homeCardItemTextContainer: {
+    backgroundColor: 'rgba(0,0,0,.75)',
+    position: 'absolute',
+    bottom: 0,
+    padding: 2,
+    left: 0,
+    width: '100%',
+  },
+  homeCardItemText: {
+    color: 'white',
   },
 });
 

@@ -206,7 +206,7 @@ const countries = [
   // 'Zimbabwe',
 ].sort();
 
-const perfectures = {
+const prefectures = {
   Japan: [
     'Hokkaido',
     'Iwate',
@@ -586,7 +586,7 @@ const perfectures = {
   ].sort(),
 };
 
-const perfecturesList = {
+const prefecturesList = {
   Japan: 'Tokyo',
   Lebanon: 'Beirut',
   Egypt: 'Cairo',
@@ -598,6 +598,8 @@ const perfecturesList = {
 const countryCodeList = {
   JP: 'Japan',
   LB: 'Lebanon',
+  jp: 'Japan',
+  Jp: 'Japan',
 };
 
 const currencies = {
@@ -613,4 +615,4 @@ const currencies = {
   Lb: 'LBP',
 };
 
-export {countries, perfectures, perfecturesList, countryCodeList, currencies};
+export {countries, prefectures, prefecturesList, countryCodeList, currencies};

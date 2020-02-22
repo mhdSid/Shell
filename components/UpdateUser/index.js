@@ -17,8 +17,8 @@ import ImagePicker from 'react-native-image-picker';
 import {mimeTypes} from '../../Constants/Ads';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import {
-  perfecturesList,
-  perfectures,
+  prefecturesList,
+  prefectures,
   countries,
 } from '../../Constants/Countries';
 import {update} from '../../services/auth';
@@ -30,7 +30,7 @@ const UpdateUser = props => {
   // console.log('UpdateUserUpdateUserUpdateUserUpdateUser: ', user);
 
   const [country, setCountry] = useState((user && user.country) || 'Japan');
-  const [perfecture, setPerfecture] = useState(perfecturesList[country]);
+  const [prefecture, setPrefecture] = useState(prefecturesList[country]);
 
   const [modalVisible, setModalVisible] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -42,7 +42,7 @@ const UpdateUser = props => {
   const [firstNameChanged, setFirstNameChanged] = useState(false);
   const [lastNameChanged, setLastNameChanged] = useState(false);
   const [countryChanged, setCountryChanged] = useState(false);
-  const [perfectureChanged, setPerfectureChanged] = useState(false);
+  const [prefectureChanged, setPrefectureChanged] = useState(false);
 
   useEffect(() => {
     setUserDataChanged(
@@ -51,7 +51,7 @@ const UpdateUser = props => {
         firstNameChanged ||
         lastNameChanged ||
         countryChanged ||
-        perfectureChanged,
+        prefectureChanged,
     );
   }, [
     imageChanged,
@@ -59,7 +59,7 @@ const UpdateUser = props => {
     firstNameChanged,
     lastNameChanged,
     countryChanged,
-    perfectureChanged,
+    prefectureChanged,
   ]);
 
   const updateCountry = value => {
@@ -93,12 +93,12 @@ const UpdateUser = props => {
     }
   };
 
-  const updatePerfecture = value => {
-    setPerfecture(value);
-    if (value && value !== user.perfecture) {
-      setPerfectureChanged(true);
+  const updatePrefecture = value => {
+    setPrefecture(value);
+    if (value && value !== user.prefecture) {
+      setPrefectureChanged(true);
     } else {
-      setPerfectureChanged(false);
+      setPrefectureChanged(false);
     }
   };
 
@@ -110,7 +110,7 @@ const UpdateUser = props => {
     setFirstNameChanged(false);
     setLastNameChanged(false);
     setCountryChanged(false);
-    setPerfectureChanged(false);
+    setPrefectureChanged(false);
   };
 
   const mobileRef = createRef();
@@ -153,7 +153,7 @@ const UpdateUser = props => {
         mobile,
         firstName,
         lastName,
-        perfecture,
+        prefecture,
         country,
         image: imageFile,
         id: user.id,
@@ -172,8 +172,8 @@ const UpdateUser = props => {
         delete updatedUserData.lastName;
       }
 
-      if (!perfectureChanged) {
-        delete updatedUserData.perfecture;
+      if (!prefectureChanged) {
+        delete updatedUserData.prefecture;
       }
 
       if (!countryChanged) {
@@ -339,20 +339,20 @@ const UpdateUser = props => {
               </Picker>
             </View>
 
-            {perfecture && (
+            {prefecture && (
               <>
-                <Text style={sharedStyles.label}>Perfecture</Text>
+                <Text style={sharedStyles.label}>Prefecture</Text>
                 <View style={sharedStyles.pickerView}>
                   <Picker
                     mode="dropdown"
-                    selectedValue={perfecture}
+                    selectedValue={prefecture}
                     // style={sharedStyles.dobViewItem}
-                    onValueChange={updatePerfecture}>
-                    {perfectures[country].map((_perfecture, index) => (
+                    onValueChange={updatePrefecture}>
+                    {prefectures[country].map((_prefecture, index) => (
                       <Picker.Item
                         key={index}
-                        label={_perfecture}
-                        value={_perfecture}
+                        label={_prefecture}
+                        value={_prefecture}
                       />
                     ))}
                   </Picker>

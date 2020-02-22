@@ -132,7 +132,7 @@ const request = async options => {
     let data = await response.json();
 
     if (data.data || data.error || data.user) {
-      console.log('response: ', data);
+      // console.log('response: ', data);
       data = decrypt(data.data || data.error || data.user, password);
 
       data = JSON.parse(data.toString(CryptoJS.enc.Utf8));

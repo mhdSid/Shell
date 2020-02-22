@@ -15,8 +15,8 @@ import {TextField} from 'react-native-material-textfield';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import ImagePicker from 'react-native-image-picker';
 import {
-  perfectures,
-  perfecturesList,
+  prefectures,
+  prefecturesList,
   currencies,
 } from '../../Constants/Countries';
 import {adStatuses, adCategories, mimeTypes} from '../../Constants/Ads';
@@ -49,8 +49,8 @@ const ImportAd = props => {
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
-  const [perfecture, setPerfecture] = useState(
-    userCountry && perfecturesList[userCountry],
+  const [prefecture, setPrefecture] = useState(
+    userCountry && prefecturesList[userCountry],
   );
   const [showAdDetails, setShowAdDetails] = useState(false);
   const [selectedAd, setSelectedAd] = useState(undefined);
@@ -70,17 +70,13 @@ const ImportAd = props => {
   useEffect(() => {
     setLoggedIn(_loggedIn);
     setUser(authUser);
+  }, [_loggedIn, authUser]);
+
+  useEffect(() => {
     setADataChanged(
       imagesChanged && adNameChanged && descriptionChanged && priceChanged,
     );
-  }, [
-    _loggedIn,
-    authUser,
-    imagesChanged,
-    adNameChanged,
-    descriptionChanged,
-    priceChanged,
-  ]);
+  }, [imagesChanged, adNameChanged, descriptionChanged, priceChanged]);
 
   const handleAdNameChangeText = value => {
     if (value && value.length > 5) {
@@ -179,7 +175,7 @@ const ImportAd = props => {
       name &&
       description &&
       price &&
-      perfecture &&
+      prefecture &&
       adStatus &&
       adCategory &&
       imageFiles &&
@@ -191,7 +187,7 @@ const ImportAd = props => {
         name,
         description,
         image: imageFiles.filter(Boolean),
-        perfecture,
+        prefecture,
         category: adCategory,
         status: adStatus,
         price,
@@ -220,9 +216,9 @@ const ImportAd = props => {
     setAdStatus(value);
   };
 
-  const updatePerfecture = value => {
-    Alert.alert('updatePerfecture: ' + value);
-    setPerfecture(value);
+  const updatePrefecture = value => {
+    Alert.alert('updatePrefecture: ' + value);
+    setPrefecture(value);
   };
 
   const handleChoosePhoto = index => {
@@ -276,7 +272,7 @@ const ImportAd = props => {
             style={{
               container: sharedStyles.toolbarContainerPadding,
             }}
-            centerElement="Let's Add"
+            centerElement="Post an Ad"
             leftElement={<Icon color="white" name="add-box" />}
             // leftElement="arrow-back"
             // onLeftElementPress={handleCloseModal}
@@ -285,7 +281,7 @@ const ImportAd = props => {
                 onPress={handleUploadAd}
                 disabled={loading || !adDataChanged}
                 raised
-                text="Save"
+                text="Post"
                 icon="done-all"
               />
             }
@@ -371,18 +367,18 @@ const ImportAd = props => {
                 </View>
               </View>
 
-              <Text style={sharedStyles.label}>Perfecture</Text>
+              <Text style={sharedStyles.label}>Prefecture</Text>
               <View style={sharedStyles.pickerView}>
                 <Picker
                   mode="dropdown"
-                  selectedValue={perfecture}
+                  selectedValue={prefecture}
                   // style={sharedStyles.dobViewItem}
-                  onValueChange={updatePerfecture}>
-                  {perfectures[userCountry].map((_perfecture, index) => (
+                  onValueChange={updatePrefecture}>
+                  {prefectures[userCountry].map((_prefecture, index) => (
                     <Picker.Item
                       key={index}
-                      label={_perfecture}
-                      value={_perfecture}
+                      label={_prefecture}
+                      value={_prefecture}
                     />
                   ))}
                 </Picker>
@@ -439,7 +435,7 @@ const ImportAd = props => {
                   disabled={loading || !adDataChanged}
                   raised={true}
                   primary
-                  text={'Confirm'}
+                  text={'Post'}
                   onPress={handleUploadAd}
                 />
               </View>

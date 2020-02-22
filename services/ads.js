@@ -15,7 +15,7 @@ const importAd = async props => {
     description,
     image,
     category,
-    perfecture,
+    prefecture,
     currency,
     status,
     price,
@@ -34,7 +34,7 @@ const importAd = async props => {
   }
 
   formData.append('category', category);
-  formData.append('perfecture', perfecture);
+  formData.append('prefecture', prefecture);
   formData.append('currency', currency);
   formData.append('status', status);
   formData.append('price', price);

@@ -27,8 +27,8 @@ import {
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {
   countries,
-  perfectures,
-  perfecturesList,
+  prefectures,
+  prefecturesList,
   countryCodeList,
 } from '../../Constants/Countries';
 import {months, days, years, monthsNumbers} from '../../Constants/Dates';
@@ -45,7 +45,7 @@ import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 
 const AuthComponent = props => {
   const {loggedIn: _loggedIn, country: serverCountryCode, user} = props;
-  // console.log('authComponent: ', user);
+  console.log('authComponent: ', user);
 
   const [loggedIn, setLoggedIn] = useState(_loggedIn);
   const [_email, setEmail] = useState(undefined);
@@ -74,13 +74,13 @@ const AuthComponent = props => {
   const [day, setDay] = useState('01');
   const [gender, setGender] = useState('Male');
   const [country, setCountry] = useState(
-    (serverCountryCode && countryCodeList[serverCountryCode]) ||
-      (user && user.country) ||
+    (user && user.country) ||
+      (serverCountryCode && countryCodeList[serverCountryCode]) ||
       'Japan',
   );
-  const [perfecture, setPerfecture] = useState(
-    (user && user.country && perfecturesList[user.country]) ||
-      perfecturesList[countryCodeList[serverCountryCode]],
+  const [prefecture, setPrefecture] = useState(
+    (user && user.country && prefecturesList[user.country]) ||
+      prefecturesList[countryCodeList[serverCountryCode]],
   );
 
   const onSettingsClose = () => {
@@ -119,12 +119,14 @@ const AuthComponent = props => {
 
   useEffect(() => {
     setLoggedIn(_loggedIn);
+  }, [_loggedIn]);
+
+  useEffect(() => {
     setUserDataChanged(
       dobChanged && firstNameChanged && lastNameChanged && mobileChanged,
     );
     setEmailPassChanged(emailChanged && passwordChanged);
   }, [
-    _loggedIn,
     dobChanged,
     firstNameChanged,
     lastNameChanged,
@@ -135,11 +137,11 @@ const AuthComponent = props => {
 
   const updateCountry = value => {
     setCountry(value);
-    setPerfecture(perfecturesList[value]);
+    setPrefecture(prefecturesList[value]);
   };
 
-  const updatePerfecture = value => {
-    setPerfecture(value);
+  const updatePrefecture = value => {
+    setPrefecture(value);
   };
 
   const updateYear = value => {
@@ -361,7 +363,7 @@ const AuthComponent = props => {
       _password &&
       mobile &&
       verificationId &&
-      perfecture &&
+      prefecture &&
       country &&
       firstName &&
       lastName
@@ -374,7 +376,7 @@ const AuthComponent = props => {
         gender,
         mobile,
         country,
-        perfecture,
+        prefecture,
         firstName,
         lastName,
       };
@@ -566,18 +568,18 @@ const AuthComponent = props => {
 
               {/* {perfecture && ( */}
               <>
-                <Text style={sharedStyles.label}>Perfecture</Text>
+                <Text style={sharedStyles.label}>Prefecture</Text>
                 <View style={sharedStyles.pickerView}>
                   <Picker
                     mode="dropdown"
-                    selectedValue={perfecture}
+                    selectedValue={prefecture}
                     // style={sharedStyles.dobViewItem}
-                    onValueChange={updatePerfecture}>
-                    {perfectures[country].map((_perfecture, index) => (
+                    onValueChange={updatePrefecture}>
+                    {prefectures[country].map((_prefecture, index) => (
                       <Picker.Item
                         key={index}
-                        label={_perfecture}
-                        value={_perfecture}
+                        label={_prefecture}
+                        value={_prefecture}
                       />
                     ))}
                   </Picker>
@@ -697,7 +699,7 @@ const AuthComponent = props => {
                       <Text
                         style={{
                           color: '#d9d9d9',
-                        }}>{`${user.email} - ${user.perfecture}, ${user.country}`}</Text>
+                        }}>{`${user.email} - ${user.prefecture}, ${user.country}`}</Text>
                     ),
                   },
                   rightElement: (
@@ -720,6 +722,11 @@ const AuthComponent = props => {
             <Drawer.Section
               divider
               items={[
+                {
+                  icon: 'help',
+                  value: 'How To Use The App',
+                  onPress: handleShowNotifications,
+                },
                 {
                   icon: 'bookmark-border',
                   value: 'Notifications',
