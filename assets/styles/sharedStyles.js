@@ -24,7 +24,6 @@ const sharedStyles = StyleSheet.create({
   },
   aboutToolbarContainer: {
     ...toolbarStyles,
-    // backgroundColor: 'white',
   },
   toolbarContainerPadding: {
     paddingHorizontal: 15,
@@ -38,7 +37,6 @@ const sharedStyles = StyleSheet.create({
 
   /* Loading */
   loading: {
-    // padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
     ...fullWidthHeight,
@@ -84,12 +82,10 @@ const sharedStyles = StyleSheet.create({
     zIndex: 1,
     opacity: 0.55,
   },
-
   profileBlurredImage: {
     width: '100%',
     height: '100%',
   },
-
   pickerView: {
     width: '70%',
     alignSelf: 'center',
@@ -247,11 +243,9 @@ const sharedStyles = StyleSheet.create({
     paddingTop: 20,
     paddingHorizontal: 5,
     paddingBottom: 20,
-    // padding: 20,
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    // ...fullWidthHeight,
   },
   updateUserContainer: {
     paddingTop: 10,
@@ -264,12 +258,6 @@ const sharedStyles = StyleSheet.create({
     ...flex,
     justifyContent: 'flex-start',
   },
-  // appContainer: {
-  //   borderLeftWidth: 5,
-  //   borderRightWidth: 5,
-  //   borderLeftColor: '#b69cf6',
-  //   borderRightColor: '#b69cf6',
-  // },
   loginBtn: {
     marginTop: 20,
   },
@@ -314,47 +302,7 @@ const sharedStyles = StyleSheet.create({
   },
   aboutFirstSection: {
     paddingTop: 70,
-    paddingBottom: 180,
-  },
-  aboutSecondSection: {
-    paddingBottom: 20,
-  },
-  aboutThirdSection: {
-    paddingBottom: 45,
-  },
-  aboutFourthSection: {
-    paddingBottom: 30,
-  },
-  aboutFifthSection: {
-    paddingBottom: 40,
-  },
-  aboutFifthSectionText: {
-    fontWeight: '500',
-    color: 'rgba(0,0,0,.8)',
-    height: 120,
-    top: 25,
-    lineHeight: 20,
-  },
-  aboutFourthSectionText: {
-    fontWeight: '500',
-    color: 'rgba(0,0,0,.8)',
-    height: 100,
-    top: 25,
-    lineHeight: 20,
-  },
-  aboutThirdSectionText: {
-    fontWeight: '500',
-    color: 'rgba(0,0,0,.8)',
-    height: 110,
-    top: 25,
-    lineHeight: 20,
-  },
-  aboutSecondSectionText: {
-    fontWeight: '500',
-    color: 'rgba(0,0,0,.8)',
-    height: 70,
-    top: 15,
-    lineHeight: 20,
+    paddingBottom: 220,
   },
   aboutSeparatorSection: {
     paddingTop: 20,
@@ -366,21 +314,40 @@ const sharedStyles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     color: 'rgba(0,0,0,.5)',
-    //   height: 70,
-    //   top: 15,
-    //   lineHeight: 20,
   },
   aboutFirstSectionTextContainer: {
     fontWeight: '500',
     color: 'rgba(0,0,0,.8)',
-    height: 250,
-    top: 15,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    marginBottom: 20,
+    padding: 20,
     lineHeight: 20,
     display: 'flex',
     flexDirection: 'column',
   },
+  aboutIconTextContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  aboutIconText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginHorizontal: 10,
+  },
   aboutFirstSectionText: {
     width: '100%',
+    fontSize: 16,
+    lineHeight: 22,
+    fontWeight: '500',
+    color: 'rgba(0,0,0,.8)',
+  },
+  aboutFirstSectionTextMargin: {
     marginBottom: 10,
   },
   adDetailsText: {
@@ -454,15 +421,11 @@ const sharedStyles = StyleSheet.create({
     zIndex: 100,
   },
   profileHeaderContentContainer: {
-    // backgroundColor: '#b69cf6',
     paddingTop: 20,
-    // paddingLeft: 15,
   },
   settingsDrawerLanguageSection: {
     marginTop: -10,
     paddingLeft: 80,
-    // justifyContent: 'center',
-    // alignItems: 'center'
   },
 });
 

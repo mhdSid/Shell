@@ -76,6 +76,7 @@ const AuthComponent = props => {
   const [firstNameChanged, setFirsNameChanged] = useState(false);
   const [lastNameChanged, setLastNameChanged] = useState(false);
   const [mobileChanged, setMobileChanged] = useState(false);
+  const [adId, setAdId] = useState(1);
 
   const [year, setYear] = useState('2020');
   const [month, setMonth] = useState('April');
@@ -91,9 +92,13 @@ const AuthComponent = props => {
       prefecturesList[countryCodeList[serverCountryCode]],
   );
 
-  AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/6721660483');
-  // AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
-  AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
+  useEffect(() => {
+    if (loggedIn && user) {
+      AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/6721660483');
+      // AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
+      AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
+    }
+  }, [adId, loggedIn, user]);
 
   const onSettingsClose = () => {
     setShowSettings(false);
@@ -301,9 +306,10 @@ const AuthComponent = props => {
     const password = passField.value();
 
     if (email && password) {
+      const lowerCaseEmail = email.toLowerCase();
       setLoading(true);
-      login({email, password}).then(
-        onSubmitSuccess(email, password),
+      login({email: lowerCaseEmail, password}).then(
+        onSubmitSuccess(lowerCaseEmail, password),
         handleError,
       );
     }
