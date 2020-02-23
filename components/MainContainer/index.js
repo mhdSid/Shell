@@ -35,21 +35,11 @@ const MainContainer = props => {
       <BottomNavigation
         active={activeView}
         style={{
-          container: {
-            padding: 0,
-            margin: 0,
-            shadowOpacity: 0,
-            borderTopWidth: 0.5,
-          },
+          container: sharedStyles.bottomNavigationContainer,
         }}>
         <BottomNavigation.Action
           style={{
-            container: {
-              paddingBottom: 12,
-              paddingTop: 12,
-              paddingLeft: 10,
-              paddingRight: 0,
-            },
+            container: sharedStyles.bottomNavigationLeftActionContainer,
             icon: {
               color: activeView === 'home' ? '#b69cf6' : '#d8d8d8',
             },
@@ -66,12 +56,7 @@ const MainContainer = props => {
         />
         <BottomNavigation.Action
           style={{
-            container: {
-              paddingBottom: 12,
-              paddingTop: 12,
-              paddingLeft: 0,
-              paddingRight: 0,
-            },
+            container: sharedStyles.bottomNavigationLeftActionContainer,
             icon: {
               color: activeView === 'search' ? '#b69cf6' : '#d8d8d8',
             },
@@ -87,12 +72,7 @@ const MainContainer = props => {
         />
         <BottomNavigation.Action
           style={{
-            container: {
-              paddingBottom: 5,
-              paddingTop: 5,
-              paddingLeft: 0,
-              paddingRight: 0,
-            },
+            container: sharedStyles.bottomNavigationMiddleActionContainer,
             icon: {
               color:
                 activeView === 'add-circle-outline' ? '#b69cf6' : '#d8d8d8',
@@ -110,12 +90,7 @@ const MainContainer = props => {
         />
         <BottomNavigation.Action
           style={{
-            container: {
-              paddingBottom: 12,
-              paddingTop: 12,
-              paddingLeft: 0,
-              paddingRight: 0,
-            },
+            container: sharedStyles.bottomNavigationLeftActionContainer,
             icon: {
               color: activeView === 'grade' ? '#b69cf6' : '#d8d8d8',
             },
@@ -140,12 +115,7 @@ const MainContainer = props => {
         />
         <BottomNavigation.Action
           style={{
-            container: {
-              paddingBottom: 12,
-              paddingTop: 12,
-              paddingLeft: 0,
-              paddingRight: 10,
-            },
+            container: sharedStyles.bottomNavigationRightActionContainer,
             icon: {
               color: activeView === 'profile' ? '#b69cf6' : '#d8d8d8',
             },

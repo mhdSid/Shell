@@ -7,6 +7,12 @@ import {Toolbar} from 'react-native-material-ui';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
+// import {
+//   // AdMobBanner,
+//   AdMobInterstitial,
+//   // PublisherBanner,
+//   // AdMobRewarded,
+// } from 'react-native-admob';
 
 const AdDetails = props => {
   const {item} = props;
@@ -65,6 +71,7 @@ const AdDetails = props => {
       animationType="slide"
       transparent={false}
       visible={modalVisible}
+      // onShow={handleShowAd}
       onDismiss={onModalDissmiss}>
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
@@ -116,11 +123,7 @@ const AdDetails = props => {
                   icon={
                     <Icon
                       size={50}
-                      style={{
-                        alignSelf: 'center',
-                        marginTop: -6,
-                        marginLeft: -5,
-                      }}
+                      style={sharedStyles.adDetailsImageArrowIconLeft}
                       name="chevron-left"
                       color="white"
                     />
@@ -128,16 +131,8 @@ const AdDetails = props => {
                   size={50}
                   onPress={handleMovePreviousPhoto}
                   style={{
-                    container: {
-                      position: 'absolute',
-                      left: 0,
-                      paddingHorizontal: 0,
-                      paddingVertical: 0,
-                      borderRadius: 0,
-                      width: 35,
-                      alignSelf: 'center',
-                      backgroundColor: 'black',
-                    },
+                    container:
+                      sharedStyles.adDetailsImageArrowIconLeftContainer,
                   }}
                 />
                 <Button
@@ -147,28 +142,13 @@ const AdDetails = props => {
                       size={50}
                       name="chevron-right"
                       color="white"
-                      style={{
-                        alignSelf: 'center',
-                        marginTop: -6,
-                        marginLeft: -2,
-                      }}
+                      style={sharedStyles.adDetailsImageArrowIconRight}
                     />
                   }
                   onPress={handleMoveNextPhoto}
                   style={{
-                    container: {
-                      position: 'absolute',
-                      right: 0,
-                      width: 35,
-                      borderRadius: 0,
-                      paddingVertical: 0,
-                      paddingHorizontal: 0,
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
-                      backgroundColor: 'black',
-                    },
+                    container:
+                      sharedStyles.adDetailsImageArrowIconRightContainer,
                   }}
                 />
               </>
@@ -177,7 +157,7 @@ const AdDetails = props => {
           <View style={sharedStyles.adDetailsContainer}>
             <Drawer
               style={{
-                container: {borderRadius: 20, marginBottom: 20},
+                container: sharedStyles.drawerContainer,
               }}>
               <Drawer.Section
                 title="Total price"
@@ -207,17 +187,14 @@ const AdDetails = props => {
                 ]}
               />
             </Drawer>
-            <Drawer style={{container: {borderRadius: 20, marginBottom: 20}}}>
+            <Drawer style={{container: sharedStyles.drawerContainer}}>
               <Drawer.Section
                 title="Name"
                 items={[
                   {
                     icon: 'dns',
                     value: (
-                      <Text
-                        style={{fontWeight: '500', color: 'rgba(0,0,0,.8)'}}>
-                        {name}
-                      </Text>
+                      <Text style={sharedStyles.adDetailsText}>{name}</Text>
                     ),
                   },
                 ]}
@@ -228,8 +205,7 @@ const AdDetails = props => {
                   {
                     icon: 'description',
                     value: (
-                      <Text
-                        style={{fontWeight: '500', color: 'rgba(0,0,0,.8)'}}>
+                      <Text style={sharedStyles.adDetailsText}>
                         {description}
                       </Text>
                     ),
@@ -239,17 +215,14 @@ const AdDetails = props => {
               />
             </Drawer>
 
-            <Drawer style={{container: {borderRadius: 20, marginBottom: 20}}}>
+            <Drawer style={{container: sharedStyles.drawerContainer}}>
               <Drawer.Section
                 title="Status"
                 items={[
                   {
                     icon: 'exposure',
                     value: (
-                      <Text
-                        style={{fontWeight: '500', color: 'rgba(0,0,0,.8)'}}>
-                        {status}
-                      </Text>
+                      <Text style={sharedStyles.adDetailsText}>{status}</Text>
                     ),
                     // description,
                   },
@@ -261,10 +234,7 @@ const AdDetails = props => {
                   {
                     icon: 'class',
                     value: (
-                      <Text
-                        style={{fontWeight: '500', color: 'rgba(0,0,0,.8)'}}>
-                        {category}
-                      </Text>
+                      <Text style={sharedStyles.adDetailsText}>{category}</Text>
                     ),
                     // description,
                   },
@@ -272,15 +242,14 @@ const AdDetails = props => {
               />
             </Drawer>
 
-            <Drawer style={{container: {borderRadius: 20, marginBottom: 20}}}>
+            <Drawer style={{container: sharedStyles.drawerContainer}}>
               <Drawer.Section
                 title="Publish date"
                 items={[
                   {
                     icon: 'today',
                     value: (
-                      <Text
-                        style={{fontWeight: '500', color: 'rgba(0,0,0,.8)'}}>
+                      <Text style={sharedStyles.adDetailsText}>
                         {publishDate}
                       </Text>
                     ),
@@ -294,8 +263,7 @@ const AdDetails = props => {
                   {
                     icon: 'pin-drop',
                     value: (
-                      <Text
-                        style={{fontWeight: '500', color: 'rgba(0,0,0,.8)'}}>
+                      <Text style={sharedStyles.adDetailsText}>
                         {`${prefecture}, ${country}`}
                       </Text>
                     ),
@@ -305,15 +273,14 @@ const AdDetails = props => {
               />
             </Drawer>
 
-            <Drawer style={{container: {borderRadius: 20, marginBottom: 20}}}>
+            <Drawer style={{container: sharedStyles.drawerContainer}}>
               <Drawer.Section
                 title="Current lottery users"
                 items={[
                   {
                     icon: 'group-add',
                     value: (
-                      <Text
-                        style={{fontWeight: '500', color: 'rgba(0,0,0,.8)'}}>
+                      <Text style={sharedStyles.adDetailsText}>
                         {lotteryUserIds}
                       </Text>
                     ),
@@ -328,10 +295,7 @@ const AdDetails = props => {
                   {
                     icon: 'person',
                     value: (
-                      <Text
-                        style={{fontWeight: '500', color: 'rgba(0,0,0,.8)'}}>
-                        {userId}
-                      </Text>
+                      <Text style={sharedStyles.adDetailsText}>{userId}</Text>
                     ),
                     // description,
                   },
@@ -339,18 +303,13 @@ const AdDetails = props => {
               />
             </Drawer>
 
-            <Drawer style={{container: {borderRadius: 20, marginBottom: 20}}}>
+            <Drawer style={{container: sharedStyles.drawerContainer}}>
               <Drawer.Section
                 title="Item ID"
                 items={[
                   {
                     icon: 'fingerprint',
-                    value: (
-                      <Text
-                        style={{fontWeight: '500', color: 'rgba(0,0,0,.8)'}}>
-                        {id}
-                      </Text>
-                    ),
+                    value: <Text style={sharedStyles.adDetailsText}>{id}</Text>,
                     // description,
                   },
                 ]}

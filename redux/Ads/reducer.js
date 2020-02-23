@@ -32,11 +32,11 @@ const adsReducer = (state = initialState, action) => {
         });
         newSet.add(action.payload);
       }
-      console.log('adsReducer: ', ads);
+      // console.log('adsReducer: ', ads);
 
       ads = Array.from(newSet);
 
-      console.log('adsReducer: ', ads);
+      // console.log('adsReducer: ', ads);
 
       return {
         // ...state,

@@ -26,7 +26,7 @@ const About = props => {
       visible={modalVisible}
       onDismiss={onModalDismiss}>
       <SafeAreaView
-        style={[sharedStyles.container, {backgroundColor: '#b69cf6'}]}>
+        style={[sharedStyles.container, sharedStyles.aboutSafeViewContainer]}>
         <Toolbar
           style={{container: sharedStyles.aboutToolbarContainer}}
           leftElement={
@@ -41,49 +41,37 @@ const About = props => {
           <View style={sharedStyles.aboutContainer}>
             <Drawer
               style={{
-                container: {borderRadius: 20, marginBottom: 20},
+                container: sharedStyles.drawerContainer,
               }}>
               <Drawer.Section
                 title="Sell"
                 style={{
-                  container: {
-                    paddingTop: 70,
-                    paddingBottom: 180,
-                  },
+                  container: sharedStyles.aboutFirstSection,
                 }}
                 items={[
                   {
                     icon: 'store',
                     value: (
-                      <View
-                        style={{
-                          fontWeight: '500',
-                          color: 'rgba(0,0,0,.8)',
-                          height: 250,
-                          top: 15,
-                          lineHeight: 20,
-                          display: 'flex',
-                          flexDirection: 'column',
-                        }}>
-                        <Text style={{width: '100%', marginBottom: 10}}>
+                      <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                        <Text style={sharedStyles.aboutFirstSectionText}>
                           Are you having problems selling any item you can think
                           about?
                         </Text>
-                        <Text style={{width: '100%', marginBottom: 10}}>
+                        <Text style={sharedStyles.aboutFirstSectionText}>
                           It's not about selling anymore!
                         </Text>
-                        <Text style={{width: '100%', marginBottom: 10}}>
+                        <Text style={sharedStyles.aboutFirstSectionText}>
                           Post an Ad about anything!
                         </Text>
-                        <Text style={{width: '100%', marginBottom: 10}}>
+                        <Text style={sharedStyles.aboutFirstSectionText}>
                           Users pay a fee to enter a Lottery to have a chance to
                           win the item in your Ad.
                         </Text>
-                        <Text style={{width: '100%', marginBottom: 10}}>
+                        <Text style={sharedStyles.aboutFirstSectionText}>
                           Once the total amount is collected, our system starts
                           a Lottery and a random user wins the item in your Ad.
                         </Text>
-                        <Text style={{width: '100%', marginBottom: 10}}>
+                        <Text style={sharedStyles.aboutFirstSectionText}>
                           The winner takes the item and you take the collected
                           cash which is the price that you initially entered.
                         </Text>
@@ -94,49 +82,24 @@ const About = props => {
               />
             </Drawer>
 
-            <View
-              style={{
-                paddingTop: 20,
-                paddingHorizontal: 20,
-                paddingBottom: 40,
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  fontWeight: 'bold',
-                  fontSize: 18,
-                  color: 'rgba(0,0,0,.5)',
-                  //   height: 70,
-                  //   top: 15,
-                  //   lineHeight: 20,
-                }}>
-                Or
-              </Text>
+            <View style={sharedStyles.aboutSeparatorSection}>
+              <Text style={sharedStyles.aboutSeparatorSectionText}>Or</Text>
             </View>
 
             <Drawer
               style={{
-                container: {borderRadius: 20, marginBottom: 20},
+                container: sharedStyles.drawerContainer,
               }}>
               <Drawer.Section
                 title="Browse"
                 style={{
-                  container: {
-                    paddingBottom: 20,
-                  },
+                  container: sharedStyles.aboutSecondSection,
                 }}
                 items={[
                   {
                     icon: 'remove-red-eye',
                     value: (
-                      <Text
-                        style={{
-                          fontWeight: '500',
-                          color: 'rgba(0,0,0,.8)',
-                          height: 70,
-                          top: 15,
-                          lineHeight: 20,
-                        }}>
+                      <Text style={sharedStyles.aboutSecondSectionText}>
                         {'Browser through a wide variety of uploaded Ads!'}
                       </Text>
                     ),
@@ -147,27 +110,18 @@ const About = props => {
 
             <Drawer
               style={{
-                container: {borderRadius: 20, marginBottom: 20},
+                container: sharedStyles.drawerContainer,
               }}>
               <Drawer.Section
                 title="Choose"
                 style={{
-                  container: {
-                    paddingBottom: 45,
-                  },
+                  container: sharedStyles.aboutThirdSection,
                 }}
                 items={[
                   {
                     icon: 'remove-red-eye',
                     value: (
-                      <Text
-                        style={{
-                          fontWeight: '500',
-                          color: 'rgba(0,0,0,.8)',
-                          height: 110,
-                          top: 25,
-                          lineHeight: 20,
-                        }}>
+                      <Text style={sharedStyles.aboutThirdSectionText}>
                         {
                           'Make sure you choose any item you love. It can be a Smart Phone, a Laptop, a Car, a House, or anything you can think about.'
                         }
@@ -179,27 +133,18 @@ const About = props => {
             </Drawer>
             <Drawer
               style={{
-                container: {borderRadius: 20, marginBottom: 20},
+                container: sharedStyles.drawerContainer,
               }}>
               <Drawer.Section
                 title="Enter Lottery"
                 style={{
-                  container: {
-                    paddingBottom: 30,
-                  },
+                  container: sharedStyles.aboutFourthSection,
                 }}
                 items={[
                   {
                     icon: 'receipt',
                     value: (
-                      <Text
-                        style={{
-                          fontWeight: '500',
-                          color: 'rgba(0,0,0,.8)',
-                          height: 100,
-                          top: 25,
-                          lineHeight: 20,
-                        }}>
+                      <Text style={sharedStyles.aboutFourthSectionText}>
                         {
                           'Pay a fee of 1,000 Japanese Yen and enter a lottery to have a chance to win any item of your choice.'
                         }
@@ -211,28 +156,19 @@ const About = props => {
             </Drawer>
             <Drawer
               style={{
-                container: {borderRadius: 20, marginBottom: 20},
+                container: sharedStyles.drawerContainer,
               }}>
               <Drawer.Section
                 title="Win"
                 style={{
-                  container: {
-                    paddingBottom: 40,
-                  },
+                  container: sharedStyles.aboutFifthSection,
                 }}
                 items={[
                   {
                     icon: 'star',
 
                     value: (
-                      <Text
-                        style={{
-                          fontWeight: '500',
-                          color: 'rgba(0,0,0,.8)',
-                          height: 120,
-                          top: 25,
-                          lineHeight: 20,
-                        }}>
+                      <Text style={sharedStyles.aboutFifthSectionText}>
                         {
                           'Once the total price of your chosen item has been collected, the lottery will start and a radom user will win the item.'
                         }

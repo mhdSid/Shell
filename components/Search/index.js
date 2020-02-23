@@ -2,6 +2,12 @@ import React from 'react';
 import {Toolbar} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {View} from 'react-native';
+// import {
+//   // AdMobBanner,
+//   AdMobInterstitial,
+//   // PublisherBanner,
+//   // AdMobRewarded,
+// } from 'react-native-admob';
 
 const SearchComponent = () => {
   return (

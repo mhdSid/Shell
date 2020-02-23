@@ -18,6 +18,12 @@ import {Loading} from '../Loading';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import {addAd} from '../../redux/Ads/actions';
 import About from '../About';
+import {
+  AdMobBanner,
+  // AdMobInterstitial,
+  // PublisherBanner,
+  // AdMobRewarded,
+} from 'react-native-admob';
 
 class CarouselItem extends PureComponent {
   static propTypes = {
@@ -31,7 +37,7 @@ class CarouselItem extends PureComponent {
 
   render() {
     const {item} = this.props;
-    const {images, name} = item;
+    const {images, name, currency, price, category} = item;
     const even = true;
     const uppercaseTitle = name ? (
       <Text
@@ -86,8 +92,16 @@ class CarouselItem extends PureComponent {
               sliderStyles.subtitle,
               even ? sliderStyles.subtitleEven : {},
             ]}
+            numberOfLines={1}>
+            {category}
+          </Text>
+          <Text
+            style={[
+              sliderStyles.subtitle,
+              even ? sliderStyles.subtitleEven : {},
+            ]}
             numberOfLines={2}>
-            {`${item.currency} ${item.price}`}
+            {`${currency} ${price}`}
           </Text>
         </View>
       </TouchableBounce>
@@ -151,7 +165,7 @@ CarouselComponent.propTypes = {
 
 const HomeComponent = props => {
   const {ads: _ads} = props;
-  console.log('HomeComponent', _ads);
+  // console.log('HomeComponent', _ads);
 
   const [ads, setAds] = useState(_ads);
   const [isList, setIsList] = useState(false);
@@ -281,6 +295,14 @@ const HomeComponent = props => {
         }
         onRightElementPress={changeViewStyle}
       />
+      <AdMobBanner
+        adSize="fullBanner"
+        adUnitID="ca-app-pub-5703846930890914/6428703368"
+        style={sharedStyles.adMobBanner}
+        // testDevices={[AdMobBanner.simulatorId]}
+        // onAdFailedToLoad={error => console.error(error)}
+      />
+
       {loading && Loading}
       {isCard && (
         <FlatList
@@ -340,7 +362,7 @@ const HomeComponent = props => {
               leftElement={
                 item.images && item.images[0] ? (
                   <CachedImage
-                    style={{width: 50, height: 50}}
+                    style={sharedStyles.homeListItemImage}
                     cache="force-cache"
                     source={{
                       uri: item.images[0],
@@ -355,7 +377,8 @@ const HomeComponent = props => {
               }
               centerElement={{
                 primaryText: item.name,
-                secondaryText: `${item.currency} ${item.price}`,
+                secondaryText: item.category,
+                tertiaryText: `${item.currency} ${item.price}`,
               }}
               onPress={handleShowAdsDetailsFlatList(item)}
             />

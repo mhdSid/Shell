@@ -63,12 +63,7 @@ const Settings = props => {
             {showLanguages && (
               <Drawer.Section
                 style={{
-                  container: {
-                    marginTop: -10,
-                    paddingLeft: 80,
-                    // justifyContent: 'center',
-                    // alignItems: 'center'
-                  },
+                  container: sharedStyles.settingsDrawerLanguageSection,
                   //   item: {
                   //     justifyContent: 'center',
                   //     alignItems: 'center',

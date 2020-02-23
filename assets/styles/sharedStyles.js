@@ -296,6 +296,174 @@ const sharedStyles = StyleSheet.create({
   homeCardItemText: {
     color: 'white',
   },
+  adMobBanner: {
+    width: '100%',
+    height: '100%',
+    alignSelf: 'center',
+  },
+  homeListItemImage: {
+    width: 50,
+    height: 50,
+  },
+  aboutSafeViewContainer: {
+    backgroundColor: '#b69cf6',
+  },
+  drawerContainer: {
+    borderRadius: 20,
+    marginBottom: 20,
+  },
+  aboutFirstSection: {
+    paddingTop: 70,
+    paddingBottom: 180,
+  },
+  aboutSecondSection: {
+    paddingBottom: 20,
+  },
+  aboutThirdSection: {
+    paddingBottom: 45,
+  },
+  aboutFourthSection: {
+    paddingBottom: 30,
+  },
+  aboutFifthSection: {
+    paddingBottom: 40,
+  },
+  aboutFifthSectionText: {
+    fontWeight: '500',
+    color: 'rgba(0,0,0,.8)',
+    height: 120,
+    top: 25,
+    lineHeight: 20,
+  },
+  aboutFourthSectionText: {
+    fontWeight: '500',
+    color: 'rgba(0,0,0,.8)',
+    height: 100,
+    top: 25,
+    lineHeight: 20,
+  },
+  aboutThirdSectionText: {
+    fontWeight: '500',
+    color: 'rgba(0,0,0,.8)',
+    height: 110,
+    top: 25,
+    lineHeight: 20,
+  },
+  aboutSecondSectionText: {
+    fontWeight: '500',
+    color: 'rgba(0,0,0,.8)',
+    height: 70,
+    top: 15,
+    lineHeight: 20,
+  },
+  aboutSeparatorSection: {
+    paddingTop: 20,
+    paddingHorizontal: 20,
+    paddingBottom: 40,
+    alignItems: 'center',
+  },
+  aboutSeparatorSectionText: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: 'rgba(0,0,0,.5)',
+    //   height: 70,
+    //   top: 15,
+    //   lineHeight: 20,
+  },
+  aboutFirstSectionTextContainer: {
+    fontWeight: '500',
+    color: 'rgba(0,0,0,.8)',
+    height: 250,
+    top: 15,
+    lineHeight: 20,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  aboutFirstSectionText: {
+    width: '100%',
+    marginBottom: 10,
+  },
+  adDetailsText: {
+    fontWeight: '500',
+    color: 'rgba(0,0,0,.8)',
+  },
+  adDetailsImageArrowIconLeft: {
+    alignSelf: 'center',
+    marginTop: -6,
+    marginLeft: -5,
+  },
+  adDetailsImageArrowIconLeftContainer: {
+    position: 'absolute',
+    left: 0,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    borderRadius: 0,
+    width: 35,
+    alignSelf: 'center',
+    backgroundColor: 'black',
+  },
+  adDetailsImageArrowIconRightContainer: {
+    position: 'absolute',
+    right: 0,
+    width: 35,
+    borderRadius: 0,
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: 'black',
+  },
+  adDetailsImageArrowIconRight: {
+    alignSelf: 'center',
+    marginTop: -6,
+    marginLeft: -2,
+  },
+  bottomNavigationContainer: {
+    padding: 0,
+    margin: 0,
+    shadowOpacity: 0,
+    borderTopWidth: 0.5,
+  },
+  bottomNavigationLeftActionContainer: {
+    paddingBottom: 12,
+    paddingTop: 12,
+    paddingLeft: 10,
+    paddingRight: 0,
+  },
+  bottomNavigationMiddleActionContainer: {
+    paddingBottom: 5,
+    paddingTop: 5,
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
+  bottomNavigationRightActionContainer: {
+    paddingBottom: 12,
+    paddingTop: 12,
+    paddingLeft: 0,
+    paddingRight: 10,
+  },
+  profileUserText: {
+    color: '#d9d9d9',
+  },
+  profileAvatarContainer: {
+    marginBottom: 10,
+  },
+  profileHeaderContainer: {
+    zIndex: 100,
+  },
+  profileHeaderContentContainer: {
+    // backgroundColor: '#b69cf6',
+    paddingTop: 20,
+    // paddingLeft: 15,
+  },
+  settingsDrawerLanguageSection: {
+    marginTop: -10,
+    paddingLeft: 80,
+    // justifyContent: 'center',
+    // alignItems: 'center'
+  },
 });
 
 export default sharedStyles;

@@ -42,6 +42,13 @@ import AppInfo from '../AppInfo';
 import {phoneNumbersRegexs, emailsRegex} from '../../Constants/Regexes';
 import {loadingPopup, Loading} from '../Loading';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
+import About from '../About';
+import {
+  // AdMobBanner,
+  AdMobInterstitial,
+  // PublisherBanner,
+  // AdMobRewarded,
+} from 'react-native-admob';
 
 const AuthComponent = props => {
   const {loggedIn: _loggedIn, country: serverCountryCode, user} = props;
@@ -55,6 +62,7 @@ const AuthComponent = props => {
   const [showSignup, setShowSignup] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [showMyAds, setShowMyAds] = useState(false);
   const [showMyLotteries, setShowMyLotteries] = useState(false);
   const [showAppInfo, setShowAppInfo] = useState(false);
@@ -83,6 +91,10 @@ const AuthComponent = props => {
       prefecturesList[countryCodeList[serverCountryCode]],
   );
 
+  AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/6721660483');
+  // AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
+  AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
+
   const onSettingsClose = () => {
     setShowSettings(false);
   };
@@ -91,6 +103,9 @@ const AuthComponent = props => {
   };
   const onMyAdsClose = () => {
     setShowMyAds(false);
+  };
+  const onAboutClose = () => {
+    setShowAbout(false);
   };
   const onMyLotteriesClose = () => {
     setShowMyLotteries(false);
@@ -410,6 +425,10 @@ const AuthComponent = props => {
     setShowNotifications(true);
   };
 
+  const handleShowAbout = () => {
+    setShowAbout(true);
+  };
+
   const handleShowMyAds = () => {
     setShowMyAds(true);
   };
@@ -649,23 +668,15 @@ const AuthComponent = props => {
                 </CachedImage>
               }
               style={{
-                contentContainer: {
-                  // backgroundColor: '#b69cf6',
-                  paddingTop: 20,
-                  // paddingLeft: 15,
-                },
+                contentContainer: sharedStyles.profileHeaderContentContainer,
               }}>
               <Drawer.Header.Account
                 style={{
-                  container: {
-                    zIndex: 100,
-                  },
+                  container: sharedStyles.profileHeaderContainer,
                   // accountContainer: {
                   //   // backgroundColor: '#b69cf6',
                   // },
-                  avatarsContainer: {
-                    marginBottom: 10,
-                  },
+                  avatarsContainer: sharedStyles.profileAvatarContainer,
                 }}
                 avatar={
                   <Avatar
@@ -691,15 +702,15 @@ const AuthComponent = props => {
                   dense: true,
                   centerElement: {
                     primaryText: (
-                      <Text style={{color: '#d9d9d9'}}>
-                        {`${user.firstName} ${user.lastName} - ${user.gameStatus} • ${user.gamePoints} Points`}
+                      <Text style={sharedStyles.profileUserText}>
+                        {`${user.firstName} ${user.lastName}`}
                       </Text>
                     ),
                     secondaryText: (
                       <Text
-                        style={{
-                          color: '#d9d9d9',
-                        }}>{`${user.email} - ${user.prefecture}, ${user.country}`}</Text>
+                        style={
+                          sharedStyles.profileUserText
+                        }>{`${user.gameStatus} • ${user.gamePoints} Points - ${user.prefecture}, ${user.country}`}</Text>
                     ),
                   },
                   rightElement: (
@@ -725,7 +736,7 @@ const AuthComponent = props => {
                 {
                   icon: 'help',
                   value: 'How To Use The App',
-                  onPress: handleShowNotifications,
+                  onPress: handleShowAbout,
                 },
                 {
                   icon: 'bookmark-border',
@@ -760,6 +771,7 @@ const AuthComponent = props => {
             <Notifications onClose={onNotificationsClose} />
           )}
           {showMyAds && <MyAds onClose={onMyAdsClose} />}
+          {showAbout && <About onClose={onAboutClose} />}
           {showMyLotteries && <MyLotteries onClose={onMyLotteriesClose} />}
           {showAppInfo && <AppInfo onClose={OnAppInfoClose} />}
 
