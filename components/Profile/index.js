@@ -76,6 +76,9 @@ const AuthComponent = props => {
   const [firstNameChanged, setFirsNameChanged] = useState(false);
   const [lastNameChanged, setLastNameChanged] = useState(false);
   const [mobileChanged, setMobileChanged] = useState(false);
+  const [postalCodeChanged, setPostalCodeChanged] = useState(false);
+  const [fullAddressChanged, setFullAddressChanged] = useState(false);
+  const [cityWardChanged, setCityWardChanged] = useState(false);
   const [adId, setAdId] = useState(1);
 
   const [year, setYear] = useState('2020');
@@ -94,9 +97,9 @@ const AuthComponent = props => {
 
   useEffect(() => {
     if (loggedIn && user) {
-      AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/6721660483');
+      // AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/6721660483');
       // AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
-      AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
+      // AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
     }
   }, [adId, loggedIn, user]);
 
@@ -130,6 +133,9 @@ const AuthComponent = props => {
   const mobileRef = createRef();
   const firstNameRef = createRef();
   const lastNameRef = createRef();
+  const postalCodeRef = createRef();
+  const cityWardRef = createRef();
+  const fullAddressRef = createRef();
 
   const text = 'Login / Signup';
 
@@ -142,17 +148,27 @@ const AuthComponent = props => {
   }, [_loggedIn]);
 
   useEffect(() => {
-    setUserDataChanged(
-      dobChanged && firstNameChanged && lastNameChanged && mobileChanged,
-    );
     setEmailPassChanged(emailChanged && passwordChanged);
+  }, [emailChanged, passwordChanged]);
+
+  useEffect(() => {
+    setUserDataChanged(
+      dobChanged &&
+        firstNameChanged &&
+        lastNameChanged &&
+        mobileChanged &&
+        postalCodeChanged &&
+        fullAddressChanged &&
+        cityWardChanged,
+    );
   }, [
     dobChanged,
     firstNameChanged,
     lastNameChanged,
     mobileChanged,
-    emailChanged,
-    passwordChanged,
+    postalCodeChanged,
+    fullAddressChanged,
+    cityWardChanged,
   ]);
 
   const updateCountry = value => {
@@ -209,6 +225,28 @@ const AuthComponent = props => {
     }
   };
 
+  const handlePostalCodeChangeText = value => {
+    if (value && value.length > 1) {
+      setPostalCodeChanged(true);
+    } else {
+      setPostalCodeChanged(false);
+    }
+  };
+  const handleFullAddressChangeText = value => {
+    if (value && value.length > 3) {
+      setFullAddressChanged(true);
+    } else {
+      setFullAddressChanged(false);
+    }
+  };
+  const handleCityWardChangeText = value => {
+    if (value && value.length > 2) {
+      setCityWardChanged(true);
+    } else {
+      setCityWardChanged(false);
+    }
+  };
+
   const handleFirstNameChangeText = value => {
     if (value && value.length > 1) {
       setFirsNameChanged(true);
@@ -231,6 +269,11 @@ const AuthComponent = props => {
     setFirsNameChanged(false);
     setLastNameChanged(false);
     setMobileChanged(false);
+    setPostalCodeChanged(false);
+    setFullAddressChanged(false);
+    setCityWardChanged(false);
+    setEmailChanged(false);
+    setPasswordChanged(false);
   };
 
   const handleError = error => {
@@ -375,10 +418,18 @@ const AuthComponent = props => {
   const handleSignup = () => {
     const {current: firstNameField} = firstNameRef;
     const {current: lastNameField} = lastNameRef;
+    const {current: mobileField} = mobileRef;
+    const {current: postalCodeField} = postalCodeRef;
+    const {current: fullAddressField} = fullAddressRef;
+    const {current: cityWardField} = cityWardRef;
+
     const firstName = firstNameField.value();
     const lastName = lastNameField.value();
-    const {current: mobileField} = mobileRef;
     const mobile = mobileField.value();
+    const postalCode = postalCodeField.value();
+    const fullAddress = fullAddressField.value();
+    const cityWard = cityWardField.value();
+
     if (
       _email &&
       _password &&
@@ -386,8 +437,11 @@ const AuthComponent = props => {
       verificationId &&
       prefecture &&
       country &&
+      postalCode &&
       firstName &&
-      lastName
+      lastName &&
+      fullAddress &&
+      cityWard
     ) {
       const newUser = {
         email: _email,
@@ -400,6 +454,9 @@ const AuthComponent = props => {
         prefecture,
         firstName,
         lastName,
+        postalCode,
+        fullAddress,
+        cityWard,
       };
       setLoading(true);
       signup(newUser).then(onSignupSuccess, handleError);
@@ -413,6 +470,7 @@ const AuthComponent = props => {
     invoke(props, 'logout', {loggedIn: false, user: false});
     setLoggedIn(false);
     setLoading(false);
+    setDefaultsDataChanged();
   };
 
   const handleLogout = () => {
@@ -591,6 +649,21 @@ const AuthComponent = props => {
                 </Picker>
               </View>
 
+              <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>Postal Code</Text>
+                <TextField
+                  label="Postal Code"
+                  keyboardType="phone-pad"
+                  // formatText={formatText}
+                  // onSubmitEditing={onSubmit}
+                  tintColor={'#b69cf6'}
+                  onChangeText={handlePostalCodeChangeText}
+                  // baseColor="#7f0000"
+                  ref={postalCodeRef}
+                  disabled={loading}
+                />
+              </View>
+
               {/* {perfecture && ( */}
               <>
                 <Text style={sharedStyles.label}>Prefecture</Text>
@@ -612,6 +685,40 @@ const AuthComponent = props => {
               </>
               {/* )} */}
 
+              <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>City Ward</Text>
+                <TextField
+                  label="City Ward"
+                  // keyboardType="phone-pad"
+                  // formatText={formatText}
+                  // onSubmitEditing={onSubmit}
+                  tintColor={'#b69cf6'}
+                  onChangeText={handleCityWardChangeText}
+                  // baseColor="#7f0000"
+                  ref={cityWardRef}
+                  disabled={loading}
+                />
+              </View>
+
+              <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>Full Address</Text>
+                <TextField
+                  label="Full Address"
+                  // keyboardType="phone-pad"
+                  // formatText={formatText}
+                  // onSubmitEditing={onSubmit}
+                  tintColor={'#b69cf6'}
+                  onChangeText={handleFullAddressChangeText}
+                  // baseColor="#7f0000"
+                  ref={fullAddressRef}
+                  disabled={loading}
+                />
+              </View>
+
+              <Text style={[sharedStyles.label, sharedStyles.signUpLabel]}>
+                Make sure to correctly fill all this required information as it
+                affects your selling/winning process!
+              </Text>
               <View style={sharedStyles.loginBtn}>
                 <Button
                   disabled={loading || !userDataChanged}
@@ -665,13 +772,15 @@ const AuthComponent = props => {
           <Drawer>
             <Drawer.Header
               image={
-                <CachedImage
-                  cache="force-cache"
-                  blurRadius={15}
-                  source={{uri: user.image}}
-                  style={sharedStyles.profileBlurredImage}>
-                  <View style={sharedStyles.profileBlur} />
-                </CachedImage>
+                user.image && (
+                  <CachedImage
+                    cache="force-cache"
+                    blurRadius={15}
+                    source={{uri: user.image}}
+                    style={sharedStyles.profileBlurredImage}>
+                    <View style={sharedStyles.profileBlur} />
+                  </CachedImage>
+                )
               }
               style={{
                 contentContainer: sharedStyles.profileHeaderContentContainer,
@@ -717,6 +826,11 @@ const AuthComponent = props => {
                         style={
                           sharedStyles.profileUserText
                         }>{`${user.gameStatus} • ${user.gamePoints} Points - ${user.prefecture}, ${user.country}`}</Text>
+                    ),
+                    tertiaryText: (
+                      <Text style={sharedStyles.profileUserText}>
+                        {user.id}
+                      </Text>
                     ),
                   },
                   rightElement: (
@@ -776,9 +890,11 @@ const AuthComponent = props => {
           {showNotifications && (
             <Notifications onClose={onNotificationsClose} />
           )}
-          {showMyAds && <MyAds onClose={onMyAdsClose} />}
+          {showMyAds && <MyAds onClose={onMyAdsClose} user={user} />}
           {showAbout && <About onClose={onAboutClose} />}
-          {showMyLotteries && <MyLotteries onClose={onMyLotteriesClose} />}
+          {showMyLotteries && (
+            <MyLotteries onClose={onMyLotteriesClose} user={user} />
+          )}
           {showAppInfo && <AppInfo onClose={OnAppInfoClose} />}
 
           {showUpdateUser && (

@@ -66,6 +66,9 @@ const signup = async props => {
     prefecture,
     firstName,
     lastName,
+    postalCode,
+    fullAddress,
+    cityWard,
   } = props;
 
   const data = await request({
@@ -82,6 +85,37 @@ const signup = async props => {
       prefecture,
       firstName,
       lastName,
+      postalCode,
+      fullAddress,
+      cityWard,
+    },
+  });
+
+  return data;
+};
+
+const search = async props => {
+  const {searchQuery} = props;
+
+  const data = await request({
+    endpoint: 'users/authenticate/search',
+    method: 'POST',
+    body: {
+      query: searchQuery,
+    },
+  });
+
+  return data;
+};
+
+const getUsersData = async props => {
+  const {users} = props;
+
+  const data = await request({
+    endpoint: '/api/users/userData',
+    method: 'POST',
+    body: {
+      users,
     },
   });
 
@@ -93,11 +127,14 @@ const update = async props => {
     mobile,
     country,
     prefecture,
+    postalCode,
+    fullAddress,
     firstName,
     lastName,
     image,
     id,
     email,
+    cityWard,
   } = props;
 
   const formData = new FormData();
@@ -116,6 +153,15 @@ const update = async props => {
   if (firstName) {
     formData.append('firstName', firstName);
   }
+  if (postalCode) {
+    formData.append('postalCode', postalCode);
+  }
+  if (cityWard) {
+    formData.append('cityWard', cityWard);
+  }
+  if (fullAddress) {
+    formData.append('fullAddress', fullAddress);
+  }
   if (lastName) {
     formData.append('lastName', lastName);
   }
@@ -131,4 +177,4 @@ const update = async props => {
   return data;
 };
 
-export {login, logout, ping, verify, signup, update};
+export {login, logout, ping, verify, signup, update, search, getUsersData};

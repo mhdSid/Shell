@@ -9,6 +9,33 @@ const getAds = async () => {
   return data;
 };
 
+const getMyAds = async props => {
+  const {userId} = props;
+
+  const data = await request({
+    endpoint: 'ads/myAds',
+    method: 'POST',
+    body: {
+      userId,
+    },
+  });
+
+  return data;
+};
+
+const getMyLotteries = async props => {
+  const {userId} = props;
+  const data = await request({
+    endpoint: 'ads/myLotteries',
+    method: 'POST',
+    body: {
+      userId,
+    },
+  });
+
+  return data;
+};
+
 const importAd = async props => {
   const {
     name,
@@ -29,7 +56,9 @@ const importAd = async props => {
 
   if (Array.isArray(image)) {
     image.forEach(item => {
-      formData.append('image', item);
+      if (item && item.uri) {
+        formData.append('image', item);
+      }
     });
   }
 
@@ -50,4 +79,4 @@ const importAd = async props => {
   return data;
 };
 
-export {importAd, getAds};
+export {importAd, getAds, getMyAds, getMyLotteries};

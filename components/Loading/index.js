@@ -2,6 +2,8 @@ import React from 'react';
 import {ActivityIndicator, SafeAreaView, View} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 
+const SimpleLoader = <ActivityIndicator style={sharedStyles.simpleLoader} />;
+
 const Loading = (
   <SafeAreaView style={sharedStyles.loading}>
     <ActivityIndicator />
@@ -18,4 +20,4 @@ const loadingPopup = (
   </View>
 );
 
-export {LoadingComponent, Loading, loadingPopup};
+export {LoadingComponent, Loading, loadingPopup, SimpleLoader};

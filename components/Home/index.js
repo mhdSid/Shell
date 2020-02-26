@@ -1,6 +1,6 @@
 import React, {PureComponent, useState, useEffect} from 'react';
 import {Toolbar, ListItem} from 'react-native-material-ui';
-import {View, Text, FlatList, Alert, ScrollView} from 'react-native';
+import {View, Text, Alert, VirtualizedList} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import Carousel from 'react-native-snap-carousel';
 import {
@@ -117,6 +117,23 @@ const renderCarouselItem = onItemPress => {
 
 const CarouselComponent = props => {
   const {items, onItemPress} = props;
+  const [sliceIndex, setSliceIndex] = useState(3);
+
+  const sliced = items.slice(0, sliceIndex);
+
+  const [slicedAds, setSlicedAds] = useState(sliced);
+
+  const onEndReached = () => {
+    if (sliceIndex < items.length - 1) {
+      let newSliceIndex = sliceIndex;
+      newSliceIndex += newSliceIndex;
+      const _sliced = items.slice(0, newSliceIndex);
+      setSlicedAds(_sliced);
+      setSliceIndex(newSliceIndex);
+      // alert(`${sliceIndex} ${newSliceIndex}`);
+    }
+  };
+
   return (
     <View style={sliderStyles.exampleContainer}>
       <Carousel
@@ -124,7 +141,9 @@ const CarouselComponent = props => {
         shouldOptimizeUpdates={true}
         // useScrollView={true}
         // ref={c => (slider1Ref = c)}
-        data={items}
+        onEndReachedThreshold={0}
+        onEndReached={onEndReached}
+        data={slicedAds}
         renderItem={renderCarouselItem(onItemPress)}
         sliderWidth={sliderWidth}
         itemWidth={itemWidth}
@@ -162,6 +181,60 @@ CarouselComponent.propTypes = {
   item: PropTypes.object,
   onItemPress: PropTypes.func,
 };
+
+class CardListItem extends PureComponent {
+  static propTypes = {
+    item: PropTypes.object,
+    onItemPress: PropTypes.func,
+  };
+
+  handleItemPress = () => {
+    const {item} = this.props;
+    invoke(this.props, 'onItemPress', item);
+  };
+
+  render() {
+    const {item} = this.props;
+    return (
+      <TouchableBounce
+        style={sharedStyles.homeCardItem}
+        onPress={this.handleItemPress}>
+        <CachedImage
+          cache="force-cache"
+          style={sharedStyles.homeCardItemImage}
+          source={{uri: item.images[0], cache: 'force-cache'}}
+        />
+        <View style={sharedStyles.homeCardItemTextContainer}>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode={'tail'}
+            style={sharedStyles.homeCardItemText}>
+            {item.name}
+          </Text>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode={'tail'}
+            style={sharedStyles.homeCardItemText}>
+            {item.description}
+          </Text>
+
+          <Text
+            numberOfLines={1}
+            ellipsizeMode={'tail'}
+            style={sharedStyles.homeCardItemText}>
+            {item.category}
+          </Text>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode={'tail'}
+            style={
+              sharedStyles.homeCardItemText
+            }>{`${item.currency} ${item.price}`}</Text>
+        </View>
+      </TouchableBounce>
+    );
+  }
+}
 
 const HomeComponent = props => {
   const {ads: _ads} = props;
@@ -207,7 +280,7 @@ const HomeComponent = props => {
       }
       // setAds(serverAds);
       invoke(props, 'addAd', serverAds);
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -231,8 +304,13 @@ const HomeComponent = props => {
 
   useEffect(() => {
     if (Array.isArray(_ads) && _ads.length > 0) {
+      // alert(_ads.length);
       setLoading(true);
+      // const sliced = _ads.slice(0, sliceIndex);
+      // let newAds = ads || [];
+      // newAds = newAds.concat(sliced);
       setAds(_ads);
+      // setSlicedAds(newAds);
     }
     return () => {
       unMounted = true;
@@ -274,6 +352,10 @@ const HomeComponent = props => {
   };
 
   const handleShowAdsDetailsFlatList = item => {
+    handleShowAdsDetails(item);
+  };
+
+  const handleShowAdsDetailsFlatListClosure = item => {
     return () => {
       handleShowAdsDetails(item);
     };
@@ -300,49 +382,26 @@ const HomeComponent = props => {
         adUnitID="ca-app-pub-5703846930890914/6428703368"
         style={sharedStyles.adMobBanner}
         // testDevices={[AdMobBanner.simulatorId]}
-        // onAdFailedToLoad={error => console.error(error)}
+        onAdFailedToLoad={error => console.error(error)}
       />
 
       {loading && Loading}
       {isCard && (
-        <FlatList
+        <VirtualizedList
           refreshing={loading}
           onRefresh={fetchAds}
           showsVerticalScrollIndicator={false}
           data={ads}
+          getItem={(data, index) => data[index]}
+          getItemCount={() => ads.length}
           contentContainerStyle={sharedStyles.homeAdsContainer}
           numColumns={3}
-          // style={sharedStyles.homeAdsContainer}
           keyExtractor={item => item.id}
           renderItem={({item}) => (
-            <TouchableBounce
-              style={sharedStyles.homeCardItem}
-              onPress={handleShowAdsDetailsFlatList(item)}>
-              <CachedImage
-                style={sharedStyles.homeCardItemImage}
-                source={{uri: item.images[0]}}
-              />
-              <View style={sharedStyles.homeCardItemTextContainer}>
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode={'tail'}
-                  style={sharedStyles.homeCardItemText}>
-                  {item.name}
-                </Text>
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode={'tail'}
-                  style={sharedStyles.homeCardItemText}>
-                  {item.category}
-                </Text>
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode={'tail'}
-                  style={
-                    sharedStyles.homeCardItemText
-                  }>{`${item.currency} ${item.price}`}</Text>
-              </View>
-            </TouchableBounce>
+            <CardListItem
+              item={item}
+              onItemPress={handleShowAdsDetailsFlatList}
+            />
           )}
         />
       )}
@@ -350,11 +409,13 @@ const HomeComponent = props => {
         <CarouselComponent items={ads} onItemPress={handleShowAdsDetails} />
       )}
       {isList && (
-        <FlatList
+        <VirtualizedList
           refreshing={loading}
           onRefresh={fetchAds}
           showsVerticalScrollIndicator={false}
           data={ads}
+          getItem={(data, index) => data[index]}
+          getItemCount={() => ads.length}
           keyExtractor={item => item.id}
           renderItem={({item}) => (
             <ListItem
@@ -380,7 +441,7 @@ const HomeComponent = props => {
                 secondaryText: item.category,
                 tertiaryText: `${item.currency} ${item.price}`,
               }}
-              onPress={handleShowAdsDetailsFlatList(item)}
+              onPress={handleShowAdsDetailsFlatListClosure(item)}
             />
           )}
         />

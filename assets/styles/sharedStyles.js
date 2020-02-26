@@ -42,6 +42,9 @@ const sharedStyles = StyleSheet.create({
     ...fullWidthHeight,
     zIndex: 1000,
   },
+  simpleLoader: {
+    alignSelf: 'center',
+  },
   loadingPopup: {
     height: '100%',
     width: '100%',
@@ -95,8 +98,8 @@ const sharedStyles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   profileImage: {
-    width: 65,
-    height: 65,
+    width: 55,
+    height: 55,
     borderRadius: 65 / 2,
   },
   userImageBtnContainer: {
@@ -169,6 +172,10 @@ const sharedStyles = StyleSheet.create({
     fontSize: 16,
 
     textAlign: 'center',
+  },
+  signUpLabel: {
+    fontWeight: 'bold',
+    fontSize: 14,
   },
   currenyLabel: {
     fontWeight: 'bold',
@@ -247,6 +254,30 @@ const sharedStyles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
   },
+  adDetailsUsersListContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+  },
+  adDetailsUsersListItemContainer: {
+    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  adDetailsUsersListItemImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 60 / 2,
+  },
+  adDetailsUsersListItemText: {
+    fontSize: 14,
+    marginTop: 5,
+    fontWeight: '100',
+    color: 'rgba(0,0,0,.55)',
+    width: 80,
+    alignSelf: 'center',
+    textAlign: 'center',
+  },
   updateUserContainer: {
     paddingTop: 10,
   },
@@ -262,22 +293,22 @@ const sharedStyles = StyleSheet.create({
     marginTop: 20,
   },
   homeCardItem: {
-    width: '31%',
+    width: '100%',
     flexGrow: 1,
-    margin: 2,
-    borderWidth: 2,
-    borderRadius: 4,
-    borderColor: '#b69cf6',
+    marginBottom: 5,
+    // borderWidth: 2,
+    // borderRadius: 4,
+    // borderColor: '#b69cf6',
   },
   homeCardItemImage: {
-    aspectRatio: 3 / 5,
-    borderRadius: 2,
+    aspectRatio: 3 / 3,
+    // borderRadius: 2,
   },
   homeCardItemTextContainer: {
     backgroundColor: 'rgba(0,0,0,.75)',
     position: 'absolute',
     bottom: 0,
-    padding: 2,
+    padding: 7,
     left: 0,
     width: '100%',
   },
@@ -293,6 +324,9 @@ const sharedStyles = StyleSheet.create({
     width: 50,
     height: 50,
   },
+  listItemUserImage: {
+    borderRadius: 50 / 2,
+  },
   aboutSafeViewContainer: {
     backgroundColor: '#b69cf6',
   },
@@ -305,9 +339,9 @@ const sharedStyles = StyleSheet.create({
     paddingBottom: 220,
   },
   aboutSeparatorSection: {
-    paddingTop: 20,
-    paddingHorizontal: 20,
-    paddingBottom: 40,
+    padding: 20,
+    // paddingHorizontal: 20,
+    // paddingBottom: 40,
     alignItems: 'center',
   },
   aboutSeparatorSectionText: {
@@ -325,6 +359,8 @@ const sharedStyles = StyleSheet.create({
     lineHeight: 20,
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
   aboutIconTextContainer: {
     display: 'flex',
@@ -332,13 +368,28 @@ const sharedStyles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     alignItems: 'center',
-    justifyContent: 'center',
+    // justifyContent: 'center',
+  },
+  userDetailsIconTextContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    // paddingHorizontal: 20,
+    alignItems: 'center',
+    // justifyContent: 'center',
   },
   aboutIconText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 20,
     marginHorizontal: 10,
+  },
+  userDetailsText: {
+    fontSize: 16,
+    marginHorizontal: 10,
+    fontWeight: '500',
+    color: 'rgba(0,0,0,.55)',
   },
   aboutFirstSectionText: {
     width: '100%',
@@ -415,7 +466,7 @@ const sharedStyles = StyleSheet.create({
     color: '#d9d9d9',
   },
   profileAvatarContainer: {
-    marginBottom: 10,
+    marginBottom: 0,
   },
   profileHeaderContainer: {
     zIndex: 100,

@@ -43,6 +43,9 @@ const UpdateUser = props => {
   const [lastNameChanged, setLastNameChanged] = useState(false);
   const [countryChanged, setCountryChanged] = useState(false);
   const [prefectureChanged, setPrefectureChanged] = useState(false);
+  const [postalCodeChanged, setPostalCodeChanged] = useState(false);
+  const [cityWardChanged, setCityWardChanged] = useState(false);
+  const [fullAddressChanged, setFullAddressChanged] = useState(false);
 
   useEffect(() => {
     setUserDataChanged(
@@ -51,7 +54,10 @@ const UpdateUser = props => {
         firstNameChanged ||
         lastNameChanged ||
         countryChanged ||
-        prefectureChanged,
+        prefectureChanged ||
+        postalCodeChanged ||
+        cityWardChanged ||
+        fullAddressChanged,
     );
   }, [
     imageChanged,
@@ -60,6 +66,9 @@ const UpdateUser = props => {
     lastNameChanged,
     countryChanged,
     prefectureChanged,
+    postalCodeChanged,
+    fullAddressChanged,
+    cityWardChanged,
   ]);
 
   const updateCountry = value => {
@@ -93,6 +102,28 @@ const UpdateUser = props => {
     }
   };
 
+  const handlePostalCodeChangeText = value => {
+    if (value && value.length > 1) {
+      setPostalCodeChanged(true);
+    } else {
+      setPostalCodeChanged(false);
+    }
+  };
+  const handleFullAddressChangeText = value => {
+    if (value && value.length > 5) {
+      setFullAddressChanged(true);
+    } else {
+      setFullAddressChanged(false);
+    }
+  };
+  const handleCityWardChangeText = value => {
+    if (value && value.length > 2) {
+      setCityWardChanged(true);
+    } else {
+      setCityWardChanged(false);
+    }
+  };
+
   const updatePrefecture = value => {
     setPrefecture(value);
     if (value && value !== user.prefecture) {
@@ -111,11 +142,17 @@ const UpdateUser = props => {
     setLastNameChanged(false);
     setCountryChanged(false);
     setPrefectureChanged(false);
+    setPostalCodeChanged(false);
+    setFullAddressChanged(false);
+    setCityWardChanged(false);
   };
 
   const mobileRef = createRef();
   const firstNameRef = createRef();
   const lastNameRef = createRef();
+  const postalCodeRef = createRef();
+  const fullAddressRef = createRef();
+  const cityWardRef = createRef();
 
   const onUpdateUserError = error => {
     const message =
@@ -142,9 +179,16 @@ const UpdateUser = props => {
     const {current: mobileField} = mobileRef;
     const {current: firstNameField} = firstNameRef;
     const {current: lastNameField} = lastNameRef;
+    const {current: postalCodeField} = postalCodeRef;
+    const {current: cityWardField} = cityWardRef;
+    const {current: fullAddressField} = fullAddressRef;
+
     const mobile = mobileField.value();
     const firstName = firstNameField.value();
     const lastName = lastNameField.value();
+    const fullAddress = fullAddressField.value();
+    const postalCode = postalCodeField.value();
+    const cityWard = cityWardField.value();
 
     if (userDataChanged) {
       setLoading(true);
@@ -158,6 +202,9 @@ const UpdateUser = props => {
         image: imageFile,
         id: user.id,
         email: user.email,
+        fullAddress,
+        cityWard,
+        postalCode,
       };
 
       if (!mobileChanged) {
@@ -182,6 +229,18 @@ const UpdateUser = props => {
 
       if (!imageChanged) {
         delete updatedUserData.image;
+      }
+
+      if (!postalCodeChanged) {
+        delete updatedUserData.postalCode;
+      }
+
+      if (!fullAddressChanged) {
+        delete updatedUserData.fullAddress;
+      }
+
+      if (!cityWardChanged) {
+        delete updatedUserData.cityWard;
       }
 
       update(updatedUserData).then(onUpdateUserSuccess, onUpdateUserError);
@@ -339,6 +398,22 @@ const UpdateUser = props => {
               </Picker>
             </View>
 
+            <View style={sharedStyles.mobileContainer}>
+              <Text style={sharedStyles.label}>Postal Code</Text>
+              <TextField
+                label="Postal Code"
+                keyboardType="phone-pad"
+                value={user.postalCode}
+                // formatText={formatText}
+                // onSubmitEditing={onSubmit}
+                tintColor={'#b69cf6'}
+                onChangeText={handlePostalCodeChangeText}
+                // baseColor="#7f0000"
+                ref={postalCodeRef}
+                disabled={loading}
+              />
+            </View>
+
             {prefecture && (
               <>
                 <Text style={sharedStyles.label}>Prefecture</Text>
@@ -359,6 +434,38 @@ const UpdateUser = props => {
                 </View>
               </>
             )}
+
+            <View style={sharedStyles.mobileContainer}>
+              <Text style={sharedStyles.label}>City Ward</Text>
+              <TextField
+                label="City Ward"
+                // keyboardType="phone-pad"
+                value={user.cityWard}
+                // formatText={formatText}
+                // onSubmitEditing={onSubmit}
+                tintColor={'#b69cf6'}
+                onChangeText={handleCityWardChangeText}
+                // baseColor="#7f0000"
+                ref={cityWardRef}
+                disabled={loading}
+              />
+            </View>
+
+            <View style={sharedStyles.mobileContainer}>
+              <Text style={sharedStyles.label}>Full Address</Text>
+              <TextField
+                label="Full Address"
+                // keyboardType="phone-pad"
+                value={user.fullAddress}
+                // formatText={formatText}
+                // onSubmitEditing={onSubmit}
+                tintColor={'#b69cf6'}
+                onChangeText={handleFullAddressChangeText}
+                // baseColor="#7f0000"
+                ref={fullAddressRef}
+                disabled={loading}
+              />
+            </View>
 
             <View style={sharedStyles.loginBtn}>
               <Button
