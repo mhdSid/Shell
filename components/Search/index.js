@@ -5,15 +5,16 @@ import {View, Alert, VirtualizedList} from 'react-native';
 import {search} from '../../services/auth';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import {Loading} from '../Loading';
-import AdDetails from '../AdDetails';
+// import AdDetails from '../AdDetails';
 import UserDetails from '../UserDetails';
+import {rootHandleShowAdsDetails} from '../Pinger';
 
 const SearchComponent = () => {
   const [searchQuery, setSearchQuery] = useState();
   const [loading, setLoading] = useState();
   const [searchData, setSearchData] = useState();
   const [showUserDetails, setShowUserDetails] = useState();
-  const [showAdDetails, setShowAdDetails] = useState();
+  // const [showAdDetails, setShowAdDetails] = useState();
   const [selectedItem, setSelectedItem] = useState();
 
   const onSearchError = error => {
@@ -69,9 +70,9 @@ const SearchComponent = () => {
     }
   };
 
-  const onAdDetailsClose = () => {
-    setShowAdDetails(false);
-  };
+  // const onAdDetailsClose = () => {
+  //   setShowAdDetails(false);
+  // };
 
   const onUserDetailsClose = () => {
     setShowUserDetails(false);
@@ -80,11 +81,12 @@ const SearchComponent = () => {
   const handleItemPress = item => {
     return () => {
       if (item.type === 'user') {
+        setSelectedItem(item);
         setShowUserDetails(true);
       } else if (item.type === 'ad') {
-        setShowAdDetails(true);
+        // setShowAdDetails(true);
+        rootHandleShowAdsDetails(item);
       }
-      setSelectedItem(item);
     };
   };
 
@@ -159,9 +161,9 @@ const SearchComponent = () => {
           )}
         />
       )}
-      {showAdDetails && (
+      {/* {showAdDetails && (
         <AdDetails onClose={onAdDetailsClose} item={selectedItem} />
-      )}
+      )} */}
       {showUserDetails && (
         <UserDetails onClose={onUserDetailsClose} item={selectedItem} />
       )}

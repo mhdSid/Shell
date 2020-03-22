@@ -2,14 +2,8 @@ import React, {PureComponent, useState, useEffect} from 'react';
 import {Toolbar, ListItem} from 'react-native-material-ui';
 import {View, Text, Alert, VirtualizedList} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
-import Carousel from 'react-native-snap-carousel';
-import {
-  sliderStyles,
-  sliderWidth,
-  itemWidth,
-} from '../../assets/styles/sliderEntry';
 import {connect} from 'react-redux';
-import AdDetails from '../AdDetails';
+// import AdDetails from '../AdDetails';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {getAds} from '../../services/ads';
@@ -17,170 +11,14 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {Loading} from '../Loading';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import {addAd} from '../../redux/Ads/actions';
-import About from '../About';
 import {
   AdMobBanner,
   // AdMobInterstitial,
   // PublisherBanner,
   // AdMobRewarded,
 } from 'react-native-admob';
-
-class CarouselItem extends PureComponent {
-  static propTypes = {
-    item: PropTypes.object,
-    onItemPress: PropTypes.func,
-  };
-  handleItemPress = () => {
-    const {item} = this.props;
-    invoke(this.props, 'onItemPress', item);
-  };
-
-  render() {
-    const {item} = this.props;
-    const {images, name, currency, price, category} = item;
-    const even = true;
-    const uppercaseTitle = name ? (
-      <Text
-        style={[sliderStyles.title, even ? sliderStyles.titleEven : {}]}
-        numberOfLines={2}>
-        {name.toUpperCase()}
-      </Text>
-    ) : (
-      false
-    );
-
-    return (
-      <TouchableBounce
-        activeOpacity={1}
-        style={sliderStyles.slideInnerContainer}
-        onPress={this.handleItemPress}>
-        <View style={sliderStyles.shadow} />
-        <View
-          style={[
-            sliderStyles.imageContainer,
-            even ? sliderStyles.imageContainerEven : {},
-          ]}>
-          {images && images[0] ? (
-            <CachedImage
-              cache="force-cache"
-              source={{
-                uri: images[0],
-                cache: 'force-cache',
-                // headers: {
-                //   Pragma: 'only-if-cached',
-                //   'Cache-Control': 'only-if-cached',
-                // },
-              }}
-              style={sliderStyles.image}
-            />
-          ) : null}
-          <View
-            style={[
-              sliderStyles.radiusMask,
-              even ? sliderStyles.radiusMaskEven : {},
-            ]}
-          />
-        </View>
-        <View
-          style={[
-            sliderStyles.textContainer,
-            even ? sliderStyles.textContainerEven : {},
-          ]}>
-          {uppercaseTitle}
-          <Text
-            style={[
-              sliderStyles.subtitle,
-              even ? sliderStyles.subtitleEven : {},
-            ]}
-            numberOfLines={1}>
-            {category}
-          </Text>
-          <Text
-            style={[
-              sliderStyles.subtitle,
-              even ? sliderStyles.subtitleEven : {},
-            ]}
-            numberOfLines={2}>
-            {`${currency} ${price}`}
-          </Text>
-        </View>
-      </TouchableBounce>
-    );
-  }
-}
-
-const renderCarouselItem = onItemPress => {
-  return ({item}) => {
-    return <CarouselItem onItemPress={onItemPress} item={item} />;
-  };
-};
-
-const CarouselComponent = props => {
-  const {items, onItemPress} = props;
-  const [sliceIndex, setSliceIndex] = useState(3);
-
-  const sliced = items.slice(0, sliceIndex);
-
-  const [slicedAds, setSlicedAds] = useState(sliced);
-
-  const onEndReached = () => {
-    if (sliceIndex < items.length - 1) {
-      let newSliceIndex = sliceIndex;
-      newSliceIndex += newSliceIndex;
-      const _sliced = items.slice(0, newSliceIndex);
-      setSlicedAds(_sliced);
-      setSliceIndex(newSliceIndex);
-      // alert(`${sliceIndex} ${newSliceIndex}`);
-    }
-  };
-
-  return (
-    <View style={sliderStyles.exampleContainer}>
-      <Carousel
-        // enableSnap={true}
-        shouldOptimizeUpdates={true}
-        // useScrollView={true}
-        // ref={c => (slider1Ref = c)}
-        onEndReachedThreshold={0}
-        onEndReached={onEndReached}
-        data={slicedAds}
-        renderItem={renderCarouselItem(onItemPress)}
-        sliderWidth={sliderWidth}
-        itemWidth={itemWidth}
-        hasParallaxImages={false}
-        firstItem={0}
-        inactiveSlideScale={0.94}
-        inactiveSlideOpacity={0.7}
-        // inactiveSlideShift={20}
-        containerCustomStyle={sliderStyles.slider}
-        contentContainerCustomStyle={sliderStyles.sliderContentContainer}
-        // loop={true}
-        loopClonesPerSide={2}
-        // autoplay={true}
-        // autoplayDelay={500}
-        // autoplayInterval={3000}
-        // onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
-      />
-      {/* <Pagination
-     dotsLength={ENTRIES1.length}
-     activeDotIndex={0}
-     containerStyle={sharedStyles.paginationContainer}
-     dotColor={'rgba(255, 255, 255, 0.92)'}
-     dotStyle={sharedStyles.paginationDot}
-     inactiveDotColor={colors.black}
-     inactiveDotOpacity={0.4}
-     inactiveDotScale={0.6}
-     carouselRef={slider1Ref}
-     tappableDots={!!slider1Ref}
-   /> */}
-    </View>
-  );
-};
-
-CarouselComponent.propTypes = {
-  item: PropTypes.object,
-  onItemPress: PropTypes.func,
-};
+import {rootHandleShowAdsDetails} from '../Pinger';
+import {CarouselComponent} from '../Carousel';
 
 class CardListItem extends PureComponent {
   static propTypes = {
@@ -244,9 +82,9 @@ const HomeComponent = props => {
   const [isList, setIsList] = useState(false);
   const [isCarousel, setIsCarousel] = useState(false);
   const [isCard, setIsCard] = useState(true);
-  const [showAdDetails, setShowAdDetails] = useState(false);
-  const [showAbout, setShowAbout] = useState(false);
-  const [selectedAd, setSelectedAd] = useState(undefined);
+  // const [showAdDetails, setShowAdDetails] = useState(false);
+  // const [showAbout, setShowAbout] = useState(false);
+  // const [selectedAd, setSelectedAd] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [fetchId, setFetchId] = useState(0);
 
@@ -338,26 +176,26 @@ const HomeComponent = props => {
     }
   };
 
-  const onAdsDetailsClose = () => {
-    setShowAdDetails(false);
-  };
+  // const onAdsDetailsClose = () => {
+  //   setShowAdDetails(false);
+  // };
 
-  const onAboutClose = () => {
-    setShowAbout(false);
-  };
+  // const onAboutClose = () => {
+  //   setShowAbout(false);
+  // };
 
-  const handleShowAdsDetails = item => {
-    setShowAdDetails(true);
-    setSelectedAd(item);
-  };
+  // const handleShowAdsDetails = item => {
+  //   setShowAdDetails(true);
+  //   setSelectedAd(item);
+  // };
 
   const handleShowAdsDetailsFlatList = item => {
-    handleShowAdsDetails(item);
+    rootHandleShowAdsDetails(item);
   };
 
   const handleShowAdsDetailsFlatListClosure = item => {
     return () => {
-      handleShowAdsDetails(item);
+      rootHandleShowAdsDetails(item);
     };
   };
 
@@ -369,7 +207,7 @@ const HomeComponent = props => {
     <View style={sharedStyles.fullheightView}>
       <Toolbar
         style={{container: sharedStyles.toolbarContainer}}
-        leftElement="help"
+        // leftElement="help"
         centerElement="Shell"
         onLeftElementPress={handleLeftElementPress}
         rightElement={
@@ -382,10 +220,10 @@ const HomeComponent = props => {
         adUnitID="ca-app-pub-5703846930890914/6428703368"
         style={sharedStyles.adMobBanner}
         // testDevices={[AdMobBanner.simulatorId]}
-        onAdFailedToLoad={error => console.error(error)}
+        // onAdFailedToLoad={error => console.error(error)}
       />
 
-      {loading && Loading}
+      {loading && <View style={{bottom: 70}}>{Loading}</View>}
       {isCard && (
         <VirtualizedList
           refreshing={loading}
@@ -406,7 +244,10 @@ const HomeComponent = props => {
         />
       )}
       {isCarousel && (
-        <CarouselComponent items={ads} onItemPress={handleShowAdsDetails} />
+        <CarouselComponent
+          items={ads}
+          onItemPress={handleShowAdsDetailsFlatList}
+        />
       )}
       {isList && (
         <VirtualizedList
@@ -447,10 +288,10 @@ const HomeComponent = props => {
         />
       )}
 
-      {showAdDetails && (
+      {/* {showAdDetails && (
         <AdDetails onClose={onAdsDetailsClose} item={selectedAd} />
-      )}
-      {showAbout && <About onClose={onAboutClose} />}
+      )} */}
+      {/* {showAbout && <About onClose={onAboutClose} />} */}
       {/* </View> */}
       {/* </ScrollView> */}
     </View>

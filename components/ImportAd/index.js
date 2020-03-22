@@ -22,13 +22,20 @@ import {
 import {adStatuses, adCategories, mimeTypes} from '../../Constants/Ads';
 import isUndefined from 'lodash/isUndefined';
 import NoAuth from '../NoAuth';
-import {LoadingComponent, loadingPopup} from '../Loading';
+import {LoadingComponent} from '../Loading';
 // import ImgToBase64 from 'react-native-image-base64';
-import {importAd} from '../../services/ads';
-import {addAd} from '../../redux/Ads/actions';
-import invoke from 'lodash/invoke';
-import AdDetails from '../AdDetails';
+// import {importAd, updateAd} from '../../services/ads';
+// import {addAd, updateCurrentAd} from '../../redux/Ads/actions';
+// import invoke from 'lodash/invoke';
+// import AdDetails from '../AdDetails';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
+import {
+  rootUpdateAd,
+  rootUploadAd,
+  rootHandleShowAdsDetails,
+  rootUpdateCurrentAdToStore,
+  rootAddAdToStore,
+} from '../Pinger';
 
 // import Buffer from 'buffer';
 
@@ -46,14 +53,12 @@ const ImportAd = props => {
   const [adCategory, setAdCategory] = useState('Sports');
   // const [adType, setAdType] = useState(undefined);
   const [adStatus, setAdStatus] = useState('No Noticable Scratches or Dirt');
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [prefecture, setPrefecture] = useState(
     userCountry && prefecturesList[userCountry],
   );
-  const [showAdDetails, setShowAdDetails] = useState(false);
-  const [selectedAd, setSelectedAd] = useState(undefined);
 
   const [adDataChanged, setADataChanged] = useState(false);
   const [imagesChanged, setImagesChanged] = useState(false);
@@ -100,17 +105,8 @@ const ImportAd = props => {
     }
   };
 
-  const onAdsDetailsClose = () => {
-    setShowAdDetails(false);
-  };
-
-  const handleShowAdsDetails = item => {
-    setSelectedAd(item);
-    setShowAdDetails(true);
-  };
-
   const setDefault = (nameField, descriptionField, priceField) => {
-    setLoading(false);
+    // setLoading(false);
 
     nameField.setValue('');
     descriptionField.setValue('');
@@ -124,39 +120,67 @@ const ImportAd = props => {
     setPriceChanged(false);
   };
 
-  const handleError = (nameField, descriptionField, priceField) => {
-    return error => {
-      const message =
-        (error && error.message) || 'A an error has occured. Please try again.';
-      // invoke(props, 'logout', {loggedIn: false, user: false});
-      // setLoggedIn(false);
-      setDefault(nameField, descriptionField, priceField);
+  const handleError = error => {
+    const message =
+      (error && error.message) || 'A an error has occured. Please try again.';
+    // invoke(props, 'logout', {loggedIn: false, user: false});
+    // setLoggedIn(false);
+    // setDefault(nameField, descriptionField, priceField);
 
-      // setVerificationId(undefined);
-      // setUser(null);
+    // setVerificationId(undefined);
+    // setUser(null);
 
-      if (message) {
-        Alert.alert(message);
+    if (message) {
+      Alert.alert(message);
+    }
+    return;
+  };
+
+  const onUpdateAdSuccess = newAd => {
+    return data => {
+      const {error, updatedAd} = data;
+      if (error) {
+        return handleError(error);
       }
-      return;
+      const newUpdatedAd = {
+        ...newAd,
+        images: [...(newAd.images || []), ...(updatedAd.images || [])],
+      };
+      rootUpdateCurrentAdToStore(newUpdatedAd);
+      rootHandleShowAdsDetails(newUpdatedAd);
     };
   };
 
-  const importAdSuccess = (nameField, descriptionField, priceField) => {
-    return data => {
-      // console.log('importAdimportAdimportAd response: ', data);
-      const {error, newAd} = data;
+  const importAdSuccess = data => {
+    // return data => {
+    // console.log('importAdimportAdimportAd response: ', data);
+    const {error, newAd} = data;
 
-      if (error || !newAd) {
-        return handleError(nameField, descriptionField, priceField)(error);
-      }
+    if (error || !newAd) {
+      return handleError(error);
+    }
 
-      setDefault(nameField, descriptionField, priceField);
+    // setDefault(nameField, descriptionField, priceField);
 
-      invoke(props, 'addAd', newAd);
-      handleShowAdsDetails(newAd);
-      // console.log('SUUUUUCESSSSSSSSS handleConfirm', newAd);
-    };
+    rootAddAdToStore(newAd);
+    rootHandleShowAdsDetails(newAd);
+
+    const newImages = imageFiles.filter(Boolean);
+
+    rootUpdateAd(
+      {
+        id: newAd.id,
+        image: newImages.slice(1, newImages.length),
+      },
+      onUpdateAdSuccess(newAd),
+      handleError,
+    );
+
+    // updateAd({
+    //   id: newAd.id,
+    //   image: newImages.slice(1, newImages.length),
+    // }).then(onUpdateAdSuccess(newAd), handleError);
+    // };
   };
 
   const handleUploadAd = () => {
@@ -182,22 +206,42 @@ const ImportAd = props => {
       userCurrency &&
       adDataChanged
     ) {
-      setLoading(true);
-      importAd({
-        name,
-        description,
-        image: imageFiles.filter(Boolean),
-        prefecture,
-        category: adCategory,
-        status: adStatus,
-        price,
-        userId: authUser.id,
-        country: authUser.country,
-        currency: userCurrency,
-      }).then(
-        importAdSuccess(nameField, descriptionField, priceField),
-        handleError(nameField, descriptionField, priceField),
+      const filteredImages = imageFiles.filter(Boolean);
+      // setLoading(true);
+      setDefault(nameField, descriptionField, priceField);
+
+      rootUploadAd(
+        {
+          name,
+          description,
+          image: filteredImages[0],
+          prefecture,
+          category: adCategory,
+          status: adStatus,
+          price,
+          userId: authUser.id,
+          country: authUser.country,
+          currency: userCurrency,
+        },
+        importAdSuccess,
+        handleError,
       );
+
+      // importAd({
+      //   name,
+      //   description,
+      //   image: filteredImages[0],
+      //   prefecture,
+      //   category: adCategory,
+      //   status: adStatus,
+      //   price,
+      //   userId: authUser.id,
+      //   country: authUser.country,
+      //   currency: userCurrency,
+      // }).then(
+      //   importAdSuccess(nameField, descriptionField, priceField),
+      //   handleError(nameField, descriptionField, priceField),
+      // );
     }
   };
 
@@ -279,14 +323,14 @@ const ImportAd = props => {
             rightElement={
               <Button
                 onPress={handleUploadAd}
-                disabled={loading || !adDataChanged}
+                disabled={!adDataChanged}
                 raised
                 text="Post"
                 icon="done-all"
               />
             }
           />
-          {loading && loadingPopup}
+          {/* {loading && loadingPopup} */}
 
           <ScrollView showsVerticalScrollIndicator={false}>
             <View
@@ -305,7 +349,7 @@ const ImportAd = props => {
                   tintColor={'#b69cf6'}
                   // baseColor="#7f0000"
                   ref={adNameRef}
-                  disabled={loading}
+                  // disabled={loading}
                 />
               </View>
 
@@ -320,7 +364,7 @@ const ImportAd = props => {
                   tintColor={'#b69cf6'}
                   // baseColor="#7f0000"
                   ref={descriptionRef}
-                  disabled={loading}
+                  // disabled={loading}
                 />
               </View>
 
@@ -338,7 +382,7 @@ const ImportAd = props => {
                       onChangeText={handlePriceChangeText}
                       // baseColor="#7f0000"
                       ref={priceRef}
-                      disabled={loading}
+                      // disabled={loading}
                     />
                   </View>
                 </View>
@@ -432,7 +476,7 @@ const ImportAd = props => {
 
               <View style={sharedStyles.loginBtn}>
                 <Button
-                  disabled={loading || !adDataChanged}
+                  disabled={!adDataChanged}
                   raised={true}
                   primary
                   text={'Post'}
@@ -442,9 +486,6 @@ const ImportAd = props => {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
-        {showAdDetails && (
-          <AdDetails onClose={onAdsDetailsClose} item={selectedAd} />
-        )}
       </View>
     );
   }
@@ -462,9 +503,10 @@ const mapStateToProps = ({authReducer}) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = () => {
   return {
-    addAd: payload => dispatch(addAd(payload)),
+    // addAd: payload => dispatch(addAd(payload)),
+    // updateCurrentAd: payload => dispatch(updateCurrentAd(payload)),
   };
 };
 

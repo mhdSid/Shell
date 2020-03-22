@@ -256,10 +256,10 @@ const AdDetails = props => {
               // height: 'auto',
             }}>
             <CachedImage
-              cache="force-cache"
+              // cache="force-cache"
               source={{
                 uri: images[currentPhotoIndex],
-                cache: 'force-cache',
+                // cache: 'force-cache',
                 // headers: {
                 //   Pragma: 'only-if-cached',
                 //   'Cache-Control': 'only-if-cached',

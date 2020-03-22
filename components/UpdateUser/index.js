@@ -8,6 +8,7 @@ import {
   Text,
   Picker,
   Alert,
+  KeyboardAvoidingView,
 } from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, Icon, Button} from 'react-native-material-ui';
@@ -305,179 +306,188 @@ const UpdateUser = props => {
         />
         {loading && loadingPopup}
 
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View
-            style={[
-              sharedStyles.loginContainer,
-              sharedStyles.updateUserContainer,
-            ]}>
-            <View style={sharedStyles.mobileContainer}>
-              <View
-                style={[
-                  sharedStyles.imageBtnContainer,
-                  sharedStyles.userImageBtnContainer,
-                ]}>
-                <TouchableBounce
-                  onPress={handleChoosePhoto}
+        <KeyboardAvoidingView
+          behavior="padding"
+          enabled
+          keyboardVerticalOffset={25}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View
+              style={[
+                sharedStyles.loginContainer,
+                sharedStyles.updateUserContainer,
+              ]}>
+              <View style={sharedStyles.mobileContainer}>
+                <View
                   style={[
-                    sharedStyles.imageBtn,
-                    sharedStyles.updateUserImgBtn,
+                    sharedStyles.imageBtnContainer,
+                    sharedStyles.userImageBtnContainer,
                   ]}>
-                  {!image && !user.image && (
-                    <Icon name="image" size={35} color="white" />
-                  )}
-                  {(image || user.image) && (
-                    <CachedImage
-                      style={[sharedStyles.adImage, sharedStyles.userImage]}
-                      cache="force-cache"
-                      source={{uri: image || user.image}}
+                  <TouchableBounce
+                    onPress={handleChoosePhoto}
+                    style={[
+                      sharedStyles.imageBtn,
+                      sharedStyles.updateUserImgBtn,
+                    ]}>
+                    {!image && !user.image && (
+                      <Icon name="image" size={35} color="white" />
+                    )}
+                    {(image || user.image) && (
+                      <CachedImage
+                        style={[sharedStyles.adImage, sharedStyles.userImage]}
+                        cache="force-cache"
+                        source={{uri: image || user.image}}
+                      />
+                    )}
+                  </TouchableBounce>
+                </View>
+              </View>
+
+              <View style={sharedStyles.nameContainer}>
+                <Text style={sharedStyles.label}>First Name</Text>
+                <TextField
+                  label="First Name"
+                  value={user.firstName}
+                  // keyboardType="phone-pad"
+                  // formatText={formatText}
+                  // onSubmitEditing={onSubmit}
+                  tintColor={'#b69cf6'}
+                  onChangeText={handleFirstNameChangeText}
+                  // baseColor="#7f0000"
+                  ref={firstNameRef}
+                  disabled={loading}
+                />
+              </View>
+
+              <View style={sharedStyles.nameContainer}>
+                <Text style={sharedStyles.label}>Last Name</Text>
+                <TextField
+                  label="Last Name"
+                  value={user.lastName}
+                  // keyboardType="phone-pad"
+                  // formatText={formatText}
+                  // onSubmitEditing={onSubmit}
+                  tintColor={'#b69cf6'}
+                  onChangeText={handleLastNameChangeText}
+                  // baseColor="#7f0000"
+                  ref={lastNameRef}
+                  disabled={loading}
+                />
+              </View>
+
+              <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>Phone Number</Text>
+                <TextField
+                  label="Mobile"
+                  keyboardType="phone-pad"
+                  value={user.mobile}
+                  // formatText={formatText}
+                  // onSubmitEditing={onSubmit}
+                  tintColor={'#b69cf6'}
+                  onChangeText={handleMobileChangeText}
+                  // baseColor="#7f0000"
+                  ref={mobileRef}
+                  disabled={loading}
+                />
+              </View>
+
+              <Text style={sharedStyles.label}>Country</Text>
+              <View style={sharedStyles.pickerView}>
+                <Picker
+                  mode="dropdown"
+                  selectedValue={country}
+                  // style={sharedStyles.dobViewItem}
+                  onValueChange={updateCountry}>
+                  {countries.map((_country, index) => (
+                    <Picker.Item
+                      key={index}
+                      label={_country}
+                      value={_country}
                     />
-                  )}
-                </TouchableBounce>
+                  ))}
+                </Picker>
+              </View>
+
+              <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>Postal Code</Text>
+                <TextField
+                  label="Postal Code"
+                  keyboardType="phone-pad"
+                  value={user.postalCode}
+                  // formatText={formatText}
+                  // onSubmitEditing={onSubmit}
+                  tintColor={'#b69cf6'}
+                  onChangeText={handlePostalCodeChangeText}
+                  // baseColor="#7f0000"
+                  ref={postalCodeRef}
+                  disabled={loading}
+                />
+              </View>
+
+              {prefecture && (
+                <>
+                  <Text style={sharedStyles.label}>Prefecture</Text>
+                  <View style={sharedStyles.pickerView}>
+                    <Picker
+                      mode="dropdown"
+                      selectedValue={prefecture}
+                      // style={sharedStyles.dobViewItem}
+                      onValueChange={updatePrefecture}>
+                      {prefectures[country].map((_prefecture, index) => (
+                        <Picker.Item
+                          key={index}
+                          label={_prefecture}
+                          value={_prefecture}
+                        />
+                      ))}
+                    </Picker>
+                  </View>
+                </>
+              )}
+
+              <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>City Ward</Text>
+                <TextField
+                  label="City Ward"
+                  // keyboardType="phone-pad"
+                  value={user.cityWard}
+                  // formatText={formatText}
+                  // onSubmitEditing={onSubmit}
+                  tintColor={'#b69cf6'}
+                  onChangeText={handleCityWardChangeText}
+                  // baseColor="#7f0000"
+                  ref={cityWardRef}
+                  disabled={loading}
+                />
+              </View>
+
+              <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>Full Address</Text>
+                <TextField
+                  label="Full Address"
+                  // keyboardType="phone-pad"
+                  value={user.fullAddress}
+                  // formatText={formatText}
+                  // onSubmitEditing={onSubmit}
+                  tintColor={'#b69cf6'}
+                  onChangeText={handleFullAddressChangeText}
+                  // baseColor="#7f0000"
+                  ref={fullAddressRef}
+                  disabled={loading}
+                />
+              </View>
+
+              <View style={sharedStyles.loginBtn}>
+                <Button
+                  disabled={loading || !userDataChanged}
+                  raised={true}
+                  primary
+                  text={'Confirm'}
+                  onPress={handleUpdateUser}
+                />
               </View>
             </View>
-
-            <View style={sharedStyles.nameContainer}>
-              <Text style={sharedStyles.label}>First Name</Text>
-              <TextField
-                label="First Name"
-                value={user.firstName}
-                // keyboardType="phone-pad"
-                // formatText={formatText}
-                // onSubmitEditing={onSubmit}
-                tintColor={'#b69cf6'}
-                onChangeText={handleFirstNameChangeText}
-                // baseColor="#7f0000"
-                ref={firstNameRef}
-                disabled={loading}
-              />
-            </View>
-
-            <View style={sharedStyles.nameContainer}>
-              <Text style={sharedStyles.label}>Last Name</Text>
-              <TextField
-                label="Last Name"
-                value={user.lastName}
-                // keyboardType="phone-pad"
-                // formatText={formatText}
-                // onSubmitEditing={onSubmit}
-                tintColor={'#b69cf6'}
-                onChangeText={handleLastNameChangeText}
-                // baseColor="#7f0000"
-                ref={lastNameRef}
-                disabled={loading}
-              />
-            </View>
-
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>Phone Number</Text>
-              <TextField
-                label="Mobile"
-                keyboardType="phone-pad"
-                value={user.mobile}
-                // formatText={formatText}
-                // onSubmitEditing={onSubmit}
-                tintColor={'#b69cf6'}
-                onChangeText={handleMobileChangeText}
-                // baseColor="#7f0000"
-                ref={mobileRef}
-                disabled={loading}
-              />
-            </View>
-
-            <Text style={sharedStyles.label}>Country</Text>
-            <View style={sharedStyles.pickerView}>
-              <Picker
-                mode="dropdown"
-                selectedValue={country}
-                // style={sharedStyles.dobViewItem}
-                onValueChange={updateCountry}>
-                {countries.map((_country, index) => (
-                  <Picker.Item key={index} label={_country} value={_country} />
-                ))}
-              </Picker>
-            </View>
-
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>Postal Code</Text>
-              <TextField
-                label="Postal Code"
-                keyboardType="phone-pad"
-                value={user.postalCode}
-                // formatText={formatText}
-                // onSubmitEditing={onSubmit}
-                tintColor={'#b69cf6'}
-                onChangeText={handlePostalCodeChangeText}
-                // baseColor="#7f0000"
-                ref={postalCodeRef}
-                disabled={loading}
-              />
-            </View>
-
-            {prefecture && (
-              <>
-                <Text style={sharedStyles.label}>Prefecture</Text>
-                <View style={sharedStyles.pickerView}>
-                  <Picker
-                    mode="dropdown"
-                    selectedValue={prefecture}
-                    // style={sharedStyles.dobViewItem}
-                    onValueChange={updatePrefecture}>
-                    {prefectures[country].map((_prefecture, index) => (
-                      <Picker.Item
-                        key={index}
-                        label={_prefecture}
-                        value={_prefecture}
-                      />
-                    ))}
-                  </Picker>
-                </View>
-              </>
-            )}
-
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>City Ward</Text>
-              <TextField
-                label="City Ward"
-                // keyboardType="phone-pad"
-                value={user.cityWard}
-                // formatText={formatText}
-                // onSubmitEditing={onSubmit}
-                tintColor={'#b69cf6'}
-                onChangeText={handleCityWardChangeText}
-                // baseColor="#7f0000"
-                ref={cityWardRef}
-                disabled={loading}
-              />
-            </View>
-
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>Full Address</Text>
-              <TextField
-                label="Full Address"
-                // keyboardType="phone-pad"
-                value={user.fullAddress}
-                // formatText={formatText}
-                // onSubmitEditing={onSubmit}
-                tintColor={'#b69cf6'}
-                onChangeText={handleFullAddressChangeText}
-                // baseColor="#7f0000"
-                ref={fullAddressRef}
-                disabled={loading}
-              />
-            </View>
-
-            <View style={sharedStyles.loginBtn}>
-              <Button
-                disabled={loading || !userDataChanged}
-                raised={true}
-                primary
-                text={'Confirm'}
-                onPress={handleUpdateUser}
-              />
-            </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </Modal>
   );

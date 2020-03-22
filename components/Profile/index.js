@@ -97,11 +97,11 @@ const AuthComponent = props => {
 
   useEffect(() => {
     if (loggedIn && user) {
-      // AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/6721660483');
+      AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/6721660483');
       // AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
-      // AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
+      AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
     }
-  }, [adId, loggedIn, user]);
+  }, [adId]);
 
   const onSettingsClose = () => {
     setShowSettings(false);

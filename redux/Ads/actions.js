@@ -1,5 +1,6 @@
 const adActions = {
   importAd: 'AD_IMPORT',
+  updateCurrentAd: 'UPDATE_CURRENT_AD',
 };
 
 const addAd = payload => ({
@@ -7,4 +8,9 @@ const addAd = payload => ({
   payload,
 });
 
-export {adActions, addAd};
+const updateCurrentAd = payload => ({
+  type: adActions.updateCurrentAd,
+  payload,
+});
+
+export {adActions, addAd, updateCurrentAd};

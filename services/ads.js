@@ -54,13 +54,14 @@ const importAd = async props => {
   formData.append('name', name);
   formData.append('description', description);
 
-  if (Array.isArray(image)) {
-    image.forEach(item => {
-      if (item && item.uri) {
-        formData.append('image', item);
-      }
-    });
-  }
+  // if (Array.isArray(image)) {
+  //   image.forEach(item => {
+  //     if (item && item.uri) {
+  //       formData.append('image', item);
+  //     }
+  //   });
+  // }
+  formData.append('image', image);
 
   formData.append('category', category);
   formData.append('prefecture', prefecture);
@@ -79,4 +80,28 @@ const importAd = async props => {
   return data;
 };
 
-export {importAd, getAds, getMyAds, getMyLotteries};
+const updateAd = async props => {
+  const {id, image} = props;
+
+  const formData = new FormData();
+
+  if (Array.isArray(image)) {
+    image.forEach(item => {
+      if (item && item.uri) {
+        formData.append('image', item);
+      }
+    });
+  }
+
+  formData.append('id', id);
+
+  const data = await request({
+    endpoint: 'ads/update',
+    method: 'POST',
+    body: formData,
+  });
+
+  return data;
+};
+
+export {importAd, getAds, getMyAds, getMyLotteries, updateAd};

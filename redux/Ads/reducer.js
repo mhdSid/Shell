@@ -44,6 +44,26 @@ const adsReducer = (state = initialState, action) => {
       };
     }
 
+    case adActions.updateCurrentAd: {
+      let {ads} = state;
+      const ad = action.payload;
+      if (ad && ad.id) {
+        const updatedAds = ads.map(item => {
+          if (item.id === ad.id) {
+            return {
+              ...item,
+              ...ad,
+            };
+          }
+          return item;
+        });
+        return {
+          ads: [...updatedAds],
+        };
+      }
+      break;
+    }
+
     default: {
       return {
         ...initialState,
