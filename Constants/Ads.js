@@ -76,4 +76,4 @@ const adStatuses = [
   'Overall Bad Condition',
 ].sort();
 
-export {adCategories, adStatuses, mimeTypes};
+export {adCategories, adStatuses, mimeTypes, adTypes};

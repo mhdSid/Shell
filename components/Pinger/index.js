@@ -7,6 +7,7 @@ import {Alert} from 'react-native';
 import {updateAd, importAd} from '../../services/ads';
 import AdDetails from '../AdDetails';
 import {addAd, updateCurrentAd} from '../../redux/Ads/actions';
+import PropTypes from 'prop-types';
 
 export let rootUpdateAd;
 export let rootUploadAd;
@@ -18,7 +19,6 @@ export let rootAddAdToStore;
 const Pinger = props => {
   const [showAdDetails, setShowAdDetails] = useState(false);
   const [selectedAd, setSelectedAd] = useState(undefined);
-  setRootSelectedAd = selectedAd;
 
   const handleShowAdsDetails = item => {
     setSelectedAd(item);
@@ -41,6 +41,7 @@ const Pinger = props => {
     invoke(props, 'addAd', data);
   };
 
+  setRootSelectedAd = selectedAd;
   rootAddAdToStore = addAdToStore;
   rootUpdateCurrentAdToStore = updateCurrentAdToStore;
   rootUpdateAd = update;
@@ -86,6 +87,13 @@ const mapDispatchToProps = dispatch => {
     addAd: payload => dispatch(addAd(payload)),
     updateCurrentAd: payload => dispatch(updateCurrentAd(payload)),
   };
+};
+
+Pinger.propTypes = {
+  logout: PropTypes.func,
+  login: PropTypes.func,
+  updateCurrentAd: PropTypes.func,
+  addAd: PropTypes.func,
 };
 
 // eslint-disable-next-line prettier/prettier

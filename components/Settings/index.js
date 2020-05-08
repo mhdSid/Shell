@@ -98,6 +98,7 @@ const Settings = props => {
 
 Settings.propTypes = {
   lang: PropTypes.string,
+  setLang: PropTypes.func,
   onClose: PropTypes.func,
 };
 

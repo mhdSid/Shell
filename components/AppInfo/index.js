@@ -3,15 +3,14 @@ import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, ScrollView, View, Text} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar} from 'react-native-material-ui';
-// import PropTypes from 'prop-types';
-// var pkg = require('./package.json');
+import PropTypes from 'prop-types';
 import pkg from '../../package.json';
 
 import {loadingPopup} from '../Loading';
 
 const AppInfo = props => {
   const [modalVisible, setModalVisible] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   const handleCloseModal = () => {
     setModalVisible(false);
@@ -52,10 +51,8 @@ const AppInfo = props => {
   );
 };
 
-// UpdateUser.propTypes = {
-//   user: PropTypes.object,
-//   onClose: PropTypes.func,
-//   updateUserAction: PropTypes.func,
-// };
+AppInfo.propTypes = {
+  onClose: PropTypes.func,
+};
 
 export default AppInfo;

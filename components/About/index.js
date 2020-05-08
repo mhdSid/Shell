@@ -3,13 +3,10 @@ import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, ScrollView, View, Text} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, IconToggle, Icon} from 'react-native-material-ui';
-// import PropTypes from 'prop-types';
-
-// import {loadingPopup} from '../Loading';
+import PropTypes from 'prop-types';
 
 const About = props => {
   const [modalVisible, setModalVisible] = useState(true);
-  //   const [loading, setLoading] = useState(false);
 
   const handleCloseModal = () => {
     setModalVisible(false);
@@ -35,7 +32,6 @@ const About = props => {
           centerElement="How To Guide"
           //   onLeftElementPress={handleCloseModal}
         />
-        {/* {loading && loadingPopup} */}
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={sharedStyles.aboutContainer}>
@@ -151,10 +147,8 @@ const About = props => {
   );
 };
 
-// UpdateUser.propTypes = {
-//   user: PropTypes.object,
-//   onClose: PropTypes.func,
-//   updateUserAction: PropTypes.func,
-// };
+About.propTypes = {
+  onClose: PropTypes.func,
+};
 
 export default About;

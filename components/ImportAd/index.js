@@ -23,11 +23,6 @@ import {adStatuses, adCategories, mimeTypes} from '../../Constants/Ads';
 import isUndefined from 'lodash/isUndefined';
 import NoAuth from '../NoAuth';
 import {LoadingComponent} from '../Loading';
-// import ImgToBase64 from 'react-native-image-base64';
-// import {importAd, updateAd} from '../../services/ads';
-// import {addAd, updateCurrentAd} from '../../redux/Ads/actions';
-// import invoke from 'lodash/invoke';
-// import AdDetails from '../AdDetails';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import {
   rootUpdateAd,
@@ -37,14 +32,9 @@ import {
   rootAddAdToStore,
 } from '../Pinger';
 
-// import Buffer from 'buffer';
-
-const adImages = [0, 1, 2, 3, 4];
 // const adTypes = {};
 
 const ImportAd = props => {
-  // console.log('IMPORT AD PROPS: ', props);
-
   const {loggedIn: _loggedIn, user: authUser} = props;
   const userCountry = authUser && authUser.country;
 
@@ -53,13 +43,11 @@ const ImportAd = props => {
   const [adCategory, setAdCategory] = useState('Sports');
   // const [adType, setAdType] = useState(undefined);
   const [adStatus, setAdStatus] = useState('No Noticable Scratches or Dirt');
-  // const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [prefecture, setPrefecture] = useState(
     userCountry && prefecturesList[userCountry],
   );
-
   const [adDataChanged, setADataChanged] = useState(false);
   const [imagesChanged, setImagesChanged] = useState(false);
   const [adNameChanged, setAdNameChanged] = useState(false);
@@ -71,6 +59,7 @@ const ImportAd = props => {
   const adNameRef = createRef();
   const descriptionRef = createRef();
   const priceRef = createRef();
+  const adImages = [0, 1, 2, 3, 4];
 
   useEffect(() => {
     setLoggedIn(_loggedIn);
@@ -106,8 +95,6 @@ const ImportAd = props => {
   };
 
   const setDefault = (nameField, descriptionField, priceField) => {
-    // setLoading(false);
-
     nameField.setValue('');
     descriptionField.setValue('');
     priceField.setValue('');
@@ -123,13 +110,6 @@ const ImportAd = props => {
   const handleError = error => {
     const message =
       (error && error.message) || 'A an error has occured. Please try again.';
-    // invoke(props, 'logout', {loggedIn: false, user: false});
-    // setLoggedIn(false);
-    // setDefault(nameField, descriptionField, priceField);
-
-    // setVerificationId(undefined);
-    // setUser(null);
-
     if (message) {
       Alert.alert(message);
     }
@@ -152,15 +132,11 @@ const ImportAd = props => {
   };
 
   const importAdSuccess = data => {
-    // return data => {
-    // console.log('importAdimportAdimportAd response: ', data);
     const {error, newAd} = data;
 
     if (error || !newAd) {
       return handleError(error);
     }
-
-    // setDefault(nameField, descriptionField, priceField);
 
     rootAddAdToStore(newAd);
     rootHandleShowAdsDetails(newAd);
@@ -175,18 +151,9 @@ const ImportAd = props => {
       onUpdateAdSuccess(newAd),
       handleError,
     );
-
-    // updateAd({
-    //   id: newAd.id,
-    //   image: newImages.slice(1, newImages.length),
-    // }).then(onUpdateAdSuccess(newAd), handleError);
-    // };
   };
 
   const handleUploadAd = () => {
-    // Alert.alert('Confirm');
-    // setLoading(false);
-
     const {current: nameField} = adNameRef;
     const {current: descriptionField} = descriptionRef;
     const {current: priceField} = priceRef;
@@ -207,7 +174,6 @@ const ImportAd = props => {
       adDataChanged
     ) {
       const filteredImages = imageFiles.filter(Boolean);
-      // setLoading(true);
       setDefault(nameField, descriptionField, priceField);
 
       rootUploadAd(
@@ -226,22 +192,6 @@ const ImportAd = props => {
         importAdSuccess,
         handleError,
       );
-
-      // importAd({
-      //   name,
-      //   description,
-      //   image: filteredImages[0],
-      //   prefecture,
-      //   category: adCategory,
-      //   status: adStatus,
-      //   price,
-      //   userId: authUser.id,
-      //   country: authUser.country,
-      //   currency: userCurrency,
-      // }).then(
-      //   importAdSuccess(nameField, descriptionField, priceField),
-      //   handleError(nameField, descriptionField, priceField),
-      // );
     }
   };
 
@@ -249,11 +199,6 @@ const ImportAd = props => {
     Alert.alert('updateAdCategory: ' + value);
     setAdCategory(value);
   };
-
-  // const updateAdType = value => {
-  //   Alert.alert('updateAdType: ' + value);
-  //   setAdType(value);
-  // };
 
   const updateAdStatus = value => {
     Alert.alert('updateAdStatus: ' + value);
@@ -330,7 +275,6 @@ const ImportAd = props => {
               />
             }
           />
-          {/* {loading && loadingPopup} */}
 
           <ScrollView showsVerticalScrollIndicator={false}>
             <View
@@ -444,24 +388,6 @@ const ImportAd = props => {
                 </Picker>
               </View>
 
-              {/* {adType && (
-            <>
-              <Text style={sharedStyles.label}>Perfecture</Text>
-              <Picker
-                mode="dropdown"
-                selectedValue={adType}
-                onValueChange={updateAdType}>
-                {adTypes[adCategory].map((_perfecture, index) => (
-                  <Picker.Item
-                    key={index}
-                    label={_perfecture}
-                    value={_perfecture}
-                  />
-                ))}
-              </Picker>
-            </>
-          )} */}
-
               <Text style={sharedStyles.label}>Status</Text>
               <View style={sharedStyles.pickerView}>
                 <Picker
@@ -504,10 +430,7 @@ const mapStateToProps = ({authReducer}) => {
 };
 
 const mapDispatchToProps = () => {
-  return {
-    // addAd: payload => dispatch(addAd(payload)),
-    // updateCurrentAd: payload => dispatch(updateCurrentAd(payload)),
-  };
+  return {};
 };
 
 // eslint-disable-next-line prettier/prettier

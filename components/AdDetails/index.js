@@ -21,13 +21,6 @@ import TouchableBounce from 'react-native/Libraries/Components/Touchable/Touchab
 import {SimpleLoader} from '../Loading';
 import formatDate from '../../lib/CachedImage/formatDate';
 
-// import {
-//   // AdMobBanner,
-//   AdMobInterstitial,
-//   // PublisherBanner,
-//   // AdMobRewarded,
-// } from 'react-native-admob';
-
 const AdDetailsUserListItem = props => {
   const {user} = props;
   const handlePress = () => {
@@ -307,39 +300,6 @@ const AdDetails = props => {
             )}
           </View>
           <View style={sharedStyles.adDetailsContainer}>
-            {/* <Drawer
-              style={{
-                container: sharedStyles.drawerContainer,
-              }}> */}
-            {/* <Drawer.Section
-                title="Total price"
-                items={[
-                  {
-                    icon: 'local-atm',
-                    value: `${currency} ${price}`,
-                  },
-                ]}
-              /> */}
-            {/* <Drawer.Section
-                title="Collected price"
-                items={[
-                  {
-                    icon: 'credit-card',
-                    value: `${currency} ${currentCollectedPrice || 0}`,
-                  },
-                ]}
-              /> */}
-            {/* <Drawer.Section
-                title="Pay to win ithe item in Lottery"
-                items={[
-                  {
-                    icon: 'monetization-on',
-                    value: `${currency} ${'1000'}`,
-                  },
-                ]}
-              /> */}
-            {/* </Drawer> */}
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon
                 color={available ? 'green' : 'red'}
@@ -397,7 +357,6 @@ const AdDetails = props => {
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              {/* <Text style={sharedStyles.aboutFirstSectionText}> */}
               {usersDataLoading && SimpleLoader}
 
               {lotteryUsersData && (
@@ -422,7 +381,6 @@ const AdDetails = props => {
                   )}
                 />
               )}
-              {/* </Text> */}
             </View>
 
             <View style={sharedStyles.userDetailsIconTextContainer}>
@@ -437,36 +395,7 @@ const AdDetails = props => {
                   onPress={winnerUserData && handleUserPress}
                 />
               }
-              {/* <Text style={sharedStyles.aboutFirstSectionText}>{userId}</Text> */}
             </View>
-
-            {/* <Drawer style={{container: sharedStyles.drawerContainer}}> */}
-            {/* <Drawer.Section
-                title="Name"
-                items={[
-                  {
-                    icon: 'dns',
-                    value: (
-                      <Text style={sharedStyles.adDetailsText}>{name}</Text>
-                    ),
-                  },
-                ]}
-              /> */}
-            {/* <Drawer.Section
-                title="Description"
-                items={[
-                  {
-                    icon: 'description',
-                    value: (
-                      <Text style={sharedStyles.adDetailsText}>
-                        {description}
-                      </Text>
-                    ),
-                    // description,
-                  },
-                ]}
-              /> */}
-            {/* </Drawer> */}
 
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="dns" />
@@ -485,33 +414,6 @@ const AdDetails = props => {
                 {description}
               </Text>
             </View>
-            {/* 
-            <Drawer style={{container: sharedStyles.drawerContainer}}>
-              <Drawer.Section
-                title="Status"
-                items={[
-                  {
-                    icon: 'exposure',
-                    value: (
-                      <Text style={sharedStyles.adDetailsText}>{status}</Text>
-                    ),
-                    // description,
-                  },
-                ]}
-              />
-              <Drawer.Section
-                title="Category"
-                items={[
-                  {
-                    icon: 'class',
-                    value: (
-                      <Text style={sharedStyles.adDetailsText}>{category}</Text>
-                    ),
-                    // description,
-                  },
-                ]}
-              />
-            </Drawer> */}
 
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="exposure" />
@@ -528,37 +430,6 @@ const AdDetails = props => {
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{category}</Text>
             </View>
-
-            {/* <Drawer style={{container: sharedStyles.drawerContainer}}>
-              <Drawer.Section
-                title="Publish date"
-                items={[
-                  {
-                    icon: 'today',
-                    value: (
-                      <Text style={sharedStyles.adDetailsText}>
-                        {publishDate}
-                      </Text>
-                    ),
-                    // description,
-                  },
-                ]}
-              />
-              <Drawer.Section
-                title="Location"
-                items={[
-                  {
-                    icon: 'pin-drop',
-                    value: (
-                      <Text style={sharedStyles.adDetailsText}>
-                        {`${prefecture}, ${country}`}
-                      </Text>
-                    ),
-                    // description,
-                  },
-                ]}
-              />
-            </Drawer> */}
 
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="today" />
@@ -580,49 +451,6 @@ const AdDetails = props => {
               </Text>
             </View>
 
-            {/* <Drawer style={{container: sharedStyles.drawerContainer}}>
-              <Drawer.Section
-                title="Current lottery users"
-                items={[
-                  {
-                    icon: 'group-add',
-                    value: (
-                      <Text style={sharedStyles.adDetailsText}>
-                        {lotteryUserIds}
-                      </Text>
-                    ),
-                    // description,
-                  },
-                ]}
-              />
-
-              <Drawer.Section
-                title="User"
-                items={[
-                  {
-                    icon: 'person',
-                    value: (
-                      <Text style={sharedStyles.adDetailsText}>{userId}</Text>
-                    ),
-                    // description,
-                  },
-                ]}
-              />
-            </Drawer>
-
-            <Drawer style={{container: sharedStyles.drawerContainer}}>
-              <Drawer.Section
-                title="Item ID"
-                items={[
-                  {
-                    icon: 'fingerprint',
-                    value: <Text style={sharedStyles.adDetailsText}>{id}</Text>,
-                    // description,
-                  },
-                ]}
-              />
-            </Drawer> */}
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="person" />
               <Text style={sharedStyles.userDetailsText}>User</Text>
@@ -635,7 +463,6 @@ const AdDetails = props => {
                   onPress={handleUserPress}
                 />
               )}
-              {/* <Text style={sharedStyles.aboutFirstSectionText}>{userId}</Text> */}
             </View>
 
             <View style={sharedStyles.userDetailsIconTextContainer}>

@@ -1,16 +1,11 @@
-// import DeviceInfo from 'react-native-device-info';
 import isUndefined from 'lodash/isUndefined';
 import isNill from 'lodash/isNil';
-// import AsyncStorage from '@react-native-community/async-storage';
 
 import CryptoJS from 'crypto-js';
-// const algorithm = 'aes-256-cbc';
-// Code goes here
+
 const keySize = 256;
-// const ivSize = 128;
 const iterations = 100;
 
-// const fingerprint = DeviceInfo.getUniqueID();
 const password = 'sippi44448888';
 
 const encrypt = (msg, pass) => {
@@ -76,53 +71,6 @@ const request = async options => {
     };
   }
 
-  // if (onProgress) {
-  //   return new Promise((resolve, reject) => {
-  //     let xhr = new XMLHttpRequest();
-  //     xhr.open(
-  //       reqData.method,
-  //       `https://halogen-proxy-239213.appspot.com/${endpoint}`,
-  //       true,
-  //     );
-
-  //     xhr.setRequestHeader('Accept', 'application/json');
-  //     xhr.setRequestHeader(
-  //       'Content-Type',
-  //       'multipart/form-data; boundary=----WebKitFormBoundarybAbXQzJABEgSJzxT',
-  //     );
-  //     xhr.onprogress = onProgress;
-
-  //     xhr.onreadystatechange = () => {
-  //       if (xhr.readyState === 4 && xhr.status === 200) {
-  //         let data = xhr.response;
-
-  //         if (data.data || data.error || data.user) {
-  //           console.log('response: ', data);
-  //           data = decrypt(data.data || data.error || data.user, password);
-
-  //           data = JSON.parse(data.toString(CryptoJS.enc.Utf8));
-
-  //           if (
-  //             typeof data !== 'undefined' &&
-  //             data !== null &&
-  //             Object.keys(data).length > 0
-  //           ) {
-  //             data = {...data};
-  //             xhr.onprogress = null;
-  //             xhr.onreadystatechange = null;
-  //             xhr = null;
-  //             resolve(data);
-  //           }
-  //         } else {
-  //           reject();
-  //         }
-  //       }
-  //     };
-
-  //     xhr.send(body);
-  //   });
-  // }
-
   const response = await fetch(
     `https://halogen-proxy-239213.appspot.com/${endpoint}`,
     reqData,
@@ -132,7 +80,6 @@ const request = async options => {
     let data = await response.json();
 
     if (data.data || data.error || data.user) {
-      // console.log('response: ', data);
       data = decrypt(data.data || data.error || data.user, password);
 
       data = JSON.parse(data.toString(CryptoJS.enc.Utf8));
@@ -151,40 +98,4 @@ const request = async options => {
   return undefined;
 };
 
-// const getAsyncStorage = async name => {
-//   try {
-//     const value = await AsyncStorage.getItem(name);
-//     if (value !== null) {
-//       // We have data!!
-//       console.log(value);
-//       return value;
-//     }
-//   } catch (error) {
-//     // Error retrieving data
-//   }
-// };
-
-// const setAsyncStorage = async (name, value) => {
-//   try {
-//     await AsyncStorage.setItem(name, value);
-//   } catch (error) {
-//     // Error saving data
-//   }
-// };
-
-// const removeAsyncStorage = async name => {
-//   try {
-//     await AsyncStorage.removeItem(name);
-//   } catch (error) {
-//     // Error saving data
-//   }
-// };
-
-export {
-  encrypt,
-  decrypt,
-  request,
-  // getAsyncStorage,
-  // setAsyncStorage,
-  // removeAsyncStorage,
-};
+export {encrypt, decrypt, request};

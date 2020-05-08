@@ -54,13 +54,6 @@ const importAd = async props => {
   formData.append('name', name);
   formData.append('description', description);
 
-  // if (Array.isArray(image)) {
-  //   image.forEach(item => {
-  //     if (item && item.uri) {
-  //       formData.append('image', item);
-  //     }
-  //   });
-  // }
   formData.append('image', image);
 
   formData.append('category', category);

@@ -7,8 +7,6 @@ const initialState = {
 };
 
 const authReducer = (state = initialState, action) => {
-  // console.log('authReducer: ', action);
-
   switch (action.type) {
     case authActions.LOGIN: {
       return {

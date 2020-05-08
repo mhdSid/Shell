@@ -13,11 +13,6 @@ const login = async props => {
   });
 
   return data;
-  // .then(data => {
-  //   if (!isUndefined(data)) {
-  //     console.log('herererere data', data);
-  //   }
-  // });
 };
 
 const logout = async () => {
@@ -25,7 +20,6 @@ const logout = async () => {
     endpoint: 'users/authenticate/logout',
     method: 'GET',
   });
-  // console.log('logououououoout ', data);
   return data;
 };
 
@@ -34,7 +28,6 @@ const ping = async () => {
     endpoint: 'users/authenticate/ping',
     method: 'GET',
   });
-  // console.log('logououououoout ', data);
   return data;
 };
 

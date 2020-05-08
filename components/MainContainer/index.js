@@ -8,7 +8,17 @@ import SearchComponent from '../Search';
 import HomeComponent from '../Home';
 import Lotteries from '../Lotteries';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+
 export let navigate;
+
+const viewLoader = {
+  grade: <Lotteries />,
+  profile: () => <AuthComponent />,
+  home: () => <HomeComponent />,
+  search: () => <SearchComponent />,
+  'add-circle-outline': props => <ImportAd {...props} />,
+};
 
 const MainContainer = props => {
   const {user, loggedIn} = props;
@@ -26,11 +36,7 @@ const MainContainer = props => {
   return (
     <View style={sharedStyles.fullheightView}>
       <SafeAreaView style={sharedStyles.container}>
-        {activeView === 'grade' && <Lotteries />}
-        {activeView === 'profile' && <AuthComponent />}
-        {activeView === 'home' && <HomeComponent />}
-        {activeView === 'search' && <SearchComponent />}
-        {activeView === 'add-circle-outline' && <ImportAd {...props} />}
+        {viewLoader[activeView]()}
       </SafeAreaView>
       <BottomNavigation
         active={activeView}
@@ -152,6 +158,11 @@ const mapStateToProps = ({authReducer}) => {
 
 const mapDispatchToProps = () => {
   return {};
+};
+
+MainContainer.propTypes = {
+  loggedIn: PropTypes.bool,
+  user: PropTypes.object,
 };
 
 // eslint-disable-next-line prettier/prettier

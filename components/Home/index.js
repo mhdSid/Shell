@@ -3,7 +3,6 @@ import {Toolbar, ListItem} from 'react-native-material-ui';
 import {View, Text, Alert, VirtualizedList} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import {connect} from 'react-redux';
-// import AdDetails from '../AdDetails';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {getAds} from '../../services/ads';
@@ -76,15 +75,11 @@ class CardListItem extends PureComponent {
 
 const HomeComponent = props => {
   const {ads: _ads} = props;
-  // console.log('HomeComponent', _ads);
 
   const [ads, setAds] = useState(_ads);
   const [isList, setIsList] = useState(false);
   const [isCarousel, setIsCarousel] = useState(false);
   const [isCard, setIsCard] = useState(true);
-  // const [showAdDetails, setShowAdDetails] = useState(false);
-  // const [showAbout, setShowAbout] = useState(false);
-  // const [selectedAd, setSelectedAd] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [fetchId, setFetchId] = useState(0);
 
@@ -93,12 +88,6 @@ const HomeComponent = props => {
   const handleError = error => {
     const message =
       (error && error.message) || 'A an error has occured. Please try again.';
-    // invoke(props, 'logout', {loggedIn: false, user: false});
-    // setLoggedIn(false);
-    // setLoading(false);
-    // setVerificationId(undefined);
-    // setUser(null);
-
     if (message) {
       Alert.alert(message);
     }
@@ -107,18 +96,11 @@ const HomeComponent = props => {
 
   const onGetAdsSuccess = data => {
     if (!unMounted) {
-      // console.log(
-      //   'onGetAdsSuccessonGetAdsSuccessonGetAdsSuccessonGetAdsSuccessonGetAdsSuccess: ',
-      //   data,
-      // );
       const {error, ads: serverAds} = data;
-
       if (error) {
         return handleError(error);
       }
-      // setAds(serverAds);
       invoke(props, 'addAd', serverAds);
-      // setLoading(false);
     }
   };
 
@@ -142,21 +124,13 @@ const HomeComponent = props => {
 
   useEffect(() => {
     if (Array.isArray(_ads) && _ads.length > 0) {
-      // alert(_ads.length);
       setLoading(true);
-      // const sliced = _ads.slice(0, sliceIndex);
-      // let newAds = ads || [];
-      // newAds = newAds.concat(sliced);
       setAds(_ads);
-      // setSlicedAds(newAds);
     }
     return () => {
       unMounted = true;
     };
   }, [_ads]);
-
-  // const {slider1ActiveSlide} = this.state;
-  // let slider1Ref;
 
   const changeViewStyle = () => {
     if (isCard) {
@@ -176,19 +150,6 @@ const HomeComponent = props => {
     }
   };
 
-  // const onAdsDetailsClose = () => {
-  //   setShowAdDetails(false);
-  // };
-
-  // const onAboutClose = () => {
-  //   setShowAbout(false);
-  // };
-
-  // const handleShowAdsDetails = item => {
-  //   setShowAdDetails(true);
-  //   setSelectedAd(item);
-  // };
-
   const handleShowAdsDetailsFlatList = item => {
     rootHandleShowAdsDetails(item);
   };
@@ -199,17 +160,12 @@ const HomeComponent = props => {
     };
   };
 
-  const handleLeftElementPress = () => {
-    setShowAbout(true);
-  };
-
   return (
     <View style={sharedStyles.fullheightView}>
       <Toolbar
         style={{container: sharedStyles.toolbarContainer}}
         // leftElement="help"
         centerElement="Shell"
-        onLeftElementPress={handleLeftElementPress}
         rightElement={
           isCard ? 'view-list' : isList ? 'view-carousel' : 'view-comfy'
         }
@@ -269,10 +225,6 @@ const HomeComponent = props => {
                     source={{
                       uri: item.images[0],
                       cache: 'force-cache',
-                      // headers: {
-                      //   Pragma: 'only-if-cached',
-                      //   'Cache-Control': 'only-if-cached',
-                      // },
                     }}
                   />
                 ) : null
@@ -287,13 +239,6 @@ const HomeComponent = props => {
           )}
         />
       )}
-
-      {/* {showAdDetails && (
-        <AdDetails onClose={onAdsDetailsClose} item={selectedAd} />
-      )} */}
-      {/* {showAbout && <About onClose={onAboutClose} />} */}
-      {/* </View> */}
-      {/* </ScrollView> */}
     </View>
   );
 };

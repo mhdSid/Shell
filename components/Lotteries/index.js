@@ -13,7 +13,7 @@ const Lotteries = props => {
 
   const [loggedIn, setLoggedIn] = useState(_loggedIn);
   const [user, setUser] = useState(authUser);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   useEffect(() => {
     setLoggedIn(_loggedIn);

@@ -51,7 +51,12 @@ import {
 } from 'react-native-admob';
 
 const AuthComponent = props => {
-  const {loggedIn: _loggedIn, country: serverCountryCode, user} = props;
+  const {
+    loggedIn: _loggedIn,
+    country: serverCountryCode,
+    user,
+    updateUserAction,
+  } = props;
   console.log('authComponent: ', user);
 
   const [loggedIn, setLoggedIn] = useState(_loggedIn);
@@ -901,7 +906,7 @@ const AuthComponent = props => {
             <UpdateUser
               onClose={onUpdateUserClose}
               user={user}
-              updateUserAction={props.updateUserAction}
+              updateUserAction={updateUserAction}
             />
           )}
         </View>
@@ -954,6 +959,9 @@ AuthComponent.propTypes = {
   loggedIn: PropTypes.bool,
   user: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
   country: PropTypes.oneOfType([PropTypes.string]),
+  logout: PropTypes.func,
+  login: PropTypes.func,
+  updateUserAction: PropTypes.func,
 };
 
 const mapStateToProps = ({authReducer}) => {

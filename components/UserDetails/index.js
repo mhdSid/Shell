@@ -1,21 +1,13 @@
 import React, {useState} from 'react';
 import {Text, View, Modal, SafeAreaView, ScrollView} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
-// import {Drawer} from 'react-native-material-ui';
 import {Toolbar, Icon} from 'react-native-material-ui';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
-// import {
-//   // AdMobBanner,
-//   AdMobInterstitial,
-//   // PublisherBanner,
-//   // AdMobRewarded,
-// } from 'react-native-admob';
 
 const UserDetails = props => {
   const {item} = props;
-  console.log('UserDetails: ', item);
   const {
     firstName,
     lastName,
@@ -90,20 +82,6 @@ const UserDetails = props => {
             />
           </View>
           <View style={sharedStyles.adDetailsContainer}>
-            {/* <Drawer
-              style={{
-                container: sharedStyles.drawerContainer,
-              }}>
-              <Drawer.Section
-                title="Name"
-                items={[
-                  {
-                    icon: 'person',
-                    value: `${firstName} ${lastName}`,
-                  },
-                ]}
-              />
-            </Drawer> */}
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="person" />
               <Text style={sharedStyles.userDetailsText}>Name</Text>
@@ -114,19 +92,6 @@ const UserDetails = props => {
               </Text>
             </View>
 
-            {/* <Drawer style={{container: sharedStyles.drawerContainer}}>
-              <Drawer.Section
-                title="Email"
-                items={[
-                  {
-                    icon: 'email',
-                    value: (
-                      <Text style={sharedStyles.adDetailsText}>{email}</Text>
-                    ),
-                  },
-                ]}
-              />
-            </Drawer> */}
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="email" />
               <Text style={sharedStyles.userDetailsText}>Email</Text>
@@ -162,63 +127,6 @@ const UserDetails = props => {
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{cityWard}</Text>
             </View>
-
-            {/* <Drawer style={{container: sharedStyles.drawerContainer}}> */}
-            {/* <Drawer.Section
-                title="Location"
-                items={[
-                  {
-                    icon: 'pin-drop',
-                    value: (
-                      <Text style={sharedStyles.adDetailsText}>
-                        {`${prefecture}, ${country}`}
-                      </Text>
-                    ),
-                    // description,
-                  },
-                ]}
-              /> */}
-            {/* <Drawer.Section
-                title="Postal Code"
-                items={[
-                  {
-                    icon: 'pin-drop',
-                    value: (
-                      <Text style={sharedStyles.adDetailsText}>
-                        {postalCode}
-                      </Text>
-                    ),
-                    // description,
-                  },
-                ]}
-              /> */}
-            {/* <Drawer.Section
-                title="City / Ward"
-                items={[
-                  {
-                    icon: 'pin-drop',
-                    value: (
-                      <Text style={sharedStyles.adDetailsText}>{cityWard}</Text>
-                    ),
-                    // description,
-                  },
-                ]}
-              /> */}
-            {/* <Drawer.Section
-                title="Full Address"
-                items={[
-                  {
-                    icon: 'pin-drop',
-                    value: (
-                      <Text style={sharedStyles.adDetailsText}>
-                        {fullAddress}
-                      </Text>
-                    ),
-                    // description,
-                  },
-                ]}
-              /> */}
-            {/* </Drawer> */}
 
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />

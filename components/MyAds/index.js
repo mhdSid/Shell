@@ -18,7 +18,7 @@ const MyAds = props => {
   const [loading, setLoading] = useState(false);
   const [showAdDetails, setShowAdDetails] = useState(false);
   const [selectedAd, setSelectedAd] = useState();
-  const [fetchId, setFetchId] = useState(1);
+  const [fetchId] = useState(1);
   const [myAds, setMyAds] = useState();
 
   const handleCloseModal = () => {
@@ -88,17 +88,6 @@ const MyAds = props => {
           onLeftElementPress={handleCloseModal}
         />
 
-        {/* <ScrollView showsVerticalScrollIndicator={false}>
-          <ScrollView>
-            <View
-              style={[
-                sharedStyles.signupView,
-                sharedStyles.loginContainer,
-                sharedStyles.updateUserContainer,
-              ]}
-            />
-          </ScrollView>
-        </ScrollView> */}
         {loading && Loading}
 
         {myAds && (

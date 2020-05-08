@@ -7,10 +7,8 @@ import {
   sliderWidth,
   itemWidth,
 } from '../../assets/styles/sliderEntry';
-// import AdDetails from '../AdDetails';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
-
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 
 class CarouselItem extends PureComponent {
@@ -118,7 +116,6 @@ const CarouselComponent = props => {
       const _sliced = items.slice(0, newSliceIndex);
       setSlicedAds(_sliced);
       setSliceIndex(newSliceIndex);
-      // alert(`${sliceIndex} ${newSliceIndex}`);
     }
   };
 

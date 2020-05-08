@@ -26,9 +26,6 @@ const monthsNumbers = {
   November: '11',
   December: '12',
 };
-// for (let i = 1; i <= 12; i += 1) {
-//   months = [...months, `${i}`];
-// }
 
 let days = [];
 for (let i = 1; i <= 31; i += 1) {

@@ -17,7 +17,7 @@ const MyLotteries = props => {
   const [loading, setLoading] = useState(false);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
   const [selectedLottery, setSelectedLottery] = useState();
-  const [fetchId, setFetchId] = useState(1);
+  const [fetchId] = useState(1);
   const [myLotteries, setMyLotteries] = useState();
 
   const handleCloseModal = () => {
@@ -83,17 +83,6 @@ const MyLotteries = props => {
           onLeftElementPress={handleCloseModal}
         />
 
-        {/* <ScrollView showsVerticalScrollIndicator={false}>
-          <ScrollView>
-            <View
-              style={[
-                sharedStyles.signupView,
-                sharedStyles.loginContainer,
-                sharedStyles.updateUserContainer,
-              ]}
-            />
-          </ScrollView>
-        </ScrollView> */}
         {loading && Loading}
 
         {myLotteries && (
