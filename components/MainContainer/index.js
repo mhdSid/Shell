@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 export let navigate;
 
 const viewLoader = {
-  grade: <Lotteries />,
+  grade: () => <Lotteries />,
   profile: () => <AuthComponent />,
   home: () => <HomeComponent />,
   search: () => <SearchComponent />,

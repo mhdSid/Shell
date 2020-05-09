@@ -2,7 +2,6 @@ import {request} from './request';
 
 const login = async props => {
   const {email, password} = props;
-
   const data = await request({
     endpoint: 'users/authenticate/email',
     method: 'POST',
@@ -11,7 +10,6 @@ const login = async props => {
       password,
     },
   });
-
   return data;
 };
 
@@ -33,7 +31,6 @@ const ping = async () => {
 
 const verify = async props => {
   const {email, password, verificationId} = props;
-
   const data = await request({
     endpoint: 'users/authenticate/email/verify',
     method: 'POST',
@@ -43,7 +40,6 @@ const verify = async props => {
       verificationId,
     },
   });
-
   return data;
 };
 
@@ -63,7 +59,6 @@ const signup = async props => {
     fullAddress,
     cityWard,
   } = props;
-
   const data = await request({
     endpoint: 'users/authenticate/signup',
     method: 'POST',
@@ -83,13 +78,11 @@ const signup = async props => {
       cityWard,
     },
   });
-
   return data;
 };
 
 const search = async props => {
   const {searchQuery} = props;
-
   const data = await request({
     endpoint: 'users/authenticate/search',
     method: 'POST',
@@ -97,13 +90,11 @@ const search = async props => {
       query: searchQuery,
     },
   });
-
   return data;
 };
 
 const getUsersData = async props => {
   const {users} = props;
-
   const data = await request({
     endpoint: '/api/users/userData',
     method: 'POST',
@@ -111,7 +102,6 @@ const getUsersData = async props => {
       users,
     },
   });
-
   return data;
 };
 
@@ -129,7 +119,6 @@ const update = async props => {
     email,
     cityWard,
   } = props;
-
   const formData = new FormData();
   if (mobile) {
     formData.append('mobile', mobile);
@@ -160,13 +149,11 @@ const update = async props => {
   }
   formData.append('id', id);
   formData.append('email', email);
-
   const data = await request({
     endpoint: 'users/authenticate/update',
     method: 'POST',
     body: formData,
   });
-
   return data;
 };
 

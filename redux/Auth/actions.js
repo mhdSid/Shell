@@ -1,7 +1,7 @@
 const authActions = {
-  LOGIN: 'AUTH_LOGIN',
-  LOGOUT: 'AUTH_LOGOUT',
-  UPDATE: 'AUTH_UPDATE',
+  LOGIN: 'AUTH_LOGIN_ACTION',
+  LOGOUT: 'AUTH_LOGOUT_ACTION',
+  UPDATE: 'AUTH_UPDATE_ACTION',
 };
 
 const loginAction = payload => ({

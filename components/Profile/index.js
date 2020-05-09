@@ -84,7 +84,7 @@ const AuthComponent = props => {
   const [postalCodeChanged, setPostalCodeChanged] = useState(false);
   const [fullAddressChanged, setFullAddressChanged] = useState(false);
   const [cityWardChanged, setCityWardChanged] = useState(false);
-  const [adId, setAdId] = useState(1);
+  const [adId] = useState(1);
 
   const [year, setYear] = useState('2020');
   const [month, setMonth] = useState('April');
@@ -107,29 +107,6 @@ const AuthComponent = props => {
       AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
     }
   }, [adId]);
-
-  const onSettingsClose = () => {
-    setShowSettings(false);
-  };
-  const onNotificationsClose = () => {
-    setShowNotifications(false);
-  };
-  const onMyAdsClose = () => {
-    setShowMyAds(false);
-  };
-  const onAboutClose = () => {
-    setShowAbout(false);
-  };
-  const onMyLotteriesClose = () => {
-    setShowMyLotteries(false);
-  };
-  const OnAppInfoClose = () => {
-    setShowAppInfo(false);
-  };
-
-  const onUpdateUserClose = () => {
-    setShowUpdateUser(false);
-  };
 
   // console.log(perfecture, 'serverCountryCode: ', serverCountryCode);
 
@@ -176,30 +153,47 @@ const AuthComponent = props => {
     cityWardChanged,
   ]);
 
+  const onSettingsClose = () => {
+    setShowSettings(false);
+  };
+  const onNotificationsClose = () => {
+    setShowNotifications(false);
+  };
+  const onMyAdsClose = () => {
+    setShowMyAds(false);
+  };
+  const onAboutClose = () => {
+    setShowAbout(false);
+  };
+  const onMyLotteriesClose = () => {
+    setShowMyLotteries(false);
+  };
+  const onAppInfoClose = () => {
+    setShowAppInfo(false);
+  };
+  const onUpdateUserClose = () => {
+    setShowUpdateUser(false);
+  };
+
   const updateCountry = value => {
     setCountry(value);
     setPrefecture(prefecturesList[value]);
   };
-
   const updatePrefecture = value => {
     setPrefecture(value);
   };
-
   const updateYear = value => {
     setYear(value);
     setDobChanged(true);
   };
-
   const updateMonth = value => {
     setMonth(value);
     setDobChanged(true);
   };
-
   const updateDay = value => {
     setDay(value);
     setDobChanged(true);
   };
-
   const updateGender = value => {
     return () => {
       setGender(value);
@@ -213,7 +207,6 @@ const AuthComponent = props => {
       setEmailChanged(false);
     }
   };
-
   const handlePasswordChangeText = value => {
     if (value && value.length > 5) {
       setPasswordChanged(true);
@@ -221,7 +214,6 @@ const AuthComponent = props => {
       setPasswordChanged(false);
     }
   };
-
   const handleMobileChangeText = value => {
     if (value && value.match(mobileRegex)) {
       setMobileChanged(true);
@@ -229,7 +221,6 @@ const AuthComponent = props => {
       setMobileChanged(false);
     }
   };
-
   const handlePostalCodeChangeText = value => {
     if (value && value.length > 1) {
       setPostalCodeChanged(true);
@@ -251,7 +242,6 @@ const AuthComponent = props => {
       setCityWardChanged(false);
     }
   };
-
   const handleFirstNameChangeText = value => {
     if (value && value.length > 1) {
       setFirsNameChanged(true);
@@ -259,7 +249,6 @@ const AuthComponent = props => {
       setFirsNameChanged(false);
     }
   };
-
   const handleLastNameChangeText = value => {
     if (value && value.length > 1) {
       setLastNameChanged(true);
@@ -288,12 +277,9 @@ const AuthComponent = props => {
     setLoggedIn(false);
     setLoading(false);
     setVerificationId(undefined);
-    // setUser(null);
-
     if (showSignup === true && verificationId) {
       setDefaultsDataChanged();
     }
-
     if (message) {
       Alert.alert(message);
     }
@@ -352,7 +338,6 @@ const AuthComponent = props => {
     const {current: passField} = passwordRef;
     const email = emailField.value();
     const password = passField.value();
-
     if (email && password) {
       const lowerCaseEmail = email.toLowerCase();
       setLoading(true);
@@ -407,11 +392,8 @@ const AuthComponent = props => {
     ) {
       setShowSignup(false);
       setVerificationId(undefined);
-
       setLoggedIn(true);
-
       setDefaultsDataChanged();
-
       invoke(props, 'login', {
         loggedIn: true,
         user: authUser,
@@ -427,14 +409,12 @@ const AuthComponent = props => {
     const {current: postalCodeField} = postalCodeRef;
     const {current: fullAddressField} = fullAddressRef;
     const {current: cityWardField} = cityWardRef;
-
     const firstName = firstNameField.value();
     const lastName = lastNameField.value();
     const mobile = mobileField.value();
     const postalCode = postalCodeField.value();
     const fullAddress = fullAddressField.value();
     const cityWard = cityWardField.value();
-
     if (
       _email &&
       _password &&
@@ -900,7 +880,7 @@ const AuthComponent = props => {
           {showMyLotteries && (
             <MyLotteries onClose={onMyLotteriesClose} user={user} />
           )}
-          {showAppInfo && <AppInfo onClose={OnAppInfoClose} />}
+          {showAppInfo && <AppInfo onClose={onAppInfoClose} />}
 
           {showUpdateUser && (
             <UpdateUser
