@@ -9,20 +9,17 @@ export const colors = {
 
 const IS_IOS = Platform.OS === 'ios';
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
-
-function wp(percentage) {
+const wp = percentage => {
   const value = (percentage * viewportWidth) / 100;
   return Math.round(value);
-}
-
+};
 const slideHeight = viewportHeight * 0.65;
 const slideWidth = wp(75);
 const itemHorizontalMargin = wp(2);
+const entryBorderRadius = 8;
 
 export const sliderWidth = viewportWidth;
 export const itemWidth = slideWidth + itemHorizontalMargin * 2;
-
-const entryBorderRadius = 8;
 
 export const sliderStyles = StyleSheet.create({
   slider: {
@@ -70,7 +67,6 @@ export const sliderStyles = StyleSheet.create({
     borderTopRightRadius: entryBorderRadius,
   },
   imageContainerEven: {
-    // backgroundColor: colors.black,
     backgroundColor: 'white',
   },
   image: {

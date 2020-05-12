@@ -75,9 +75,11 @@ const AdDetails = props => {
     setModalVisible(false);
   };
   const handleActionPress = value => {
-    // alert(value);
+    Alert.alert(value);
   };
-  const handleEnterDraw = () => {};
+  const handleEnterDraw = () => {
+    Alert.alert('handleEnterDraw');
+  };
   const handleError = error => {
     const message =
       (error && error.message) || 'A an error has occured. Please try again.';

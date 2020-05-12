@@ -296,13 +296,9 @@ const sharedStyles = StyleSheet.create({
     width: '100%',
     flexGrow: 1,
     marginBottom: 5,
-    // borderWidth: 2,
-    // borderRadius: 4,
-    // borderColor: '#b69cf6',
   },
   homeCardItemImage: {
     aspectRatio: 3 / 3,
-    // borderRadius: 2,
   },
   homeCardItemTextContainer: {
     backgroundColor: 'rgba(0,0,0,.75)',
@@ -340,8 +336,6 @@ const sharedStyles = StyleSheet.create({
   },
   aboutSeparatorSection: {
     padding: 20,
-    // paddingHorizontal: 20,
-    // paddingBottom: 40,
     alignItems: 'center',
   },
   aboutSeparatorSectionText: {
@@ -368,16 +362,13 @@ const sharedStyles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     alignItems: 'center',
-    // justifyContent: 'center',
   },
   userDetailsIconTextContainer: {
     display: 'flex',
     flexDirection: 'row',
     paddingVertical: 10,
     paddingHorizontal: 15,
-    // paddingHorizontal: 20,
     alignItems: 'center',
-    // justifyContent: 'center',
   },
   aboutIconText: {
     color: 'white',
