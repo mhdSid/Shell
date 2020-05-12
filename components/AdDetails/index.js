@@ -19,7 +19,7 @@ import UserDetails from '../UserDetails';
 import {getUsersData} from '../../services/auth';
 import {SimpleLoader} from '../Loading';
 import formatDate from '../../lib/CachedImage/formatDate';
-import AdDetailsUserListItem from './AddDetailsUserListItem';
+import AdDetailsUserListItem from './AdDetailsUserListItem';
 
 const myActions = ['share', 'favorite', 'cancel', 'delete'];
 const defaultActions = ['share', 'favorite', 'shop'];
