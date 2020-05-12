@@ -57,8 +57,6 @@ const AuthComponent = props => {
     user,
     updateUserAction,
   } = props;
-  console.log('authComponent: ', user);
-
   const [loggedIn, setLoggedIn] = useState(_loggedIn);
   const [_email, setEmail] = useState(undefined);
   const [_password, setPassword] = useState(undefined);
@@ -71,7 +69,6 @@ const AuthComponent = props => {
   const [showMyAds, setShowMyAds] = useState(false);
   const [showMyLotteries, setShowMyLotteries] = useState(false);
   const [showAppInfo, setShowAppInfo] = useState(false);
-
   const [emailPassChanged, setEmailPassChanged] = useState(false);
   const [emailChanged, setEmailChanged] = useState(false);
   const [passwordChanged, setPasswordChanged] = useState(false);
@@ -85,7 +82,6 @@ const AuthComponent = props => {
   const [fullAddressChanged, setFullAddressChanged] = useState(false);
   const [cityWardChanged, setCityWardChanged] = useState(false);
   const [adId] = useState(1);
-
   const [year, setYear] = useState('2020');
   const [month, setMonth] = useState('April');
   const [day, setDay] = useState('01');
@@ -99,17 +95,6 @@ const AuthComponent = props => {
     (user && user.country && prefecturesList[user.country]) ||
       prefecturesList[countryCodeList[serverCountryCode]],
   );
-
-  useEffect(() => {
-    if (loggedIn && user) {
-      AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/6721660483');
-      // AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
-      AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
-    }
-  }, [adId]);
-
-  // console.log(perfecture, 'serverCountryCode: ', serverCountryCode);
-
   const emailRef = createRef();
   const passwordRef = createRef();
   const mobileRef = createRef();
@@ -118,40 +103,9 @@ const AuthComponent = props => {
   const postalCodeRef = createRef();
   const cityWardRef = createRef();
   const fullAddressRef = createRef();
-
   const text = 'Login / Signup';
-
   const mobileRegex = new RegExp(phoneNumbersRegexs[country]);
-
   const userEmailRegex = new RegExp(emailsRegex);
-
-  useEffect(() => {
-    setLoggedIn(_loggedIn);
-  }, [_loggedIn]);
-
-  useEffect(() => {
-    setEmailPassChanged(emailChanged && passwordChanged);
-  }, [emailChanged, passwordChanged]);
-
-  useEffect(() => {
-    setUserDataChanged(
-      dobChanged &&
-        firstNameChanged &&
-        lastNameChanged &&
-        mobileChanged &&
-        postalCodeChanged &&
-        fullAddressChanged &&
-        cityWardChanged,
-    );
-  }, [
-    dobChanged,
-    firstNameChanged,
-    lastNameChanged,
-    mobileChanged,
-    postalCodeChanged,
-    fullAddressChanged,
-    cityWardChanged,
-  ]);
 
   const onSettingsClose = () => {
     setShowSettings(false);
@@ -174,7 +128,6 @@ const AuthComponent = props => {
   const onUpdateUserClose = () => {
     setShowUpdateUser(false);
   };
-
   const updateCountry = value => {
     setCountry(value);
     setPrefecture(prefecturesList[value]);
@@ -199,7 +152,6 @@ const AuthComponent = props => {
       setGender(value);
     };
   };
-
   const handleEmailChangeText = value => {
     if (value && value.match(userEmailRegex)) {
       setEmailChanged(true);
@@ -256,7 +208,6 @@ const AuthComponent = props => {
       setLastNameChanged(false);
     }
   };
-
   const setDefaultsDataChanged = () => {
     setUserDataChanged(false);
     setDobChanged(false);
@@ -269,7 +220,6 @@ const AuthComponent = props => {
     setEmailChanged(false);
     setPasswordChanged(false);
   };
-
   const handleError = error => {
     const message =
       (error && error.message) || 'A an error has occured. Please try again.';
@@ -285,7 +235,6 @@ const AuthComponent = props => {
     }
     return;
   };
-
   /*
    * First submit Handler
    */
@@ -302,7 +251,6 @@ const AuthComponent = props => {
         email: __email,
         password: __password,
       } = authUser;
-
       // should should confirmation button and go to sign up screen afterwards
       if (emailVerified === false && _verificationId) {
         setEmail(email);
@@ -332,7 +280,6 @@ const AuthComponent = props => {
       }
     };
   };
-
   const handleSubmit = () => {
     const {current: emailField} = emailRef;
     const {current: passField} = passwordRef;
@@ -347,7 +294,6 @@ const AuthComponent = props => {
       );
     }
   };
-
   /*
    * Verify user Handler
    */
@@ -363,7 +309,6 @@ const AuthComponent = props => {
       setShowSignup(true);
     }
   };
-
   const handleVerifyUser = () => {
     if (_email && _password && verificationId) {
       setLoading(true);
@@ -373,7 +318,6 @@ const AuthComponent = props => {
       );
     }
   };
-
   /*
    * signup Handler
    */
@@ -401,7 +345,6 @@ const AuthComponent = props => {
       setLoading(false);
     }
   };
-
   const handleSignup = () => {
     const {current: firstNameField} = firstNameRef;
     const {current: lastNameField} = lastNameRef;
@@ -447,7 +390,6 @@ const AuthComponent = props => {
       signup(newUser).then(onSignupSuccess, handleError);
     }
   };
-
   /*
    * Logout Handler
    */
@@ -457,47 +399,76 @@ const AuthComponent = props => {
     setLoading(false);
     setDefaultsDataChanged();
   };
-
   const handleLogout = () => {
     setLoading(true);
     logout().then(onLogoutSuccess, handleError);
   };
-
   const handleShowSettings = () => {
     setShowSettings(true);
   };
   const handleShowUpdateUser = () => {
     setShowUpdateUser(true);
   };
-
   const handleShowNotifications = () => {
     setShowNotifications(true);
   };
-
   const handleShowAbout = () => {
     setShowAbout(true);
   };
-
   const handleShowMyAds = () => {
     setShowMyAds(true);
   };
-
   const handleShowMyLotteries = () => {
     setShowMyLotteries(true);
   };
-
   const handleShowAppInfo = () => {
     setShowAppInfo(true);
   };
+  const getUserProfileText = () => {
+    const {
+      gameStatus: userGameStatus,
+      gamePoints: userGamePoints,
+      prefecture: userPrefecture,
+      country: userCountry,
+    } = user;
+    return `${userGameStatus} • ${userGamePoints} Points - ${userPrefecture}, ${userCountry}`;
+  };
 
-  //   const formatText = text => {
-  //     return text.replace(/[^+\d]/g, '');
-  //   };
-  // if (!didInit) {
-  //   console.log('showing null because did not init yet');
+  useEffect(() => {
+    if (loggedIn && user) {
+      AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/6721660483');
+      // AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
+      AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
+    }
+  }, [adId]);
 
-  //   return null;
-  // }
+  useEffect(() => {
+    setLoggedIn(_loggedIn);
+  }, [_loggedIn]);
+
+  useEffect(() => {
+    setEmailPassChanged(emailChanged && passwordChanged);
+  }, [emailChanged, passwordChanged]);
+
+  useEffect(() => {
+    setUserDataChanged(
+      dobChanged &&
+        firstNameChanged &&
+        lastNameChanged &&
+        mobileChanged &&
+        postalCodeChanged &&
+        fullAddressChanged &&
+        cityWardChanged,
+    );
+  }, [
+    dobChanged,
+    firstNameChanged,
+    lastNameChanged,
+    mobileChanged,
+    postalCodeChanged,
+    fullAddressChanged,
+    cityWardChanged,
+  ]);
 
   if (isUndefined(_loggedIn) && isUndefined(user)) {
     return Loading;
@@ -507,63 +478,43 @@ const AuthComponent = props => {
     return (
       <View style={sharedStyles.fullheightView}>
         {loading && loadingPopup}
-
         <KeyboardAvoidingView
           behavior="padding"
           enabled
           keyboardVerticalOffset={25}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View
-              style={
-                // sharedStyles.signupView,
-                sharedStyles.loginContainer
-                // sharedStyles.keyboardPaddingBottom,
-              }>
+            <View style={sharedStyles.loginContainer}>
               <View style={sharedStyles.nameContainer}>
                 <Text style={sharedStyles.label}>First Name</Text>
                 <TextField
                   label="First Name"
-                  // keyboardType="phone-pad"
-                  // formatText={formatText}
-                  // onSubmitEditing={onSubmit}
                   tintColor={'#b69cf6'}
                   onChangeText={handleFirstNameChangeText}
-                  // baseColor="#7f0000"
                   ref={firstNameRef}
                   disabled={loading}
                 />
               </View>
-
               <View style={sharedStyles.nameContainer}>
                 <Text style={sharedStyles.label}>Last Name</Text>
                 <TextField
                   label="Last Name"
-                  // keyboardType="phone-pad"
-                  // formatText={formatText}
-                  // onSubmitEditing={onSubmit}
                   onChangeText={handleLastNameChangeText}
                   tintColor={'#b69cf6'}
-                  // baseColor="#7f0000"
                   ref={lastNameRef}
                   disabled={loading}
                 />
               </View>
-
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>Phone Number</Text>
                 <TextField
                   label="Mobile"
                   keyboardType="phone-pad"
-                  // formatText={formatText}
-                  // onSubmitEditing={onSubmit}
                   tintColor={'#b69cf6'}
                   onChangeText={handleMobileChangeText}
-                  // baseColor="#7f0000"
                   ref={mobileRef}
                   disabled={loading}
                 />
               </View>
-
               <View style={sharedStyles.genderContainer}>
                 <Text style={sharedStyles.label}>Gender</Text>
                 <View style={sharedStyles.genderView}>
@@ -581,7 +532,6 @@ const AuthComponent = props => {
                   />
                 </View>
               </View>
-
               <View style={sharedStyles.dobContainer}>
                 <Text style={[sharedStyles.dobLabel, sharedStyles.label]}>
                   Date of birth
@@ -616,13 +566,11 @@ const AuthComponent = props => {
                   </Picker>
                 </View>
               </View>
-
               <Text style={sharedStyles.label}>Country</Text>
               <View style={sharedStyles.pickerView}>
                 <Picker
                   mode="dropdown"
                   selectedValue={country}
-                  // style={sharedStyles.dobViewItem}
                   onValueChange={updateCountry}>
                   {countries.map((_country, index) => (
                     <Picker.Item
@@ -633,73 +581,52 @@ const AuthComponent = props => {
                   ))}
                 </Picker>
               </View>
-
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>Postal Code</Text>
                 <TextField
                   label="Postal Code"
                   keyboardType="phone-pad"
-                  // formatText={formatText}
-                  // onSubmitEditing={onSubmit}
                   tintColor={'#b69cf6'}
                   onChangeText={handlePostalCodeChangeText}
-                  // baseColor="#7f0000"
                   ref={postalCodeRef}
                   disabled={loading}
                 />
               </View>
-
-              {/* {perfecture && ( */}
-              <>
-                <Text style={sharedStyles.label}>Prefecture</Text>
-                <View style={sharedStyles.pickerView}>
-                  <Picker
-                    mode="dropdown"
-                    selectedValue={prefecture}
-                    // style={sharedStyles.dobViewItem}
-                    onValueChange={updatePrefecture}>
-                    {prefectures[country].map((_prefecture, index) => (
-                      <Picker.Item
-                        key={index}
-                        label={_prefecture}
-                        value={_prefecture}
-                      />
-                    ))}
-                  </Picker>
-                </View>
-              </>
-              {/* )} */}
-
+              <Text style={sharedStyles.label}>Prefecture</Text>
+              <View style={sharedStyles.pickerView}>
+                <Picker
+                  mode="dropdown"
+                  selectedValue={prefecture}
+                  onValueChange={updatePrefecture}>
+                  {prefectures[country].map((_prefecture, index) => (
+                    <Picker.Item
+                      key={index}
+                      label={_prefecture}
+                      value={_prefecture}
+                    />
+                  ))}
+                </Picker>
+              </View>
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>City Ward</Text>
                 <TextField
                   label="City Ward"
-                  // keyboardType="phone-pad"
-                  // formatText={formatText}
-                  // onSubmitEditing={onSubmit}
                   tintColor={'#b69cf6'}
                   onChangeText={handleCityWardChangeText}
-                  // baseColor="#7f0000"
                   ref={cityWardRef}
                   disabled={loading}
                 />
               </View>
-
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>Full Address</Text>
                 <TextField
                   label="Full Address"
-                  // keyboardType="phone-pad"
-                  // formatText={formatText}
-                  // onSubmitEditing={onSubmit}
                   tintColor={'#b69cf6'}
                   onChangeText={handleFullAddressChangeText}
-                  // baseColor="#7f0000"
                   ref={fullAddressRef}
                   disabled={loading}
                 />
               </View>
-
               <Text style={[sharedStyles.label, sharedStyles.signUpLabel]}>
                 Make sure to correctly fill all this required information as it
                 affects your selling/winning process!
@@ -724,7 +651,6 @@ const AuthComponent = props => {
     return (
       <View style={sharedStyles.fullheightView}>
         {loading && loadingPopup}
-
         <View style={sharedStyles.loginContainer}>
           <View style={sharedStyles.loginBtn}>
             <Button
@@ -735,7 +661,6 @@ const AuthComponent = props => {
               disabled={loading}
             />
           </View>
-
           <Text style={sharedStyles.verificationLabel}>
             Please check your inbox in order to verify your email
           </Text>
@@ -748,18 +673,12 @@ const AuthComponent = props => {
     return (
       <View style={sharedStyles.fullheightView}>
         {loading && loadingPopup}
-
-        <View
-          style={
-            sharedStyles.loggedInContainer
-            // showSettings && sharedStyles.backdrop,
-          }>
+        <View style={sharedStyles.loggedInContainer}>
           <Drawer>
             <Drawer.Header
               image={
                 user.image && (
                   <CachedImage
-                    cache="force-cache"
                     blurRadius={15}
                     source={{uri: user.image}}
                     style={sharedStyles.profileBlurredImage}>
@@ -773,9 +692,6 @@ const AuthComponent = props => {
               <Drawer.Header.Account
                 style={{
                   container: sharedStyles.profileHeaderContainer,
-                  // accountContainer: {
-                  //   // backgroundColor: '#b69cf6',
-                  // },
                   avatarsContainer: sharedStyles.profileAvatarContainer,
                 }}
                 avatar={
@@ -784,20 +700,14 @@ const AuthComponent = props => {
                       user.image ? (
                         <CachedImage
                           style={sharedStyles.profileImage}
-                          cache="force-cache"
                           source={{uri: user.image}}
                         />
                       ) : (
                         <Icon name="image" />
                       )
                     }
-                    // text="A"
                   />
                 }
-                // accounts={[
-                //   {avatar: <Avatar text="B" />},
-                //   {avatar: <Avatar text="C" />},
-                // ]}
                 footer={{
                   dense: true,
                   centerElement: {
@@ -807,10 +717,9 @@ const AuthComponent = props => {
                       </Text>
                     ),
                     secondaryText: (
-                      <Text
-                        style={
-                          sharedStyles.profileUserText
-                        }>{`${user.gameStatus} • ${user.gamePoints} Points - ${user.prefecture}, ${user.country}`}</Text>
+                      <Text style={sharedStyles.profileUserText}>
+                        {getUserProfileText()}
+                      </Text>
                     ),
                     tertiaryText: (
                       <Text style={sharedStyles.profileUserText}>
@@ -825,13 +734,7 @@ const AuthComponent = props => {
                       text=""
                       primary
                     />
-                    // <Icon
-                    //   style={{marginRight: 10}}
-                    //   color="#d9d9d9"
-                    //   name="edit"
-                    // />
                   ),
-                  // onRightElementPress: ,
                 }}
               />
             </Drawer.Header>
@@ -848,14 +751,12 @@ const AuthComponent = props => {
                   value: 'Notifications',
                   onPress: handleShowNotifications,
                 },
-                // {icon: 'today', value: 'Calendar', active: true},
                 {icon: 'people', value: 'My Ads', onPress: handleShowMyAds},
                 {
                   icon: 'grade',
                   value: 'My Lotteries',
                   onPress: handleShowMyLotteries,
                 },
-                // {icon: 'history', value: 'History'},
               ]}
             />
             <Drawer.Section
@@ -881,7 +782,6 @@ const AuthComponent = props => {
             <MyLotteries onClose={onMyLotteriesClose} user={user} />
           )}
           {showAppInfo && <AppInfo onClose={onAppInfoClose} />}
-
           {showUpdateUser && (
             <UpdateUser
               onClose={onUpdateUserClose}
@@ -897,25 +797,17 @@ const AuthComponent = props => {
   return (
     <View style={sharedStyles.fullheightView}>
       {loading && loadingPopup}
-
       <View style={sharedStyles.loginContainer}>
         <TextField
           label="Email"
-          //  keyboardType="phone-pad"
-          // formatText={formatText}
-          // onSubmitEditing={onSubmit}
           onChangeText={handleEmailChangeText}
           ref={emailRef}
           tintColor={'#b69cf6'}
           disabled={loading}
         />
-
         <TextField
           label="Password"
           onChangeText={handlePasswordChangeText}
-          // keyboardType="phone-pad"
-          // formatText={formatText}
-          // onSubmitEditing={onSubmit}
           ref={passwordRef}
           secureTextEntry={true}
           disabled={loading}

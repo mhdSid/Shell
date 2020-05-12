@@ -5,7 +5,6 @@ import {View, Alert, VirtualizedList} from 'react-native';
 import {search} from '../../services/auth';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import {Loading} from '../Loading';
-// import AdDetails from '../AdDetails';
 import UserDetails from '../UserDetails';
 import {rootHandleShowAdsDetails} from '../Pinger';
 
@@ -14,20 +13,17 @@ const SearchComponent = () => {
   const [loading, setLoading] = useState();
   const [searchData, setSearchData] = useState();
   const [showUserDetails, setShowUserDetails] = useState();
-  // const [showAdDetails, setShowAdDetails] = useState();
   const [selectedItem, setSelectedItem] = useState();
 
   const onSearchError = error => {
     const message =
       (error && error.message) || 'A an error has occured. Please try again.';
     setLoading(false);
-
     if (message) {
       Alert.alert(message);
     }
     return;
   };
-
   const onSeachSuccess = data => {
     const {error, searchData: searchResults} = data;
     if (error) {
@@ -53,38 +49,27 @@ const SearchComponent = () => {
     ];
     setSearchData(newSearchResults);
     setLoading(false);
-    console.log('onSeachSuccess: ', newSearchResults);
   };
-
   const onSearchChangeText = value => {
     if (value) {
       setSearchQuery(value);
     }
   };
-
   const handleSearch = () => {
-    // alert(query);
     if (searchQuery) {
       setLoading(true);
       search({searchQuery}).then(onSeachSuccess, onSearchError);
     }
   };
-
-  // const onAdDetailsClose = () => {
-  //   setShowAdDetails(false);
-  // };
-
   const onUserDetailsClose = () => {
     setShowUserDetails(false);
   };
-
   const handleItemPress = item => {
     return () => {
       if (item.type === 'user') {
         setSelectedItem(item);
         setShowUserDetails(true);
       } else if (item.type === 'ad') {
-        // setShowAdDetails(true);
         rootHandleShowAdsDetails(item);
       }
     };
@@ -94,7 +79,6 @@ const SearchComponent = () => {
     <View style={sharedStyles.fullheightView}>
       <Toolbar
         style={{container: sharedStyles.toolbarContainer}}
-        // leftElement="menu"
         centerElement="Search"
         searchable={{
           autoFocus: true,
@@ -102,17 +86,8 @@ const SearchComponent = () => {
           onSubmitEditing: handleSearch,
           onChangeText: onSearchChangeText,
         }}
-
-        // rightElement={{
-        //   menu: {
-        //     icon: 'more-vert',
-        //     labels: ['item 1', 'item 2'],
-        //   },
-        // }}
-        // onRightElementPress={handleSearch}
       />
       {loading && Loading}
-
       {searchData && (
         <VirtualizedList
           refreshing={loading}
@@ -132,14 +107,8 @@ const SearchComponent = () => {
                       sharedStyles.homeListItemImage,
                       item.type === 'user' && sharedStyles.listItemUserImage,
                     ]}
-                    cache="force-cache"
                     source={{
                       uri: item.image || item.images[0],
-                      cache: 'force-cache',
-                      // headers: {
-                      //   Pragma: 'only-if-cached',
-                      //   'Cache-Control': 'only-if-cached',
-                      // },
                     }}
                   />
                 ) : null
@@ -161,9 +130,6 @@ const SearchComponent = () => {
           )}
         />
       )}
-      {/* {showAdDetails && (
-        <AdDetails onClose={onAdDetailsClose} item={selectedItem} />
-      )} */}
       {showUserDetails && (
         <UserDetails onClose={onUserDetailsClose} item={selectedItem} />
       )}

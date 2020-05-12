@@ -7,5 +7,4 @@ import App from './App';
 import {name as appName} from './app.json';
 
 const RenderApp = () => App;
-
 AppRegistry.registerComponent(appName, RenderApp);

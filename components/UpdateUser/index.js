@@ -28,10 +28,8 @@ import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 
 const UpdateUser = props => {
   const {user} = props;
-
   const [country, setCountry] = useState((user && user.country) || 'Japan');
   const [prefecture, setPrefecture] = useState(prefecturesList[country]);
-
   const [modalVisible, setModalVisible] = useState(true);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(undefined);
@@ -46,6 +44,188 @@ const UpdateUser = props => {
   const [postalCodeChanged, setPostalCodeChanged] = useState(false);
   const [cityWardChanged, setCityWardChanged] = useState(false);
   const [fullAddressChanged, setFullAddressChanged] = useState(false);
+  const mobileRef = createRef();
+  const firstNameRef = createRef();
+  const lastNameRef = createRef();
+  const postalCodeRef = createRef();
+  const fullAddressRef = createRef();
+  const cityWardRef = createRef();
+
+  const updateCountry = value => {
+    setCountry(value);
+    if (value && value !== user.country) {
+      setCountryChanged(true);
+    } else {
+      setCountryChanged(false);
+    }
+  };
+  const handleMobileChangeText = value => {
+    if (value && value.length > 3 && value !== user.mobile) {
+      setMobileChanged(true);
+    } else {
+      setMobileChanged(false);
+    }
+  };
+  const handleFirstNameChangeText = value => {
+    if (value && value.length > 1 && value !== user.firstName) {
+      setFirstNameChanged(true);
+    } else {
+      setFirstNameChanged(false);
+    }
+  };
+  const handleLastNameChangeText = value => {
+    if (value && value.length > 1 && value !== user.lastName) {
+      setLastNameChanged(true);
+    } else {
+      setLastNameChanged(false);
+    }
+  };
+  const handlePostalCodeChangeText = value => {
+    if (value && value.length > 1) {
+      setPostalCodeChanged(true);
+    } else {
+      setPostalCodeChanged(false);
+    }
+  };
+  const handleFullAddressChangeText = value => {
+    if (value && value.length > 5) {
+      setFullAddressChanged(true);
+    } else {
+      setFullAddressChanged(false);
+    }
+  };
+  const handleCityWardChangeText = value => {
+    if (value && value.length > 2) {
+      setCityWardChanged(true);
+    } else {
+      setCityWardChanged(false);
+    }
+  };
+  const updatePrefecture = value => {
+    setPrefecture(value);
+    if (value && value !== user.prefecture) {
+      setPrefectureChanged(true);
+    } else {
+      setPrefectureChanged(false);
+    }
+  };
+  const setDefaultsDataChanged = () => {
+    setLoading(false);
+    setUserDataChanged(false);
+    setImageChanged(false);
+    setMobileChanged(false);
+    setFirstNameChanged(false);
+    setLastNameChanged(false);
+    setCountryChanged(false);
+    setPrefectureChanged(false);
+    setPostalCodeChanged(false);
+    setFullAddressChanged(false);
+    setCityWardChanged(false);
+  };
+  const onUpdateUserError = error => {
+    const message =
+      (error && error.message) || 'A an error has occured. Please try again.';
+    setDefaultsDataChanged();
+    if (message) {
+      Alert.alert(message);
+    }
+    return;
+  };
+  const onUpdateUserSuccess = data => {
+    const {error, user: updatedUser} = data;
+    if (error) {
+      return onUpdateUserError(error);
+    }
+    setDefaultsDataChanged();
+    invoke(props, 'updateUserAction', updatedUser);
+    setModalVisible(false);
+  };
+  const handleUpdateUser = () => {
+    const {current: mobileField} = mobileRef;
+    const {current: firstNameField} = firstNameRef;
+    const {current: lastNameField} = lastNameRef;
+    const {current: postalCodeField} = postalCodeRef;
+    const {current: cityWardField} = cityWardRef;
+    const {current: fullAddressField} = fullAddressRef;
+    const mobile = mobileField.value();
+    const firstName = firstNameField.value();
+    const lastName = lastNameField.value();
+    const fullAddress = fullAddressField.value();
+    const postalCode = postalCodeField.value();
+    const cityWard = cityWardField.value();
+    if (userDataChanged) {
+      setLoading(true);
+      const updatedUserData = {
+        mobile,
+        firstName,
+        lastName,
+        prefecture,
+        country,
+        image: imageFile,
+        id: user.id,
+        email: user.email,
+        fullAddress,
+        cityWard,
+        postalCode,
+      };
+      if (!mobileChanged) {
+        delete updatedUserData.mobile;
+      }
+      if (!firstNameChanged) {
+        delete updatedUserData.firstName;
+      }
+      if (!lastNameChanged) {
+        delete updatedUserData.lastName;
+      }
+      if (!prefectureChanged) {
+        delete updatedUserData.prefecture;
+      }
+      if (!countryChanged) {
+        delete updatedUserData.country;
+      }
+      if (!imageChanged) {
+        delete updatedUserData.image;
+      }
+      if (!postalCodeChanged) {
+        delete updatedUserData.postalCode;
+      }
+      if (!fullAddressChanged) {
+        delete updatedUserData.fullAddress;
+      }
+      if (!cityWardChanged) {
+        delete updatedUserData.cityWard;
+      }
+      update(updatedUserData).then(onUpdateUserSuccess, onUpdateUserError);
+    }
+  };
+  const handleChoosePhoto = () => {
+    const options = {
+      noData: true,
+    };
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.uri) {
+        const imagePath = response.uri;
+        setImage(imagePath);
+        const imageName = imagePath.slice(
+          imagePath.lastIndexOf('/') + 1,
+          imagePath.length,
+        );
+        const typeRegex = imageName.match(/\.jpg|png|jpeg/);
+        setImageFile({
+          uri: response.uri,
+          type: mimeTypes[typeRegex[0]],
+          name: imageName,
+        });
+        setImageChanged(true);
+      }
+    });
+  };
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+  const onModalDismiss = () => {
+    invoke(props, 'onClose');
+  };
 
   useEffect(() => {
     setUserDataChanged(
@@ -71,216 +251,6 @@ const UpdateUser = props => {
     cityWardChanged,
   ]);
 
-  const updateCountry = value => {
-    setCountry(value);
-    if (value && value !== user.country) {
-      setCountryChanged(true);
-    } else {
-      setCountryChanged(false);
-    }
-  };
-
-  const handleMobileChangeText = value => {
-    if (value && value.length > 3 && value !== user.mobile) {
-      setMobileChanged(true);
-    } else {
-      setMobileChanged(false);
-    }
-  };
-  const handleFirstNameChangeText = value => {
-    if (value && value.length > 1 && value !== user.firstName) {
-      setFirstNameChanged(true);
-    } else {
-      setFirstNameChanged(false);
-    }
-  };
-  const handleLastNameChangeText = value => {
-    if (value && value.length > 1 && value !== user.lastName) {
-      setLastNameChanged(true);
-    } else {
-      setLastNameChanged(false);
-    }
-  };
-
-  const handlePostalCodeChangeText = value => {
-    if (value && value.length > 1) {
-      setPostalCodeChanged(true);
-    } else {
-      setPostalCodeChanged(false);
-    }
-  };
-  const handleFullAddressChangeText = value => {
-    if (value && value.length > 5) {
-      setFullAddressChanged(true);
-    } else {
-      setFullAddressChanged(false);
-    }
-  };
-  const handleCityWardChangeText = value => {
-    if (value && value.length > 2) {
-      setCityWardChanged(true);
-    } else {
-      setCityWardChanged(false);
-    }
-  };
-
-  const updatePrefecture = value => {
-    setPrefecture(value);
-    if (value && value !== user.prefecture) {
-      setPrefectureChanged(true);
-    } else {
-      setPrefectureChanged(false);
-    }
-  };
-
-  const setDefaultsDataChanged = () => {
-    setLoading(false);
-    setUserDataChanged(false);
-    setImageChanged(false);
-    setMobileChanged(false);
-    setFirstNameChanged(false);
-    setLastNameChanged(false);
-    setCountryChanged(false);
-    setPrefectureChanged(false);
-    setPostalCodeChanged(false);
-    setFullAddressChanged(false);
-    setCityWardChanged(false);
-  };
-
-  const mobileRef = createRef();
-  const firstNameRef = createRef();
-  const lastNameRef = createRef();
-  const postalCodeRef = createRef();
-  const fullAddressRef = createRef();
-  const cityWardRef = createRef();
-
-  const onUpdateUserError = error => {
-    const message =
-      (error && error.message) || 'A an error has occured. Please try again.';
-    setDefaultsDataChanged();
-    if (message) {
-      Alert.alert(message);
-    }
-    return;
-  };
-
-  const onUpdateUserSuccess = data => {
-    const {error, user: updatedUser} = data;
-    if (error) {
-      return onUpdateUserError(error);
-    }
-    setDefaultsDataChanged();
-
-    invoke(props, 'updateUserAction', updatedUser);
-    setModalVisible(false);
-  };
-
-  const handleUpdateUser = () => {
-    const {current: mobileField} = mobileRef;
-    const {current: firstNameField} = firstNameRef;
-    const {current: lastNameField} = lastNameRef;
-    const {current: postalCodeField} = postalCodeRef;
-    const {current: cityWardField} = cityWardRef;
-    const {current: fullAddressField} = fullAddressRef;
-
-    const mobile = mobileField.value();
-    const firstName = firstNameField.value();
-    const lastName = lastNameField.value();
-    const fullAddress = fullAddressField.value();
-    const postalCode = postalCodeField.value();
-    const cityWard = cityWardField.value();
-
-    if (userDataChanged) {
-      setLoading(true);
-
-      const updatedUserData = {
-        mobile,
-        firstName,
-        lastName,
-        prefecture,
-        country,
-        image: imageFile,
-        id: user.id,
-        email: user.email,
-        fullAddress,
-        cityWard,
-        postalCode,
-      };
-
-      if (!mobileChanged) {
-        delete updatedUserData.mobile;
-      }
-
-      if (!firstNameChanged) {
-        delete updatedUserData.firstName;
-      }
-
-      if (!lastNameChanged) {
-        delete updatedUserData.lastName;
-      }
-
-      if (!prefectureChanged) {
-        delete updatedUserData.prefecture;
-      }
-
-      if (!countryChanged) {
-        delete updatedUserData.country;
-      }
-
-      if (!imageChanged) {
-        delete updatedUserData.image;
-      }
-
-      if (!postalCodeChanged) {
-        delete updatedUserData.postalCode;
-      }
-
-      if (!fullAddressChanged) {
-        delete updatedUserData.fullAddress;
-      }
-
-      if (!cityWardChanged) {
-        delete updatedUserData.cityWard;
-      }
-
-      update(updatedUserData).then(onUpdateUserSuccess, onUpdateUserError);
-    }
-  };
-
-  const handleChoosePhoto = () => {
-    const options = {
-      noData: true,
-    };
-    ImagePicker.launchImageLibrary(options, response => {
-      if (response.uri) {
-        const imagePath = response.uri;
-        setImage(imagePath);
-
-        const imageName = imagePath.slice(
-          imagePath.lastIndexOf('/') + 1,
-          imagePath.length,
-        );
-
-        const typeRegex = imageName.match(/\.jpg|png|jpeg/);
-
-        setImageFile({
-          uri: response.uri,
-          type: mimeTypes[typeRegex[0]],
-          name: imageName,
-        });
-        setImageChanged(true);
-      }
-    });
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
-
-  const onModalDismiss = () => {
-    invoke(props, 'onClose');
-  };
-
   return (
     <Modal
       animationType="slide"
@@ -304,7 +274,6 @@ const UpdateUser = props => {
           }
         />
         {loading && loadingPopup}
-
         <KeyboardAvoidingView
           behavior="padding"
           enabled
@@ -333,68 +302,51 @@ const UpdateUser = props => {
                     {(image || user.image) && (
                       <CachedImage
                         style={[sharedStyles.adImage, sharedStyles.userImage]}
-                        cache="force-cache"
                         source={{uri: image || user.image}}
                       />
                     )}
                   </TouchableBounce>
                 </View>
               </View>
-
               <View style={sharedStyles.nameContainer}>
                 <Text style={sharedStyles.label}>First Name</Text>
                 <TextField
                   label="First Name"
                   value={user.firstName}
-                  // keyboardType="phone-pad"
-                  // formatText={formatText}
-                  // onSubmitEditing={onSubmit}
                   tintColor={'#b69cf6'}
                   onChangeText={handleFirstNameChangeText}
-                  // baseColor="#7f0000"
                   ref={firstNameRef}
                   disabled={loading}
                 />
               </View>
-
               <View style={sharedStyles.nameContainer}>
                 <Text style={sharedStyles.label}>Last Name</Text>
                 <TextField
                   label="Last Name"
                   value={user.lastName}
-                  // keyboardType="phone-pad"
-                  // formatText={formatText}
-                  // onSubmitEditing={onSubmit}
                   tintColor={'#b69cf6'}
                   onChangeText={handleLastNameChangeText}
-                  // baseColor="#7f0000"
                   ref={lastNameRef}
                   disabled={loading}
                 />
               </View>
-
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>Phone Number</Text>
                 <TextField
                   label="Mobile"
                   keyboardType="phone-pad"
                   value={user.mobile}
-                  // formatText={formatText}
-                  // onSubmitEditing={onSubmit}
                   tintColor={'#b69cf6'}
                   onChangeText={handleMobileChangeText}
-                  // baseColor="#7f0000"
                   ref={mobileRef}
                   disabled={loading}
                 />
               </View>
-
               <Text style={sharedStyles.label}>Country</Text>
               <View style={sharedStyles.pickerView}>
                 <Picker
                   mode="dropdown"
                   selectedValue={country}
-                  // style={sharedStyles.dobViewItem}
                   onValueChange={updateCountry}>
                   {countries.map((_country, index) => (
                     <Picker.Item
@@ -405,23 +357,18 @@ const UpdateUser = props => {
                   ))}
                 </Picker>
               </View>
-
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>Postal Code</Text>
                 <TextField
                   label="Postal Code"
                   keyboardType="phone-pad"
                   value={user.postalCode}
-                  // formatText={formatText}
-                  // onSubmitEditing={onSubmit}
                   tintColor={'#b69cf6'}
                   onChangeText={handlePostalCodeChangeText}
-                  // baseColor="#7f0000"
                   ref={postalCodeRef}
                   disabled={loading}
                 />
               </View>
-
               {prefecture && (
                 <>
                   <Text style={sharedStyles.label}>Prefecture</Text>
@@ -429,7 +376,6 @@ const UpdateUser = props => {
                     <Picker
                       mode="dropdown"
                       selectedValue={prefecture}
-                      // style={sharedStyles.dobViewItem}
                       onValueChange={updatePrefecture}>
                       {prefectures[country].map((_prefecture, index) => (
                         <Picker.Item
@@ -442,39 +388,28 @@ const UpdateUser = props => {
                   </View>
                 </>
               )}
-
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>City Ward</Text>
                 <TextField
                   label="City Ward"
-                  // keyboardType="phone-pad"
                   value={user.cityWard}
-                  // formatText={formatText}
-                  // onSubmitEditing={onSubmit}
                   tintColor={'#b69cf6'}
                   onChangeText={handleCityWardChangeText}
-                  // baseColor="#7f0000"
                   ref={cityWardRef}
                   disabled={loading}
                 />
               </View>
-
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>Full Address</Text>
                 <TextField
                   label="Full Address"
-                  // keyboardType="phone-pad"
                   value={user.fullAddress}
-                  // formatText={formatText}
-                  // onSubmitEditing={onSubmit}
                   tintColor={'#b69cf6'}
                   onChangeText={handleFullAddressChangeText}
-                  // baseColor="#7f0000"
                   ref={fullAddressRef}
                   disabled={loading}
                 />
               </View>
-
               <View style={sharedStyles.loginBtn}>
                 <Button
                   disabled={loading || !userDataChanged}

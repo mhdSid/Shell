@@ -12,7 +12,6 @@ import {Loading} from '../Loading';
 
 const MyLotteries = props => {
   const {user} = props;
-
   const [modalVisible, setModalVisible] = useState(true);
   const [loading, setLoading] = useState(false);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
@@ -23,22 +22,18 @@ const MyLotteries = props => {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-
   const onModalDismiss = () => {
     invoke(props, 'onClose');
   };
-
   const handleError = error => {
     const message =
       (error && error.message) || 'A an error has occured. Please try again.';
     setLoading(false);
-
     if (message) {
       Alert.alert(message);
     }
     return;
   };
-
   const onGetMyLotteriesSuccess = data => {
     const {myLotteries: _myLotteries, error} = data;
     if (error) {
@@ -46,21 +41,18 @@ const MyLotteries = props => {
     }
     setMyLotteries(_myLotteries || []);
   };
-
   const fetchMyLotteries = () => {
     getMyLotteries({userId: user.id}).then(
       onGetMyLotteriesSuccess,
       handleError,
     );
   };
-
   const handleItemPress = item => {
     return () => {
       setShowLotteryDetails(true);
       setSelectedLottery(item);
     };
   };
-
   const onAdDetailsClose = () => {
     setShowLotteryDetails(false);
   };
@@ -82,9 +74,7 @@ const MyLotteries = props => {
           centerElement="My Lotteries"
           onLeftElementPress={handleCloseModal}
         />
-
         {loading && Loading}
-
         {myLotteries && (
           <VirtualizedList
             refreshing={loading}
@@ -101,14 +91,8 @@ const MyLotteries = props => {
                   item.images && item.images[0] ? (
                     <CachedImage
                       style={sharedStyles.homeListItemImage}
-                      cache="force-cache"
                       source={{
                         uri: item.images[0],
-                        cache: 'force-cache',
-                        // headers: {
-                        //   Pragma: 'only-if-cached',
-                        //   'Cache-Control': 'only-if-cached',
-                        // },
                       }}
                     />
                   ) : null

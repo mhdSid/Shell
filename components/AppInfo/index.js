@@ -5,7 +5,6 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import pkg from '../../package.json';
-
 import {loadingPopup} from '../Loading';
 
 const AppInfo = props => {
@@ -15,7 +14,6 @@ const AppInfo = props => {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-
   const onModalDismiss = () => {
     invoke(props, 'onClose');
   };
@@ -33,7 +31,6 @@ const AppInfo = props => {
           onLeftElementPress={handleCloseModal}
         />
         {loading && loadingPopup}
-
         <ScrollView showsVerticalScrollIndicator={false}>
           <ScrollView>
             <View

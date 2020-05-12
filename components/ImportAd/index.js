@@ -32,16 +32,12 @@ import {
   rootAddAdToStore,
 } from '../Pinger';
 
-// const adTypes = {};
-
 const ImportAd = props => {
   const {loggedIn: _loggedIn, user: authUser} = props;
   const userCountry = authUser && authUser.country;
-
   const [loggedIn, setLoggedIn] = useState(_loggedIn);
   const [user, setUser] = useState(authUser);
   const [adCategory, setAdCategory] = useState('Sports');
-  // const [adType, setAdType] = useState(undefined);
   const [adStatus, setAdStatus] = useState('No Noticable Scratches or Dirt');
   const [images, setImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
@@ -53,24 +49,11 @@ const ImportAd = props => {
   const [adNameChanged, setAdNameChanged] = useState(false);
   const [descriptionChanged, setDescriptionChanged] = useState(false);
   const [priceChanged, setPriceChanged] = useState(false);
-
   const userCurrency = userCountry && currencies[userCountry];
-
   const adNameRef = createRef();
   const descriptionRef = createRef();
   const priceRef = createRef();
   const adImages = [0, 1, 2, 3, 4];
-
-  useEffect(() => {
-    setLoggedIn(_loggedIn);
-    setUser(authUser);
-  }, [_loggedIn, authUser]);
-
-  useEffect(() => {
-    setADataChanged(
-      imagesChanged && adNameChanged && descriptionChanged && priceChanged,
-    );
-  }, [imagesChanged, adNameChanged, descriptionChanged, priceChanged]);
 
   const handleAdNameChangeText = value => {
     if (value && value.length > 5) {
@@ -93,20 +76,17 @@ const ImportAd = props => {
       setPriceChanged(false);
     }
   };
-
   const setDefault = (nameField, descriptionField, priceField) => {
     nameField.setValue('');
     descriptionField.setValue('');
     priceField.setValue('');
     setImages([]);
-
     setADataChanged(false);
     setImagesChanged(false);
     setAdNameChanged(false);
     setDescriptionChanged(false);
     setPriceChanged(false);
   };
-
   const handleError = error => {
     const message =
       (error && error.message) || 'A an error has occured. Please try again.';
@@ -115,7 +95,6 @@ const ImportAd = props => {
     }
     return;
   };
-
   const onUpdateAdSuccess = newAd => {
     return data => {
       const {error, updatedAd} = data;
@@ -130,19 +109,14 @@ const ImportAd = props => {
       rootHandleShowAdsDetails(newUpdatedAd);
     };
   };
-
   const importAdSuccess = data => {
     const {error, newAd} = data;
-
     if (error || !newAd) {
       return handleError(error);
     }
-
     rootAddAdToStore(newAd);
     rootHandleShowAdsDetails(newAd);
-
     const newImages = imageFiles.filter(Boolean);
-
     rootUpdateAd(
       {
         id: newAd.id,
@@ -152,16 +126,13 @@ const ImportAd = props => {
       handleError,
     );
   };
-
   const handleUploadAd = () => {
     const {current: nameField} = adNameRef;
     const {current: descriptionField} = descriptionRef;
     const {current: priceField} = priceRef;
-
     const name = nameField.value();
     const description = descriptionField.value();
     const price = priceField.value();
-
     if (
       name &&
       description &&
@@ -175,7 +146,6 @@ const ImportAd = props => {
     ) {
       const filteredImages = imageFiles.filter(Boolean);
       setDefault(nameField, descriptionField, priceField);
-
       rootUploadAd(
         {
           name,
@@ -194,22 +164,18 @@ const ImportAd = props => {
       );
     }
   };
-
   const updateAdCategory = value => {
     Alert.alert('updateAdCategory: ' + value);
     setAdCategory(value);
   };
-
   const updateAdStatus = value => {
     Alert.alert('updateAdStatus: ' + value);
     setAdStatus(value);
   };
-
   const updatePrefecture = value => {
     Alert.alert('updatePrefecture: ' + value);
     setPrefecture(value);
   };
-
   const handleChoosePhoto = index => {
     return () => {
       const options = {
@@ -220,27 +186,33 @@ const ImportAd = props => {
           const imagePath = response.uri;
           images[index] = imagePath;
           setImages([...images]);
-
           const imageName = imagePath.slice(
             imagePath.lastIndexOf('/') + 1,
             imagePath.length,
           );
-
           const typeRegex = imageName.match(/\.jpg|png|jpeg/);
-
           imageFiles[index] = {
             uri: response.uri,
             type: mimeTypes[typeRegex[0]],
             name: imageName,
           };
-
           setImagesChanged(true);
-
           setImageFiles([...imageFiles]);
         }
       });
     };
   };
+
+  useEffect(() => {
+    setLoggedIn(_loggedIn);
+    setUser(authUser);
+  }, [_loggedIn, authUser]);
+
+  useEffect(() => {
+    setADataChanged(
+      imagesChanged && adNameChanged && descriptionChanged && priceChanged,
+    );
+  }, [imagesChanged, adNameChanged, descriptionChanged, priceChanged]);
 
   if (isUndefined(_loggedIn) && isUndefined(user)) {
     return <LoadingComponent />;
@@ -263,8 +235,6 @@ const ImportAd = props => {
             }}
             centerElement="Post an Ad"
             leftElement={<Icon color="white" name="add-box" />}
-            // leftElement="arrow-back"
-            // onLeftElementPress={handleCloseModal}
             rightElement={
               <Button
                 onPress={handleUploadAd}
@@ -275,7 +245,6 @@ const ImportAd = props => {
               />
             }
           />
-
           <ScrollView showsVerticalScrollIndicator={false}>
             <View
               style={[
@@ -286,32 +255,20 @@ const ImportAd = props => {
                 <Text style={sharedStyles.label}>Product Name</Text>
                 <TextField
                   label="Ad Name"
-                  // keyboardType="phone-pad"
-                  // formatText={formatText}
-                  // onSubmitEditing={onSubmit}
                   onChangeText={handleAdNameChangeText}
                   tintColor={'#b69cf6'}
-                  // baseColor="#7f0000"
                   ref={adNameRef}
-                  // disabled={loading}
                 />
               </View>
-
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>Description</Text>
                 <TextField
                   label="Description"
-                  // keyboardType="phone-pad"
-                  // formatText={formatText}
-                  // onSubmitEditing={onSubmit}
                   onChangeText={handleDescriptionChangeText}
                   tintColor={'#b69cf6'}
-                  // baseColor="#7f0000"
                   ref={descriptionRef}
-                  // disabled={loading}
                 />
               </View>
-
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>Price</Text>
                 <View style={sharedStyles.priceContainer}>
@@ -320,18 +277,13 @@ const ImportAd = props => {
                     <TextField
                       label="Price"
                       keyboardType="phone-pad"
-                      // formatText={formatText}
-                      // onSubmitEditing={onSubmit}
                       tintColor={'#b69cf6'}
                       onChangeText={handlePriceChangeText}
-                      // baseColor="#7f0000"
                       ref={priceRef}
-                      // disabled={loading}
                     />
                   </View>
                 </View>
               </View>
-
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>Images</Text>
                 <View style={sharedStyles.imageBtnContainer}>
@@ -346,7 +298,6 @@ const ImportAd = props => {
                       {images[index] && (
                         <CachedImage
                           style={sharedStyles.adImage}
-                          cache="force-cache"
                           source={{uri: images[index]}}
                         />
                       )}
@@ -354,13 +305,11 @@ const ImportAd = props => {
                   ))}
                 </View>
               </View>
-
               <Text style={sharedStyles.label}>Prefecture</Text>
               <View style={sharedStyles.pickerView}>
                 <Picker
                   mode="dropdown"
                   selectedValue={prefecture}
-                  // style={sharedStyles.dobViewItem}
                   onValueChange={updatePrefecture}>
                   {prefectures[userCountry].map((_prefecture, index) => (
                     <Picker.Item
@@ -371,7 +320,6 @@ const ImportAd = props => {
                   ))}
                 </Picker>
               </View>
-
               <Text style={sharedStyles.label}>Category</Text>
               <View style={sharedStyles.pickerView}>
                 <Picker
@@ -387,7 +335,6 @@ const ImportAd = props => {
                   ))}
                 </Picker>
               </View>
-
               <Text style={sharedStyles.label}>Status</Text>
               <View style={sharedStyles.pickerView}>
                 <Picker
@@ -399,7 +346,6 @@ const ImportAd = props => {
                   ))}
                 </Picker>
               </View>
-
               <View style={sharedStyles.loginBtn}>
                 <Button
                   disabled={!adDataChanged}

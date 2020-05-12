@@ -40,14 +40,6 @@ const Pinger = props => {
   const addAdToStore = data => {
     invoke(props, 'addAd', data);
   };
-
-  setRootSelectedAd = selectedAd;
-  rootAddAdToStore = addAdToStore;
-  rootUpdateCurrentAdToStore = updateCurrentAdToStore;
-  rootUpdateAd = update;
-  rootUploadAd = uploadAd;
-  rootHandleShowAdsDetails = handleShowAdsDetails;
-
   const onPingSuccess = data => {
     const {error, user: authUser, country} = data;
     if (error) {
@@ -63,10 +55,16 @@ const Pinger = props => {
       });
     }
   };
-
   const onPingError = () => {
     invoke(props, 'logout', {loggedIn: false, user: false});
   };
+
+  setRootSelectedAd = selectedAd;
+  rootAddAdToStore = addAdToStore;
+  rootUpdateCurrentAdToStore = updateCurrentAdToStore;
+  rootUpdateAd = update;
+  rootUploadAd = uploadAd;
+  rootHandleShowAdsDetails = handleShowAdsDetails;
 
   ping().then(onPingSuccess, onPingError);
 

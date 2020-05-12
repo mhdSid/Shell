@@ -14,7 +14,6 @@ const Notifications = props => {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-
   const onModalDismiss = () => {
     invoke(props, 'onClose');
   };
@@ -33,7 +32,6 @@ const Notifications = props => {
           onLeftElementPress={handleCloseModal}
         />
         {loading && loadingPopup}
-
         <ScrollView showsVerticalScrollIndicator={false}>
           <View
             style={[

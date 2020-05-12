@@ -12,8 +12,6 @@ import {Loading} from '../Loading';
 
 const MyAds = props => {
   const {user} = props;
-  console.log('MyAdsMyAdsMyAdsMyAdsMyAdsMyAds: ', user);
-
   const [modalVisible, setModalVisible] = useState(true);
   const [loading, setLoading] = useState(false);
   const [showAdDetails, setShowAdDetails] = useState(false);
@@ -24,48 +22,36 @@ const MyAds = props => {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-
   const onModalDismiss = () => {
     invoke(props, 'onClose');
   };
-
   const handleError = error => {
     const message =
       (error && error.message) || 'A an error has occured. Please try again.';
     setLoading(false);
-
     if (message) {
       Alert.alert(message);
     }
     return;
   };
-
   const onGetMyAdsSuccess = data => {
     const {myAds: _myAds, error} = data;
     if (error) {
       return handleError(error);
     }
-    console.log(
-      'onGetMyAdsSuccessonGetMyAdsSuccessonGetMyAdsSuccessonGetMyAdsSuccessonGetMyAdsSuccess: ',
-      data,
-    );
-
     setMyAds(_myAds || []);
     setLoading(false);
   };
-
   const fetchMyAds = () => {
     setLoading(true);
     getMyAds({userId: user.id}).then(onGetMyAdsSuccess, handleError);
   };
-
   const handleItemPress = item => {
     return () => {
       setShowAdDetails(true);
       setSelectedAd(item);
     };
   };
-
   const onAdDetailsClose = () => {
     setShowAdDetails(false);
   };
@@ -87,9 +73,7 @@ const MyAds = props => {
           centerElement="My Ads"
           onLeftElementPress={handleCloseModal}
         />
-
         {loading && Loading}
-
         {myAds && (
           <VirtualizedList
             refreshing={loading}
@@ -106,14 +90,9 @@ const MyAds = props => {
                   item.images && item.images[0] ? (
                     <CachedImage
                       style={sharedStyles.homeListItemImage}
-                      cache="force-cache"
                       source={{
                         uri: item.images[0],
                         cache: 'force-cache',
-                        // headers: {
-                        //   Pragma: 'only-if-cached',
-                        //   'Cache-Control': 'only-if-cached',
-                        // },
                       }}
                     />
                   ) : null

@@ -1,36 +1,25 @@
 import React, {useState} from 'react';
 import invoke from 'lodash/invoke';
-import {Modal, SafeAreaView, ScrollView} from 'react-native';
+import {Modal, SafeAreaView, ScrollView, View, Text} from 'react-native';
 import {connect} from 'react-redux';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {Toolbar, Drawer} from 'react-native-material-ui';
+import {Toolbar, Drawer, Icon} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {setLang} from '../../redux/Settings/actions';
+import {Flag} from 'react-native-svg-flagkit';
 
 const Settings = props => {
   const {lang} = props;
-  // console.log('SettingsSettingsSettingsSettingsSettings: ', lang);
-
   const [modalVisible, setModalVisible] = useState(true);
-  const [showLanguages, setShowLanguages] = useState(false);
 
   const handleSetLanguage = value => {
     return () => {
-      // console.log(value);
       invoke(props, 'setLang', value);
     };
   };
-
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-
-  const handleShowLanguages = () => {
-    let _showLanguages = showLanguages;
-    _showLanguages = !_showLanguages;
-    setShowLanguages(_showLanguages);
-  };
-
   const onModalDissmiss = () => {
     invoke(props, 'onClose');
   };
@@ -47,7 +36,6 @@ const Settings = props => {
           leftElement="arrow-back"
           onLeftElementPress={handleCloseModal}
         />
-
         <ScrollView showsVerticalScrollIndicator={false}>
           <Drawer>
             <Drawer.Section
@@ -56,39 +44,59 @@ const Settings = props => {
                 {
                   icon: 'language',
                   value: 'Language',
-                  onPress: handleShowLanguages,
                 },
               ]}
             />
-            {showLanguages && (
-              <Drawer.Section
-                style={{
-                  container: sharedStyles.settingsDrawerLanguageSection,
-                  //   item: {
-                  //     justifyContent: 'center',
-                  //     alignItems: 'center',
-                  //   },
-                  //   value: {
-                  //     justifyContent: 'center',
-                  //     alignItems: 'center',
-                  //   },
-                }}
-                items={[
-                  showLanguages && {
-                    key: 'English',
-                    //   icon: 'language',
-                    value: 'English',
-                    onPress: handleSetLanguage('en'),
-                  },
-                  showLanguages && {
-                    key: 'Japanese',
-                    //   icon: 'language',
-                    value: 'Japanese',
-                    onPress: handleSetLanguage('jp'),
-                  },
-                ]}
-              />
-            )}
+            <Drawer.Section
+              style={{
+                container: sharedStyles.settingsDrawerLanguageSection,
+                icon: sharedStyles.langIcon,
+              }}
+              items={[
+                {
+                  key: 'US',
+                  icon: <Flag id={'US'} width={30} height={30} />,
+                  value:
+                    lang === 'US' ? (
+                      <View
+                        style={[
+                          sharedStyles.flexRow,
+                          sharedStyles.textAlignVertical,
+                        ]}>
+                        <Text style={sharedStyles.appText}>English</Text>
+                        <Icon
+                          style={sharedStyles.langChecked}
+                          color="green"
+                          name="check"
+                          size={15}
+                        />
+                      </View>
+                    ) : (
+                      'English'
+                    ),
+                  onPress: handleSetLanguage('US'),
+                },
+                {
+                  key: 'JP',
+                  icon: <Flag id={'JP'} width={30} height={30} />,
+                  value:
+                    lang === 'JP' ? (
+                      <View style={sharedStyles.flexRow}>
+                        <Text style={sharedStyles.appText}>Japanese</Text>
+                        <Icon
+                          style={sharedStyles.langChecked}
+                          color="green"
+                          name="check"
+                          size={15}
+                        />
+                      </View>
+                    ) : (
+                      'Japanese'
+                    ),
+                  onPress: handleSetLanguage('JP'),
+                },
+              ]}
+            />
           </Drawer>
         </ScrollView>
       </SafeAreaView>

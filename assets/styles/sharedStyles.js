@@ -401,9 +401,9 @@ const sharedStyles = StyleSheet.create({
   aboutFirstSectionTextMargin: {
     marginBottom: 10,
   },
-  adDetailsText: {
+  appText: {
     fontWeight: '500',
-    color: 'rgba(0,0,0,.8)',
+    color: 'rgba(0,0,0,.85)',
   },
   adDetailsImageArrowIconLeft: {
     alignSelf: 'center',
@@ -476,7 +476,20 @@ const sharedStyles = StyleSheet.create({
   },
   settingsDrawerLanguageSection: {
     marginTop: -10,
-    paddingLeft: 80,
+    paddingLeft: 20,
+  },
+  flexRow: {
+    flexDirection: 'row',
+    display: 'flex',
+  },
+  textAlignVertical: {
+    textAlignVertical: 'center',
+  },
+  langChecked: {
+    marginHorizontal: 10,
+  },
+  homeLoading: {
+    bottom: 70,
   },
 });
 

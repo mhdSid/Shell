@@ -11,7 +11,6 @@ const About = props => {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-
   const onModalDismiss = () => {
     invoke(props, 'onClose');
   };
@@ -30,9 +29,7 @@ const About = props => {
             <IconToggle onPress={handleCloseModal} name="arrow-back" />
           }
           centerElement="How To Guide"
-          //   onLeftElementPress={handleCloseModal}
         />
-
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={sharedStyles.aboutContainer}>
             <View style={sharedStyles.aboutIconTextContainer}>
@@ -90,54 +87,46 @@ const About = props => {
                 is the price that you initially entered.
               </Text>
             </View>
-
             <View style={sharedStyles.aboutSeparatorSection}>
               <Text style={sharedStyles.aboutSeparatorSectionText}>Or</Text>
             </View>
-
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="white" name="explore" />
               <Text style={sharedStyles.aboutIconText}>Browse</Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {'Browser through a wide variety of uploaded Ads!'}
+                Browser through a wide variety of uploaded Ads!
               </Text>
             </View>
-
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="white" name="remove-red-eye" />
               <Text style={sharedStyles.aboutIconText}>Choose</Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {
-                  'Make sure you choose any item you love. It can be a Smart Phone, a Laptop, a Car, a House, or anything you can think about.'
-                }
+                Make sure you choose any item you love. It can be a Smart Phone,
+                a Laptop, a Car, a House, or anything you can think about.
               </Text>
             </View>
-
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="white" name="receipt" />
               <Text style={sharedStyles.aboutIconText}>Enter Lottery</Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {
-                  'Pay a fee of 1,000 Japanese Yen and enter a lottery to have a chance to win any item of your choice.'
-                }
+                Pay a fee of 1,000 Japanese Yen and enter a lottery to have a
+                chance to win any item of your choice.
               </Text>
             </View>
-
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="white" name="star" />
               <Text style={sharedStyles.aboutIconText}>Win</Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {
-                  'Once the total price of your chosen item has been collected, the lottery will start and a radom user will win the item.'
-                }
+                Once the total price of your chosen item has been collected, the
+                lottery will start and a radom user will win the item.
               </Text>
             </View>
           </View>

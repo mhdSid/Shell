@@ -1,7 +1,6 @@
-import React, {PureComponent, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Toolbar, ListItem} from 'react-native-material-ui';
-import {View, Text, Alert, VirtualizedList} from 'react-native';
-import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
+import {View, Alert, VirtualizedList} from 'react-native';
 import {connect} from 'react-redux';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
@@ -18,71 +17,16 @@ import {
 } from 'react-native-admob';
 import {rootHandleShowAdsDetails} from '../Pinger';
 import {CarouselComponent} from '../Carousel';
-
-class CardListItem extends PureComponent {
-  static propTypes = {
-    item: PropTypes.object,
-    onItemPress: PropTypes.func,
-  };
-
-  handleItemPress = () => {
-    const {item} = this.props;
-    invoke(this.props, 'onItemPress', item);
-  };
-
-  render() {
-    const {item} = this.props;
-    return (
-      <TouchableBounce
-        style={sharedStyles.homeCardItem}
-        onPress={this.handleItemPress}>
-        <CachedImage
-          cache="force-cache"
-          style={sharedStyles.homeCardItemImage}
-          source={{uri: item.images[0], cache: 'force-cache'}}
-        />
-        <View style={sharedStyles.homeCardItemTextContainer}>
-          <Text
-            numberOfLines={1}
-            ellipsizeMode={'tail'}
-            style={sharedStyles.homeCardItemText}>
-            {item.name}
-          </Text>
-          <Text
-            numberOfLines={1}
-            ellipsizeMode={'tail'}
-            style={sharedStyles.homeCardItemText}>
-            {item.description}
-          </Text>
-
-          <Text
-            numberOfLines={1}
-            ellipsizeMode={'tail'}
-            style={sharedStyles.homeCardItemText}>
-            {item.category}
-          </Text>
-          <Text
-            numberOfLines={1}
-            ellipsizeMode={'tail'}
-            style={
-              sharedStyles.homeCardItemText
-            }>{`${item.currency} ${item.price}`}</Text>
-        </View>
-      </TouchableBounce>
-    );
-  }
-}
+import CardListItem from './CardListItem';
 
 const HomeComponent = props => {
   const {ads: _ads} = props;
-
   const [ads, setAds] = useState(_ads);
   const [isList, setIsList] = useState(false);
   const [isCarousel, setIsCarousel] = useState(false);
   const [isCard, setIsCard] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [fetchId, setFetchId] = useState(0);
-
+  const [fetchId] = useState(0);
   let unMounted = false;
 
   const handleError = error => {
@@ -93,7 +37,6 @@ const HomeComponent = props => {
     }
     return;
   };
-
   const onGetAdsSuccess = data => {
     if (!unMounted) {
       const {error, ads: serverAds} = data;
@@ -103,9 +46,33 @@ const HomeComponent = props => {
       invoke(props, 'addAd', serverAds);
     }
   };
-
   const fetchAds = () => {
     getAds().then(onGetAdsSuccess, handleError);
+  };
+  const changeViewStyle = () => {
+    if (isCard) {
+      setIsList(true);
+      setIsCard(false);
+      setIsCarousel(false);
+    }
+    if (isList) {
+      setIsList(false);
+      setIsCard(false);
+      setIsCarousel(true);
+    }
+    if (isCarousel) {
+      setIsList(false);
+      setIsCard(true);
+      setIsCarousel(false);
+    }
+  };
+  const handleShowAdsDetailsFlatList = item => {
+    rootHandleShowAdsDetails(item);
+  };
+  const handleShowAdsDetailsFlatListClosure = item => {
+    return () => {
+      rootHandleShowAdsDetails(item);
+    };
   };
 
   useEffect(() => {
@@ -132,39 +99,10 @@ const HomeComponent = props => {
     };
   }, [_ads]);
 
-  const changeViewStyle = () => {
-    if (isCard) {
-      setIsList(true);
-      setIsCard(false);
-      setIsCarousel(false);
-    }
-    if (isList) {
-      setIsList(false);
-      setIsCard(false);
-      setIsCarousel(true);
-    }
-    if (isCarousel) {
-      setIsList(false);
-      setIsCard(true);
-      setIsCarousel(false);
-    }
-  };
-
-  const handleShowAdsDetailsFlatList = item => {
-    rootHandleShowAdsDetails(item);
-  };
-
-  const handleShowAdsDetailsFlatListClosure = item => {
-    return () => {
-      rootHandleShowAdsDetails(item);
-    };
-  };
-
   return (
     <View style={sharedStyles.fullheightView}>
       <Toolbar
         style={{container: sharedStyles.toolbarContainer}}
-        // leftElement="help"
         centerElement="Shell"
         rightElement={
           isCard ? 'view-list' : isList ? 'view-carousel' : 'view-comfy'
@@ -175,11 +113,8 @@ const HomeComponent = props => {
         adSize="fullBanner"
         adUnitID="ca-app-pub-5703846930890914/6428703368"
         style={sharedStyles.adMobBanner}
-        // testDevices={[AdMobBanner.simulatorId]}
-        // onAdFailedToLoad={error => console.error(error)}
       />
-
-      {loading && <View style={{bottom: 70}}>{Loading}</View>}
+      {loading && <View style={sharedStyles.homeLoading}>{Loading}</View>}
       {isCard && (
         <VirtualizedList
           refreshing={loading}

@@ -10,7 +10,6 @@ import {Toolbar} from 'react-native-material-ui';
 
 const Lotteries = props => {
   const {loggedIn: _loggedIn, user: authUser, lotteries} = props;
-
   const [loggedIn, setLoggedIn] = useState(_loggedIn);
   const [user, setUser] = useState(authUser);
   const [loading] = useState(false);
@@ -34,10 +33,8 @@ const Lotteries = props => {
         style={{container: sharedStyles.toolbarContainer}}
         centerElement="Lotteries"
       />
-
       <View style={sharedStyles.innerContainer}>
         {loading && loadingPopup}
-
         <Text>{!lotteries && 'No Lotteries available'}</Text>
       </View>
     </View>

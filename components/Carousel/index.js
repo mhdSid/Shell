@@ -16,6 +16,7 @@ class CarouselItem extends PureComponent {
     item: PropTypes.object,
     onItemPress: PropTypes.func,
   };
+
   handleItemPress = () => {
     const {item} = this.props;
     invoke(this.props, 'onItemPress', item);
@@ -48,14 +49,8 @@ class CarouselItem extends PureComponent {
           ]}>
           {images && images[0] ? (
             <CachedImage
-              cache="force-cache"
               source={{
                 uri: images[0],
-                cache: 'force-cache',
-                // headers: {
-                //   Pragma: 'only-if-cached',
-                //   'Cache-Control': 'only-if-cached',
-                // },
               }}
               style={sliderStyles.image}
             />
@@ -122,10 +117,7 @@ const CarouselComponent = props => {
   return (
     <View style={sliderStyles.exampleContainer}>
       <Carousel
-        // enableSnap={true}
         shouldOptimizeUpdates={true}
-        // useScrollView={true}
-        // ref={c => (slider1Ref = c)}
         onEndReachedThreshold={0}
         onEndReached={onEndReached}
         data={slicedAds}
@@ -136,28 +128,10 @@ const CarouselComponent = props => {
         firstItem={0}
         inactiveSlideScale={0.94}
         inactiveSlideOpacity={0.7}
-        // inactiveSlideShift={20}
         containerCustomStyle={sliderStyles.slider}
         contentContainerCustomStyle={sliderStyles.sliderContentContainer}
-        // loop={true}
         loopClonesPerSide={2}
-        // autoplay={true}
-        // autoplayDelay={500}
-        // autoplayInterval={3000}
-        // onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
       />
-      {/* <Pagination
-       dotsLength={ENTRIES1.length}
-       activeDotIndex={0}
-       containerStyle={sharedStyles.paginationContainer}
-       dotColor={'rgba(255, 255, 255, 0.92)'}
-       dotStyle={sharedStyles.paginationDot}
-       inactiveDotColor={colors.black}
-       inactiveDotOpacity={0.4}
-       inactiveDotScale={0.6}
-       carouselRef={slider1Ref}
-       tappableDots={!!slider1Ref}
-     /> */}
     </View>
   );
 };

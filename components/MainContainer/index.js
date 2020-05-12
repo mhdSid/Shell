@@ -22,7 +22,6 @@ const viewLoader = {
 
 const MainContainer = props => {
   const {user, loggedIn} = props;
-
   const [activeView, setActiveView] = useState('home');
 
   const handlePress = type => {
@@ -34,7 +33,7 @@ const MainContainer = props => {
   navigate = handlePress;
 
   return (
-    <View style={sharedStyles.fullheightView}>
+    <SafeAreaView style={sharedStyles.fullheightView}>
       <SafeAreaView style={sharedStyles.container}>
         {viewLoader[activeView]()}
       </SafeAreaView>
@@ -54,10 +53,9 @@ const MainContainer = props => {
               display: 'none',
             },
           }}
-          // key="home"
+          key="home"
           icon={<Icon name="home" size={30} />}
           active={activeView === 'home'}
-          //   label="Home"
           onPress={handlePress('home')}
         />
         <BottomNavigation.Action
@@ -73,7 +71,6 @@ const MainContainer = props => {
           key="search"
           icon={<Icon name="search" size={30} />}
           active={activeView === 'search'}
-          //   label="Home"
           onPress={handlePress('search')}
         />
         <BottomNavigation.Action
@@ -91,7 +88,6 @@ const MainContainer = props => {
           key="add-circle-outline"
           icon={<Icon name="add-circle-outline" size={40} />}
           active={activeView === 'add-circle-outline'}
-          //   label="Add"
           onPress={handlePress('add-circle-outline')}
         />
         <BottomNavigation.Action
@@ -116,7 +112,6 @@ const MainContainer = props => {
             )
           }
           active={activeView === 'grade'}
-          //   label="Lotteries"
           onPress={handlePress('grade')}
         />
         <BottomNavigation.Action
@@ -141,11 +136,10 @@ const MainContainer = props => {
             )
           }
           active={activeView === 'profile'}
-          //   label="Settings"
           onPress={handlePress('profile')}
         />
       </BottomNavigation>
-    </View>
+    </SafeAreaView>
   );
 };
 

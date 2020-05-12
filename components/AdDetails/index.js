@@ -17,62 +17,15 @@ import PropTypes from 'prop-types';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import UserDetails from '../UserDetails';
 import {getUsersData} from '../../services/auth';
-import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import {SimpleLoader} from '../Loading';
 import formatDate from '../../lib/CachedImage/formatDate';
+import AdDetailsUserListItem from './AddDetailsUserListItem';
 
-const AdDetailsUserListItem = props => {
-  const {user} = props;
-  const handlePress = () => {
-    invoke(props, 'onPress', user);
-  };
-
-  return (
-    <TouchableBounce
-      style={sharedStyles.adDetailsUsersListItemContainer}
-      onPress={handlePress}>
-      {user.image ? (
-        <CachedImage
-          cache="force-cache"
-          source={{
-            uri: user.image,
-            cache: 'force-cache',
-            // headers: {
-            //   Pragma: 'only-if-cached',
-            //   'Cache-Control': 'only-if-cached',
-            // },
-          }}
-          style={sharedStyles.adDetailsUsersListItemImage}
-        />
-      ) : (
-        <Icon
-          name="face"
-          size={40}
-          // style={[
-          //   sharedStyles.adDetailsUsersListItemImage,
-          //   sharedStyles.adDetailsEmptyUser,
-          // ]}
-        />
-      )}
-      {(user.firstName || user.lastName) && (
-        <Text
-          numberOfLines={1}
-          ellipsizeMode={'tail'}
-          style={sharedStyles.adDetailsUsersListItemText}>
-          {`${user.firstName} ${user.lastName}`}
-        </Text>
-      )}
-    </TouchableBounce>
-  );
-};
+const myActions = ['share', 'favorite', 'cancel', 'delete'];
+const defaultActions = ['share', 'favorite', 'shop'];
 
 const AdDetails = props => {
   const {item, user: authUser} = props;
-  console.log(
-    'AdDetailsAdDetailsAdDetailsAdDetailsAdDetails: ',
-    item,
-    authUser,
-  );
   const {
     name,
     description,
@@ -102,111 +55,76 @@ const AdDetails = props => {
   const [winnerUserData, setWinnerUserData] = useState();
   const [usersDataLoading, setUsersDataLoading] = useState(false);
 
-  const myActions = ['share', 'favorite', 'cancel', 'delete'];
-  const defaultActions = ['share', 'favorite', 'shop'];
-
   const onUserDetailsClose = () => {
     setShowUserDetails(false);
   };
-
   const handleMovePreviousPhoto = () => {
     let index = currentPhotoIndex;
     index = index <= 0 ? images.length - 1 : --index;
     setCurrentPhotoIndex(index);
   };
-
   const handleMoveNextPhoto = () => {
     let index = currentPhotoIndex;
     index = index >= images.length - 1 ? 0 : ++index;
     setCurrentPhotoIndex(index);
   };
-
   const onModalDissmiss = () => {
     invoke(props, 'onClose');
   };
-
   const handleCloseModal = () => {
     setModalVisible(false);
   };
-
   const handleActionPress = value => {
     // alert(value);
   };
-
   const handleEnterDraw = () => {};
-
   const handleError = error => {
     const message =
       (error && error.message) || 'A an error has occured. Please try again.';
     setUsersDataLoading(false);
-
     if (message) {
       Alert.alert(message);
     }
     return;
   };
-
   const onGetUsersDataSuccess = data => {
     let {error, users} = data;
     if (error) {
       return handleError(error);
     }
-    // setUsersData(users);
-
-    console.log(
-      'onGetUsersDataSuccessonGetUsersDataSuccessonGetUsersDataSuccess: ',
-      users,
-    );
     users = users.filter(Boolean);
-
     if (Array.isArray(users) && users.length > 0) {
-      let lotterUsers = [];
-
+      let lotteryUsers = [];
       users.forEach(user => {
         if (user.id === winnerUserId) {
           setWinnerUserData(user);
         } else if (user.id === userId) {
           setAdPosterData(user);
         } else {
-          lotterUsers = [...lotterUsers, user];
+          lotteryUsers = [...lotteryUsers, user];
         }
       });
-
-      setLotteryUsersData(lotterUsers);
+      setLotteryUsersData(lotteryUsers);
     }
     setUsersDataLoading(false);
-
-    console.log(
-      'onGetUsersDataSuccessonGetUsersDataSuccessonGetUsersDataSuccess: ',
-      // lotterUsers,
-    );
   };
-
   const fetchUsersData = () => {
     const users = [
       userId,
       ...(lotteryUserIds || []),
       winnerUserId || false,
     ].filter(Boolean);
-    console.log(
-      'fetchUsersDatafetchUsersDatafetchUsersDatafetchUsersData: ',
-      users,
-    );
     if (users.length > 0) {
       setUsersDataLoading(true);
       getUsersData({users}).then(onGetUsersDataSuccess, handleError);
     }
   };
-
   const onShow = () => {
     fetchUsersData();
   };
-
   const handleUserPress = user => {
-    // return () => {
     setShowUserDetails(true);
     setSelectedUser(user);
-    // };
   };
 
   return (
@@ -225,7 +143,6 @@ const AdDetails = props => {
             item.userId !== authUser.id && (
               <Button
                 onPress={handleEnterDraw}
-                // disabled={loading || !adDataChanged}
                 raised
                 text="Enter Draw"
                 icon="shop"
@@ -233,30 +150,11 @@ const AdDetails = props => {
             )
           }
         />
-
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View
-            style={{
-              // height: '45%',
-              display: 'flex',
-              flexDirection: 'row',
-              // justifyContent: 'center',
-              // alignItems: 'center',
-              // position: 'absolute',
-              // top: 0,
-              // left: 0,
-              // aspectRatio: 3 / 2,
-              // height: 'auto',
-            }}>
+          <View style={sharedStyles.flexRow}>
             <CachedImage
-              // cache="force-cache"
               source={{
                 uri: images[currentPhotoIndex],
-                // cache: 'force-cache',
-                // headers: {
-                //   Pragma: 'only-if-cached',
-                //   'Cache-Control': 'only-if-cached',
-                // },
               }}
               style={sharedStyles.adDetailsImage}
             />
@@ -264,7 +162,6 @@ const AdDetails = props => {
               <>
                 <Button
                   text=""
-                  // icon="white"
                   icon={
                     <Icon
                       size={50}
@@ -314,7 +211,6 @@ const AdDetails = props => {
                   : 'The Ad is not available'}
               </Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="local-atm" />
               <Text style={sharedStyles.userDetailsText}>Total Price</Text>
@@ -325,7 +221,6 @@ const AdDetails = props => {
                   sharedStyles.aboutFirstSectionText
                 }>{`${currency} ${price}`}</Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="credit-card" />
               <Text style={sharedStyles.userDetailsText}>Collected Price</Text>
@@ -336,7 +231,6 @@ const AdDetails = props => {
                   sharedStyles.aboutFirstSectionText
                 }>{`${currency} ${currentCollectedPrice || 0}`}</Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="monetization-on" />
               <Text style={sharedStyles.userDetailsText}>
@@ -349,7 +243,6 @@ const AdDetails = props => {
                   sharedStyles.aboutFirstSectionText
                 }>{`${currency} ${'1000'}`}</Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="group-add" />
               <Text style={sharedStyles.userDetailsText}>
@@ -358,11 +251,8 @@ const AdDetails = props => {
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               {usersDataLoading && SimpleLoader}
-
               {lotteryUsersData && (
                 <VirtualizedList
-                  // refreshing={usersDataLoading}
-                  // onRefresh={fetchUsersData}
                   horizontal={true}
                   showsVerticalScrollIndicator={false}
                   data={lotteryUsersData}
@@ -371,7 +261,6 @@ const AdDetails = props => {
                   contentContainerStyle={
                     sharedStyles.adDetailsUsersListContainer
                   }
-                  // numColumns={3}
                   keyExtractor={_user => _user.id}
                   renderItem={({item: _user}) => (
                     <AdDetailsUserListItem
@@ -382,7 +271,6 @@ const AdDetails = props => {
                 />
               )}
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="green" name="star" />
               <Text style={sharedStyles.userDetailsText}>Winner</Text>
@@ -396,7 +284,6 @@ const AdDetails = props => {
                 />
               }
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="dns" />
               <Text style={sharedStyles.userDetailsText}>Name</Text>
@@ -404,7 +291,6 @@ const AdDetails = props => {
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{name}</Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="description" />
               <Text style={sharedStyles.userDetailsText}>Description</Text>
@@ -414,7 +300,6 @@ const AdDetails = props => {
                 {description}
               </Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="exposure" />
               <Text style={sharedStyles.userDetailsText}>Status</Text>
@@ -422,7 +307,6 @@ const AdDetails = props => {
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{status}</Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="class" />
               <Text style={sharedStyles.userDetailsText}>Category</Text>
@@ -430,7 +314,6 @@ const AdDetails = props => {
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{category}</Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="today" />
               <Text style={sharedStyles.userDetailsText}>Publish Date</Text>
@@ -440,7 +323,6 @@ const AdDetails = props => {
                 {formatDate(publishDate)}
               </Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
               <Text style={sharedStyles.userDetailsText}>Location</Text>
@@ -450,7 +332,6 @@ const AdDetails = props => {
                 {`${prefecture}, ${country}`}
               </Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="person" />
               <Text style={sharedStyles.userDetailsText}>User</Text>
@@ -464,7 +345,6 @@ const AdDetails = props => {
                 />
               )}
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="fingerprint" />
               <Text style={sharedStyles.userDetailsText}>Ad ID</Text>
@@ -472,7 +352,6 @@ const AdDetails = props => {
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{id}</Text>
             </View>
-
             <Text>{cancelled}</Text>
             <Text>{cancelDate}</Text>
             {/* <Text>{lotteryUserIds}</Text> */}

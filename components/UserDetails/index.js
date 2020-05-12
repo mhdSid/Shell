@@ -25,7 +25,6 @@ const UserDetails = props => {
   const onModalDissmiss = () => {
     invoke(props, 'onClose');
   };
-
   const handleCloseModal = () => {
     setModalVisible(false);
   };
@@ -35,7 +34,6 @@ const UserDetails = props => {
       animationType="slide"
       transparent={false}
       visible={modalVisible}
-      // onShow={handleShowAd}
       onDismiss={onModalDissmiss}>
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
@@ -43,40 +41,12 @@ const UserDetails = props => {
           leftElement="arrow-back"
           onLeftElementPress={handleCloseModal}
           centerElement={`${firstName} ${lastName}`}
-          //   rightElement={
-          //     <Button
-          //       onPress={handleEnterDraw}
-          //       // disabled={loading || !adDataChanged}
-          //       raised
-          //       text="Enter Draw"
-          //       icon="shop"
-          //     />
-          //   }
         />
-
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View
-            style={{
-              // height: '45%',
-              display: 'flex',
-              flexDirection: 'row',
-              // justifyContent: 'center',
-              // alignItems: 'center',
-              // position: 'absolute',
-              // top: 0,
-              // left: 0,
-              // aspectRatio: 3 / 2,
-              // height: 'auto',
-            }}>
+          <View style={sharedStyles.flexRow}>
             <CachedImage
-              cache="force-cache"
               source={{
                 uri: image,
-                cache: 'force-cache',
-                // headers: {
-                //   Pragma: 'only-if-cached',
-                //   'Cache-Control': 'only-if-cached',
-                // },
               }}
               style={sharedStyles.adDetailsImage}
             />
@@ -91,7 +61,6 @@ const UserDetails = props => {
                 {`${firstName} ${lastName}`}
               </Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="email" />
               <Text style={sharedStyles.userDetailsText}>Email</Text>
@@ -99,7 +68,6 @@ const UserDetails = props => {
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{email}</Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
               <Text style={sharedStyles.userDetailsText}>Location</Text>
@@ -109,7 +77,6 @@ const UserDetails = props => {
                 {`${prefecture}, ${country}`}
               </Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
               <Text style={sharedStyles.userDetailsText}>Postal Code</Text>
@@ -119,7 +86,6 @@ const UserDetails = props => {
                 {postalCode}
               </Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
               <Text style={sharedStyles.userDetailsText}>City / Ward</Text>
@@ -127,7 +93,6 @@ const UserDetails = props => {
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{cityWard}</Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
               <Text style={sharedStyles.userDetailsText}>Full Address</Text>
@@ -137,7 +102,6 @@ const UserDetails = props => {
                 {fullAddress}
               </Text>
             </View>
-
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="fingerprint" />
               <Text style={sharedStyles.userDetailsText}>User ID</Text>
