@@ -49,6 +49,7 @@ import {
   // PublisherBanner,
   // AdMobRewarded,
 } from 'react-native-admob';
+import {profile, loginSingup, errors} from '../../Constants/Texts';
 
 const AuthComponent = props => {
   const {
@@ -82,14 +83,14 @@ const AuthComponent = props => {
   const [fullAddressChanged, setFullAddressChanged] = useState(false);
   const [cityWardChanged, setCityWardChanged] = useState(false);
   const [adId] = useState(1);
-  const [year, setYear] = useState('2020');
-  const [month, setMonth] = useState('April');
-  const [day, setDay] = useState('01');
-  const [gender, setGender] = useState('Male');
+  const [year, setYear] = useState(profile.initialYear);
+  const [month, setMonth] = useState(profile.initialMonth);
+  const [day, setDay] = useState(profile.initialDay);
+  const [gender, setGender] = useState(profile.male);
   const [country, setCountry] = useState(
     (user && user.country) ||
       (serverCountryCode && countryCodeList[serverCountryCode]) ||
-      'Japan',
+      profile.japan,
   );
   const [prefecture, setPrefecture] = useState(
     (user && user.country && prefecturesList[user.country]) ||
@@ -103,7 +104,7 @@ const AuthComponent = props => {
   const postalCodeRef = createRef();
   const cityWardRef = createRef();
   const fullAddressRef = createRef();
-  const text = 'Login / Signup';
+  const text = loginSingup;
   const mobileRegex = new RegExp(phoneNumbersRegexs[country]);
   const userEmailRegex = new RegExp(emailsRegex);
 
@@ -221,8 +222,7 @@ const AuthComponent = props => {
     setPasswordChanged(false);
   };
   const handleError = error => {
-    const message =
-      (error && error.message) || 'A an error has occured. Please try again.';
+    const message = (error && error.message) || errors.error;
     invoke(props, 'logout', {loggedIn: false, user: false});
     setLoggedIn(false);
     setLoading(false);
@@ -431,7 +431,7 @@ const AuthComponent = props => {
       prefecture: userPrefecture,
       country: userCountry,
     } = user;
-    return `${userGameStatus} • ${userGamePoints} Points - ${userPrefecture}, ${userCountry}`;
+    return `${userGameStatus} • ${userGamePoints} ${profile.points} - ${userPrefecture}, ${userCountry}`;
   };
 
   useEffect(() => {
@@ -485,9 +485,9 @@ const AuthComponent = props => {
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={sharedStyles.loginContainer}>
               <View style={sharedStyles.nameContainer}>
-                <Text style={sharedStyles.label}>First Name</Text>
+                <Text style={sharedStyles.label}>{profile.firstName}</Text>
                 <TextField
-                  label="First Name"
+                  label={profile.firstName}
                   tintColor={'#b69cf6'}
                   onChangeText={handleFirstNameChangeText}
                   ref={firstNameRef}
@@ -495,9 +495,9 @@ const AuthComponent = props => {
                 />
               </View>
               <View style={sharedStyles.nameContainer}>
-                <Text style={sharedStyles.label}>Last Name</Text>
+                <Text style={sharedStyles.label}>{profile.lastName}</Text>
                 <TextField
-                  label="Last Name"
+                  label={profile.lastName}
                   onChangeText={handleLastNameChangeText}
                   tintColor={'#b69cf6'}
                   ref={lastNameRef}
@@ -505,9 +505,9 @@ const AuthComponent = props => {
                 />
               </View>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>Phone Number</Text>
+                <Text style={sharedStyles.label}>{profile.phoneNumber}</Text>
                 <TextField
-                  label="Mobile"
+                  label={profile.mobile}
                   keyboardType="phone-pad"
                   tintColor={'#b69cf6'}
                   onChangeText={handleMobileChangeText}
@@ -516,25 +516,25 @@ const AuthComponent = props => {
                 />
               </View>
               <View style={sharedStyles.genderContainer}>
-                <Text style={sharedStyles.label}>Gender</Text>
+                <Text style={sharedStyles.label}>{profile.gender}</Text>
                 <View style={sharedStyles.genderView}>
                   <RadioButton
-                    label="Male"
-                    checked={gender === 'Male'}
-                    value="Male"
-                    onSelect={updateGender('Male')}
+                    label={profile.male}
+                    checked={gender === profile.male}
+                    value={profile.male}
+                    onSelect={updateGender(profile.male)}
                   />
                   <RadioButton
-                    label="Female"
-                    checked={gender === 'Female'}
-                    value="Female"
-                    onSelect={updateGender('Female')}
+                    label={profile.female}
+                    checked={gender === profile.female}
+                    value={profile.female}
+                    onSelect={updateGender(profile.female)}
                   />
                 </View>
               </View>
               <View style={sharedStyles.dobContainer}>
                 <Text style={[sharedStyles.dobLabel, sharedStyles.label]}>
-                  Date of birth
+                  {profile.dateOfBirth}
                 </Text>
                 <View style={sharedStyles.dobView}>
                   <Picker
@@ -566,7 +566,7 @@ const AuthComponent = props => {
                   </Picker>
                 </View>
               </View>
-              <Text style={sharedStyles.label}>Country</Text>
+              <Text style={sharedStyles.label}>{profile.country}</Text>
               <View style={sharedStyles.pickerView}>
                 <Picker
                   mode="dropdown"
@@ -582,9 +582,9 @@ const AuthComponent = props => {
                 </Picker>
               </View>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>Postal Code</Text>
+                <Text style={sharedStyles.label}>{profile.postalCode}</Text>
                 <TextField
-                  label="Postal Code"
+                  label={profile.postalCode}
                   keyboardType="phone-pad"
                   tintColor={'#b69cf6'}
                   onChangeText={handlePostalCodeChangeText}
@@ -592,7 +592,7 @@ const AuthComponent = props => {
                   disabled={loading}
                 />
               </View>
-              <Text style={sharedStyles.label}>Prefecture</Text>
+              <Text style={sharedStyles.label}>{profile.prefecture}</Text>
               <View style={sharedStyles.pickerView}>
                 <Picker
                   mode="dropdown"
@@ -608,9 +608,9 @@ const AuthComponent = props => {
                 </Picker>
               </View>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>City Ward</Text>
+                <Text style={sharedStyles.label}>{profile.cityWard}</Text>
                 <TextField
-                  label="City Ward"
+                  label={profile.cityWard}
                   tintColor={'#b69cf6'}
                   onChangeText={handleCityWardChangeText}
                   ref={cityWardRef}
@@ -618,9 +618,9 @@ const AuthComponent = props => {
                 />
               </View>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>Full Address</Text>
+                <Text style={sharedStyles.label}>{profile.fullAddress}</Text>
                 <TextField
-                  label="Full Address"
+                  label={profile.fullAddress}
                   tintColor={'#b69cf6'}
                   onChangeText={handleFullAddressChangeText}
                   ref={fullAddressRef}
@@ -628,15 +628,14 @@ const AuthComponent = props => {
                 />
               </View>
               <Text style={[sharedStyles.label, sharedStyles.signUpLabel]}>
-                Make sure to correctly fill all this required information as it
-                affects your selling/winning process!
+                {profile.fillInformationCorrectly}
               </Text>
               <View style={sharedStyles.loginBtn}>
                 <Button
                   disabled={loading || !userDataChanged}
                   raised={true}
                   primary
-                  text={'Sign up'}
+                  text={profile.signUp}
                   onPress={handleSignup}
                 />
               </View>
@@ -656,13 +655,13 @@ const AuthComponent = props => {
             <Button
               raised={true}
               primary
-              text={'Verify'}
+              text={profile.verify}
               onPress={handleVerifyUser}
               disabled={loading}
             />
           </View>
           <Text style={sharedStyles.verificationLabel}>
-            Please check your inbox in order to verify your email
+            {profile.checkYourInbox}
           </Text>
         </View>
       </View>
@@ -743,32 +742,40 @@ const AuthComponent = props => {
               items={[
                 {
                   icon: 'help',
-                  value: 'How To Use The App',
+                  value: profile.howToUseTheApp,
                   onPress: handleShowAbout,
                 },
                 {
                   icon: 'bookmark-border',
-                  value: 'Notifications',
+                  value: profile.notifications,
                   onPress: handleShowNotifications,
                 },
-                {icon: 'people', value: 'My Ads', onPress: handleShowMyAds},
+                {
+                  icon: 'people',
+                  value: profile.myAds,
+                  onPress: handleShowMyAds,
+                },
                 {
                   icon: 'grade',
-                  value: 'My Lotteries',
+                  value: profile.myLotteries,
                   onPress: handleShowMyLotteries,
                 },
               ]}
             />
             <Drawer.Section
-              title="Personal"
+              title={profile.personal}
               items={[
                 {
                   icon: 'settings',
-                  value: 'Settings',
+                  value: profile.settings,
                   onPress: handleShowSettings,
                 },
-                {icon: 'exit-to-app', value: 'Logout', onPress: handleLogout},
-                {icon: 'info', value: 'Info', onPress: handleShowAppInfo},
+                {
+                  icon: 'exit-to-app',
+                  value: profile.logout,
+                  onPress: handleLogout,
+                },
+                {icon: 'info', value: profile.info, onPress: handleShowAppInfo},
               ]}
             />
           </Drawer>
@@ -799,14 +806,14 @@ const AuthComponent = props => {
       {loading && loadingPopup}
       <View style={sharedStyles.loginContainer}>
         <TextField
-          label="Email"
+          label={profile.email}
           onChangeText={handleEmailChangeText}
           ref={emailRef}
           tintColor={'#b69cf6'}
           disabled={loading}
         />
         <TextField
-          label="Password"
+          label={profile.password}
           onChangeText={handlePasswordChangeText}
           ref={passwordRef}
           secureTextEntry={true}

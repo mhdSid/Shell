@@ -9,6 +9,7 @@ import {getMyLotteries} from '../../services/Ads';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import AdDetails from '../AdDetails';
 import {Loading} from '../Loading';
+import {myyLotteries, errors} from '../../Constants/Texts';
 
 const MyLotteries = props => {
   const {user} = props;
@@ -26,8 +27,7 @@ const MyLotteries = props => {
     invoke(props, 'onClose');
   };
   const handleError = error => {
-    const message =
-      (error && error.message) || 'A an error has occured. Please try again.';
+    const message = (error && error.message) || errors.error;
     setLoading(false);
     if (message) {
       Alert.alert(message);
@@ -71,7 +71,7 @@ const MyLotteries = props => {
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}
           leftElement="arrow-back"
-          centerElement="My Lotteries"
+          centerElement={myyLotteries.myLotteries}
           onLeftElementPress={handleCloseModal}
         />
         {loading && Loading}

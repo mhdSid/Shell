@@ -31,14 +31,15 @@ import {
   rootUpdateCurrentAdToStore,
   rootAddAdToStore,
 } from '../Pinger';
+import {importAd, errors} from '../../Constants/Texts';
 
 const ImportAd = props => {
   const {loggedIn: _loggedIn, user: authUser} = props;
   const userCountry = authUser && authUser.country;
   const [loggedIn, setLoggedIn] = useState(_loggedIn);
   const [user, setUser] = useState(authUser);
-  const [adCategory, setAdCategory] = useState('Sports');
-  const [adStatus, setAdStatus] = useState('No Noticable Scratches or Dirt');
+  const [adCategory, setAdCategory] = useState(importAd.sports);
+  const [adStatus, setAdStatus] = useState(importAd.noNoticableScratches);
   const [images, setImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [prefecture, setPrefecture] = useState(
@@ -88,8 +89,7 @@ const ImportAd = props => {
     setPriceChanged(false);
   };
   const handleError = error => {
-    const message =
-      (error && error.message) || 'A an error has occured. Please try again.';
+    const message = (error && error.message) || errors.error;
     if (message) {
       Alert.alert(message);
     }
@@ -233,14 +233,14 @@ const ImportAd = props => {
             style={{
               container: sharedStyles.toolbarContainerPadding,
             }}
-            centerElement="Post an Ad"
+            centerElement={importAd.postAnAd}
             leftElement={<Icon color="white" name="add-box" />}
             rightElement={
               <Button
                 onPress={handleUploadAd}
                 disabled={!adDataChanged}
                 raised
-                text="Post"
+                text={importAd.post}
                 icon="done-all"
               />
             }
@@ -252,30 +252,30 @@ const ImportAd = props => {
                 sharedStyles.importAdContainer,
               ]}>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>Product Name</Text>
+                <Text style={sharedStyles.label}>{importAd.productName}</Text>
                 <TextField
-                  label="Ad Name"
+                  label={importAd.adName}
                   onChangeText={handleAdNameChangeText}
                   tintColor={'#b69cf6'}
                   ref={adNameRef}
                 />
               </View>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>Description</Text>
+                <Text style={sharedStyles.label}>{importAd.description}</Text>
                 <TextField
-                  label="Description"
+                  label={importAd.description}
                   onChangeText={handleDescriptionChangeText}
                   tintColor={'#b69cf6'}
                   ref={descriptionRef}
                 />
               </View>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>Price</Text>
+                <Text style={sharedStyles.label}>{importAd.price}</Text>
                 <View style={sharedStyles.priceContainer}>
                   <Text style={sharedStyles.currenyLabel}>{userCurrency}</Text>
                   <View style={sharedStyles.adPriceTextfieldContainer}>
                     <TextField
-                      label="Price"
+                      label={importAd.price}
                       keyboardType="phone-pad"
                       tintColor={'#b69cf6'}
                       onChangeText={handlePriceChangeText}
@@ -285,7 +285,7 @@ const ImportAd = props => {
                 </View>
               </View>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>Images</Text>
+                <Text style={sharedStyles.label}>{importAd.images}</Text>
                 <View style={sharedStyles.imageBtnContainer}>
                   {adImages.map(index => (
                     <TouchableBounce
@@ -305,7 +305,7 @@ const ImportAd = props => {
                   ))}
                 </View>
               </View>
-              <Text style={sharedStyles.label}>Prefecture</Text>
+              <Text style={sharedStyles.label}>{importAd.prefecture}</Text>
               <View style={sharedStyles.pickerView}>
                 <Picker
                   mode="dropdown"
@@ -320,7 +320,7 @@ const ImportAd = props => {
                   ))}
                 </Picker>
               </View>
-              <Text style={sharedStyles.label}>Category</Text>
+              <Text style={sharedStyles.label}>{importAd.category}</Text>
               <View style={sharedStyles.pickerView}>
                 <Picker
                   mode="dropdown"
@@ -335,7 +335,7 @@ const ImportAd = props => {
                   ))}
                 </Picker>
               </View>
-              <Text style={sharedStyles.label}>Status</Text>
+              <Text style={sharedStyles.label}>{importAd.status}</Text>
               <View style={sharedStyles.pickerView}>
                 <Picker
                   mode="dropdown"
@@ -351,7 +351,7 @@ const ImportAd = props => {
                   disabled={!adDataChanged}
                   raised={true}
                   primary
-                  text={'Post'}
+                  text={importAd.post}
                   onPress={handleUploadAd}
                 />
               </View>

@@ -4,8 +4,8 @@ import {Modal, SafeAreaView, ScrollView, View} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
-
 import {loadingPopup} from '../Loading';
+import {notifications} from '../../Constants/Texts';
 
 const Notifications = props => {
   const [modalVisible, setModalVisible] = useState(true);
@@ -28,7 +28,7 @@ const Notifications = props => {
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}
           leftElement="arrow-back"
-          centerElement="Notifications"
+          centerElement={notifications.notifications}
           onLeftElementPress={handleCloseModal}
         />
         {loading && loadingPopup}

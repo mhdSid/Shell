@@ -7,6 +7,7 @@ import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import {Loading} from '../Loading';
 import UserDetails from '../UserDetails';
 import {rootHandleShowAdsDetails} from '../Pinger';
+import {searchh, errors} from '../../Constants/Texts';
 
 const SearchComponent = () => {
   const [searchQuery, setSearchQuery] = useState();
@@ -16,8 +17,7 @@ const SearchComponent = () => {
   const [selectedItem, setSelectedItem] = useState();
 
   const onSearchError = error => {
-    const message =
-      (error && error.message) || 'A an error has occured. Please try again.';
+    const message = (error && error.message) || errors.error;
     setLoading(false);
     if (message) {
       Alert.alert(message);
@@ -79,10 +79,10 @@ const SearchComponent = () => {
     <View style={sharedStyles.fullheightView}>
       <Toolbar
         style={{container: sharedStyles.toolbarContainer}}
-        centerElement="Search"
+        centerElement={searchh.search}
         searchable={{
           autoFocus: true,
-          placeholder: 'Search',
+          placeholder: searchh.search,
           onSubmitEditing: handleSearch,
           onChangeText: onSearchChangeText,
         }}

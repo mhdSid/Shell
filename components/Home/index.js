@@ -18,6 +18,7 @@ import {
 import {rootHandleShowAdsDetails} from '../Pinger';
 import {CarouselComponent} from '../Carousel';
 import CardListItem from './CardListItem';
+import {home} from '../../Constants/Texts';
 
 const HomeComponent = props => {
   const {ads: _ads} = props;
@@ -103,7 +104,7 @@ const HomeComponent = props => {
     <View style={sharedStyles.fullheightView}>
       <Toolbar
         style={{container: sharedStyles.toolbarContainer}}
-        centerElement="Shell"
+        centerElement={home.appName}
         rightElement={
           isCard ? 'view-list' : isList ? 'view-carousel' : 'view-comfy'
         }

@@ -25,6 +25,7 @@ import {
 import {update} from '../../services/Auth';
 import {loadingPopup} from '../Loading';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
+import {errors, updateUserr} from '../../Constants/Texts';
 
 const UpdateUser = props => {
   const {user} = props;
@@ -123,8 +124,7 @@ const UpdateUser = props => {
     setCityWardChanged(false);
   };
   const onUpdateUserError = error => {
-    const message =
-      (error && error.message) || 'A an error has occured. Please try again.';
+    const message = (error && error.message) || errors.error;
     setDefaultsDataChanged();
     if (message) {
       Alert.alert(message);
@@ -268,7 +268,7 @@ const UpdateUser = props => {
               onPress={handleUpdateUser}
               disabled={loading || !userDataChanged}
               raised
-              text="Save"
+              text={updateUserr.save}
               icon="done-all"
             />
           }
@@ -309,9 +309,9 @@ const UpdateUser = props => {
                 </View>
               </View>
               <View style={sharedStyles.nameContainer}>
-                <Text style={sharedStyles.label}>First Name</Text>
+                <Text style={sharedStyles.label}>{updateUserr.firstName}</Text>
                 <TextField
-                  label="First Name"
+                  label={updateUserr.firstName}
                   value={user.firstName}
                   tintColor={'#b69cf6'}
                   onChangeText={handleFirstNameChangeText}
@@ -320,9 +320,9 @@ const UpdateUser = props => {
                 />
               </View>
               <View style={sharedStyles.nameContainer}>
-                <Text style={sharedStyles.label}>Last Name</Text>
+                <Text style={sharedStyles.label}>{updateUserr.lastName}</Text>
                 <TextField
-                  label="Last Name"
+                  label={updateUserr.lastName}
                   value={user.lastName}
                   tintColor={'#b69cf6'}
                   onChangeText={handleLastNameChangeText}
@@ -331,9 +331,11 @@ const UpdateUser = props => {
                 />
               </View>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>Phone Number</Text>
+                <Text style={sharedStyles.label}>
+                  {updateUserr.phoneNumber}
+                </Text>
                 <TextField
-                  label="Mobile"
+                  label={updateUserr.mobile}
                   keyboardType="phone-pad"
                   value={user.mobile}
                   tintColor={'#b69cf6'}
@@ -342,7 +344,7 @@ const UpdateUser = props => {
                   disabled={loading}
                 />
               </View>
-              <Text style={sharedStyles.label}>Country</Text>
+              <Text style={sharedStyles.label}>{updateUserr.country}</Text>
               <View style={sharedStyles.pickerView}>
                 <Picker
                   mode="dropdown"
@@ -358,9 +360,9 @@ const UpdateUser = props => {
                 </Picker>
               </View>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>Postal Code</Text>
+                <Text style={sharedStyles.label}>{updateUserr.postalCode}</Text>
                 <TextField
-                  label="Postal Code"
+                  label={updateUserr.postalCode}
                   keyboardType="phone-pad"
                   value={user.postalCode}
                   tintColor={'#b69cf6'}
@@ -371,7 +373,9 @@ const UpdateUser = props => {
               </View>
               {prefecture && (
                 <>
-                  <Text style={sharedStyles.label}>Prefecture</Text>
+                  <Text style={sharedStyles.label}>
+                    {updateUserr.prefecture}
+                  </Text>
                   <View style={sharedStyles.pickerView}>
                     <Picker
                       mode="dropdown"
@@ -389,9 +393,9 @@ const UpdateUser = props => {
                 </>
               )}
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>City Ward</Text>
+                <Text style={sharedStyles.label}>{updateUserr.cityWard}</Text>
                 <TextField
-                  label="City Ward"
+                  label={updateUserr.cityWard}
                   value={user.cityWard}
                   tintColor={'#b69cf6'}
                   onChangeText={handleCityWardChangeText}
@@ -400,9 +404,11 @@ const UpdateUser = props => {
                 />
               </View>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>Full Address</Text>
+                <Text style={sharedStyles.label}>
+                  {updateUserr.fullAddress}
+                </Text>
                 <TextField
-                  label="Full Address"
+                  label={updateUserr.fullAddress}
                   value={user.fullAddress}
                   tintColor={'#b69cf6'}
                   onChangeText={handleFullAddressChangeText}
@@ -415,7 +421,7 @@ const UpdateUser = props => {
                   disabled={loading || !userDataChanged}
                   raised={true}
                   primary
-                  text={'Confirm'}
+                  text={updateUserr.confirm}
                   onPress={handleUpdateUser}
                 />
               </View>

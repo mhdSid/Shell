@@ -7,6 +7,7 @@ import isUndefined from 'lodash/isUndefined';
 import {Loading, loadingPopup} from '../Loading';
 import PropTypes from 'prop-types';
 import {Toolbar} from 'react-native-material-ui';
+import {lottteries} from '../../Constants/Texts';
 
 const Lotteries = props => {
   const {loggedIn: _loggedIn, user: authUser, lotteries} = props;
@@ -31,11 +32,11 @@ const Lotteries = props => {
     <View style={sharedStyles.fullheightView}>
       <Toolbar
         style={{container: sharedStyles.toolbarContainer}}
-        centerElement="Lotteries"
+        centerElement={lottteries.lotteries}
       />
       <View style={sharedStyles.innerContainer}>
         {loading && loadingPopup}
-        <Text>{!lotteries && 'No Lotteries available'}</Text>
+        <Text>{!lotteries && lottteries.emptyLotteries}</Text>
       </View>
     </View>
   );

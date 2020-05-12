@@ -4,6 +4,7 @@ import {Modal, SafeAreaView, ScrollView, View, Text} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, IconToggle, Icon} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
+import {about} from '../../Constants/Texts';
 
 const About = props => {
   const [modalVisible, setModalVisible] = useState(true);
@@ -28,13 +29,13 @@ const About = props => {
           leftElement={
             <IconToggle onPress={handleCloseModal} name="arrow-back" />
           }
-          centerElement="How To Guide"
+          centerElement={about.howTo}
         />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={sharedStyles.aboutContainer}>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="white" name="store" />
-              <Text style={sharedStyles.aboutIconText}>Sell</Text>
+              <Text style={sharedStyles.aboutIconText}>{about.sell}</Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text
@@ -42,91 +43,88 @@ const About = props => {
                   sharedStyles.aboutFirstSectionText,
                   sharedStyles.aboutFirstSectionTextMargin,
                 ]}>
-                Are you having problems selling any item you can think about?
+                {about.howToUseFirst}
               </Text>
               <Text
                 style={[
                   sharedStyles.aboutFirstSectionText,
                   sharedStyles.aboutFirstSectionTextMargin,
                 ]}>
-                Do you want to make money if you have something that you don't
-                use?
+                {about.howToUseSecond}
               </Text>
               <Text
                 style={[
                   sharedStyles.aboutFirstSectionText,
                   sharedStyles.aboutFirstSectionTextMargin,
                 ]}>
-                It's not about selling anymore!
+                {about.howToUseThird}
               </Text>
               <Text
                 style={[
                   sharedStyles.aboutFirstSectionText,
                   sharedStyles.aboutFirstSectionTextMargin,
                 ]}>
-                Post an Ad about anything!
+                {about.howToUseFourth}
               </Text>
               <Text
                 style={[
                   sharedStyles.aboutFirstSectionText,
                   sharedStyles.aboutFirstSectionTextMargin,
                 ]}>
-                Users pay a fee to enter a Lottery to have a chance to win the
-                item in your Ad.
+                {about.howToUseFifth}
               </Text>
               <Text
                 style={[
                   sharedStyles.aboutFirstSectionText,
                   sharedStyles.aboutFirstSectionTextMargin,
                 ]}>
-                Once the total amount is collected, our system starts a Lottery
-                and a random user wins the item in your Ad.
+                {about.howToUseSixth}
               </Text>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                The winner takes the item and you take the collected cash which
-                is the price that you initially entered.
+                {about.howToUseSeventh}
               </Text>
             </View>
             <View style={sharedStyles.aboutSeparatorSection}>
-              <Text style={sharedStyles.aboutSeparatorSectionText}>Or</Text>
+              <Text style={sharedStyles.aboutSeparatorSectionText}>
+                {about.or}
+              </Text>
             </View>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="white" name="explore" />
-              <Text style={sharedStyles.aboutIconText}>Browse</Text>
+              <Text style={sharedStyles.aboutIconText}>{about.browse}</Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                Browser through a wide variety of uploaded Ads!
+                {about.howtoUseEigtth}
               </Text>
             </View>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="white" name="remove-red-eye" />
-              <Text style={sharedStyles.aboutIconText}>Choose</Text>
+              <Text style={sharedStyles.aboutIconText}>{about.choose}</Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                Make sure you choose any item you love. It can be a Smart Phone,
-                a Laptop, a Car, a House, or anything you can think about.
+                {about.howToUseNineth}
               </Text>
             </View>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="white" name="receipt" />
-              <Text style={sharedStyles.aboutIconText}>Enter Lottery</Text>
+              <Text style={sharedStyles.aboutIconText}>
+                {about.enterLottery}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                Pay a fee of 1,000 Japanese Yen and enter a lottery to have a
-                chance to win any item of your choice.
+                {about.howToUseTenth}
               </Text>
             </View>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="white" name="star" />
-              <Text style={sharedStyles.aboutIconText}>Win</Text>
+              <Text style={sharedStyles.aboutIconText}>{about.win}</Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                Once the total price of your chosen item has been collected, the
-                lottery will start and a radom user will win the item.
+                {about.howToUseEleventh}
               </Text>
             </View>
           </View>

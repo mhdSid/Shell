@@ -7,6 +7,7 @@ import {Toolbar, Drawer, Icon} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {setLang} from '../../redux/Settings/actions';
 import {Flag} from 'react-native-svg-flagkit';
+import {settings} from '../../Constants/Texts';
 
 const Settings = props => {
   const {lang} = props;
@@ -39,11 +40,11 @@ const Settings = props => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <Drawer>
             <Drawer.Section
-              title="Settings"
+              title={settings.settings}
               items={[
                 {
                   icon: 'language',
-                  value: 'Language',
+                  value: settings.language,
                 },
               ]}
             />
@@ -54,16 +55,18 @@ const Settings = props => {
               }}
               items={[
                 {
-                  key: 'US',
-                  icon: <Flag id={'US'} width={30} height={30} />,
+                  key: settings.en,
+                  icon: <Flag id={settings.en} width={30} height={30} />,
                   value:
-                    lang === 'US' ? (
+                    lang === settings.en ? (
                       <View
                         style={[
                           sharedStyles.flexRow,
                           sharedStyles.textAlignVertical,
                         ]}>
-                        <Text style={sharedStyles.appText}>English</Text>
+                        <Text style={sharedStyles.appText}>
+                          {settings.english}
+                        </Text>
                         <Icon
                           style={sharedStyles.langChecked}
                           color="green"
@@ -72,17 +75,19 @@ const Settings = props => {
                         />
                       </View>
                     ) : (
-                      'English'
+                      settings.english
                     ),
-                  onPress: handleSetLanguage('US'),
+                  onPress: handleSetLanguage(settings.en),
                 },
                 {
-                  key: 'JP',
-                  icon: <Flag id={'JP'} width={30} height={30} />,
+                  key: settings.jp,
+                  icon: <Flag id={settings.jp} width={30} height={30} />,
                   value:
-                    lang === 'JP' ? (
+                    lang === settings.jp ? (
                       <View style={sharedStyles.flexRow}>
-                        <Text style={sharedStyles.appText}>Japanese</Text>
+                        <Text style={sharedStyles.appText}>
+                          {settings.japanese}
+                        </Text>
                         <Icon
                           style={sharedStyles.langChecked}
                           color="green"
@@ -91,9 +96,9 @@ const Settings = props => {
                         />
                       </View>
                     ) : (
-                      'Japanese'
+                      settings.japanese
                     ),
-                  onPress: handleSetLanguage('JP'),
+                  onPress: handleSetLanguage(settings.jp),
                 },
               ]}
             />

@@ -20,6 +20,7 @@ import {getUsersData} from '../../services/Auth';
 import {SimpleLoader} from '../Loading';
 import formatDate from '../../lib/CachedImage/formatDate';
 import AdDetailsUserListItem from './AdDetailsUserListItem.js';
+import {errors, adDetails} from '../../Constants/Texts';
 
 const myActions = ['share', 'favorite', 'cancel', 'delete'];
 const defaultActions = ['share', 'favorite', 'shop'];
@@ -81,8 +82,7 @@ const AdDetails = props => {
     Alert.alert('handleEnterDraw');
   };
   const handleError = error => {
-    const message =
-      (error && error.message) || 'A an error has occured. Please try again.';
+    const message = (error && error.message) || errors.error;
     setUsersDataLoading(false);
     if (message) {
       Alert.alert(message);
@@ -146,7 +146,7 @@ const AdDetails = props => {
               <Button
                 onPress={handleEnterDraw}
                 raised
-                text="Enter Draw"
+                text={adDetails.enterDraw}
                 icon="shop"
               />
             )
@@ -204,18 +204,20 @@ const AdDetails = props => {
                 color={available ? 'green' : 'red'}
                 name={available ? 'verified-user' : 'close'}
               />
-              <Text style={sharedStyles.userDetailsText}>Availabality</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {adDetails.availability}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {available
-                  ? 'The Ad is currently available'
-                  : 'The Ad is not available'}
+                {available ? adDetails.adAvailable : adDetails.adNotAvailable}
               </Text>
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="local-atm" />
-              <Text style={sharedStyles.userDetailsText}>Total Price</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {adDetails.totalPrice}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text
@@ -225,7 +227,9 @@ const AdDetails = props => {
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="credit-card" />
-              <Text style={sharedStyles.userDetailsText}>Collected Price</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {adDetails.collectedPrice}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text
@@ -236,19 +240,19 @@ const AdDetails = props => {
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="monetization-on" />
               <Text style={sharedStyles.userDetailsText}>
-                Pay To Win The Item In The Lottery
+                {adDetails.payToWin}
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text
                 style={
                   sharedStyles.aboutFirstSectionText
-                }>{`${currency} ${'1000'}`}</Text>
+                }>{`${currency} ${'555'}`}</Text>
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="group-add" />
               <Text style={sharedStyles.userDetailsText}>
-                Current lottery users
+                {adDetails.currentLotteryUsers}
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -275,7 +279,9 @@ const AdDetails = props => {
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="green" name="star" />
-              <Text style={sharedStyles.userDetailsText}>Winner</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {adDetails.winner}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               {usersDataLoading && SimpleLoader}
@@ -288,14 +294,16 @@ const AdDetails = props => {
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="dns" />
-              <Text style={sharedStyles.userDetailsText}>Name</Text>
+              <Text style={sharedStyles.userDetailsText}>{adDetails.name}</Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{name}</Text>
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="description" />
-              <Text style={sharedStyles.userDetailsText}>Description</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {adDetails.description}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
@@ -304,21 +312,27 @@ const AdDetails = props => {
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="exposure" />
-              <Text style={sharedStyles.userDetailsText}>Status</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {adDetails.status}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{status}</Text>
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="class" />
-              <Text style={sharedStyles.userDetailsText}>Category</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {adDetails.category}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{category}</Text>
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="today" />
-              <Text style={sharedStyles.userDetailsText}>Publish Date</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {adDetails.publishDate}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
@@ -327,7 +341,9 @@ const AdDetails = props => {
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
-              <Text style={sharedStyles.userDetailsText}>Location</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {adDetails.location}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
@@ -336,7 +352,7 @@ const AdDetails = props => {
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="person" />
-              <Text style={sharedStyles.userDetailsText}>User</Text>
+              <Text style={sharedStyles.userDetailsText}>{adDetails.user}</Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               {usersDataLoading && SimpleLoader}
@@ -349,7 +365,7 @@ const AdDetails = props => {
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="fingerprint" />
-              <Text style={sharedStyles.userDetailsText}>Ad ID</Text>
+              <Text style={sharedStyles.userDetailsText}>{adDetails.adId}</Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{id}</Text>

@@ -3,6 +3,7 @@ import {View, Text} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Button} from 'react-native-material-ui';
 import {navigate} from '../MainContainer';
+import {noAuth, loginSingup} from '../../Constants/Texts';
 
 const NoAuth = () => {
   const navigateToAuth = () => {
@@ -16,13 +17,13 @@ const NoAuth = () => {
         sharedStyles.importAdNoAuthContainer,
       ]}>
       <Text style={[sharedStyles.label, sharedStyles.noAuthLabel]}>
-        Please login or signup to add a new item
+        {noAuth.loginSingup}
       </Text>
       <View style={sharedStyles.loginBtn}>
         <Button
           raised={true}
           primary
-          text={'Login/Signup'}
+          text={loginSingup}
           onPress={navigateToAuth}
         />
       </View>

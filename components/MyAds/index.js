@@ -9,6 +9,7 @@ import {getMyAds} from '../../services/Ads';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import AdDetails from '../AdDetails';
 import {Loading} from '../Loading';
+import {errors, myyAds} from '../../Constants/Texts';
 
 const MyAds = props => {
   const {user} = props;
@@ -26,8 +27,7 @@ const MyAds = props => {
     invoke(props, 'onClose');
   };
   const handleError = error => {
-    const message =
-      (error && error.message) || 'A an error has occured. Please try again.';
+    const message = (error && error.message) || errors.error;
     setLoading(false);
     if (message) {
       Alert.alert(message);
@@ -70,7 +70,7 @@ const MyAds = props => {
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}
           leftElement="arrow-back"
-          centerElement="My Ads"
+          centerElement={myyAds.myAds}
           onLeftElementPress={handleCloseModal}
         />
         {loading && Loading}

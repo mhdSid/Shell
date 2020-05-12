@@ -5,6 +5,7 @@ import {Toolbar, Icon} from 'react-native-material-ui';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
+import {userDetails} from '../../Constants/Texts';
 
 const UserDetails = props => {
   const {item} = props;
@@ -54,7 +55,9 @@ const UserDetails = props => {
           <View style={sharedStyles.adDetailsContainer}>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="person" />
-              <Text style={sharedStyles.userDetailsText}>Name</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {userDetails.name}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
@@ -63,14 +66,18 @@ const UserDetails = props => {
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="email" />
-              <Text style={sharedStyles.userDetailsText}>Email</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {userDetails.email}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{email}</Text>
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
-              <Text style={sharedStyles.userDetailsText}>Location</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {userDetails.location}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
@@ -79,7 +86,9 @@ const UserDetails = props => {
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
-              <Text style={sharedStyles.userDetailsText}>Postal Code</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {userDetails.postalCode}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
@@ -88,14 +97,18 @@ const UserDetails = props => {
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
-              <Text style={sharedStyles.userDetailsText}>City / Ward</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {userDetails.cityWard}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{cityWard}</Text>
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
-              <Text style={sharedStyles.userDetailsText}>Full Address</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {userDetails.fullAddress}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
@@ -104,7 +117,9 @@ const UserDetails = props => {
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="fingerprint" />
-              <Text style={sharedStyles.userDetailsText}>User ID</Text>
+              <Text style={sharedStyles.userDetailsText}>
+                {userDetails.userId}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{id}</Text>
