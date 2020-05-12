@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Toolbar, ListItem} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {View, Alert, VirtualizedList} from 'react-native';
-import {search} from '../../services/auth';
+import {search} from '../../services/Auth';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import {Loading} from '../Loading';
 import UserDetails from '../UserDetails';

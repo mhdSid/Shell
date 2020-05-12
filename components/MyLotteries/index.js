@@ -5,7 +5,7 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, ListItem} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 
-import {getMyLotteries} from '../../services/ads';
+import {getMyLotteries} from '../../services/Ads';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import AdDetails from '../AdDetails';
 import {Loading} from '../Loading';

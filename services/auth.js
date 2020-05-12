@@ -1,4 +1,4 @@
-import {request} from './request';
+import {request} from './Request';
 
 const login = async props => {
   const {email, password} = props;

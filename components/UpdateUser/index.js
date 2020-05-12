@@ -22,7 +22,7 @@ import {
   prefectures,
   countries,
 } from '../../Constants/Countries';
-import {update} from '../../services/auth';
+import {update} from '../../services/Auth';
 import {loadingPopup} from '../Loading';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 

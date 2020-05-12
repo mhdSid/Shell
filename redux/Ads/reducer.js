@@ -10,7 +10,6 @@ const adsReducer = (state = initialState, action) => {
     case adActions.importAd: {
       let {ads} = state;
       const newSet = new Set();
-
       if (Array.isArray(action.payload)) {
         ENTRIES1.forEach(item => {
           newSet.add(item);
@@ -27,14 +26,11 @@ const adsReducer = (state = initialState, action) => {
         });
         newSet.add(action.payload);
       }
-
       ads = Array.from(newSet);
-
       return {
         ads,
       };
     }
-
     case adActions.updateCurrentAd: {
       let {ads} = state;
       const ad = action.payload;
@@ -54,7 +50,6 @@ const adsReducer = (state = initialState, action) => {
       }
       break;
     }
-
     default: {
       return {
         ...initialState,

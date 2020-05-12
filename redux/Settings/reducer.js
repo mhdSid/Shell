@@ -12,7 +12,6 @@ const settingsReducer = (state = initialState, action) => {
         lang: action.payload,
       };
     }
-
     default: {
       return (
         state || {

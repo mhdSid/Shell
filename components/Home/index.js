@@ -4,7 +4,7 @@ import {View, Alert, VirtualizedList} from 'react-native';
 import {connect} from 'react-redux';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
-import {getAds} from '../../services/ads';
+import {getAds} from '../../services/Ads';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Loading} from '../Loading';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
@@ -156,10 +156,8 @@ const HomeComponent = props => {
                 item.images && item.images[0] ? (
                   <CachedImage
                     style={sharedStyles.homeListItemImage}
-                    cache="force-cache"
                     source={{
                       uri: item.images[0],
-                      cache: 'force-cache',
                     }}
                   />
                 ) : null

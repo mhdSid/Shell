@@ -14,7 +14,6 @@ const authReducer = (state = initialState, action) => {
         ...action.payload,
       };
     }
-
     case authActions.UPDATE: {
       const user = {
         ...state.user,
@@ -25,14 +24,12 @@ const authReducer = (state = initialState, action) => {
         user,
       };
     }
-
     case authActions.LOGOUT: {
       return {
         ...initialState,
         ...action.payload,
       };
     }
-
     default: {
       return (
         state || {

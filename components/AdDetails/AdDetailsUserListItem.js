@@ -20,10 +20,8 @@ const AdDetailsUserListItem = props => {
       onPress={handlePress}>
       {user.image ? (
         <CachedImage
-          cache="force-cache"
           source={{
             uri: user.image,
-            cache: 'force-cache',
           }}
           style={sharedStyles.adDetailsUsersListItemImage}
         />

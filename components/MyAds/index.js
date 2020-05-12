@@ -5,7 +5,7 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, ListItem} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 
-import {getMyAds} from '../../services/ads';
+import {getMyAds} from '../../services/Ads';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import AdDetails from '../AdDetails';
 import {Loading} from '../Loading';
@@ -92,7 +92,6 @@ const MyAds = props => {
                       style={sharedStyles.homeListItemImage}
                       source={{
                         uri: item.images[0],
-                        cache: 'force-cache',
                       }}
                     />
                   ) : null

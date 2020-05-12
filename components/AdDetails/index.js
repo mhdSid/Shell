@@ -16,10 +16,10 @@ import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import UserDetails from '../UserDetails';
-import {getUsersData} from '../../services/auth';
+import {getUsersData} from '../../services/Auth';
 import {SimpleLoader} from '../Loading';
 import formatDate from '../../lib/CachedImage/formatDate';
-import AdDetailsUserListItem from './AdDetailsUserListItem';
+import AdDetailsUserListItem from './AdDetailsUserListItem.js';
 
 const myActions = ['share', 'favorite', 'cancel', 'delete'];
 const defaultActions = ['share', 'favorite', 'shop'];

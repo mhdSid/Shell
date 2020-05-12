@@ -1,4 +1,4 @@
-import {request} from './request';
+import {request} from './Request';
 
 const getAds = async () => {
   const data = await request({

@@ -29,9 +29,8 @@ export default class CardListItem extends PureComponent {
         style={sharedStyles.homeCardItem}
         onPress={this.handleItemPress}>
         <CachedImage
-          cache="force-cache"
           style={sharedStyles.homeCardItemImage}
-          source={{uri: item.images[0], cache: 'force-cache'}}
+          source={{uri: item.images[0]}}
         />
         <View style={sharedStyles.homeCardItemTextContainer}>
           <Text

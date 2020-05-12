@@ -18,7 +18,7 @@ import {
   Avatar,
   Icon,
 } from 'react-native-material-ui';
-import {login, logout, verify, signup} from '../../services/auth';
+import {login, logout, verify, signup} from '../../services/Auth';
 import {
   loginAction,
   logoutAction,

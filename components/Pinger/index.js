@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import invoke from 'lodash/invoke';
 import {connect} from 'react-redux';
-import {ping} from '../../services/auth';
+import {ping} from '../../services/Auth';
 import {loginAction, logoutAction} from '../../redux/Auth/actions';
 import {Alert} from 'react-native';
-import {updateAd, importAd} from '../../services/ads';
+import {updateAd, importAd} from '../../services/Ads';
 import AdDetails from '../AdDetails';
 import {addAd, updateCurrentAd} from '../../redux/Ads/actions';
 import PropTypes from 'prop-types';
