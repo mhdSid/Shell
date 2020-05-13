@@ -1,55 +1,30 @@
 import React, {createRef, useState, useEffect} from 'react';
 import invoke from 'lodash/invoke';
-import {
-  View,
-  Picker,
-  ScrollView,
-  Text,
-  Alert,
-  KeyboardAvoidingView,
-} from 'react-native';
+import {Alert} from 'react-native';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {TextField} from 'react-native-material-textfield';
-import {
-  Button,
-  RadioButton,
-  Drawer,
-  Avatar,
-  Icon,
-} from 'react-native-material-ui';
 import {login, logout, verify, signup} from '../../services/Auth';
 import {
   loginAction,
   logoutAction,
   updateAction,
 } from '../../redux/Auth/actions';
-import sharedStyles from '../../assets/styles/sharedStyles';
-import {
-  countries,
-  prefectures,
-  prefecturesList,
-  countryCodeList,
-} from '../../Constants/Countries';
-import {months, days, years, monthsNumbers} from '../../Constants/Dates';
+import {prefecturesList, countryCodeList} from '../../Constants/Countries';
+import {monthsNumbers} from '../../Constants/Dates';
 import isUndefined from 'lodash/isUndefined';
-import Settings from '../Settings';
-import UpdateUser from '../UpdateUser';
-import Notifications from '../Notifications';
-import MyAds from '../MyAds';
-import MyLotteries from '../MyLotteries';
-import AppInfo from '../AppInfo';
 import {phoneNumbersRegexs, emailsRegex} from '../../Constants/Regexes';
-import {loadingPopup, Loading} from '../Loading';
-import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
-import About from '../About';
+import {Loading} from '../Loading';
 import {
   // AdMobBanner,
   AdMobInterstitial,
   // PublisherBanner,
   // AdMobRewarded,
 } from 'react-native-admob';
-import {profile, loginSingup, errors} from '../../Constants/Texts';
+import {profile, errors} from '../../Constants/Texts';
+import Login from './Login';
+import UserProfile from './UserProfile';
+import VerifyUser from './VerifyUser';
+import SignUp from './SignUp';
 
 const AuthComponent = props => {
   const {
@@ -64,16 +39,9 @@ const AuthComponent = props => {
   const [loading, setLoading] = useState(false);
   const [verificationId, setVerificationId] = useState(undefined);
   const [showSignup, setShowSignup] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [showAbout, setShowAbout] = useState(false);
-  const [showMyAds, setShowMyAds] = useState(false);
-  const [showMyLotteries, setShowMyLotteries] = useState(false);
-  const [showAppInfo, setShowAppInfo] = useState(false);
   const [emailPassChanged, setEmailPassChanged] = useState(false);
   const [emailChanged, setEmailChanged] = useState(false);
   const [passwordChanged, setPasswordChanged] = useState(false);
-  const [showUpdateUser, setShowUpdateUser] = useState(false);
   const [userDataChanged, setUserDataChanged] = useState(false);
   const [dobChanged, setDobChanged] = useState(false);
   const [firstNameChanged, setFirsNameChanged] = useState(false);
@@ -104,31 +72,9 @@ const AuthComponent = props => {
   const postalCodeRef = createRef();
   const cityWardRef = createRef();
   const fullAddressRef = createRef();
-  const text = loginSingup;
   const mobileRegex = new RegExp(phoneNumbersRegexs[country]);
   const userEmailRegex = new RegExp(emailsRegex);
 
-  const onSettingsClose = () => {
-    setShowSettings(false);
-  };
-  const onNotificationsClose = () => {
-    setShowNotifications(false);
-  };
-  const onMyAdsClose = () => {
-    setShowMyAds(false);
-  };
-  const onAboutClose = () => {
-    setShowAbout(false);
-  };
-  const onMyLotteriesClose = () => {
-    setShowMyLotteries(false);
-  };
-  const onAppInfoClose = () => {
-    setShowAppInfo(false);
-  };
-  const onUpdateUserClose = () => {
-    setShowUpdateUser(false);
-  };
   const updateCountry = value => {
     setCountry(value);
     setPrefecture(prefecturesList[value]);
@@ -403,36 +349,6 @@ const AuthComponent = props => {
     setLoading(true);
     logout().then(onLogoutSuccess, handleError);
   };
-  const handleShowSettings = () => {
-    setShowSettings(true);
-  };
-  const handleShowUpdateUser = () => {
-    setShowUpdateUser(true);
-  };
-  const handleShowNotifications = () => {
-    setShowNotifications(true);
-  };
-  const handleShowAbout = () => {
-    setShowAbout(true);
-  };
-  const handleShowMyAds = () => {
-    setShowMyAds(true);
-  };
-  const handleShowMyLotteries = () => {
-    setShowMyLotteries(true);
-  };
-  const handleShowAppInfo = () => {
-    setShowAppInfo(true);
-  };
-  const getUserProfileText = () => {
-    const {
-      gameStatus: userGameStatus,
-      gamePoints: userGamePoints,
-      prefecture: userPrefecture,
-      country: userCountry,
-    } = user;
-    return `${userGameStatus} • ${userGamePoints} ${profile.points} - ${userPrefecture}, ${userCountry}`;
-  };
 
   useEffect(() => {
     if (loggedIn && user) {
@@ -476,361 +392,63 @@ const AuthComponent = props => {
 
   if (showSignup === true && verificationId) {
     return (
-      <View style={sharedStyles.fullheightView}>
-        {loading && loadingPopup}
-        <KeyboardAvoidingView
-          behavior="padding"
-          enabled
-          keyboardVerticalOffset={25}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={sharedStyles.loginContainer}>
-              <View style={sharedStyles.nameContainer}>
-                <Text style={sharedStyles.label}>{profile.firstName}</Text>
-                <TextField
-                  label={profile.firstName}
-                  tintColor={'#b69cf6'}
-                  onChangeText={handleFirstNameChangeText}
-                  ref={firstNameRef}
-                  disabled={loading}
-                />
-              </View>
-              <View style={sharedStyles.nameContainer}>
-                <Text style={sharedStyles.label}>{profile.lastName}</Text>
-                <TextField
-                  label={profile.lastName}
-                  onChangeText={handleLastNameChangeText}
-                  tintColor={'#b69cf6'}
-                  ref={lastNameRef}
-                  disabled={loading}
-                />
-              </View>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>{profile.phoneNumber}</Text>
-                <TextField
-                  label={profile.mobile}
-                  keyboardType="phone-pad"
-                  tintColor={'#b69cf6'}
-                  onChangeText={handleMobileChangeText}
-                  ref={mobileRef}
-                  disabled={loading}
-                />
-              </View>
-              <View style={sharedStyles.genderContainer}>
-                <Text style={sharedStyles.label}>{profile.gender}</Text>
-                <View style={sharedStyles.genderView}>
-                  <RadioButton
-                    label={profile.male}
-                    checked={gender === profile.male}
-                    value={profile.male}
-                    onSelect={updateGender(profile.male)}
-                  />
-                  <RadioButton
-                    label={profile.female}
-                    checked={gender === profile.female}
-                    value={profile.female}
-                    onSelect={updateGender(profile.female)}
-                  />
-                </View>
-              </View>
-              <View style={sharedStyles.dobContainer}>
-                <Text style={[sharedStyles.dobLabel, sharedStyles.label]}>
-                  {profile.dateOfBirth}
-                </Text>
-                <View style={sharedStyles.dobView}>
-                  <Picker
-                    mode="dropdown"
-                    selectedValue={month}
-                    style={sharedStyles.dobViewItem}
-                    onValueChange={updateMonth}>
-                    {months.map((_month, index) => (
-                      <Picker.Item key={index} label={_month} value={_month} />
-                    ))}
-                  </Picker>
-                  <Picker
-                    mode="dropdown"
-                    selectedValue={day}
-                    style={sharedStyles.dobViewItem}
-                    onValueChange={updateDay}>
-                    {days.map((_day, index) => (
-                      <Picker.Item key={index} label={_day} value={_day} />
-                    ))}
-                  </Picker>
-                  <Picker
-                    mode="dropdown"
-                    selectedValue={year}
-                    style={sharedStyles.dobViewItem}
-                    onValueChange={updateYear}>
-                    {years.map((_year, index) => (
-                      <Picker.Item key={index} label={_year} value={_year} />
-                    ))}
-                  </Picker>
-                </View>
-              </View>
-              <Text style={sharedStyles.label}>{profile.country}</Text>
-              <View style={sharedStyles.pickerView}>
-                <Picker
-                  mode="dropdown"
-                  selectedValue={country}
-                  onValueChange={updateCountry}>
-                  {countries.map((_country, index) => (
-                    <Picker.Item
-                      key={index}
-                      label={_country}
-                      value={_country}
-                    />
-                  ))}
-                </Picker>
-              </View>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>{profile.postalCode}</Text>
-                <TextField
-                  label={profile.postalCode}
-                  keyboardType="phone-pad"
-                  tintColor={'#b69cf6'}
-                  onChangeText={handlePostalCodeChangeText}
-                  ref={postalCodeRef}
-                  disabled={loading}
-                />
-              </View>
-              <Text style={sharedStyles.label}>{profile.prefecture}</Text>
-              <View style={sharedStyles.pickerView}>
-                <Picker
-                  mode="dropdown"
-                  selectedValue={prefecture}
-                  onValueChange={updatePrefecture}>
-                  {prefectures[country].map((_prefecture, index) => (
-                    <Picker.Item
-                      key={index}
-                      label={_prefecture}
-                      value={_prefecture}
-                    />
-                  ))}
-                </Picker>
-              </View>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>{profile.cityWard}</Text>
-                <TextField
-                  label={profile.cityWard}
-                  tintColor={'#b69cf6'}
-                  onChangeText={handleCityWardChangeText}
-                  ref={cityWardRef}
-                  disabled={loading}
-                />
-              </View>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>{profile.fullAddress}</Text>
-                <TextField
-                  label={profile.fullAddress}
-                  tintColor={'#b69cf6'}
-                  onChangeText={handleFullAddressChangeText}
-                  ref={fullAddressRef}
-                  disabled={loading}
-                />
-              </View>
-              <Text style={[sharedStyles.label, sharedStyles.signUpLabel]}>
-                {profile.fillInformationCorrectly}
-              </Text>
-              <View style={sharedStyles.loginBtn}>
-                <Button
-                  disabled={loading || !userDataChanged}
-                  raised={true}
-                  primary
-                  text={profile.signUp}
-                  onPress={handleSignup}
-                />
-              </View>
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </View>
+      <SignUp
+        loading={loading}
+        handleFirstNameChangeText={handleFirstNameChangeText}
+        firstNameRef={firstNameRef}
+        handleLastNameChangeText={handleLastNameChangeText}
+        lastNameRef={lastNameRef}
+        handleMobileChangeText={handleMobileChangeText}
+        mobileRef={mobileRef}
+        gender={gender}
+        updateGender={updateGender}
+        month={month}
+        updateMonth={updateMonth}
+        handleSignup={handleSignup}
+        userDataChanged={userDataChanged}
+        fullAddressRef={fullAddressRef}
+        day={day}
+        handleFullAddressChangeText={handleFullAddressChangeText}
+        cityWardRef={cityWardRef}
+        handleCityWardChangeText={handleCityWardChangeText}
+        updateDay={updateDay}
+        year={year}
+        updateYear={updateYear}
+        country={country}
+        updateCountry={updateCountry}
+        handlePostalCodeChangeText={handlePostalCodeChangeText}
+        postalCodeRef={postalCodeRef}
+        prefecture={prefecture}
+        updatePrefecture={updatePrefecture}
+      />
     );
   }
 
   if (verificationId) {
-    return (
-      <View style={sharedStyles.fullheightView}>
-        {loading && loadingPopup}
-        <View style={sharedStyles.loginContainer}>
-          <View style={sharedStyles.loginBtn}>
-            <Button
-              raised={true}
-              primary
-              text={profile.verify}
-              onPress={handleVerifyUser}
-              disabled={loading}
-            />
-          </View>
-          <Text style={sharedStyles.verificationLabel}>
-            {profile.checkYourInbox}
-          </Text>
-        </View>
-      </View>
-    );
+    return <VerifyUser loading={loading} handleVerifyUser={handleVerifyUser} />;
   }
 
   if (loggedIn && user) {
     return (
-      <View style={sharedStyles.fullheightView}>
-        {loading && loadingPopup}
-        <View style={sharedStyles.loggedInContainer}>
-          <Drawer>
-            <Drawer.Header
-              image={
-                user.image && (
-                  <CachedImage
-                    blurRadius={15}
-                    source={{uri: user.image}}
-                    style={sharedStyles.profileBlurredImage}>
-                    <View style={sharedStyles.profileBlur} />
-                  </CachedImage>
-                )
-              }
-              style={{
-                contentContainer: sharedStyles.profileHeaderContentContainer,
-              }}>
-              <Drawer.Header.Account
-                style={{
-                  container: sharedStyles.profileHeaderContainer,
-                  avatarsContainer: sharedStyles.profileAvatarContainer,
-                }}
-                avatar={
-                  <Avatar
-                    image={
-                      user.image ? (
-                        <CachedImage
-                          style={sharedStyles.profileImage}
-                          source={{uri: user.image}}
-                        />
-                      ) : (
-                        <Icon name="image" />
-                      )
-                    }
-                  />
-                }
-                footer={{
-                  dense: true,
-                  centerElement: {
-                    primaryText: (
-                      <Text style={sharedStyles.profileUserText}>
-                        {`${user.firstName} ${user.lastName}`}
-                      </Text>
-                    ),
-                    secondaryText: (
-                      <Text style={sharedStyles.profileUserText}>
-                        {getUserProfileText()}
-                      </Text>
-                    ),
-                    tertiaryText: (
-                      <Text style={sharedStyles.profileUserText}>
-                        {user.id}
-                      </Text>
-                    ),
-                  },
-                  rightElement: (
-                    <Button
-                      onPress={handleShowUpdateUser}
-                      icon="edit"
-                      text=""
-                      primary
-                    />
-                  ),
-                }}
-              />
-            </Drawer.Header>
-            <Drawer.Section
-              divider
-              items={[
-                {
-                  icon: 'help',
-                  value: profile.howToUseTheApp,
-                  onPress: handleShowAbout,
-                },
-                {
-                  icon: 'bookmark-border',
-                  value: profile.notifications,
-                  onPress: handleShowNotifications,
-                },
-                {
-                  icon: 'people',
-                  value: profile.myAds,
-                  onPress: handleShowMyAds,
-                },
-                {
-                  icon: 'grade',
-                  value: profile.myLotteries,
-                  onPress: handleShowMyLotteries,
-                },
-              ]}
-            />
-            <Drawer.Section
-              title={profile.personal}
-              items={[
-                {
-                  icon: 'settings',
-                  value: profile.settings,
-                  onPress: handleShowSettings,
-                },
-                {
-                  icon: 'exit-to-app',
-                  value: profile.logout,
-                  onPress: handleLogout,
-                },
-                {icon: 'info', value: profile.info, onPress: handleShowAppInfo},
-              ]}
-            />
-          </Drawer>
-          {showSettings && <Settings onClose={onSettingsClose} />}
-          {showNotifications && (
-            <Notifications onClose={onNotificationsClose} />
-          )}
-          {showMyAds && <MyAds onClose={onMyAdsClose} user={user} />}
-          {showAbout && <About onClose={onAboutClose} />}
-          {showMyLotteries && (
-            <MyLotteries onClose={onMyLotteriesClose} user={user} />
-          )}
-          {showAppInfo && <AppInfo onClose={onAppInfoClose} />}
-          {showUpdateUser && (
-            <UpdateUser
-              onClose={onUpdateUserClose}
-              user={user}
-              updateUserAction={updateUserAction}
-            />
-          )}
-        </View>
-      </View>
+      <UserProfile
+        loading={loading}
+        user={user}
+        handleLogout={handleLogout}
+        updateUserAction={updateUserAction}
+      />
     );
   }
 
   return (
-    <View style={sharedStyles.fullheightView}>
-      {loading && loadingPopup}
-      <View style={sharedStyles.loginContainer}>
-        <TextField
-          label={profile.email}
-          onChangeText={handleEmailChangeText}
-          ref={emailRef}
-          tintColor={'#b69cf6'}
-          disabled={loading}
-        />
-        <TextField
-          label={profile.password}
-          onChangeText={handlePasswordChangeText}
-          ref={passwordRef}
-          secureTextEntry={true}
-          disabled={loading}
-          tintColor={'#b69cf6'}
-        />
-        <View style={sharedStyles.loginBtn}>
-          <Button
-            disabled={loading || !emailPassChanged}
-            raised={true}
-            primary
-            text={text}
-            onPress={handleSubmit}
-          />
-        </View>
-      </View>
-    </View>
+    <Login
+      loading={loading}
+      handleEmailChangeText={handleEmailChangeText}
+      emailRef={emailRef}
+      handlePasswordChangeText={handlePasswordChangeText}
+      passwordRef={passwordRef}
+      emailPassChanged={emailPassChanged}
+      handleSubmit={handleSubmit}
+    />
   );
 };
 

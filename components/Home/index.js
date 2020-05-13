@@ -18,7 +18,9 @@ import {
 import {rootHandleShowAdsDetails} from '../Pinger';
 import {CarouselComponent} from '../Carousel';
 import CardListItem from './CardListItem';
-import {home} from '../../Constants/Texts';
+import {home, errors} from '../../Constants/Texts';
+
+let unMounted = false;
 
 const HomeComponent = props => {
   const {ads: _ads} = props;
@@ -28,11 +30,9 @@ const HomeComponent = props => {
   const [isCard, setIsCard] = useState(true);
   const [loading, setLoading] = useState(true);
   const [fetchId] = useState(0);
-  let unMounted = false;
 
   const handleError = error => {
-    const message =
-      (error && error.message) || 'A an error has occured. Please try again.';
+    const message = (error && error.message) || errors.error;
     if (message) {
       Alert.alert(message);
     }
@@ -77,28 +77,27 @@ const HomeComponent = props => {
   };
 
   useEffect(() => {
-    if (Array.isArray(ads) && ads.length > 0) {
+    unMounted = false;
+    if (Array.isArray(_ads)) {
+      setLoading(true);
+      setAds(_ads);
+    }
+    if (Array.isArray(ads)) {
       setLoading(false);
     }
-  }, [ads]);
+    return () => {
+      unMounted = true;
+    };
+  }, [ads, _ads]);
 
   useEffect(() => {
+    unMounted = false;
     setLoading(true);
     fetchAds();
     return () => {
       unMounted = true;
     };
   }, [fetchId]);
-
-  useEffect(() => {
-    if (Array.isArray(_ads) && _ads.length > 0) {
-      setLoading(true);
-      setAds(_ads);
-    }
-    return () => {
-      unMounted = true;
-    };
-  }, [_ads]);
 
   return (
     <View style={sharedStyles.fullheightView}>
