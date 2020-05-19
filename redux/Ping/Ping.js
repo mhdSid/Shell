@@ -18,17 +18,16 @@ const handlePing = payload => {
       const {error, user: authUser, country} = data;
       if (error) {
         return onPingError({error, country});
-      } else {
-        return dispatch({
-          type: authActions.LOGIN,
-          payload: {
-            loggedIn: true,
-            user: authUser,
-            sessionID: authUser.sessionID,
-            country,
-          },
-        });
       }
+      return dispatch({
+        type: authActions.LOGIN,
+        payload: {
+          loggedIn: true,
+          user: authUser,
+          sessionID: authUser.sessionID,
+          country,
+        },
+      });
     };
     return ping().then(onPingSuccess, error => {
       return onPingError({error});

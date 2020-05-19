@@ -240,7 +240,7 @@ const AdDetails = props => {
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               {usersDataLoading && SimpleLoader}
-              {lotteryUsersData && (
+              {!usersDataLoading && lotteryUsersData && (
                 <VirtualizedList
                   horizontal={true}
                   showsVerticalScrollIndicator={false}
@@ -268,12 +268,12 @@ const AdDetails = props => {
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               {usersDataLoading && SimpleLoader}
-              {
+              {!usersDataLoading && winnerUserData && (
                 <AdDetailsUserListItem
                   user={winnerUserData}
                   onPress={winnerUserData && handleUserPress}
                 />
-              }
+              )}
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="dns" />
@@ -339,7 +339,7 @@ const AdDetails = props => {
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               {usersDataLoading && SimpleLoader}
-              {adPosterData && (
+              {!usersDataLoading && adPosterData && (
                 <AdDetailsUserListItem
                   user={adPosterData}
                   onPress={handleUserPress}

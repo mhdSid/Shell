@@ -19,11 +19,8 @@ import {home} from '../../Constants/Texts';
 import {handleFetchAds} from '../../redux/Ads/FetchAds';
 import {showAdDetails} from '../../redux/AdDetails/actions';
 
-// let unMounted = false;
-
 const HomeComponent = props => {
   const {ads} = props;
-  // const [ads, setAds] = useState(_ads);
   const [isList, setIsList] = useState(false);
   const [isCarousel, setIsCarousel] = useState(false);
   const [isCard, setIsCard] = useState(true);

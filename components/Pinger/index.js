@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import invoke from 'lodash/invoke';
 import {connect} from 'react-redux';
 import AdDetails from '../AdDetails';
@@ -8,15 +8,12 @@ import {showAdDetails} from '../../redux/AdDetails/actions';
 
 const Pinger = props => {
   const {adDetails} = props;
-  const [fetchId] = useState(0);
 
   const onAdsDetailsClose = () => {
     invoke(props, 'showAdDetails', undefined);
   };
 
-  useEffect(() => {
-    invoke(props, 'handlePing');
-  }, [fetchId]);
+  invoke(props, 'handlePing');
 
   if (adDetails) {
     return <AdDetails onClose={onAdsDetailsClose} item={adDetails} />;

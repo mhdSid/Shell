@@ -6,7 +6,6 @@ import {searchActions} from './actions';
 const handleSearch = payload => {
   return dispatch => {
     const {searchQuery, onError} = payload;
-
     const onSeachSuccess = data => {
       const {error, searchData: searchResults} = data;
       if (error) {
@@ -36,7 +35,6 @@ const handleSearch = payload => {
         payload: newSearchResults,
       });
     };
-
     return search({searchQuery}).then(onSeachSuccess, error => {
       return handleError({error, onError});
     });

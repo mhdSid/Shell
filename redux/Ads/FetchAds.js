@@ -6,14 +6,12 @@ const handleFetchAds = payload => {
   return dispatch => {
     const {onError} = payload;
     const onGetAdsSuccess = data => {
-      // if (!unMounted) {
       invoke(payload, 'onSuccess');
       const {error, ads: serverAds} = data;
       if (error) {
         return handleError({error, onError});
       }
       return dispatch({type: adActions.IMPORTAD, payload: serverAds});
-      // }
     };
     return getAds().then(onGetAdsSuccess, error => {
       return handleError({error, onError});
