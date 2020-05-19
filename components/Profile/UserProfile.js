@@ -13,9 +13,13 @@ import AppInfo from '../AppInfo';
 import {loadingPopup} from '../Loading';
 import {profile} from '../../Constants/Texts';
 import PropTypes from 'prop-types';
+import invoke from 'lodash/invoke';
+import {connect} from 'react-redux';
+import {logoutAction} from '../../redux/Auth/actions';
+import {handleLogout} from '../../redux/Auth/Logout';
 
 const UserProfile = props => {
-  const {loading, user, handleLogout, updateUserAction} = props;
+  const {user} = props;
   const [showUpdateUser, setShowUpdateUser] = useState(false);
   const [showAppInfo, setShowAppInfo] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -23,6 +27,18 @@ const UserProfile = props => {
   const [showAbout, setShowAbout] = useState(false);
   const [showMyAds, setShowMyAds] = useState(false);
   const [showMyLotteries, setShowMyLotteries] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const callback = () => {
+    setLoading(false);
+  };
+  const handleLogoutPress = () => {
+    setLoading(true);
+    invoke(props, 'handleLogout', {
+      onError: callback,
+      onSuccess: callback,
+    });
+  };
   const onUpdateUserClose = () => {
     setShowUpdateUser(false);
   };
@@ -72,7 +88,8 @@ const UserProfile = props => {
       prefecture: userPrefecture,
       country: userCountry,
     } = user;
-    return `${userGameStatus} • ${userGamePoints} ${profile.points} - ${userPrefecture}, ${userCountry}`;
+    const {points} = profile;
+    return `${userGameStatus} • ${userGamePoints} ${points} - ${userPrefecture}, ${userCountry}`;
   };
 
   return (
@@ -177,7 +194,7 @@ const UserProfile = props => {
               {
                 icon: 'exit-to-app',
                 value: profile.logout,
-                onPress: handleLogout,
+                onPress: handleLogoutPress,
               },
               {icon: 'info', value: profile.info, onPress: handleShowAppInfo},
             ]}
@@ -185,29 +202,33 @@ const UserProfile = props => {
         </Drawer>
         {showSettings && <Settings onClose={onSettingsClose} />}
         {showNotifications && <Notifications onClose={onNotificationsClose} />}
-        {showMyAds && <MyAds onClose={onMyAdsClose} user={user} />}
+        {showMyAds && <MyAds onClose={onMyAdsClose} />}
         {showAbout && <About onClose={onAboutClose} />}
-        {showMyLotteries && (
-          <MyLotteries onClose={onMyLotteriesClose} user={user} />
-        )}
+        {showMyLotteries && <MyLotteries onClose={onMyLotteriesClose} />}
         {showAppInfo && <AppInfo onClose={onAppInfoClose} />}
-        {showUpdateUser && (
-          <UpdateUser
-            onClose={onUpdateUserClose}
-            user={user}
-            updateUserAction={updateUserAction}
-          />
-        )}
+        {showUpdateUser && <UpdateUser onClose={onUpdateUserClose} />}
       </View>
     </View>
   );
 };
 
 UserProfile.propTypes = {
-  loading: PropTypes.bool,
   user: PropTypes.object,
-  handleLogout: PropTypes.func,
-  updateUserAction: PropTypes.func,
+  logout: PropTypes.func,
 };
 
-export default UserProfile;
+const mapStateToProps = ({authReducer}) => {
+  return {
+    user: authReducer.user,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: payload => dispatch(logoutAction(payload)),
+    handleLogout: payload => dispatch(handleLogout(payload)),
+  };
+};
+
+// eslint-disable-next-line prettier/prettier
+export default connect(mapStateToProps, mapDispatchToProps)(UserProfile);

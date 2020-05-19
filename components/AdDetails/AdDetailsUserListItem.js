@@ -4,7 +4,7 @@ import TouchableBounce from 'react-native/Libraries/Components/Touchable/Touchab
 import PropTypes from 'prop-types';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {Text} from 'react-native';
+import {Text, View} from 'react-native';
 import {Icon} from 'react-native-material-ui';
 
 const AdDetailsUserListItem = props => {
@@ -14,29 +14,36 @@ const AdDetailsUserListItem = props => {
     invoke(props, 'onPress', user);
   };
 
+  if (user) {
+    return (
+      <TouchableBounce
+        style={sharedStyles.adDetailsUsersListItemContainer}
+        onPress={handlePress}>
+        {user.image ? (
+          <CachedImage
+            source={{
+              uri: user.image,
+            }}
+            style={sharedStyles.adDetailsUsersListItemImage}
+          />
+        ) : (
+          <Icon name="face" size={40} />
+        )}
+        {(user.firstName || user.lastName) && (
+          <Text
+            numberOfLines={1}
+            ellipsizeMode={'tail'}
+            style={sharedStyles.adDetailsUsersListItemText}>
+            {`${user.firstName} ${user.lastName}`}
+          </Text>
+        )}
+      </TouchableBounce>
+    );
+  }
   return (
-    <TouchableBounce
-      style={sharedStyles.adDetailsUsersListItemContainer}
-      onPress={handlePress}>
-      {user.image ? (
-        <CachedImage
-          source={{
-            uri: user.image,
-          }}
-          style={sharedStyles.adDetailsUsersListItemImage}
-        />
-      ) : (
-        <Icon name="face" size={40} />
-      )}
-      {(user.firstName || user.lastName) && (
-        <Text
-          numberOfLines={1}
-          ellipsizeMode={'tail'}
-          style={sharedStyles.adDetailsUsersListItemText}>
-          {`${user.firstName} ${user.lastName}`}
-        </Text>
-      )}
-    </TouchableBounce>
+    <View style={sharedStyles.adDetailsUsersListItemContainer}>
+      <Icon name="face" size={40} />
+    </View>
   );
 };
 

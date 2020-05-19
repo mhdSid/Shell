@@ -1,13 +1,34 @@
-import React from 'react';
+import React, {useState} from 'react';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {loadingPopup} from '../Loading';
 import {Button} from 'react-native-material-ui';
 import {Text, View} from 'react-native';
 import {profile} from '../../Constants/Texts';
 import PropTypes from 'prop-types';
+import invoke from 'lodash/invoke';
+import {connect} from 'react-redux';
+import {logoutAction, loginAction} from '../../redux/Auth/actions';
+import {handleVerifyUser} from '../../redux/Auth/VerifyUser';
 
 const VerifyUser = props => {
-  const {loading, handleVerifyUser} = props;
+  const {email, password, verificationId} = props;
+  const [loading, setLoading] = useState(false);
+
+  const callback = () => {
+    setLoading(false);
+  };
+  const handleVerifyUserPress = () => {
+    if (email && password && verificationId) {
+      setLoading(true);
+      invoke(props, 'handleVerifyUser', {
+        onSuccess: callback,
+        onError: callback,
+        email,
+        password,
+        verificationId,
+      });
+    }
+  };
 
   return (
     <View style={sharedStyles.fullheightView}>
@@ -18,7 +39,7 @@ const VerifyUser = props => {
             raised={true}
             primary
             text={profile.verify}
-            onPress={handleVerifyUser}
+            onPress={handleVerifyUserPress}
             disabled={loading}
           />
         </View>
@@ -31,8 +52,28 @@ const VerifyUser = props => {
 };
 
 VerifyUser.propTypes = {
-  loading: PropTypes.bool,
-  handleVerifyUser: PropTypes.func,
+  email: PropTypes.string,
+  password: PropTypes.string,
+  verificationId: PropTypes.oneOfType([PropTypes.string, PropTypes.any]),
+  logout: PropTypes.func,
+  login: PropTypes.func,
 };
 
-export default VerifyUser;
+const mapStateToProps = ({authReducer}) => {
+  return {
+    email: authReducer.email,
+    password: authReducer.password,
+    verificationId: authReducer.verificationId,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: payload => dispatch(logoutAction(payload)),
+    login: payload => dispatch(loginAction(payload)),
+    handleVerifyUser: payload => dispatch(handleVerifyUser(payload)),
+  };
+};
+
+// eslint-disable-next-line prettier/prettier
+export default connect(mapStateToProps, mapDispatchToProps)(VerifyUser);

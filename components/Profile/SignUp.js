@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, createRef, useEffect} from 'react';
 import {
   View,
   Picker,
@@ -14,37 +14,203 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {countries, prefectures} from '../../Constants/Countries';
 import {months, days, years} from '../../Constants/Dates';
 import PropTypes from 'prop-types';
+import {phoneNumbersRegexs} from '../../Constants/Regexes';
+import {prefecturesList, countryCodeList} from '../../Constants/Countries';
+import {monthsNumbers} from '../../Constants/Dates';
+import invoke from 'lodash/invoke';
+import {loginAction, logoutAction} from '../../redux/Auth/actions';
+import {connect} from 'react-redux';
+import {handleSignUp} from '../../redux/Auth/SignUp';
 
 const SignUp = props => {
   const {
-    loading,
-    userDataChanged,
-    gender,
-    month,
-    day,
-    year,
-    country,
-    prefecture,
-    firstNameRef,
-    lastNameRef,
-    mobileRef,
-    fullAddressRef,
-    cityWardRef,
-    postalCodeRef,
-    handleLastNameChangeText,
-    handleFirstNameChangeText,
-    handleMobileChangeText,
-    handleFullAddressChangeText,
-    handleCityWardChangeText,
-    handlePostalCodeChangeText,
-    updateGender,
-    updateCountry,
-    updateDay,
-    updateMonth,
-    handleSignup,
-    updatePrefecture,
-    updateYear,
+    email,
+    password,
+    verificationId,
+    user,
+    country: serverCountryCode,
   } = props;
+  const [loading, setLoading] = useState(false);
+  const [userDataChanged, setUserDataChanged] = useState(false);
+  const [dobChanged, setDobChanged] = useState(false);
+  const [firstNameChanged, setFirsNameChanged] = useState(false);
+  const [lastNameChanged, setLastNameChanged] = useState(false);
+  const [mobileChanged, setMobileChanged] = useState(false);
+  const [postalCodeChanged, setPostalCodeChanged] = useState(false);
+  const [fullAddressChanged, setFullAddressChanged] = useState(false);
+  const [cityWardChanged, setCityWardChanged] = useState(false);
+  const [year, setYear] = useState(profile.initialYear);
+  const [month, setMonth] = useState(profile.initialMonth);
+  const [day, setDay] = useState(profile.initialDay);
+  const [gender, setGender] = useState(profile.male);
+  const [country, setCountry] = useState(
+    (user && user.country) ||
+      (serverCountryCode && countryCodeList[serverCountryCode]) ||
+      profile.japan,
+  );
+  const [prefecture, setPrefecture] = useState(
+    (user && user.country && prefecturesList[user.country]) ||
+      prefecturesList[countryCodeList[serverCountryCode]],
+  );
+  const mobileRegex = new RegExp(phoneNumbersRegexs[country]);
+
+  const mobileRef = createRef();
+  const firstNameRef = createRef();
+  const lastNameRef = createRef();
+  const postalCodeRef = createRef();
+  const cityWardRef = createRef();
+  const fullAddressRef = createRef();
+
+  const updateCountry = value => {
+    setCountry(value);
+    setPrefecture(prefecturesList[value]);
+  };
+  const updatePrefecture = value => {
+    setPrefecture(value);
+  };
+
+  const updateGender = value => {
+    return () => {
+      setGender(value);
+    };
+  };
+  const updateYear = value => {
+    setYear(value);
+    setDobChanged(true);
+  };
+  const updateMonth = value => {
+    setMonth(value);
+    setDobChanged(true);
+  };
+  const updateDay = value => {
+    setDay(value);
+    setDobChanged(true);
+  };
+  const handleMobileChangeText = value => {
+    if (value && value.match(mobileRegex)) {
+      setMobileChanged(true);
+    } else {
+      setMobileChanged(false);
+    }
+  };
+  const handlePostalCodeChangeText = value => {
+    if (value && value.length > 1) {
+      setPostalCodeChanged(true);
+    } else {
+      setPostalCodeChanged(false);
+    }
+  };
+  const handleFullAddressChangeText = value => {
+    if (value && value.length > 3) {
+      setFullAddressChanged(true);
+    } else {
+      setFullAddressChanged(false);
+    }
+  };
+  const handleCityWardChangeText = value => {
+    if (value && value.length > 2) {
+      setCityWardChanged(true);
+    } else {
+      setCityWardChanged(false);
+    }
+  };
+  const handleFirstNameChangeText = value => {
+    if (value && value.length > 1) {
+      setFirsNameChanged(true);
+    } else {
+      setFirsNameChanged(false);
+    }
+  };
+  const handleLastNameChangeText = value => {
+    if (value && value.length > 1) {
+      setLastNameChanged(true);
+    } else {
+      setLastNameChanged(false);
+    }
+  };
+  const setDefaultsDataChanged = () => {
+    setUserDataChanged(false);
+    setDobChanged(false);
+    setFirsNameChanged(false);
+    setLastNameChanged(false);
+    setMobileChanged(false);
+    setPostalCodeChanged(false);
+    setFullAddressChanged(false);
+    setCityWardChanged(false);
+  };
+  const callback = () => {
+    setLoading(false);
+    setDefaultsDataChanged();
+  };
+  const handleSignupPress = () => {
+    const {current: firstNameField} = firstNameRef;
+    const {current: lastNameField} = lastNameRef;
+    const {current: mobileField} = mobileRef;
+    const {current: postalCodeField} = postalCodeRef;
+    const {current: fullAddressField} = fullAddressRef;
+    const {current: cityWardField} = cityWardRef;
+    const firstName = firstNameField.value();
+    const lastName = lastNameField.value();
+    const mobile = mobileField.value();
+    const postalCode = postalCodeField.value();
+    const fullAddress = fullAddressField.value();
+    const cityWard = cityWardField.value();
+    if (
+      email &&
+      password &&
+      mobile &&
+      verificationId &&
+      prefecture &&
+      country &&
+      postalCode &&
+      firstName &&
+      lastName &&
+      fullAddress &&
+      cityWard
+    ) {
+      const newUser = {
+        email,
+        password,
+        verificationId,
+        dob: new Date(`${year}/${monthsNumbers[month]}/${day}`),
+        gender,
+        mobile,
+        country,
+        prefecture,
+        firstName,
+        lastName,
+        postalCode,
+        fullAddress,
+        cityWard,
+      };
+      setLoading(true);
+      invoke(props, 'handleSignup', {
+        newUser,
+        onSuccess: callback,
+        onError: callback,
+      });
+    }
+  };
+
+  useEffect(() => {
+    setUserDataChanged(
+      dobChanged &&
+        firstNameChanged &&
+        lastNameChanged &&
+        mobileChanged &&
+        postalCodeChanged &&
+        fullAddressChanged &&
+        cityWardChanged,
+    );
+  }, [
+    dobChanged,
+    firstNameChanged,
+    lastNameChanged,
+    mobileChanged,
+    postalCodeChanged,
+    fullAddressChanged,
+    cityWardChanged,
+  ]);
 
   return (
     <View style={sharedStyles.fullheightView}>
@@ -203,7 +369,7 @@ const SignUp = props => {
                 raised={true}
                 primary
                 text={profile.signUp}
-                onPress={handleSignup}
+                onPress={handleSignupPress}
               />
             </View>
           </View>
@@ -214,33 +380,32 @@ const SignUp = props => {
 };
 
 SignUp.propTypes = {
-  loading: PropTypes.bool,
-  userDataChanged: PropTypes.bool,
-  gender: PropTypes.string,
-  month: PropTypes.string,
-  day: PropTypes.string,
-  year: PropTypes.string,
+  email: PropTypes.string,
+  password: PropTypes.string,
+  verificationId: PropTypes.string,
+  user: PropTypes.object,
   country: PropTypes.string,
-  prefecture: PropTypes.string,
-  firstNameRef: PropTypes.any,
-  lastNameRef: PropTypes.any,
-  mobileRef: PropTypes.any,
-  fullAddressRef: PropTypes.any,
-  cityWardRef: PropTypes.any,
-  postalCodeRef: PropTypes.any,
-  handleLastNameChangeText: PropTypes.func,
-  handleFirstNameChangeText: PropTypes.func,
-  handleMobileChangeText: PropTypes.func,
-  handleFullAddressChangeText: PropTypes.func,
-  handleCityWardChangeText: PropTypes.func,
-  handlePostalCodeChangeText: PropTypes.func,
-  updateGender: PropTypes.func,
-  updateCountry: PropTypes.func,
-  updateDay: PropTypes.func,
-  updateMonth: PropTypes.func,
-  handleSignup: PropTypes.func,
-  updatePrefecture: PropTypes.func,
-  updateYear: PropTypes.func,
+  login: PropTypes.func,
+  logout: PropTypes.func,
 };
 
-export default SignUp;
+const mapStateToProps = ({authReducer}) => {
+  return {
+    email: authReducer.email,
+    password: authReducer.password,
+    verificationId: authReducer.verificationId,
+    user: authReducer.user,
+    country: authReducer.country,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    login: payload => dispatch(loginAction(payload)),
+    logout: payload => dispatch(logoutAction(payload)),
+    handleSignUp: payload => dispatch(handleSignUp(payload)),
+  };
+};
+
+// eslint-disable-next-line prettier/prettier
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

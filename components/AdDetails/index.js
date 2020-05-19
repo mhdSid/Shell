@@ -16,17 +16,23 @@ import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import UserDetails from '../UserDetails';
-import {getUsersData} from '../../services/Auth';
 import {SimpleLoader} from '../Loading';
 import formatDate from '../../lib/CachedImage/formatDate';
 import AdDetailsUserListItem from './AdDetailsUserListItem.js';
-import {errors, adDetails} from '../../Constants/Texts';
+import {adDetails} from '../../Constants/Texts';
+import {handleFetchUsersData} from '../../redux/AdDetails/FetchUsersData';
 
 const myActions = ['share', 'favorite', 'cancel', 'delete'];
 const defaultActions = ['share', 'favorite', 'shop'];
 
 const AdDetails = props => {
-  const {item, user: authUser} = props;
+  const {
+    item,
+    user: authUser,
+    lotteryUsersData,
+    adPosterData,
+    winnerUserData,
+  } = props;
   const {
     name,
     description,
@@ -51,9 +57,6 @@ const AdDetails = props => {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [showUserDetails, setShowUserDetails] = useState();
   const [selectedUser, setSelectedUser] = useState();
-  const [lotteryUsersData, setLotteryUsersData] = useState();
-  const [adPosterData, setAdPosterData] = useState();
-  const [winnerUserData, setWinnerUserData] = useState();
   const [usersDataLoading, setUsersDataLoading] = useState(false);
 
   const onUserDetailsClose = () => {
@@ -81,33 +84,7 @@ const AdDetails = props => {
   const handleEnterDraw = () => {
     Alert.alert('handleEnterDraw');
   };
-  const handleError = error => {
-    const message = (error && error.message) || errors.error;
-    setUsersDataLoading(false);
-    if (message) {
-      Alert.alert(message);
-    }
-    return;
-  };
-  const onGetUsersDataSuccess = data => {
-    let {error, users} = data;
-    if (error) {
-      return handleError(error);
-    }
-    users = users.filter(Boolean);
-    if (Array.isArray(users) && users.length > 0) {
-      let lotteryUsers = [];
-      users.forEach(user => {
-        if (user.id === winnerUserId) {
-          setWinnerUserData(user);
-        } else if (user.id === userId) {
-          setAdPosterData(user);
-        } else {
-          lotteryUsers = [...lotteryUsers, user];
-        }
-      });
-      setLotteryUsersData(lotteryUsers);
-    }
+  const callback = () => {
     setUsersDataLoading(false);
   };
   const fetchUsersData = () => {
@@ -118,7 +95,13 @@ const AdDetails = props => {
     ].filter(Boolean);
     if (users.length > 0) {
       setUsersDataLoading(true);
-      getUsersData({users}).then(onGetUsersDataSuccess, handleError);
+      invoke(props, 'handleFetchUsersData', {
+        winnerUserId,
+        userId,
+        users,
+        onError: callback,
+        onSuccess: callback,
+      });
     }
   };
   const onShow = () => {
@@ -287,7 +270,7 @@ const AdDetails = props => {
               {usersDataLoading && SimpleLoader}
               {
                 <AdDetailsUserListItem
-                  user={winnerUserData || {}}
+                  user={winnerUserData}
                   onPress={winnerUserData && handleUserPress}
                 />
               }
@@ -401,15 +384,20 @@ AdDetails.propTypes = {
   onClose: PropTypes.func,
 };
 
-const mapStateToProps = ({lotteriesReducer, authReducer}) => {
+const mapStateToProps = ({lotteriesReducer, authReducer, adDetailsReducer}) => {
   return {
     lotteries: lotteriesReducer.lotteries,
     user: authReducer.user,
+    adPosterData: adDetailsReducer.adPosterData,
+    lotteryUsersData: adDetailsReducer.lotteryUsersData,
+    winnerUserData: adDetailsReducer.winnerUserData,
   };
 };
 
-const mapDispatchToProps = () => {
-  return {};
+const mapDispatchToProps = dispatch => {
+  return {
+    handleFetchUsersData: payload => dispatch(handleFetchUsersData(payload)),
+  };
 };
 
 // eslint-disable-next-line prettier/prettier

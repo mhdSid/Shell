@@ -154,6 +154,7 @@ const updateUserr = {
   cityWard: 'City Ward',
   fullAddress: 'Full Address',
   confirm: 'Confirm',
+  japan: 'Japan',
 };
 
 const userDetails = {

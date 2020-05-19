@@ -4,6 +4,10 @@ const initialState = {
   loggedIn: undefined,
   user: undefined,
   country: 'LB',
+  email: undefined,
+  password: undefined,
+  verificationId: undefined,
+  showSignup: undefined,
 };
 
 const authReducer = (state = initialState, action) => {

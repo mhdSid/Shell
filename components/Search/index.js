@@ -1,64 +1,39 @@
 import React, {useState} from 'react';
 import {Toolbar, ListItem} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {View, Alert, VirtualizedList} from 'react-native';
-import {search} from '../../services/Auth';
+import {View, VirtualizedList} from 'react-native';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import {Loading} from '../Loading';
 import UserDetails from '../UserDetails';
-import {rootHandleShowAdsDetails} from '../Pinger';
-import {searchh, errors} from '../../Constants/Texts';
+import {searchh} from '../../Constants/Texts';
+import {connect} from 'react-redux';
+import invoke from 'lodash/invoke';
+import {showAdDetails} from '../../redux/AdDetails/actions';
+import {handleSearch} from '../../redux/Search/Search';
 
-const SearchComponent = () => {
+const SearchComponent = props => {
+  const {searchResults} = props;
   const [searchQuery, setSearchQuery] = useState();
-  const [loading, setLoading] = useState();
-  const [searchData, setSearchData] = useState();
+  const [loading, setLoading] = useState(false);
   const [showUserDetails, setShowUserDetails] = useState();
   const [selectedItem, setSelectedItem] = useState();
 
-  const onSearchError = error => {
-    const message = (error && error.message) || errors.error;
+  const callback = () => {
     setLoading(false);
-    if (message) {
-      Alert.alert(message);
-    }
-    return;
   };
-  const onSeachSuccess = data => {
-    const {error, searchData: searchResults} = data;
-    if (error) {
-      return onSearchError(error);
+  const handleSearchPress = () => {
+    if (searchQuery) {
+      setLoading(true);
+      invoke(props, 'handleSearch', {
+        searchQuery,
+        onError: callback,
+        onSuccess: callback,
+      });
     }
-    const newSearchResults = [
-      ...((searchResults.users &&
-        searchResults.users.map(user => {
-          return {
-            ...user,
-            type: 'user',
-          };
-        })) ||
-        []),
-      ...((searchResults.ads &&
-        searchResults.ads.map(ad => {
-          return {
-            ...ad,
-            type: 'ad',
-          };
-        })) ||
-        []),
-    ];
-    setSearchData(newSearchResults);
-    setLoading(false);
   };
   const onSearchChangeText = value => {
     if (value) {
       setSearchQuery(value);
-    }
-  };
-  const handleSearch = () => {
-    if (searchQuery) {
-      setLoading(true);
-      search({searchQuery}).then(onSeachSuccess, onSearchError);
     }
   };
   const onUserDetailsClose = () => {
@@ -70,7 +45,7 @@ const SearchComponent = () => {
         setSelectedItem(item);
         setShowUserDetails(true);
       } else if (item.type === 'ad') {
-        rootHandleShowAdsDetails(item);
+        invoke(props, 'showAdDetails', item);
       }
     };
   };
@@ -83,19 +58,19 @@ const SearchComponent = () => {
         searchable={{
           autoFocus: true,
           placeholder: searchh.search,
-          onSubmitEditing: handleSearch,
+          onSubmitEditing: handleSearchPress,
           onChangeText: onSearchChangeText,
         }}
       />
       {loading && Loading}
-      {searchData && (
+      {searchResults && (
         <VirtualizedList
           refreshing={loading}
-          onRefresh={handleSearch}
+          onRefresh={handleSearchPress}
           showsVerticalScrollIndicator={false}
-          data={searchData}
+          data={searchResults}
           getItem={(data, index) => data[index]}
-          getItemCount={() => searchData.length}
+          getItemCount={() => searchResults.length}
           keyExtractor={item => item.id}
           renderItem={({item}) => (
             <ListItem
@@ -137,4 +112,18 @@ const SearchComponent = () => {
   );
 };
 
-export default SearchComponent;
+const mapStateToProps = ({searchReducer}) => {
+  return {
+    searchResults: searchReducer.searchResults,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    showAdDetails: payload => dispatch(showAdDetails(payload)),
+    handleSearch: payload => dispatch(handleSearch(payload)),
+  };
+};
+
+// eslint-disable-next-line prettier/prettier
+export default connect(mapStateToProps, mapDispatchToProps)(SearchComponent);

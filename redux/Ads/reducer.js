@@ -7,7 +7,7 @@ const initialState = {
 
 const adsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case adActions.importAd: {
+    case adActions.IMPORTAD: {
       let {ads} = state;
       const newSet = new Set();
       if (Array.isArray(action.payload)) {
@@ -31,7 +31,7 @@ const adsReducer = (state = initialState, action) => {
         ads,
       };
     }
-    case adActions.updateCurrentAd: {
+    case adActions.UPDATECURRENTAD: {
       let {ads} = state;
       const ad = action.payload;
       if (ad && ad.id) {
@@ -52,7 +52,7 @@ const adsReducer = (state = initialState, action) => {
     }
     default: {
       return {
-        ...initialState,
+        ...state,
       };
     }
   }

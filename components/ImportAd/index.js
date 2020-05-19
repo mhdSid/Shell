@@ -24,14 +24,9 @@ import isUndefined from 'lodash/isUndefined';
 import NoAuth from '../NoAuth';
 import {LoadingComponent} from '../Loading';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
-import {
-  rootUpdateAd,
-  rootUploadAd,
-  rootHandleShowAdsDetails,
-  rootUpdateCurrentAdToStore,
-  rootAddAdToStore,
-} from '../Pinger';
-import {importAd, errors} from '../../Constants/Texts';
+import {importAd} from '../../Constants/Texts';
+import invoke from 'lodash/invoke';
+import {handleImportAd} from '../../redux/Ads/ImportAd';
 
 const ImportAd = props => {
   const {loggedIn: _loggedIn, user: authUser} = props;
@@ -88,44 +83,6 @@ const ImportAd = props => {
     setDescriptionChanged(false);
     setPriceChanged(false);
   };
-  const handleError = error => {
-    const message = (error && error.message) || errors.error;
-    if (message) {
-      Alert.alert(message);
-    }
-    return;
-  };
-  const onUpdateAdSuccess = newAd => {
-    return data => {
-      const {error, updatedAd} = data;
-      if (error) {
-        return handleError(error);
-      }
-      const newUpdatedAd = {
-        ...newAd,
-        images: [...(newAd.images || []), ...(updatedAd.images || [])],
-      };
-      rootUpdateCurrentAdToStore(newUpdatedAd);
-      rootHandleShowAdsDetails(newUpdatedAd);
-    };
-  };
-  const importAdSuccess = data => {
-    const {error, newAd} = data;
-    if (error || !newAd) {
-      return handleError(error);
-    }
-    rootAddAdToStore(newAd);
-    rootHandleShowAdsDetails(newAd);
-    const newImages = imageFiles.filter(Boolean);
-    rootUpdateAd(
-      {
-        id: newAd.id,
-        image: newImages.slice(1, newImages.length),
-      },
-      onUpdateAdSuccess(newAd),
-      handleError,
-    );
-  };
   const handleUploadAd = () => {
     const {current: nameField} = adNameRef;
     const {current: descriptionField} = descriptionRef;
@@ -146,22 +103,21 @@ const ImportAd = props => {
     ) {
       const filteredImages = imageFiles.filter(Boolean);
       setDefault(nameField, descriptionField, priceField);
-      rootUploadAd(
-        {
-          name,
-          description,
-          image: filteredImages[0],
-          prefecture,
-          category: adCategory,
-          status: adStatus,
-          price,
-          userId: authUser.id,
-          country: authUser.country,
-          currency: userCurrency,
-        },
-        importAdSuccess,
-        handleError,
-      );
+      invoke(props, 'handleImportAd', {
+        name,
+        description,
+        image: filteredImages[0],
+        prefecture,
+        category: adCategory,
+        status: adStatus,
+        price,
+        userId: authUser.id,
+        country: authUser.country,
+        currency: userCurrency,
+        onError: () => {},
+        onSuccess: () => {},
+        imageFiles: filteredImages,
+      });
     }
   };
   const updateAdCategory = value => {
@@ -375,8 +331,10 @@ const mapStateToProps = ({authReducer}) => {
   };
 };
 
-const mapDispatchToProps = () => {
-  return {};
+const mapDispatchToProps = dispatch => {
+  return {
+    handleImportAd: payload => dispatch(handleImportAd(payload)),
+  };
 };
 
 // eslint-disable-next-line prettier/prettier

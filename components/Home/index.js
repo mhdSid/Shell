@@ -1,54 +1,44 @@
 import React, {useState, useEffect} from 'react';
 import {Toolbar, ListItem} from 'react-native-material-ui';
-import {View, Alert, VirtualizedList} from 'react-native';
+import {View, VirtualizedList} from 'react-native';
 import {connect} from 'react-redux';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
-import {getAds} from '../../services/Ads';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Loading} from '../Loading';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
-import {addAd} from '../../redux/Ads/actions';
 import {
   AdMobBanner,
   // AdMobInterstitial,
   // PublisherBanner,
   // AdMobRewarded,
 } from 'react-native-admob';
-import {rootHandleShowAdsDetails} from '../Pinger';
 import {CarouselComponent} from '../Carousel';
 import CardListItem from './CardListItem';
-import {home, errors} from '../../Constants/Texts';
+import {home} from '../../Constants/Texts';
+import {handleFetchAds} from '../../redux/Ads/FetchAds';
+import {showAdDetails} from '../../redux/AdDetails/actions';
 
-let unMounted = false;
+// let unMounted = false;
 
 const HomeComponent = props => {
-  const {ads: _ads} = props;
-  const [ads, setAds] = useState(_ads);
+  const {ads} = props;
+  // const [ads, setAds] = useState(_ads);
   const [isList, setIsList] = useState(false);
   const [isCarousel, setIsCarousel] = useState(false);
   const [isCard, setIsCard] = useState(true);
   const [loading, setLoading] = useState(true);
   const [fetchId] = useState(0);
 
-  const handleError = error => {
-    const message = (error && error.message) || errors.error;
-    if (message) {
-      Alert.alert(message);
-    }
-    return;
-  };
-  const onGetAdsSuccess = data => {
-    if (!unMounted) {
-      const {error, ads: serverAds} = data;
-      if (error) {
-        return handleError(error);
-      }
-      invoke(props, 'addAd', serverAds);
-    }
+  const callback = () => {
+    // setLoading(false);
   };
   const fetchAds = () => {
-    getAds().then(onGetAdsSuccess, handleError);
+    setLoading(true);
+    invoke(props, 'fetchAds', {
+      onError: callback,
+      onSuccess: callback,
+    });
   };
   const changeViewStyle = () => {
     if (isCard) {
@@ -68,35 +58,52 @@ const HomeComponent = props => {
     }
   };
   const handleShowAdsDetailsFlatList = item => {
-    rootHandleShowAdsDetails(item);
+    invoke(props, 'showAdDetails', item);
   };
   const handleShowAdsDetailsFlatListClosure = item => {
     return () => {
-      rootHandleShowAdsDetails(item);
+      invoke(props, 'showAdDetails', item);
     };
+  };
+  const renderCardListItem = ({item}) => (
+    <CardListItem item={item} onItemPress={handleShowAdsDetailsFlatList} />
+  );
+  const renderListItem = ({item}) => (
+    <ListItem
+      divider
+      leftElement={
+        item.images && item.images[0] ? (
+          <CachedImage
+            style={sharedStyles.homeListItemImage}
+            source={{
+              uri: item.images[0],
+            }}
+          />
+        ) : null
+      }
+      centerElement={{
+        primaryText: item.name,
+        secondaryText: item.category,
+        tertiaryText: `${item.currency} ${item.price}`,
+      }}
+      onPress={handleShowAdsDetailsFlatListClosure(item)}
+    />
+  );
+  const getListLength = () => {
+    return ads.length;
+  };
+  const getListItem = (data, index) => {
+    return data[index];
   };
 
   useEffect(() => {
-    unMounted = false;
-    if (Array.isArray(_ads)) {
-      setLoading(true);
-      setAds(_ads);
-    }
     if (Array.isArray(ads)) {
       setLoading(false);
     }
-    return () => {
-      unMounted = true;
-    };
-  }, [ads, _ads]);
+  }, [ads]);
 
   useEffect(() => {
-    unMounted = false;
-    setLoading(true);
     fetchAds();
-    return () => {
-      unMounted = true;
-    };
   }, [fetchId]);
 
   return (
@@ -121,17 +128,12 @@ const HomeComponent = props => {
           onRefresh={fetchAds}
           showsVerticalScrollIndicator={false}
           data={ads}
-          getItem={(data, index) => data[index]}
-          getItemCount={() => ads.length}
+          getItem={getListItem}
+          getItemCount={getListLength}
           contentContainerStyle={sharedStyles.homeAdsContainer}
           numColumns={3}
           keyExtractor={item => item.id}
-          renderItem={({item}) => (
-            <CardListItem
-              item={item}
-              onItemPress={handleShowAdsDetailsFlatList}
-            />
-          )}
+          renderItem={renderCardListItem}
         />
       )}
       {isCarousel && (
@@ -146,30 +148,10 @@ const HomeComponent = props => {
           onRefresh={fetchAds}
           showsVerticalScrollIndicator={false}
           data={ads}
-          getItem={(data, index) => data[index]}
-          getItemCount={() => ads.length}
+          getItem={getListItem}
+          getItemCount={getListLength}
           keyExtractor={item => item.id}
-          renderItem={({item}) => (
-            <ListItem
-              divider
-              leftElement={
-                item.images && item.images[0] ? (
-                  <CachedImage
-                    style={sharedStyles.homeListItemImage}
-                    source={{
-                      uri: item.images[0],
-                    }}
-                  />
-                ) : null
-              }
-              centerElement={{
-                primaryText: item.name,
-                secondaryText: item.category,
-                tertiaryText: `${item.currency} ${item.price}`,
-              }}
-              onPress={handleShowAdsDetailsFlatListClosure(item)}
-            />
-          )}
+          renderItem={renderListItem}
         />
       )}
     </View>
@@ -188,7 +170,8 @@ const mapStateToProps = ({adsReducer}) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addAd: payload => dispatch(addAd(payload)),
+    fetchAds: payload => dispatch(handleFetchAds(payload)),
+    showAdDetails: payload => dispatch(showAdDetails(payload)),
   };
 };
 

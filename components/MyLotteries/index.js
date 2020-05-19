@@ -1,24 +1,23 @@
 import React, {useState, useEffect} from 'react';
 import invoke from 'lodash/invoke';
-import {Modal, SafeAreaView, VirtualizedList, Alert} from 'react-native';
+import {Modal, SafeAreaView, VirtualizedList} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, ListItem} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
-
-import {getMyLotteries} from '../../services/Ads';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import AdDetails from '../AdDetails';
 import {Loading} from '../Loading';
-import {myyLotteries, errors} from '../../Constants/Texts';
+import {myyLotteries} from '../../Constants/Texts';
+import {connect} from 'react-redux';
+import {handleFetchMyLotteries} from '../../redux/User/FetchMyLotteries';
 
 const MyLotteries = props => {
-  const {user} = props;
+  const {user, myLotteries} = props;
   const [modalVisible, setModalVisible] = useState(true);
   const [loading, setLoading] = useState(false);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
   const [selectedLottery, setSelectedLottery] = useState();
   const [fetchId] = useState(1);
-  const [myLotteries, setMyLotteries] = useState();
 
   const handleCloseModal = () => {
     setModalVisible(false);
@@ -26,26 +25,15 @@ const MyLotteries = props => {
   const onModalDismiss = () => {
     invoke(props, 'onClose');
   };
-  const handleError = error => {
-    const message = (error && error.message) || errors.error;
+  const callback = () => {
     setLoading(false);
-    if (message) {
-      Alert.alert(message);
-    }
-    return;
-  };
-  const onGetMyLotteriesSuccess = data => {
-    const {myLotteries: _myLotteries, error} = data;
-    if (error) {
-      return handleError(error);
-    }
-    setMyLotteries(_myLotteries || []);
   };
   const fetchMyLotteries = () => {
-    getMyLotteries({userId: user.id}).then(
-      onGetMyLotteriesSuccess,
-      handleError,
-    );
+    invoke(props, 'handleFetchMyLotteries', {
+      onSuccess: callback,
+      onError: callback,
+      userId: user.id,
+    });
   };
   const handleItemPress = item => {
     return () => {
@@ -120,4 +108,19 @@ MyLotteries.propTypes = {
   onClose: PropTypes.func,
 };
 
-export default MyLotteries;
+const mapStateToProps = ({authReducer, userReducer}) => {
+  return {
+    user: authReducer.user,
+    myLotteries: userReducer.myLotteries,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleFetchMyLotteries: payload =>
+      dispatch(handleFetchMyLotteries(payload)),
+  };
+};
+
+// eslint-disable-next-line prettier/prettier
+export default connect(mapStateToProps, mapDispatchToProps)(MyLotteries);

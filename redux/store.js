@@ -3,6 +3,7 @@ import {createStore, applyMiddleware} from 'redux';
 import {createLogger} from 'redux-logger';
 import {persistStore, persistReducer} from 'redux-persist';
 import rootReducer from './reducers';
+import thunk from 'redux-thunk';
 
 // Middleware: Redux Persist Config
 const persistConfig = {
@@ -11,7 +12,7 @@ const persistConfig = {
   // Storage Method (React Native)
   storage: AsyncStorage,
   // Whitelist (Save Specific Reducers)
-  whitelist: ['authReducer', 'settingsReducer'],
+  whitelist: ['authReducer', 'settingsReducer', 'adsReducer'],
   // Blacklist (Don't Save Specific Reducers)
 };
 
@@ -19,7 +20,10 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 // Redux: Store
-const store = createStore(persistedReducer, applyMiddleware(createLogger()));
+const store = createStore(
+  persistedReducer,
+  applyMiddleware(thunk, createLogger()),
+);
 
 // Middleware: Redux Persist Persister
 const persistor = persistStore(store);

@@ -1,24 +1,23 @@
 import React, {useState, useEffect} from 'react';
 import invoke from 'lodash/invoke';
-import {Modal, SafeAreaView, VirtualizedList, Alert} from 'react-native';
+import {Modal, SafeAreaView, VirtualizedList} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, ListItem} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
-
-import {getMyAds} from '../../services/Ads';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import AdDetails from '../AdDetails';
 import {Loading} from '../Loading';
-import {errors, myyAds} from '../../Constants/Texts';
+import {myyAds} from '../../Constants/Texts';
+import {connect} from 'react-redux';
+import {handleFetchMyAds} from '../../redux/User/FetchMyAds';
 
 const MyAds = props => {
-  const {user} = props;
+  const {user, myAds} = props;
   const [modalVisible, setModalVisible] = useState(true);
   const [loading, setLoading] = useState(false);
   const [showAdDetails, setShowAdDetails] = useState(false);
   const [selectedAd, setSelectedAd] = useState();
   const [fetchId] = useState(1);
-  const [myAds, setMyAds] = useState();
 
   const handleCloseModal = () => {
     setModalVisible(false);
@@ -26,25 +25,16 @@ const MyAds = props => {
   const onModalDismiss = () => {
     invoke(props, 'onClose');
   };
-  const handleError = error => {
-    const message = (error && error.message) || errors.error;
-    setLoading(false);
-    if (message) {
-      Alert.alert(message);
-    }
-    return;
-  };
-  const onGetMyAdsSuccess = data => {
-    const {myAds: _myAds, error} = data;
-    if (error) {
-      return handleError(error);
-    }
-    setMyAds(_myAds || []);
+  const callback = () => {
     setLoading(false);
   };
   const fetchMyAds = () => {
     setLoading(true);
-    getMyAds({userId: user.id}).then(onGetMyAdsSuccess, handleError);
+    invoke(props, 'handleFetchMyAds', {
+      userId: user.id,
+      onSuccess: callback,
+      onError: callback,
+    });
   };
   const handleItemPress = item => {
     return () => {
@@ -119,4 +109,18 @@ MyAds.propTypes = {
   onClose: PropTypes.func,
 };
 
-export default MyAds;
+const mapStateToProps = ({authReducer, userReducer}) => {
+  return {
+    user: authReducer.user,
+    myAds: userReducer.myAds,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleFetchMyAds: payload => dispatch(handleFetchMyAds(payload)),
+  };
+};
+
+// eslint-disable-next-line prettier/prettier
+export default connect(mapStateToProps, mapDispatchToProps)(MyAds);

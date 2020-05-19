@@ -1,97 +1,45 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import invoke from 'lodash/invoke';
 import {connect} from 'react-redux';
-import {ping} from '../../services/Auth';
-import {loginAction, logoutAction} from '../../redux/Auth/actions';
-import {Alert} from 'react-native';
-import {updateAd, importAd} from '../../services/Ads';
 import AdDetails from '../AdDetails';
-import {addAd, updateCurrentAd} from '../../redux/Ads/actions';
+import {handlePing} from '../../redux/Ping/Ping';
 import PropTypes from 'prop-types';
-
-export let rootUpdateAd;
-export let rootUploadAd;
-export let setRootSelectedAd;
-export let rootHandleShowAdsDetails;
-export let rootUpdateCurrentAdToStore;
-export let rootAddAdToStore;
+import {showAdDetails} from '../../redux/AdDetails/actions';
 
 const Pinger = props => {
-  const [showAdDetails, setShowAdDetails] = useState(false);
-  const [selectedAd, setSelectedAd] = useState(undefined);
+  const {adDetails} = props;
+  const [fetchId] = useState(0);
 
-  const handleShowAdsDetails = item => {
-    setSelectedAd(item);
-    setShowAdDetails(true);
-  };
   const onAdsDetailsClose = () => {
-    setShowAdDetails(false);
-    setSelectedAd();
-  };
-  const update = (data, callback, errorCallback) => {
-    updateAd(data).then(callback, errorCallback);
-  };
-  const uploadAd = (data, callback, errorCallback) => {
-    importAd(data).then(callback, errorCallback);
-  };
-  const updateCurrentAdToStore = data => {
-    invoke(props, 'updateCurrentAd', data);
-  };
-  const addAdToStore = data => {
-    invoke(props, 'addAd', data);
-  };
-  const onPingSuccess = data => {
-    const {error, user: authUser, country} = data;
-    if (error) {
-      const {message} = error;
-      invoke(props, 'logout', {country, loggedIn: false, user: false});
-      Alert.alert(message);
-    } else {
-      invoke(props, 'login', {
-        loggedIn: true,
-        user: authUser,
-        sessionID: authUser.sessionID,
-        country,
-      });
-    }
-  };
-  const onPingError = () => {
-    invoke(props, 'logout', {loggedIn: false, user: false});
+    invoke(props, 'showAdDetails', undefined);
   };
 
-  setRootSelectedAd = selectedAd;
-  rootAddAdToStore = addAdToStore;
-  rootUpdateCurrentAdToStore = updateCurrentAdToStore;
-  rootUpdateAd = update;
-  rootUploadAd = uploadAd;
-  rootHandleShowAdsDetails = handleShowAdsDetails;
+  useEffect(() => {
+    invoke(props, 'handlePing');
+  }, [fetchId]);
 
-  ping().then(onPingSuccess, onPingError);
-
-  if (showAdDetails) {
-    return <AdDetails onClose={onAdsDetailsClose} item={selectedAd} />;
+  if (adDetails) {
+    return <AdDetails onClose={onAdsDetailsClose} item={adDetails} />;
   }
   return null;
 };
 
-const mapStateToProps = () => {
-  return {};
+const mapStateToProps = ({adDetailsReducer}) => {
+  return {
+    adDetails: adDetailsReducer.adDetails,
+  };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    login: payload => dispatch(loginAction(payload)),
-    logout: payload => dispatch(logoutAction(payload)),
-    addAd: payload => dispatch(addAd(payload)),
-    updateCurrentAd: payload => dispatch(updateCurrentAd(payload)),
+    showAdDetails: payload => dispatch(showAdDetails(payload)),
+    handlePing: payload => dispatch(handlePing(payload)),
   };
 };
 
 Pinger.propTypes = {
-  logout: PropTypes.func,
-  login: PropTypes.func,
-  updateCurrentAd: PropTypes.func,
-  addAd: PropTypes.func,
+  showAdDetails: PropTypes.func,
+  handlePing: PropTypes.func,
 };
 
 // eslint-disable-next-line prettier/prettier

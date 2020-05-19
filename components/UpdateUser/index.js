@@ -7,7 +7,6 @@ import {
   View,
   Text,
   Picker,
-  Alert,
   KeyboardAvoidingView,
 } from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
@@ -22,15 +21,20 @@ import {
   prefectures,
   countries,
 } from '../../Constants/Countries';
-import {update} from '../../services/Auth';
 import {loadingPopup} from '../Loading';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
-import {errors, updateUserr} from '../../Constants/Texts';
+import {updateUserr} from '../../Constants/Texts';
+import {handlerUpdateUserData} from '../../redux/Auth/UpdateUser';
+import {connect} from 'react-redux';
 
 const UpdateUser = props => {
   const {user} = props;
-  const [country, setCountry] = useState((user && user.country) || 'Japan');
-  const [prefecture, setPrefecture] = useState(prefecturesList[country]);
+  const [country, setCountry] = useState(
+    (user && user.country) || updateUserr.japan,
+  );
+  const [prefecture, setPrefecture] = useState(
+    (user && user.prefecture) || prefecturesList[country],
+  );
   const [modalVisible, setModalVisible] = useState(true);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(undefined);
@@ -123,23 +127,6 @@ const UpdateUser = props => {
     setFullAddressChanged(false);
     setCityWardChanged(false);
   };
-  const onUpdateUserError = error => {
-    const message = (error && error.message) || errors.error;
-    setDefaultsDataChanged();
-    if (message) {
-      Alert.alert(message);
-    }
-    return;
-  };
-  const onUpdateUserSuccess = data => {
-    const {error, user: updatedUser} = data;
-    if (error) {
-      return onUpdateUserError(error);
-    }
-    setDefaultsDataChanged();
-    invoke(props, 'updateUserAction', updatedUser);
-    setModalVisible(false);
-  };
   const handleUpdateUser = () => {
     const {current: mobileField} = mobileRef;
     const {current: firstNameField} = firstNameRef;
@@ -156,46 +143,26 @@ const UpdateUser = props => {
     if (userDataChanged) {
       setLoading(true);
       const updatedUserData = {
-        mobile,
-        firstName,
-        lastName,
-        prefecture,
-        country,
-        image: imageFile,
+        ...(mobileChanged && {mobile}),
+        ...(firstNameChanged && {firstName}),
+        ...(lastNameChanged && {lastName}),
+        ...(prefectureChanged && {prefecture}),
+        ...(countryChanged && {country}),
+        ...(imageChanged && {image: imageFile}),
+        ...(fullAddressChanged && {fullAddress}),
+        ...(cityWardChanged && {cityWard}),
+        ...(postalCodeChanged && {postalCode}),
         id: user.id,
         email: user.email,
-        fullAddress,
-        cityWard,
-        postalCode,
       };
-      if (!mobileChanged) {
-        delete updatedUserData.mobile;
-      }
-      if (!firstNameChanged) {
-        delete updatedUserData.firstName;
-      }
-      if (!lastNameChanged) {
-        delete updatedUserData.lastName;
-      }
-      if (!prefectureChanged) {
-        delete updatedUserData.prefecture;
-      }
-      if (!countryChanged) {
-        delete updatedUserData.country;
-      }
-      if (!imageChanged) {
-        delete updatedUserData.image;
-      }
-      if (!postalCodeChanged) {
-        delete updatedUserData.postalCode;
-      }
-      if (!fullAddressChanged) {
-        delete updatedUserData.fullAddress;
-      }
-      if (!cityWardChanged) {
-        delete updatedUserData.cityWard;
-      }
-      update(updatedUserData).then(onUpdateUserSuccess, onUpdateUserError);
+      invoke(props, 'handleUpdateUserData', {
+        onError: setDefaultsDataChanged,
+        onSuccess: () => {
+          setDefaultsDataChanged();
+          setModalVisible(false);
+        },
+        updatedUserData,
+      });
     }
   };
   const handleChoosePhoto = () => {
@@ -439,4 +406,17 @@ UpdateUser.propTypes = {
   updateUserAction: PropTypes.func,
 };
 
-export default UpdateUser;
+const mapStateToProps = ({authReducer}) => {
+  return {
+    user: authReducer.user,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleUpdateUserData: payload => dispatch(handlerUpdateUserData(payload)),
+  };
+};
+
+// eslint-disable-next-line prettier/prettier
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateUser);
