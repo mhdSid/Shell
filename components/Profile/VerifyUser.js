@@ -9,6 +9,11 @@ import invoke from 'lodash/invoke';
 import {connect} from 'react-redux';
 import {logoutAction, loginAction} from '../../redux/Auth/actions';
 import {handleVerifyUser} from '../../redux/Auth/VerifyUser';
+import {
+  getEmailSelector,
+  getPasswordSelector,
+  getVerificationIdSelector,
+} from './Selectors';
 
 const VerifyUser = props => {
   const {email, password, verificationId} = props;
@@ -59,11 +64,11 @@ VerifyUser.propTypes = {
   login: PropTypes.func,
 };
 
-const mapStateToProps = ({authReducer}) => {
+const mapStateToProps = state => {
   return {
-    email: authReducer.email,
-    password: authReducer.password,
-    verificationId: authReducer.verificationId,
+    email: getEmailSelector(state),
+    password: getPasswordSelector(state),
+    verificationId: getVerificationIdSelector(state),
   };
 };
 
@@ -75,5 +80,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-// eslint-disable-next-line prettier/prettier
-export default connect(mapStateToProps, mapDispatchToProps)(VerifyUser);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(VerifyUser);

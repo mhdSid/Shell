@@ -2,22 +2,29 @@ import {settingsActions} from './actions';
 
 const initialState = {
   lang: 'en',
+  isHomeListStyle: false,
+  isHomeCardStyle: true,
+  isHomeCarouselStyle: false,
 };
 
 const settingsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case settingsActions.setLang: {
+    case settingsActions.SETLANG: {
       return {
         ...state,
         lang: action.payload,
       };
     }
+    case settingsActions.SETHOMEVIEWSTYLE: {
+      return {
+        ...state,
+        ...action.payload,
+      };
+    }
     default: {
-      return (
-        state || {
-          ...initialState,
-        }
-      );
+      return {
+        ...state,
+      };
     }
   }
 };

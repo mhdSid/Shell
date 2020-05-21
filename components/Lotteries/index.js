@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import sharedStyles from '../../assets/styles/sharedStyles';
@@ -8,19 +8,17 @@ import {Loading, loadingPopup} from '../Loading';
 import PropTypes from 'prop-types';
 import {Toolbar} from 'react-native-material-ui';
 import {lottteries} from '../../Constants/Texts';
+import {
+  getLoggedInSelector,
+  getUserSelector,
+  getLotteriesSelector,
+} from './Selectors';
 
 const Lotteries = props => {
-  const {loggedIn: _loggedIn, user: authUser, lotteries} = props;
-  const [loggedIn, setLoggedIn] = useState(_loggedIn);
-  const [user, setUser] = useState(authUser);
+  const {loggedIn, user, lotteries} = props;
   const [loading] = useState(false);
 
-  useEffect(() => {
-    setLoggedIn(_loggedIn);
-    setUser(authUser);
-  }, [_loggedIn, authUser]);
-
-  if (isUndefined(_loggedIn) && isUndefined(user)) {
+  if (isUndefined(loggedIn) && isUndefined(user)) {
     return Loading;
   }
 
@@ -36,7 +34,9 @@ const Lotteries = props => {
       />
       <View style={sharedStyles.innerContainer}>
         {loading && loadingPopup}
-        <Text>{!lotteries && lottteries.emptyLotteries}</Text>
+        {!lotteries && (
+          <Text style={sharedStyles.appText}>{lottteries.emptyLotteries}</Text>
+        )}
       </View>
     </View>
   );
@@ -48,11 +48,11 @@ Lotteries.propTypes = {
   lotteries: PropTypes.any,
 };
 
-const mapStateToProps = ({authReducer, lotteriesReducer}) => {
+const mapStateToProps = state => {
   return {
-    loggedIn: authReducer.loggedIn,
-    user: authReducer.user,
-    lotteries: lotteriesReducer.lotteries,
+    loggedIn: getLoggedInSelector(state),
+    user: getUserSelector(state),
+    lotteries: getLotteriesSelector(state),
   };
 };
 
@@ -60,5 +60,7 @@ const mapDispatchToProps = () => {
   return {};
 };
 
-// eslint-disable-next-line prettier/prettier
-export default connect(mapStateToProps, mapDispatchToProps)(Lotteries);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Lotteries);

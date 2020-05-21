@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {
@@ -18,18 +18,24 @@ import Login from './Login';
 import UserProfile from './UserProfile';
 import VerifyUser from './VerifyUser';
 import SignUp from './SignUp';
+import {
+  getLoggedInSelector,
+  getUserSelector,
+  getCountrySelector,
+  getShowSignUpSelector,
+  getVerificationIdSelector,
+} from './Selectors';
 
 const AuthComponent = props => {
   const {loggedIn, user, showSignup, verificationId} = props;
-  const [adId] = useState(1);
 
   useEffect(() => {
-    if (loggedIn && user && adId) {
+    if (loggedIn && user) {
       AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/6721660483');
       // AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
       AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
     }
-  }, [adId]);
+  }, []);
 
   if (isUndefined(loggedIn) && isUndefined(user)) {
     return Loading;
@@ -59,13 +65,13 @@ AuthComponent.propTypes = {
   updateUserAction: PropTypes.func,
 };
 
-const mapStateToProps = ({authReducer}) => {
+const mapStateToProps = state => {
   return {
-    loggedIn: authReducer.loggedIn,
-    user: authReducer.user,
-    country: authReducer.country,
-    showSignup: authReducer.showSignup,
-    verificationId: authReducer.verificationId,
+    loggedIn: getLoggedInSelector(state),
+    user: getUserSelector(state),
+    country: getCountrySelector(state),
+    showSignup: getShowSignUpSelector(state),
+    verificationId: getVerificationIdSelector(state),
   };
 };
 
@@ -77,5 +83,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-// eslint-disable-next-line prettier/prettier
-export default connect(mapStateToProps, mapDispatchToProps)(AuthComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AuthComponent);

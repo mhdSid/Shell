@@ -18,17 +18,20 @@ import CardListItem from './CardListItem';
 import {home} from '../../Constants/Texts';
 import {handleFetchAds} from '../../redux/Ads/FetchAds';
 import {showAdDetails} from '../../redux/AdDetails/actions';
+import {setHomeViewStyle} from '../../redux/Settings/actions';
+import {
+  getAdsSelector,
+  getIsListSelector,
+  getIsCardSelector,
+  getIsCarouselSelector,
+} from './Selectors';
 
 const HomeComponent = props => {
-  const {ads} = props;
-  const [isList, setIsList] = useState(false);
-  const [isCarousel, setIsCarousel] = useState(false);
-  const [isCard, setIsCard] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [fetchId] = useState(0);
+  const {ads, isList, isCarousel, isCard} = props;
+  const [loading, setLoading] = useState(false);
 
   const callback = () => {
-    // setLoading(false);
+    setLoading(false);
   };
   const fetchAds = () => {
     setLoading(true);
@@ -39,25 +42,31 @@ const HomeComponent = props => {
   };
   const changeViewStyle = () => {
     if (isCard) {
-      setIsList(true);
-      setIsCard(false);
-      setIsCarousel(false);
+      invoke(props, 'setHomeViewStyle', {
+        isHomeCardStyle: false,
+        isHomeCarouselStyle: false,
+        isHomeListStyle: true,
+      });
     }
     if (isList) {
-      setIsList(false);
-      setIsCard(false);
-      setIsCarousel(true);
+      invoke(props, 'setHomeViewStyle', {
+        isHomeCardStyle: false,
+        isHomeCarouselStyle: true,
+        isHomeListStyle: false,
+      });
     }
     if (isCarousel) {
-      setIsList(false);
-      setIsCard(true);
-      setIsCarousel(false);
+      invoke(props, 'setHomeViewStyle', {
+        isHomeCardStyle: true,
+        isHomeCarouselStyle: false,
+        isHomeListStyle: false,
+      });
     }
   };
   const handleShowAdsDetailsFlatList = item => {
     invoke(props, 'showAdDetails', item);
   };
-  const handleShowAdsDetailsFlatListClosure = item => {
+  const handleShowAdDetails = item => {
     return () => {
       invoke(props, 'showAdDetails', item);
     };
@@ -83,25 +92,16 @@ const HomeComponent = props => {
         secondaryText: item.category,
         tertiaryText: `${item.currency} ${item.price}`,
       }}
-      onPress={handleShowAdsDetailsFlatListClosure(item)}
+      onPress={handleShowAdDetails(item)}
     />
   );
-  const getListLength = () => {
-    return ads.length;
-  };
-  const getListItem = (data, index) => {
-    return data[index];
-  };
-
-  useEffect(() => {
-    if (Array.isArray(ads)) {
-      setLoading(false);
-    }
-  }, [ads]);
+  const getItem = (data, index) => data[index];
+  const getItemCount = () => ads.length;
+  const getItemKey = item => item.id;
 
   useEffect(() => {
     fetchAds();
-  }, [fetchId]);
+  }, []);
 
   return (
     <View style={sharedStyles.fullheightView}>
@@ -119,35 +119,40 @@ const HomeComponent = props => {
         style={sharedStyles.adMobBanner}
       />
       {loading && <View style={sharedStyles.homeLoading}>{Loading}</View>}
-      {isCard && (
+      {isCard && ads && ads.length > 0 && (
         <VirtualizedList
+          initialNumToRender={2}
+          windowSize={2}
+          removeClippedSubviews={true}
           refreshing={loading}
           onRefresh={fetchAds}
           showsVerticalScrollIndicator={false}
           data={ads}
-          getItem={getListItem}
-          getItemCount={getListLength}
+          getItem={getItem}
+          getItemCount={getItemCount}
           contentContainerStyle={sharedStyles.homeAdsContainer}
-          numColumns={3}
-          keyExtractor={item => item.id}
+          keyExtractor={getItemKey}
           renderItem={renderCardListItem}
         />
       )}
-      {isCarousel && (
+      {isCarousel && ads && ads.length > 0 && (
         <CarouselComponent
           items={ads}
           onItemPress={handleShowAdsDetailsFlatList}
         />
       )}
-      {isList && (
+      {isList && ads && ads.length > 0 && (
         <VirtualizedList
+          removeClippedSubviews={true}
+          windowSize={2}
+          initialNumToRender={2}
           refreshing={loading}
           onRefresh={fetchAds}
           showsVerticalScrollIndicator={false}
           data={ads}
-          getItem={getListItem}
-          getItemCount={getListLength}
-          keyExtractor={item => item.id}
+          getItem={getItem}
+          getItemCount={getItemCount}
+          keyExtractor={getItemKey}
           renderItem={renderListItem}
         />
       )}
@@ -159,9 +164,12 @@ HomeComponent.propTypes = {
   ads: PropTypes.array,
 };
 
-const mapStateToProps = ({adsReducer}) => {
+const mapStateToProps = state => {
   return {
-    ads: adsReducer.ads,
+    ads: getAdsSelector(state),
+    isList: getIsListSelector(state),
+    isCard: getIsCardSelector(state),
+    isCarousel: getIsCarouselSelector(state),
   };
 };
 
@@ -169,8 +177,11 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchAds: payload => dispatch(handleFetchAds(payload)),
     showAdDetails: payload => dispatch(showAdDetails(payload)),
+    setHomeViewStyle: payload => dispatch(setHomeViewStyle(payload)),
   };
 };
 
-// eslint-disable-next-line prettier/prettier
-export default connect(mapStateToProps, mapDispatchToProps)(HomeComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(HomeComponent);

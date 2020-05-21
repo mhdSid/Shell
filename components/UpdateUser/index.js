@@ -26,6 +26,7 @@ import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import {updateUserr} from '../../Constants/Texts';
 import {handlerUpdateUserData} from '../../redux/Auth/UpdateUser';
 import {connect} from 'react-redux';
+import {getUserSelector} from './Selectors';
 
 const UpdateUser = props => {
   const {user} = props;
@@ -406,9 +407,9 @@ UpdateUser.propTypes = {
   updateUserAction: PropTypes.func,
 };
 
-const mapStateToProps = ({authReducer}) => {
+const mapStateToProps = state => {
   return {
-    user: authReducer.user,
+    user: getUserSelector(state),
   };
 };
 
@@ -418,5 +419,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-// eslint-disable-next-line prettier/prettier
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateUser);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(UpdateUser);

@@ -102,7 +102,7 @@ Login.propTypes = {
   logout: PropTypes.func,
 };
 
-const mapStateToProps = ({}) => {
+const mapStateToProps = () => {
   return {};
 };
 
@@ -114,5 +114,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-// eslint-disable-next-line prettier/prettier
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Login);

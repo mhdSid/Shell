@@ -9,33 +9,34 @@ import HomeComponent from '../Home';
 import Lotteries from '../Lotteries';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import {getLoggedInSelector, getUserSelector} from './Selectors';
 
 export let navigate;
 
 const viewLoader = {
-  grade: () => <Lotteries />,
-  profile: () => <AuthComponent />,
-  home: () => <HomeComponent />,
-  search: () => <SearchComponent />,
-  'add-circle-outline': props => <ImportAd {...props} />,
+  grade: <Lotteries />,
+  profile: <AuthComponent />,
+  home: <HomeComponent />,
+  search: <SearchComponent />,
+  'add-circle-outline': <ImportAd />,
 };
 
 const MainContainer = props => {
   const {user, loggedIn} = props;
   const [activeView, setActiveView] = useState('home');
 
-  const handlePress = type => {
+  const handleSetActiveView = type => {
     return () => {
       setActiveView(type);
     };
   };
 
-  navigate = handlePress;
+  navigate = handleSetActiveView;
 
   return (
     <SafeAreaView style={sharedStyles.fullheightView}>
       <SafeAreaView style={sharedStyles.container}>
-        {viewLoader[activeView]()}
+        {viewLoader[activeView]}
       </SafeAreaView>
       <BottomNavigation
         active={activeView}
@@ -56,7 +57,7 @@ const MainContainer = props => {
           key="home"
           icon={<Icon name="home" size={30} />}
           active={activeView === 'home'}
-          onPress={handlePress('home')}
+          onPress={handleSetActiveView('home')}
         />
         <BottomNavigation.Action
           style={{
@@ -71,7 +72,7 @@ const MainContainer = props => {
           key="search"
           icon={<Icon name="search" size={30} />}
           active={activeView === 'search'}
-          onPress={handlePress('search')}
+          onPress={handleSetActiveView('search')}
         />
         <BottomNavigation.Action
           style={{
@@ -88,7 +89,7 @@ const MainContainer = props => {
           key="add-circle-outline"
           icon={<Icon name="add-circle-outline" size={40} />}
           active={activeView === 'add-circle-outline'}
-          onPress={handlePress('add-circle-outline')}
+          onPress={handleSetActiveView('add-circle-outline')}
         />
         <BottomNavigation.Action
           style={{
@@ -112,7 +113,7 @@ const MainContainer = props => {
             )
           }
           active={activeView === 'grade'}
-          onPress={handlePress('grade')}
+          onPress={handleSetActiveView('grade')}
         />
         <BottomNavigation.Action
           style={{
@@ -136,22 +137,18 @@ const MainContainer = props => {
             )
           }
           active={activeView === 'profile'}
-          onPress={handlePress('profile')}
+          onPress={handleSetActiveView('profile')}
         />
       </BottomNavigation>
     </SafeAreaView>
   );
 };
 
-const mapStateToProps = ({authReducer}) => {
+const mapStateToProps = state => {
   return {
-    loggedIn: authReducer.loggedIn,
-    user: authReducer.user,
+    loggedIn: getLoggedInSelector(state),
+    user: getUserSelector(state),
   };
-};
-
-const mapDispatchToProps = () => {
-  return {};
 };
 
 MainContainer.propTypes = {
@@ -159,5 +156,4 @@ MainContainer.propTypes = {
   user: PropTypes.object,
 };
 
-// eslint-disable-next-line prettier/prettier
-export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);
+export default connect(mapStateToProps)(MainContainer);

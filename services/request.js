@@ -1,41 +1,32 @@
 import CryptoJS from 'crypto-js';
-import isUndefined from 'lodash/isUndefined';
-import isNill from 'lodash/isNil';
 import {decrypt, password} from './Encrypt';
+import {apiRequest} from '../Constants/Api';
 
 const request = async options => {
   const {method, body, endpoint} = options;
   let reqData = {
     method,
     headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      Accept: apiRequest.jsonContentType,
+      'Content-Type': apiRequest.jsonContentType,
     },
   };
   if (body instanceof FormData) {
-    reqData.headers['Content-Type'] =
-      'multipart/form-data; boundary=----WebKitFormBoundarybAbXQzJABEgSJzxT';
+    reqData.headers['Content-Type'] = apiRequest.formContentType;
   }
-  if (!isUndefined(body) && !isNill(body) && Object.keys(body).length > 0) {
+  if (body && Object.keys(body).length > 0) {
     reqData = {
       ...reqData,
       body: body instanceof FormData ? body : JSON.stringify(options.body),
     };
   }
-  const response = await fetch(
-    `https://halogen-proxy-239213.appspot.com/${endpoint}`,
-    reqData,
-  );
-  if (typeof response !== 'undefined' && response !== null) {
+  const response = await fetch(`${apiRequest.apiUri}${endpoint}`, reqData);
+  if (response) {
     let data = await response.json();
     if (data.data || data.error || data.user) {
       data = decrypt(data.data || data.error || data.user, password);
       data = JSON.parse(data.toString(CryptoJS.enc.Utf8));
-      if (
-        typeof data !== 'undefined' &&
-        data !== null &&
-        Object.keys(data).length > 0
-      ) {
+      if (data && Object.keys(data).length > 0) {
         data = {...data};
         return data;
       }

@@ -10,6 +10,7 @@ import {Loading} from '../Loading';
 import {myyAds} from '../../Constants/Texts';
 import {connect} from 'react-redux';
 import {handleFetchMyAds} from '../../redux/User/FetchMyAds';
+import {getUserSelector, getMyAdsSelector} from './Selectors';
 
 const MyAds = props => {
   const {user, myAds} = props;
@@ -17,7 +18,6 @@ const MyAds = props => {
   const [loading, setLoading] = useState(false);
   const [showAdDetails, setShowAdDetails] = useState(false);
   const [selectedAd, setSelectedAd] = useState();
-  const [fetchId] = useState(1);
 
   const handleCloseModal = () => {
     setModalVisible(false);
@@ -48,7 +48,7 @@ const MyAds = props => {
 
   useEffect(() => {
     fetchMyAds();
-  }, [fetchId]);
+  }, []);
 
   return (
     <Modal
@@ -109,10 +109,10 @@ MyAds.propTypes = {
   onClose: PropTypes.func,
 };
 
-const mapStateToProps = ({authReducer, userReducer}) => {
+const mapStateToProps = state => {
   return {
-    user: authReducer.user,
-    myAds: userReducer.myAds,
+    user: getUserSelector(state),
+    myAds: getMyAdsSelector(state),
   };
 };
 
@@ -122,5 +122,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-// eslint-disable-next-line prettier/prettier
-export default connect(mapStateToProps, mapDispatchToProps)(MyAds);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MyAds);

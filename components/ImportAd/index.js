@@ -27,12 +27,13 @@ import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import {importAd} from '../../Constants/Texts';
 import invoke from 'lodash/invoke';
 import {handleImportAd} from '../../redux/Ads/ImportAd';
+import {getLoggedInSelector, getUserSelector} from './Selectors';
 
 const ImportAd = props => {
-  const {loggedIn: _loggedIn, user: authUser} = props;
-  const userCountry = authUser && authUser.country;
-  const [loggedIn, setLoggedIn] = useState(_loggedIn);
-  const [user, setUser] = useState(authUser);
+  const {loggedIn, user} = props;
+  const userCountry = user && user.country;
+  // const [loggedIn, setLoggedIn] = useState(_loggedIn);
+  // const [user, setUser] = useState(authUser);
   const [adCategory, setAdCategory] = useState(importAd.sports);
   const [adStatus, setAdStatus] = useState(importAd.noNoticableScratches);
   const [images, setImages] = useState([]);
@@ -111,8 +112,8 @@ const ImportAd = props => {
         category: adCategory,
         status: adStatus,
         price,
-        userId: authUser.id,
-        country: authUser.country,
+        userId: user.id,
+        country: user.country,
         currency: userCurrency,
         onError: () => {},
         onSuccess: () => {},
@@ -160,17 +161,12 @@ const ImportAd = props => {
   };
 
   useEffect(() => {
-    setLoggedIn(_loggedIn);
-    setUser(authUser);
-  }, [_loggedIn, authUser]);
-
-  useEffect(() => {
     setADataChanged(
       imagesChanged && adNameChanged && descriptionChanged && priceChanged,
     );
   }, [imagesChanged, adNameChanged, descriptionChanged, priceChanged]);
 
-  if (isUndefined(_loggedIn) && isUndefined(user)) {
+  if (isUndefined(loggedIn) && isUndefined(user)) {
     return <LoadingComponent />;
   }
 
@@ -324,10 +320,10 @@ ImportAd.propTypes = {
   user: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
 };
 
-const mapStateToProps = ({authReducer}) => {
+const mapStateToProps = state => {
   return {
-    loggedIn: authReducer.loggedIn,
-    user: authReducer.user,
+    loggedIn: getLoggedInSelector(state),
+    user: getUserSelector(state),
   };
 };
 
@@ -337,5 +333,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-// eslint-disable-next-line prettier/prettier
-export default connect(mapStateToProps, mapDispatchToProps)(ImportAd);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ImportAd);

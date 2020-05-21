@@ -8,6 +8,8 @@ import PropTypes from 'prop-types';
 import {setLang} from '../../redux/Settings/actions';
 import {Flag} from 'react-native-svg-flagkit';
 import {settings} from '../../Constants/Texts';
+import pkg from '../../package.json';
+import {getLangSelector} from './Selectors';
 
 const Settings = props => {
   const {lang} = props;
@@ -102,6 +104,16 @@ const Settings = props => {
                 },
               ]}
             />
+            <Drawer.Section
+              title={settings.version}
+              items={[
+                {
+                  value: (
+                    <Text style={sharedStyles.appText}>{pkg.version}</Text>
+                  ),
+                },
+              ]}
+            />
           </Drawer>
         </ScrollView>
       </SafeAreaView>
@@ -115,9 +127,9 @@ Settings.propTypes = {
   onClose: PropTypes.func,
 };
 
-const mapStateToProps = ({settingsReducer}) => {
+const mapStateToProps = state => {
   return {
-    lang: settingsReducer.lang,
+    lang: getLangSelector(state),
   };
 };
 
@@ -127,5 +139,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-// eslint-disable-next-line prettier/prettier
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Settings);

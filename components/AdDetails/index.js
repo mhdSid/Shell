@@ -14,13 +14,23 @@ import {Button, Icon, ActionButton} from 'react-native-material-ui';
 import {Toolbar} from 'react-native-material-ui';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
-import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
+import {
+  CachedImage,
+  ImageCacheProvider,
+} from '../../lib/CachedImage/react-native-cached-image';
 import UserDetails from '../UserDetails';
 import {SimpleLoader} from '../Loading';
 import formatDate from '../../lib/CachedImage/formatDate';
 import AdDetailsUserListItem from './AdDetailsUserListItem.js';
 import {adDetails} from '../../Constants/Texts';
 import {handleFetchUsersData} from '../../redux/AdDetails/FetchUsersData';
+import {
+  getLotteriesSelector,
+  getUsersSelector,
+  getAdPosterDataSelector,
+  getLotteryUsersDataSelector,
+  getWinnerUserDataSelector,
+} from './Selectors';
 
 const myActions = ['share', 'favorite', 'cancel', 'delete'];
 const defaultActions = ['share', 'favorite', 'shop'];
@@ -64,13 +74,11 @@ const AdDetails = props => {
   };
   const handleMovePreviousPhoto = () => {
     let index = currentPhotoIndex;
-    index = index <= 0 ? images.length - 1 : --index;
-    setCurrentPhotoIndex(index);
+    setCurrentPhotoIndex(index <= 0 ? images.length - 1 : --index);
   };
   const handleMoveNextPhoto = () => {
     let index = currentPhotoIndex;
-    index = index >= images.length - 1 ? 0 : ++index;
-    setCurrentPhotoIndex(index);
+    setCurrentPhotoIndex(index >= images.length - 1 ? 0 : ++index);
   };
   const onModalDissmiss = () => {
     invoke(props, 'onClose');
@@ -111,6 +119,7 @@ const AdDetails = props => {
     setShowUserDetails(true);
     setSelectedUser(user);
   };
+  const empty = <Icon name="face" size={40} />;
 
   return (
     <Modal
@@ -137,12 +146,14 @@ const AdDetails = props => {
         />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={sharedStyles.flexRow}>
-            <CachedImage
-              source={{
-                uri: images[currentPhotoIndex],
-              }}
-              style={sharedStyles.adDetailsImage}
-            />
+            <ImageCacheProvider urlsToPreload={images}>
+              <CachedImage
+                source={{
+                  uri: images[currentPhotoIndex],
+                }}
+                style={sharedStyles.adDetailsImage}
+              />
+            </ImageCacheProvider>
             {images.length > 1 && (
               <>
                 <Button
@@ -240,25 +251,30 @@ const AdDetails = props => {
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               {usersDataLoading && SimpleLoader}
-              {!usersDataLoading && lotteryUsersData && (
-                <VirtualizedList
-                  horizontal={true}
-                  showsVerticalScrollIndicator={false}
-                  data={lotteryUsersData}
-                  getItem={(data, index) => data[index]}
-                  getItemCount={() => lotteryUsersData.length}
-                  contentContainerStyle={
-                    sharedStyles.adDetailsUsersListContainer
-                  }
-                  keyExtractor={_user => _user.id}
-                  renderItem={({item: _user}) => (
-                    <AdDetailsUserListItem
-                      user={_user}
-                      onPress={handleUserPress}
-                    />
-                  )}
-                />
-              )}
+              {!usersDataLoading &&
+                lotteryUsersData &&
+                lotteryUsersData.length > 0 && (
+                  <VirtualizedList
+                    horizontal={true}
+                    showsVerticalScrollIndicator={false}
+                    data={lotteryUsersData}
+                    getItem={(data, index) => data[index]}
+                    getItemCount={() => lotteryUsersData.length}
+                    contentContainerStyle={
+                      sharedStyles.adDetailsUsersListContainer
+                    }
+                    keyExtractor={_user => _user.id}
+                    renderItem={({item: _user}) => (
+                      <AdDetailsUserListItem
+                        user={_user}
+                        onPress={handleUserPress}
+                      />
+                    )}
+                  />
+                )}
+              {!usersDataLoading &&
+                (!lotteryUsersData || lotteryUsersData.length === 0) &&
+                empty}
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="green" name="star" />
@@ -274,6 +290,7 @@ const AdDetails = props => {
                   onPress={winnerUserData && handleUserPress}
                 />
               )}
+              {!usersDataLoading && !winnerUserData && empty}
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="dns" />
@@ -345,6 +362,7 @@ const AdDetails = props => {
                   onPress={handleUserPress}
                 />
               )}
+              {!usersDataLoading && !adPosterData && empty}
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="fingerprint" />
@@ -384,13 +402,13 @@ AdDetails.propTypes = {
   onClose: PropTypes.func,
 };
 
-const mapStateToProps = ({lotteriesReducer, authReducer, adDetailsReducer}) => {
+const mapStateToProps = state => {
   return {
-    lotteries: lotteriesReducer.lotteries,
-    user: authReducer.user,
-    adPosterData: adDetailsReducer.adPosterData,
-    lotteryUsersData: adDetailsReducer.lotteryUsersData,
-    winnerUserData: adDetailsReducer.winnerUserData,
+    lotteries: getLotteriesSelector(state),
+    user: getUsersSelector(state),
+    adPosterData: getAdPosterDataSelector(state),
+    lotteryUsersData: getLotteryUsersDataSelector(state),
+    winnerUserData: getWinnerUserDataSelector(state),
   };
 };
 
@@ -400,5 +418,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-// eslint-disable-next-line prettier/prettier
-export default connect(mapStateToProps, mapDispatchToProps)(AdDetails);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AdDetails);

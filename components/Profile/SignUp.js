@@ -21,6 +21,13 @@ import invoke from 'lodash/invoke';
 import {loginAction, logoutAction} from '../../redux/Auth/actions';
 import {connect} from 'react-redux';
 import {handleSignUp} from '../../redux/Auth/SignUp';
+import {
+  getEmailSelector,
+  getPasswordSelector,
+  getVerificationIdSelector,
+  getUserSelector,
+  getCountrySelector,
+} from './Selectors';
 
 const SignUp = props => {
   const {
@@ -389,13 +396,13 @@ SignUp.propTypes = {
   logout: PropTypes.func,
 };
 
-const mapStateToProps = ({authReducer}) => {
+const mapStateToProps = state => {
   return {
-    email: authReducer.email,
-    password: authReducer.password,
-    verificationId: authReducer.verificationId,
-    user: authReducer.user,
-    country: authReducer.country,
+    email: getEmailSelector(state),
+    password: getPasswordSelector(state),
+    verificationId: getVerificationIdSelector(state),
+    user: getUserSelector(state),
+    country: getCountrySelector(state),
   };
 };
 
@@ -407,5 +414,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-// eslint-disable-next-line prettier/prettier
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SignUp);

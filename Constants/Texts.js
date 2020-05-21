@@ -67,7 +67,7 @@ const importAd = {
   images: 'Images',
   prefecture: 'Prefecture',
   category: 'Category',
-  status: 'Status',
+  status: 'Condition',
 };
 
 const lottteries = {
@@ -140,6 +140,7 @@ const settings = {
   jp: 'JP',
   english: 'English',
   japanese: 'Japanese',
+  version: 'Version',
 };
 
 const updateUserr = {

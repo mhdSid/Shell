@@ -35,11 +35,14 @@ const authReducer = (state = initialState, action) => {
       };
     }
     default: {
-      return (
-        state || {
-          ...initialState,
-        }
-      );
+      // return (
+      //   state || {
+      //     ...initialState,
+      //   }
+      // );
+      return {
+        ...state,
+      };
     }
   }
 };

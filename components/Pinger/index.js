@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import invoke from 'lodash/invoke';
 import {connect} from 'react-redux';
 import AdDetails from '../AdDetails';
 import {handlePing} from '../../redux/Ping/Ping';
 import PropTypes from 'prop-types';
 import {showAdDetails} from '../../redux/AdDetails/actions';
+import {getAdDetailsSelector} from './Selectors';
 
 const Pinger = props => {
   const {adDetails} = props;
@@ -13,7 +14,9 @@ const Pinger = props => {
     invoke(props, 'showAdDetails', undefined);
   };
 
-  invoke(props, 'handlePing');
+  useEffect(() => {
+    invoke(props, 'handlePing');
+  }, []);
 
   if (adDetails) {
     return <AdDetails onClose={onAdsDetailsClose} item={adDetails} />;
@@ -21,9 +24,9 @@ const Pinger = props => {
   return null;
 };
 
-const mapStateToProps = ({adDetailsReducer}) => {
+const mapStateToProps = state => {
   return {
-    adDetails: adDetailsReducer.adDetails,
+    adDetails: getAdDetailsSelector(state),
   };
 };
 
@@ -39,5 +42,7 @@ Pinger.propTypes = {
   handlePing: PropTypes.func,
 };
 
-// eslint-disable-next-line prettier/prettier
-export default connect(mapStateToProps, mapDispatchToProps)(Pinger);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Pinger);

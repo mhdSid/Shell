@@ -69,11 +69,15 @@ const mimeTypes = {
 };
 
 const adStatuses = [
-  'Unused',
+  'New',
+  'Used',
   'Nearly Used',
   'No Noticable Scratches or Dirt',
   'Some Scratches & Dirt',
   'Overall Bad Condition',
+  'Excellent',
+  'Good',
+  'Great',
 ].sort();
 
 export {adCategories, adStatuses, mimeTypes, adTypes};

@@ -10,6 +10,7 @@ import {Loading} from '../Loading';
 import {myyLotteries} from '../../Constants/Texts';
 import {connect} from 'react-redux';
 import {handleFetchMyLotteries} from '../../redux/User/FetchMyLotteries';
+import {getUserSelector, getMyLotteriesSelector} from './Selectors';
 
 const MyLotteries = props => {
   const {user, myLotteries} = props;
@@ -17,7 +18,6 @@ const MyLotteries = props => {
   const [loading, setLoading] = useState(false);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
   const [selectedLottery, setSelectedLottery] = useState();
-  const [fetchId] = useState(1);
 
   const handleCloseModal = () => {
     setModalVisible(false);
@@ -47,7 +47,7 @@ const MyLotteries = props => {
 
   useEffect(() => {
     fetchMyLotteries();
-  }, [fetchId]);
+  }, []);
 
   return (
     <Modal
@@ -108,10 +108,10 @@ MyLotteries.propTypes = {
   onClose: PropTypes.func,
 };
 
-const mapStateToProps = ({authReducer, userReducer}) => {
+const mapStateToProps = state => {
   return {
-    user: authReducer.user,
-    myLotteries: userReducer.myLotteries,
+    user: getUserSelector(state),
+    myLotteries: getMyLotteriesSelector(state),
   };
 };
 
@@ -122,5 +122,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-// eslint-disable-next-line prettier/prettier
-export default connect(mapStateToProps, mapDispatchToProps)(MyLotteries);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MyLotteries);
