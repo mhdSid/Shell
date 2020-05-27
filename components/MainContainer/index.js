@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, View} from 'react-native';
+import {SafeAreaView} from 'react-native';
 import {BottomNavigation, Icon, Badge} from 'react-native-material-ui';
 import AuthComponent from '../Profile';
 import sharedStyles from '../../assets/styles/sharedStyles';

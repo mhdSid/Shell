@@ -603,15 +603,15 @@ const countryCodeList = {
 };
 
 const currencies = {
-  Japan: '¥(JPY)',
+  Japan: '¥',
   Lebanon: 'LBP',
   Egypt: 'EGP',
   Russia: '₽(RUB)',
   Qatar: 'QAR',
   Dubai: 'AED',
-  JP: '¥(JPY)',
+  JP: '¥',
   LB: 'LBP',
-  Jp: '¥(JPY)',
+  Jp: '¥',
   Lb: 'LBP',
 };
 

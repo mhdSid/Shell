@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, createRef} from 'react';
 import {
   Text,
   View,
@@ -14,10 +14,6 @@ import {Button, Icon, ActionButton} from 'react-native-material-ui';
 import {Toolbar} from 'react-native-material-ui';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
-import {
-  CachedImage,
-  ImageCacheProvider,
-} from '../../lib/CachedImage/react-native-cached-image';
 import UserDetails from '../UserDetails';
 import {SimpleLoader} from '../Loading';
 import formatDate from '../../lib/CachedImage/formatDate';
@@ -30,7 +26,14 @@ import {
   getAdPosterDataSelector,
   getLotteryUsersDataSelector,
   getWinnerUserDataSelector,
+  getUserAdsSelector,
 } from './Selectors';
+import {handleFetchUserAds} from '../../redux/AdDetails/FetchUserAds';
+import CardListItem from '../Home/CardListItem';
+import {showAdDetails} from '../../redux/AdDetails/actions';
+import {CarouselComponent} from '../Carousel';
+import ImagesViewer from '../ImageViewer';
+import Payment from '../Payment';
 
 const myActions = ['share', 'favorite', 'cancel', 'delete'];
 const defaultActions = ['share', 'favorite', 'shop'];
@@ -42,6 +45,7 @@ const AdDetails = props => {
     lotteryUsersData,
     adPosterData,
     winnerUserData,
+    userAds,
   } = props;
   const {
     name,
@@ -63,37 +67,44 @@ const AdDetails = props => {
     currentCollectedPrice,
     images,
   } = item;
-  const [modalVisible, setModalVisible] = useState(true);
-  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-  const [showUserDetails, setShowUserDetails] = useState();
   const [selectedUser, setSelectedUser] = useState();
-  const [usersDataLoading, setUsersDataLoading] = useState(false);
+  const [usersDataLoading, setUsersDataLoading] = useState(true);
+  const [userAdsLoading, setUserAdsLoading] = useState(true);
+  const [showImagesViewer, setShowImagesViewer] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
+  const [viewImageUri, setViewImageUri] = useState(images[0]);
+  const scrollViewRef = createRef();
 
   const onUserDetailsClose = () => {
-    setShowUserDetails(false);
+    setSelectedUser(undefined);
   };
-  const handleMovePreviousPhoto = () => {
-    let index = currentPhotoIndex;
-    setCurrentPhotoIndex(index <= 0 ? images.length - 1 : --index);
-  };
-  const handleMoveNextPhoto = () => {
-    let index = currentPhotoIndex;
-    setCurrentPhotoIndex(index >= images.length - 1 ? 0 : ++index);
-  };
-  const onModalDissmiss = () => {
-    invoke(props, 'onClose');
+  const handleUserAdPress = ad => {
+    return () => {
+      scrollViewRef.current.scrollTo({x: 0, y: 0, animated: true});
+      if (props.updateAdDetails) {
+        invoke(props, 'updateAdDetails', ad);
+      } else {
+        invoke(props, 'showAdDetails', ad);
+      }
+    };
   };
   const handleCloseModal = () => {
-    setModalVisible(false);
+    invoke(props, 'onClose');
   };
   const handleActionPress = value => {
     Alert.alert(value);
   };
   const handleEnterDraw = () => {
-    Alert.alert('handleEnterDraw');
+    setShowPayment(true);
   };
-  const callback = () => {
+  const onPaymentClose = () => {
+    setShowPayment(false);
+  };
+  const fetchUsersDataCallback = () => {
     setUsersDataLoading(false);
+  };
+  const fetchUsersAdsCallback = () => {
+    setUserAdsLoading(false);
   };
   const fetchUsersData = () => {
     const users = [
@@ -102,39 +113,65 @@ const AdDetails = props => {
       winnerUserId || false,
     ].filter(Boolean);
     if (users.length > 0) {
-      setUsersDataLoading(true);
       invoke(props, 'handleFetchUsersData', {
         winnerUserId,
         userId,
         users,
-        onError: callback,
-        onSuccess: callback,
+        onError: fetchUsersDataCallback,
+        onSuccess: fetchUsersDataCallback,
       });
     }
   };
   const onShow = () => {
     fetchUsersData();
+    invoke(props, 'handleFetchUserAds', {
+      userId,
+      onError: fetchUsersAdsCallback,
+      onSuccess: fetchUsersAdsCallback,
+    });
   };
   const handleUserPress = user => {
-    setShowUserDetails(true);
     setSelectedUser(user);
   };
   const empty = <Icon name="face" size={40} />;
-
+  const getItem = (data, index) => data[index];
+  const getUserAdsCount = () => userAds.length;
+  const getLotteryUsersCount = () => lotteryUsersData.length;
+  const getVirtualKey = _item => _item.id;
+  const renderUserAdItem = ({item: ad}) => (
+    <CardListItem
+      item={ad}
+      smallImage={true}
+      horizontal={true}
+      onItemPress={handleUserAdPress(ad)}
+    />
+  );
+  const renderLotteryUserItem = ({item: _user}) => (
+    <AdDetailsUserListItem user={_user} onPress={handleUserPress} />
+  );
+  const handleShowImagesViewer = url => {
+    setViewImageUri(url);
+    setShowImagesViewer(true);
+  };
+  const onImagesViewerClose = () => {
+    setShowImagesViewer(false);
+  };
   return (
-    <Modal
-      animationType="slide"
-      transparent={false}
-      visible={modalVisible}
-      onShow={onShow}
-      onDismiss={onModalDissmiss}>
+    <Modal animationType="slide" onShow={onShow}>
+      {selectedUser && (
+        <UserDetails onClose={onUserDetailsClose} item={selectedUser} />
+      )}
+      {showImagesViewer && (
+        <ImagesViewer uri={viewImageUri} onClose={onImagesViewerClose} />
+      )}
+      {showPayment && <Payment onClose={onPaymentClose} />}
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
-          style={{container: sharedStyles.toolbarContainer}}
+          style={{container: sharedStyles.adDetailsToolbarContainer}}
           leftElement="arrow-back"
           onLeftElementPress={handleCloseModal}
           rightElement={
-            item.userId !== authUser.id && (
+            `${userId}` !== `${authUser.id}` && (
               <Button
                 onPress={handleEnterDraw}
                 raised
@@ -144,53 +181,13 @@ const AdDetails = props => {
             )
           }
         />
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
           <View style={sharedStyles.flexRow}>
-            <ImageCacheProvider urlsToPreload={images}>
-              <CachedImage
-                source={{
-                  uri: images[currentPhotoIndex],
-                }}
-                style={sharedStyles.adDetailsImage}
-              />
-            </ImageCacheProvider>
-            {images.length > 1 && (
-              <>
-                <Button
-                  text=""
-                  icon={
-                    <Icon
-                      size={50}
-                      style={sharedStyles.adDetailsImageArrowIconLeft}
-                      name="chevron-left"
-                      color="white"
-                    />
-                  }
-                  size={50}
-                  onPress={handleMovePreviousPhoto}
-                  style={{
-                    container:
-                      sharedStyles.adDetailsImageArrowIconLeftContainer,
-                  }}
-                />
-                <Button
-                  text=""
-                  icon={
-                    <Icon
-                      size={50}
-                      name="chevron-right"
-                      color="white"
-                      style={sharedStyles.adDetailsImageArrowIconRight}
-                    />
-                  }
-                  onPress={handleMoveNextPhoto}
-                  style={{
-                    container:
-                      sharedStyles.adDetailsImageArrowIconRightContainer,
-                  }}
-                />
-              </>
-            )}
+            <CarouselComponent
+              onItemPress={handleShowImagesViewer}
+              items={images}
+              imageOnly={true}
+            />
           </View>
           <View style={sharedStyles.adDetailsContainer}>
             <View style={sharedStyles.userDetailsIconTextContainer}>
@@ -255,21 +252,18 @@ const AdDetails = props => {
                 lotteryUsersData &&
                 lotteryUsersData.length > 0 && (
                   <VirtualizedList
+                    initialNumToRender={2}
+                    windowSize={2}
                     horizontal={true}
                     showsVerticalScrollIndicator={false}
                     data={lotteryUsersData}
-                    getItem={(data, index) => data[index]}
-                    getItemCount={() => lotteryUsersData.length}
+                    getItem={getItem}
+                    getItemCount={getLotteryUsersCount}
                     contentContainerStyle={
                       sharedStyles.adDetailsUsersListContainer
                     }
-                    keyExtractor={_user => _user.id}
-                    renderItem={({item: _user}) => (
-                      <AdDetailsUserListItem
-                        user={_user}
-                        onPress={handleUserPress}
-                      />
-                    )}
+                    keyExtractor={getVirtualKey}
+                    renderItem={renderLotteryUserItem}
                   />
                 )}
               {!usersDataLoading &&
@@ -365,6 +359,34 @@ const AdDetails = props => {
               {!usersDataLoading && !adPosterData && empty}
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
+              <Icon color="rgba(0,0,0,.55)" name="collections" />
+              <Text style={sharedStyles.userDetailsText}>
+                {adDetails.userAds}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutFirstSectionTextContainerNoFlex}>
+              {userAdsLoading && SimpleLoader}
+              {!userAdsLoading && userAds && (
+                <VirtualizedList
+                  initialNumToRender={2}
+                  windowSize={2}
+                  horizontal={true}
+                  removeClippedSubviews={true}
+                  showsHorizontalScrollIndicator={false}
+                  data={userAds}
+                  getItem={getItem}
+                  getItemCount={getUserAdsCount}
+                  keyExtractor={getVirtualKey}
+                  renderItem={renderUserAdItem}
+                />
+              )}
+              {!userAdsLoading && !userAds && (
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.emptyUserAds}
+                </Text>
+              )}
+            </View>
+            <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="fingerprint" />
               <Text style={sharedStyles.userDetailsText}>{adDetails.adId}</Text>
             </View>
@@ -390,9 +412,6 @@ const AdDetails = props => {
           transition="speedDial"
         />
       </SafeAreaView>
-      {showUserDetails && (
-        <UserDetails onClose={onUserDetailsClose} item={selectedUser} />
-      )}
     </Modal>
   );
 };
@@ -400,6 +419,7 @@ const AdDetails = props => {
 AdDetails.propTypes = {
   item: PropTypes.object,
   onClose: PropTypes.func,
+  updateAdDetails: PropTypes.func,
 };
 
 const mapStateToProps = state => {
@@ -409,12 +429,15 @@ const mapStateToProps = state => {
     adPosterData: getAdPosterDataSelector(state),
     lotteryUsersData: getLotteryUsersDataSelector(state),
     winnerUserData: getWinnerUserDataSelector(state),
+    userAds: getUserAdsSelector(state),
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     handleFetchUsersData: payload => dispatch(handleFetchUsersData(payload)),
+    handleFetchUserAds: payload => dispatch(handleFetchUserAds(payload)),
+    showAdDetails: payload => dispatch(showAdDetails(payload)),
   };
 };
 

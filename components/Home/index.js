@@ -25,6 +25,8 @@ import {
   getIsCardSelector,
   getIsCarouselSelector,
 } from './Selectors';
+import UploadAdProgress from '../UploadAdProgress';
+import {emitSocketEvents} from '../../services/Socket.js';
 
 const HomeComponent = props => {
   const {ads, isList, isCarousel, isCard} = props;
@@ -74,37 +76,40 @@ const HomeComponent = props => {
   const renderCardListItem = ({item}) => (
     <CardListItem item={item} onItemPress={handleShowAdsDetailsFlatList} />
   );
-  const renderListItem = ({item}) => (
-    <ListItem
-      divider
-      leftElement={
-        item.images && item.images[0] ? (
-          <CachedImage
-            style={sharedStyles.homeListItemImage}
-            source={{
-              uri: item.images[0],
-            }}
-          />
-        ) : null
-      }
-      centerElement={{
-        primaryText: item.name,
-        secondaryText: item.category,
-        tertiaryText: `${item.currency} ${item.price}`,
-      }}
-      onPress={handleShowAdDetails(item)}
-    />
+  const renderListItem = ({item, index}) => (
+    <View style={index === ads.length - 1 && sharedStyles.homeListItemMargin}>
+      <ListItem
+        divider
+        leftElement={
+          item.images && item.images[0] ? (
+            <CachedImage
+              style={sharedStyles.homeListItemImage}
+              source={{
+                uri: item.images[0],
+              }}
+            />
+          ) : null
+        }
+        centerElement={{
+          primaryText: item.name,
+          secondaryText: item.category,
+          tertiaryText: `${item.currency} ${item.price}`,
+        }}
+        onPress={handleShowAdDetails(item)}
+      />
+    </View>
   );
   const getItem = (data, index) => data[index];
   const getItemCount = () => ads.length;
   const getItemKey = item => item.id;
 
   useEffect(() => {
+    emitSocketEvents();
     fetchAds();
   }, []);
 
   return (
-    <View style={sharedStyles.fullheightView}>
+    <View style={sharedStyles.fullheightView} shouldRasterizeIOS={true}>
       <Toolbar
         style={{container: sharedStyles.toolbarContainer}}
         centerElement={home.appName}
@@ -118,7 +123,14 @@ const HomeComponent = props => {
         adUnitID="ca-app-pub-5703846930890914/6428703368"
         style={sharedStyles.adMobBanner}
       />
+      <UploadAdProgress />
       {loading && <View style={sharedStyles.homeLoading}>{Loading}</View>}
+      {isCarousel && ads && ads.length > 0 && (
+        <CarouselComponent
+          items={ads}
+          onItemPress={handleShowAdsDetailsFlatList}
+        />
+      )}
       {isCard && ads && ads.length > 0 && (
         <VirtualizedList
           initialNumToRender={2}
@@ -133,12 +145,6 @@ const HomeComponent = props => {
           contentContainerStyle={sharedStyles.homeAdsContainer}
           keyExtractor={getItemKey}
           renderItem={renderCardListItem}
-        />
-      )}
-      {isCarousel && ads && ads.length > 0 && (
-        <CarouselComponent
-          items={ads}
-          onItemPress={handleShowAdsDetailsFlatList}
         />
       )}
       {isList && ads && ads.length > 0 && (

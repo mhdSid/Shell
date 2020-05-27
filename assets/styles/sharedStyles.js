@@ -17,12 +17,21 @@ const toolbarStyles = {
   zIndex: 9999,
 };
 
+const uploadProgressContainer = {
+  flexDirection: 'row',
+  display: 'flex',
+  alignItems: 'flex-start',
+  backgroundColor: '#b69cf6',
+  alignSelf: 'center',
+  borderRadius: 7,
+  padding: 5,
+  margin: 10,
+  zIndex: 100,
+};
+
 const sharedStyles = StyleSheet.create({
   /* ToolBar */
   toolbarContainer: {
-    ...toolbarStyles,
-  },
-  aboutToolbarContainer: {
     ...toolbarStyles,
   },
   toolbarContainerPadding: {
@@ -32,6 +41,11 @@ const sharedStyles = StyleSheet.create({
   toolbarContainerPaddingRight: {
     paddingRight: 15,
     ...toolbarStyles,
+  },
+  adDetailsToolbarContainer: {
+    ...toolbarStyles,
+    textAlign: 'center',
+    paddingRight: 15,
   },
   /* End ToolBar */
 
@@ -179,8 +193,9 @@ const sharedStyles = StyleSheet.create({
   },
   currenyLabel: {
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 18,
     marginHorizontal: 20,
+    color: 'rgba(0,0,0,.7)',
   },
   verificationLabel: {
     marginTop: 10,
@@ -233,7 +248,11 @@ const sharedStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   importAdContainer: {
-    marginBottom: 50,
+    ...flex,
+    marginTop: 40,
+    paddingHorizontal: 30,
+    marginBottom: 150,
+    justifyContent: 'flex-start',
   },
   loggedInContainer: {
     ...flex,
@@ -247,12 +266,15 @@ const sharedStyles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   homeAdsContainer: {
-    paddingTop: 20,
-    paddingHorizontal: 5,
+    paddingTop: 10,
+    paddingHorizontal: 10,
     paddingBottom: 20,
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
+  },
+  homeListItemMargin: {
+    marginBottom: 20,
   },
   adDetailsUsersListContainer: {
     display: 'flex',
@@ -294,11 +316,27 @@ const sharedStyles = StyleSheet.create({
   },
   homeCardItem: {
     width: '100%',
-    flexGrow: 1,
-    marginBottom: 5,
+    // flexGrow: 1,
+    marginBottom: 10,
+  },
+  homeCardItemHorizontal: {
+    width: 170,
+    height: 170,
+    // flexGrow: 1,
+    marginHorizontal: 10,
+    // marginBottom: 5,
+    // width: '70%',
   },
   homeCardItemImage: {
     aspectRatio: 3 / 3,
+  },
+  homeCardItemImageSmall: {
+    // aspectRatio: 4 / 3,
+    // width: '70%%',
+    width: '100%',
+    height: '100%',
+    // flexGrow: 1,
+    // display: 'flex',
   },
   homeCardItemTextContainer: {
     backgroundColor: 'rgba(0,0,0,.75)',
@@ -325,6 +363,7 @@ const sharedStyles = StyleSheet.create({
   },
   aboutSafeViewContainer: {
     backgroundColor: '#b69cf6',
+    justifyContent: 'center',
   },
   drawerContainer: {
     borderRadius: 20,
@@ -355,6 +394,19 @@ const sharedStyles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
+  },
+  aboutFirstSectionTextContainerNoFlex: {
+    fontWeight: '500',
+    color: 'rgba(0,0,0,.8)',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    marginBottom: 20,
+    padding: 20,
+    lineHeight: 20,
+    // display: 'flex',
+    // flexDirection: 'column',
+    // justifyContent: 'flex-start',
+    // alignItems: 'flex-start',
   },
   aboutIconTextContainer: {
     display: 'flex',
@@ -481,6 +533,80 @@ const sharedStyles = StyleSheet.create({
   },
   homeLoading: {
     bottom: 70,
+  },
+  uploadProgressRelative: {
+    ...uploadProgressContainer,
+    position: 'relative',
+    width: '95%',
+  },
+  uploadProgressAbsolute: {
+    ...uploadProgressContainer,
+    position: 'absolute',
+    bottom: 0,
+    flexGrow: 1,
+    left: 0,
+    right: 0,
+    width: '95%',
+  },
+  uploadProgressText: {
+    fontWeight: '500',
+    marginHorizontal: 10,
+    color: 'white',
+  },
+  closeModalBtn: {
+    position: 'absolute',
+    right: 0,
+    top: 10,
+    zIndex: 100,
+    // alignSelf: 'flex-end',
+  },
+  imageViewer: {
+    backgroundColor: 'black',
+    // display: 'flex',
+    // justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft: 20,
+    paddingRight: 20,
+    position: 'relative',
+    // ...flex,
+    // justifyContent: 'flex-start',
+  },
+  imageViewerZoom: {
+    marginTop: -50,
+  },
+  imageViewerImage: {
+    width: 300,
+    height: 300,
+    alignSelf: 'center',
+  },
+  paymentBtn: {
+    marginBottom: 15,
+  },
+  paymentBtnContainer: {
+    backgroundColor: '#1919ff',
+    color: 'white',
+    height: 50,
+  },
+  creditContainer: {
+    marginTop: 15,
+    marginBottom: 30,
+    flex: 1,
+    alignSelf: 'flex-start',
+  },
+  creditInput: {
+    width: '70%',
+    margin: 0,
+  },
+  btnContainer: {
+    marginVertical: 30,
+  },
+  paymentTitle: {
+    color: '#b69cf6',
+    textShadowColor: '#1919ff',
+    textShadowRadius: 5,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 30,
   },
 });
 

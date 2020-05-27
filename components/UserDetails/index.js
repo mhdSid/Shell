@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Text, View, Modal, SafeAreaView, ScrollView} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, Icon} from 'react-native-material-ui';
@@ -21,21 +21,13 @@ const UserDetails = props => {
     cityWard,
     fullAddress,
   } = item;
-  const [modalVisible, setModalVisible] = useState(true);
 
-  const onModalDissmiss = () => {
-    invoke(props, 'onClose');
-  };
   const handleCloseModal = () => {
-    setModalVisible(false);
+    invoke(props, 'onClose');
   };
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={false}
-      visible={modalVisible}
-      onDismiss={onModalDissmiss}>
+    <Modal animationType="slide">
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}

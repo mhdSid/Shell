@@ -6,6 +6,7 @@ import settingsReducer from './Settings/reducer';
 import adDetailsReducer from './AdDetails/reducer';
 import searchReducer from './Search/reducer';
 import userReducer from './User/reducer';
+import uploadProgressReducer from './UploadProgress/reducer';
 
 const rootReducer = combineReducers({
   authReducer: authReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   adDetailsReducer: adDetailsReducer,
   searchReducer: searchReducer,
   userReducer: userReducer,
+  uploadProgressReducer: uploadProgressReducer,
 });
 
 export default rootReducer;

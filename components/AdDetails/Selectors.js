@@ -5,6 +5,7 @@ const getUsers = state => state.authReducer.user;
 const getAdPosterData = state => state.adDetailsReducer.adPosterData;
 const getLotteryUsersData = state => state.adDetailsReducer.lotteryUsersData;
 const getWinnerUserData = state => state.adDetailsReducer.winnerUserData;
+const getUserAds = state => state.adDetailsReducer.userAds;
 
 const getLotteriesSelector = createSelector(
   [getLotteries],
@@ -31,10 +32,16 @@ const getWinnerUserDataSelector = createSelector(
   winnerUserData => winnerUserData,
 );
 
+const getUserAdsSelector = createSelector(
+  [getUserAds],
+  userAds => userAds,
+);
+
 export {
   getLotteriesSelector,
   getUsersSelector,
   getAdPosterDataSelector,
   getLotteryUsersDataSelector,
   getWinnerUserDataSelector,
+  getUserAdsSelector,
 };

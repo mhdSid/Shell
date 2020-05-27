@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, ScrollView, View, Text} from 'react-native';
 import {connect} from 'react-redux';
@@ -13,7 +13,6 @@ import {getLangSelector} from './Selectors';
 
 const Settings = props => {
   const {lang} = props;
-  const [modalVisible, setModalVisible] = useState(true);
 
   const handleSetLanguage = value => {
     return () => {
@@ -21,18 +20,11 @@ const Settings = props => {
     };
   };
   const handleCloseModal = () => {
-    setModalVisible(false);
-  };
-  const onModalDissmiss = () => {
     invoke(props, 'onClose');
   };
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={false}
-      visible={modalVisible}
-      onDismiss={onModalDissmiss}>
+    <Modal animationType="slide">
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}

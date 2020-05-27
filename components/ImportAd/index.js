@@ -28,12 +28,11 @@ import {importAd} from '../../Constants/Texts';
 import invoke from 'lodash/invoke';
 import {handleImportAd} from '../../redux/Ads/ImportAd';
 import {getLoggedInSelector, getUserSelector} from './Selectors';
+import UploadAdProgress from '../UploadAdProgress';
 
 const ImportAd = props => {
   const {loggedIn, user} = props;
   const userCountry = user && user.country;
-  // const [loggedIn, setLoggedIn] = useState(_loggedIn);
-  // const [user, setUser] = useState(authUser);
   const [adCategory, setAdCategory] = useState(importAd.sports);
   const [adStatus, setAdStatus] = useState(importAd.noNoticableScratches);
   const [images, setImages] = useState([]);
@@ -78,6 +77,7 @@ const ImportAd = props => {
     descriptionField.setValue('');
     priceField.setValue('');
     setImages([]);
+    setImageFiles([]);
     setADataChanged(false);
     setImagesChanged(false);
     setAdNameChanged(false);
@@ -103,7 +103,6 @@ const ImportAd = props => {
       adDataChanged
     ) {
       const filteredImages = imageFiles.filter(Boolean);
-      setDefault(nameField, descriptionField, priceField);
       invoke(props, 'handleImportAd', {
         name,
         description,
@@ -119,6 +118,7 @@ const ImportAd = props => {
         onSuccess: () => {},
         imageFiles: filteredImages,
       });
+      setDefault(nameField, descriptionField, priceField);
     }
   };
   const updateAdCategory = value => {
@@ -197,12 +197,9 @@ const ImportAd = props => {
               />
             }
           />
+          <UploadAdProgress relative={true} />
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View
-              style={[
-                sharedStyles.loginContainer,
-                sharedStyles.importAdContainer,
-              ]}>
+            <View style={sharedStyles.importAdContainer}>
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>{importAd.productName}</Text>
                 <TextField

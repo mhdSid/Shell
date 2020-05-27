@@ -1,34 +1,30 @@
 import {adActions} from './actions';
 import {ENTRIES1} from '../../Constants/CarouselEntries';
+import uniqBy from 'lodash/uniqBy';
 
 const initialState = {
-  ads: [],
+  ads: [...ENTRIES1],
 };
 
 const adsReducer = (state = initialState, action) => {
   switch (action.type) {
     case adActions.IMPORTAD: {
-      let {ads} = state;
-      const newSet = new Set();
-      if (Array.isArray(action.payload)) {
-        ENTRIES1.forEach(item => {
-          newSet.add(item);
-        });
-        action.payload.forEach(ad => {
-          newSet.add({
-            ...ad,
-            images: ad.images.filter(Boolean),
-          });
-        });
-      } else {
-        ENTRIES1.forEach(item => {
-          newSet.add(item);
-        });
-        newSet.add(action.payload);
+      const {payload} = action;
+      let newAds = [];
+      if (Array.isArray(payload) && payload.length > 0) {
+        newAds = [...payload];
+      } else if (
+        typeof payload === 'object' &&
+        Object.keys(payload).length > 0
+      ) {
+        newAds = [payload];
       }
-      ads = Array.from(newSet);
+      newAds = uniqBy([...state.ads, ...newAds], 'id').sort(
+        (ad1, ad2) => +new Date(ad2.publishDate) - +new Date(ad1.publishDate),
+      );
+
       return {
-        ads,
+        ads: newAds,
       };
     }
     case adActions.UPDATECURRENTAD: {
@@ -45,10 +41,12 @@ const adsReducer = (state = initialState, action) => {
           return item;
         });
         return {
-          ads: [...updatedAds],
+          ads: updatedAds,
         };
       }
-      break;
+      return {
+        ...state,
+      };
     }
     default: {
       return {

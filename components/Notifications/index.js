@@ -8,22 +8,14 @@ import {loadingPopup} from '../Loading';
 import {notifications} from '../../Constants/Texts';
 
 const Notifications = props => {
-  const [modalVisible, setModalVisible] = useState(true);
   const [loading] = useState(false);
 
   const handleCloseModal = () => {
-    setModalVisible(false);
-  };
-  const onModalDismiss = () => {
     invoke(props, 'onClose');
   };
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={false}
-      visible={modalVisible}
-      onDismiss={onModalDismiss}>
+    <Modal animationType="slide">
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}

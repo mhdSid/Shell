@@ -36,7 +36,6 @@ const UpdateUser = props => {
   const [prefecture, setPrefecture] = useState(
     (user && user.prefecture) || prefecturesList[country],
   );
-  const [modalVisible, setModalVisible] = useState(true);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(undefined);
   const [imageFile, setImageFile] = useState(undefined);
@@ -128,6 +127,10 @@ const UpdateUser = props => {
     setFullAddressChanged(false);
     setCityWardChanged(false);
   };
+  const onSuccessCallback = () => {
+    setDefaultsDataChanged();
+    handleCloseModal();
+  };
   const handleUpdateUser = () => {
     const {current: mobileField} = mobileRef;
     const {current: firstNameField} = firstNameRef;
@@ -158,10 +161,7 @@ const UpdateUser = props => {
       };
       invoke(props, 'handleUpdateUserData', {
         onError: setDefaultsDataChanged,
-        onSuccess: () => {
-          setDefaultsDataChanged();
-          setModalVisible(false);
-        },
+        onSuccess: onSuccessCallback,
         updatedUserData,
       });
     }
@@ -189,9 +189,6 @@ const UpdateUser = props => {
     });
   };
   const handleCloseModal = () => {
-    setModalVisible(false);
-  };
-  const onModalDismiss = () => {
     invoke(props, 'onClose');
   };
 
@@ -220,11 +217,7 @@ const UpdateUser = props => {
   ]);
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={false}
-      visible={modalVisible}
-      onDismiss={onModalDismiss}>
+    <Modal animationType="slide">
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
           style={{container: sharedStyles.toolbarContainerPaddingRight}}

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, VirtualizedList} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
@@ -14,19 +14,18 @@ import {getUserSelector, getMyLotteriesSelector} from './Selectors';
 
 const MyLotteries = props => {
   const {user, myLotteries} = props;
-  const [modalVisible, setModalVisible] = useState(true);
   const [loading, setLoading] = useState(false);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
   const [selectedLottery, setSelectedLottery] = useState();
 
   const handleCloseModal = () => {
-    setModalVisible(false);
-  };
-  const onModalDismiss = () => {
     invoke(props, 'onClose');
   };
   const callback = () => {
     setLoading(false);
+  };
+  const updateAdDetails = item => {
+    setSelectedLottery(item);
   };
   const fetchMyLotteries = () => {
     invoke(props, 'handleFetchMyLotteries', {
@@ -44,17 +43,40 @@ const MyLotteries = props => {
   const onAdDetailsClose = () => {
     setShowLotteryDetails(false);
   };
-
-  useEffect(() => {
-    fetchMyLotteries();
-  }, []);
-
+  const getItem = (data, index) => data[index];
+  const getItemCount = () => myLotteries.length;
+  const getKeyExtractor = item => item.id;
+  const renderItem = ({item}) => (
+    <ListItem
+      divider
+      leftElement={
+        item.images && item.images[0] ? (
+          <CachedImage
+            style={sharedStyles.homeListItemImage}
+            source={{
+              uri: item.images[0],
+            }}
+          />
+        ) : null
+      }
+      centerElement={{
+        primaryText: item.name,
+        secondaryText: item.category,
+        tertiaryText: `${item.currency} ${item.price}`,
+      }}
+      onPress={handleItemPress(item)}
+    />
+  );
+  const adDetailsModal = showLotteryDetails && (
+    <AdDetails
+      updateAdDetails={updateAdDetails}
+      onClose={onAdDetailsClose}
+      item={selectedLottery}
+    />
+  );
   return (
-    <Modal
-      animationType="slide"
-      transparent={false}
-      visible={modalVisible}
-      onDismiss={onModalDismiss}>
+    <Modal animationType="slide" onShow={fetchMyLotteries}>
+      {adDetailsModal}
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}
@@ -63,40 +85,17 @@ const MyLotteries = props => {
           onLeftElementPress={handleCloseModal}
         />
         {loading && Loading}
-        {myLotteries && (
+        {myLotteries && myLotteries.length > 0 && (
           <VirtualizedList
             refreshing={loading}
             onRefresh={fetchMyLotteries}
             showsVerticalScrollIndicator={false}
             data={myLotteries}
-            getItem={(data, index) => data[index]}
-            getItemCount={() => myLotteries.length}
-            keyExtractor={item => item.id}
-            renderItem={({item}) => (
-              <ListItem
-                divider
-                leftElement={
-                  item.images && item.images[0] ? (
-                    <CachedImage
-                      style={sharedStyles.homeListItemImage}
-                      source={{
-                        uri: item.images[0],
-                      }}
-                    />
-                  ) : null
-                }
-                centerElement={{
-                  primaryText: item.name,
-                  secondaryText: item.category,
-                  tertiaryText: `${item.currency} ${item.price}`,
-                }}
-                onPress={handleItemPress(item)}
-              />
-            )}
+            getItem={getItem}
+            getItemCount={getItemCount}
+            keyExtractor={getKeyExtractor}
+            renderItem={renderItem}
           />
-        )}
-        {showLotteryDetails && (
-          <AdDetails onClose={onAdDetailsClose} item={selectedLottery} />
         )}
       </SafeAreaView>
     </Modal>

@@ -15,7 +15,14 @@ class CarouselItem extends PureComponent {
   static propTypes = {
     item: PropTypes.object,
     onItemPress: PropTypes.func,
+    imageOnly: PropTypes.bool,
   };
+
+  constructor(props) {
+    super(props);
+    this.numLines1 = 1;
+    this.numLines2 = 2;
+  }
 
   handleItemPress = () => {
     const {item} = this.props;
@@ -23,13 +30,29 @@ class CarouselItem extends PureComponent {
   };
 
   render() {
-    const {item} = this.props;
+    const {item, imageOnly} = this.props;
     const {images, name, currency, price, category} = item;
-    const even = true;
+    const textStyles = [sliderStyles.title, sliderStyles.titleEven];
+    const subtitleStyles = [sliderStyles.subtitle, sliderStyles.subtitleEven];
+    const containerStyles = [
+      imageOnly
+        ? sliderStyles.slideInnerContainerImageOnly
+        : sliderStyles.slideInnerContainer,
+    ];
+    const imageContainerStyles = [
+      sliderStyles.imageContainer,
+      sliderStyles.imageContainerEven,
+    ];
+    const textContainerStyles = [
+      sliderStyles.textContainer,
+      sliderStyles.textContainerEven,
+    ];
+    const radiusMaskStyles = [
+      sliderStyles.radiusMask,
+      sliderStyles.radiusMaskEven,
+    ];
     const uppercaseTitle = name ? (
-      <Text
-        style={[sliderStyles.title, even ? sliderStyles.titleEven : {}]}
-        numberOfLines={2}>
+      <Text style={textStyles} numberOfLines={this.numLines2}>
         {name.toUpperCase()}
       </Text>
     ) : (
@@ -39,106 +62,74 @@ class CarouselItem extends PureComponent {
     return (
       <TouchableBounce
         activeOpacity={1}
-        style={sliderStyles.slideInnerContainer}
+        style={containerStyles}
         onPress={this.handleItemPress}>
         <View style={sliderStyles.shadow} />
-        <View
-          style={[
-            sliderStyles.imageContainer,
-            even ? sliderStyles.imageContainerEven : {},
-          ]}>
-          {images && images[0] ? (
+        <View style={imageContainerStyles}>
+          {(imageOnly && item) || (images && images[0]) ? (
             <CachedImage
               source={{
-                uri: images[0],
+                uri: imageOnly ? item : images[0],
               }}
               style={sliderStyles.image}
             />
           ) : null}
-          <View
-            style={[
-              sliderStyles.radiusMask,
-              even ? sliderStyles.radiusMaskEven : {},
-            ]}
-          />
+          {!imageOnly && <View style={radiusMaskStyles} />}
         </View>
-        <View
-          style={[
-            sliderStyles.textContainer,
-            even ? sliderStyles.textContainerEven : {},
-          ]}>
-          {uppercaseTitle}
-          <Text
-            style={[
-              sliderStyles.subtitle,
-              even ? sliderStyles.subtitleEven : {},
-            ]}
-            numberOfLines={1}>
-            {category}
-          </Text>
-          <Text
-            style={[
-              sliderStyles.subtitle,
-              even ? sliderStyles.subtitleEven : {},
-            ]}
-            numberOfLines={2}>
-            {`${currency} ${price}`}
-          </Text>
-        </View>
+        {!imageOnly && (
+          <View style={textContainerStyles}>
+            {uppercaseTitle}
+            <Text style={subtitleStyles} numberOfLines={this.numLines1}>
+              {category}
+            </Text>
+            <Text style={subtitleStyles} numberOfLines={this.numLines1}>
+              {`${currency} ${price}`}
+            </Text>
+          </View>
+        )}
       </TouchableBounce>
     );
   }
 }
 
-const renderCarouselItem = onItemPress => {
-  return ({item}) => {
-    return <CarouselItem onItemPress={onItemPress} item={item} />;
-  };
-};
-
 const CarouselComponent = props => {
-  const {items, onItemPress} = props;
-  const [sliceIndex, setSliceIndex] = useState(3);
-
-  const sliced = items.slice(0, sliceIndex);
-
-  const [slicedAds, setSlicedAds] = useState(sliced);
-
-  const onEndReached = () => {
-    if (sliceIndex < items.length - 1) {
-      let newSliceIndex = sliceIndex;
-      newSliceIndex += newSliceIndex;
-      const _sliced = items.slice(0, newSliceIndex);
-      setSlicedAds(_sliced);
-      setSliceIndex(newSliceIndex);
+  const {items, onItemPress, imageOnly} = props;
+  const sliceValue = items.length > 5 ? 5 : items.length > 2 ? 2 : items.length;
+  const [sliceIndex, setSliceIndex] = useState(sliceValue);
+  const slicedAds = items.slice(0, sliceIndex);
+  const renderCarouselItem = ({item}) => (
+    <CarouselItem onItemPress={onItemPress} item={item} imageOnly={imageOnly} />
+  );
+  const onEndReached = index => {
+    if (index < items.length - 1 && index === sliceIndex - 2) {
+      setSliceIndex(sliceIndex + sliceValue);
     }
   };
+  const onSnapToItem = imageOnly ? null : onEndReached;
+  const data = imageOnly ? items : slicedAds;
 
   return (
-    <View style={sliderStyles.exampleContainer}>
-      <Carousel
-        shouldOptimizeUpdates={true}
-        onEndReachedThreshold={0}
-        onEndReached={onEndReached}
-        data={slicedAds}
-        renderItem={renderCarouselItem(onItemPress)}
-        sliderWidth={sliderWidth}
-        itemWidth={itemWidth}
-        hasParallaxImages={false}
-        firstItem={0}
-        inactiveSlideScale={0.94}
-        inactiveSlideOpacity={0.7}
-        containerCustomStyle={sliderStyles.slider}
-        contentContainerCustomStyle={sliderStyles.sliderContentContainer}
-        loopClonesPerSide={2}
-      />
-    </View>
+    <Carousel
+      shouldOptimizeUpdates={true}
+      onSnapToItem={onSnapToItem}
+      data={data}
+      renderItem={renderCarouselItem}
+      sliderWidth={sliderWidth}
+      itemWidth={itemWidth}
+      hasParallaxImages={false}
+      firstItem={0}
+      inactiveSlideScale={0.94}
+      inactiveSlideOpacity={0.7}
+      containerCustomStyle={sliderStyles.slider}
+      contentContainerCustomStyle={sliderStyles.sliderContentContainer}
+    />
   );
 };
 
 CarouselComponent.propTypes = {
   item: PropTypes.object,
   onItemPress: PropTypes.func,
+  imageOnly: PropTypes.bool,
 };
 
-export {CarouselItem, renderCarouselItem, CarouselComponent};
+export {CarouselItem, CarouselComponent};

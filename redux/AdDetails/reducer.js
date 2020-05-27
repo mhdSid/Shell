@@ -5,6 +5,7 @@ const initialState = {
   adPosterData: undefined,
   winnerUserData: undefined,
   adDetails: undefined,
+  userAds: undefined,
 };
 
 const adDetailsReducer = (state = initialState, action) => {
@@ -19,6 +20,19 @@ const adDetailsReducer = (state = initialState, action) => {
       return {
         ...state,
         winnerUserData: action.payload,
+      };
+    }
+    case adDetailsActions.FETCHUSERADS: {
+      const {payload} = action;
+      if (Array.isArray(payload) && payload.length > 0) {
+        return {
+          ...state,
+          userAds: [...payload],
+        };
+      }
+      return {
+        ...state,
+        userAds: undefined,
       };
     }
     case adDetailsActions.SETADPOSTERDATA: {

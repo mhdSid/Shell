@@ -6,7 +6,7 @@ const handlerUpdateUserData = payload => {
   return dispatch => {
     const {onError, updatedUserData} = payload;
     const onUpdateUserSuccess = data => {
-      const {error, user: updatedUser} = data;
+      let {error, user: updatedUser} = data;
       if (error) {
         return handleError({error, onError});
       }

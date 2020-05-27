@@ -17,8 +17,10 @@ const request = async options => {
   if (body && Object.keys(body).length > 0) {
     reqData = {
       ...reqData,
-      body: body instanceof FormData ? body : JSON.stringify(options.body),
+      body: body instanceof FormData ? body : JSON.stringify(body),
     };
+
+    // todo: encrypt all bodies
   }
   const response = await fetch(`${apiRequest.apiUri}${endpoint}`, reqData);
   if (response) {

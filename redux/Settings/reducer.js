@@ -1,7 +1,7 @@
 import {settingsActions} from './actions';
 
 const initialState = {
-  lang: 'en',
+  lang: 'US',
   isHomeListStyle: false,
   isHomeCardStyle: true,
   isHomeCarouselStyle: false,

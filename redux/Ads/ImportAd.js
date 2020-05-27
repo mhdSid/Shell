@@ -2,9 +2,13 @@ import {importAd, updateAd} from '../../services/Ads';
 import {handleError, adActions} from './actions';
 import invoke from 'lodash/invoke';
 import {adDetailsActions} from '../AdDetails/actions';
+import {uploadProgressActions} from '../UploadProgress/actions';
 
 const handleImportAd = payload => {
   return dispatch => {
+    const uniqId = `_${Math.random()
+      .toString(36)
+      .substr(2, 9)}`;
     const {
       onError,
       name,
@@ -33,6 +37,10 @@ const handleImportAd = payload => {
           type: adActions.UPDATECURRENTAD,
           payload: newUpdatedAd,
         });
+        dispatch({
+          type: uploadProgressActions.REMOVEPROGRESSITEM,
+          payload: uniqId,
+        });
         return dispatch({
           type: adDetailsActions.SHOWADDETAILS,
           payload: newUpdatedAd,
@@ -53,14 +61,24 @@ const handleImportAd = payload => {
         type: adDetailsActions.SHOWADDETAILS,
         payload: newAd,
       });
-      const newImages = imageFiles.filter(Boolean);
-      return updateAd({
-        id: newAd.id,
-        image: newImages.slice(1, newImages.length),
-      }).then(onUpdateAdSuccess(newAd), reason => {
-        return handleError({error: reason, onError});
+      if (imageFiles && imageFiles.length > 1) {
+        const newImages = imageFiles.filter(Boolean);
+        return updateAd({
+          id: newAd.id,
+          image: newImages.slice(1, newImages.length),
+        }).then(onUpdateAdSuccess(newAd), reason => {
+          return handleError({error: reason, onError});
+        });
+      }
+      return dispatch({
+        type: uploadProgressActions.REMOVEPROGRESSITEM,
+        payload: uniqId,
       });
     };
+    dispatch({
+      type: uploadProgressActions.ADDNEWPROGRESSITEM,
+      payload: uniqId,
+    });
     return importAd({
       name,
       description,

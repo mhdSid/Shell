@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, VirtualizedList} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
@@ -14,15 +14,11 @@ import {getUserSelector, getMyAdsSelector} from './Selectors';
 
 const MyAds = props => {
   const {user, myAds} = props;
-  const [modalVisible, setModalVisible] = useState(true);
   const [loading, setLoading] = useState(false);
   const [showAdDetails, setShowAdDetails] = useState(false);
   const [selectedAd, setSelectedAd] = useState();
 
   const handleCloseModal = () => {
-    setModalVisible(false);
-  };
-  const onModalDismiss = () => {
     invoke(props, 'onClose');
   };
   const callback = () => {
@@ -42,21 +38,48 @@ const MyAds = props => {
       setSelectedAd(item);
     };
   };
+  const updateAdDetails = item => {
+    setSelectedAd(item);
+  };
   const onAdDetailsClose = () => {
     setShowAdDetails(false);
   };
-
-  useEffect(() => {
-    fetchMyAds();
-  }, []);
+  const getItem = (data, index) => data[index];
+  const getItemCount = () => myAds.length;
+  const getKeyExtractor = item => item.id;
+  const renderItem = ({item}) => (
+    <ListItem
+      divider
+      leftElement={
+        item.images && item.images[0] ? (
+          <CachedImage
+            style={sharedStyles.homeListItemImage}
+            source={{
+              uri: item.images[0],
+            }}
+          />
+        ) : null
+      }
+      centerElement={{
+        primaryText: item.name,
+        secondaryText: item.category,
+        tertiaryText: `${item.currency} ${item.price}`,
+      }}
+      onPress={handleItemPress(item)}
+    />
+  );
+  const adDetailsModal = showAdDetails && (
+    <AdDetails
+      updateAdDetails={updateAdDetails}
+      onClose={onAdDetailsClose}
+      item={selectedAd}
+    />
+  );
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={false}
-      visible={modalVisible}
-      onDismiss={onModalDismiss}>
+    <Modal animationType="slide" onShow={fetchMyAds}>
       <SafeAreaView style={sharedStyles.container}>
+        {adDetailsModal}
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}
           leftElement="arrow-back"
@@ -64,40 +87,17 @@ const MyAds = props => {
           onLeftElementPress={handleCloseModal}
         />
         {loading && Loading}
-        {myAds && (
+        {myAds && myAds.length > 0 && (
           <VirtualizedList
             refreshing={loading}
             onRefresh={fetchMyAds}
             showsVerticalScrollIndicator={false}
             data={myAds}
-            getItem={(data, index) => data[index]}
-            getItemCount={() => myAds.length}
-            keyExtractor={item => item.id}
-            renderItem={({item}) => (
-              <ListItem
-                divider
-                leftElement={
-                  item.images && item.images[0] ? (
-                    <CachedImage
-                      style={sharedStyles.homeListItemImage}
-                      source={{
-                        uri: item.images[0],
-                      }}
-                    />
-                  ) : null
-                }
-                centerElement={{
-                  primaryText: item.name,
-                  secondaryText: item.category,
-                  tertiaryText: `${item.currency} ${item.price}`,
-                }}
-                onPress={handleItemPress(item)}
-              />
-            )}
+            getItem={getItem}
+            getItemCount={getItemCount}
+            keyExtractor={getKeyExtractor}
+            renderItem={renderItem}
           />
-        )}
-        {showAdDetails && (
-          <AdDetails onClose={onAdDetailsClose} item={selectedAd} />
         )}
       </SafeAreaView>
     </Modal>

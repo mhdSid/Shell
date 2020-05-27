@@ -20,7 +20,7 @@ const about = {
   howToUseNineth:
     'Make sure you choose any item you love. It can be a Smart Phone, a Laptop, a Car, a House, or anything you can think about.',
   howToUseTenth:
-    'Pay a fee of 1,000 Japanese Yen and enter a lottery to have a chance to win any item of your choice.',
+    'Pay a fee of ¥555 to enter a lottery and have a chance to win any item of your choice.',
   howToUseEleventh:
     'Once the total price of your chosen item has been collected, the lottery will start and a radom user will win the item.',
   enterLottery: 'Enter Lottery',
@@ -49,6 +49,8 @@ const adDetails = {
   location: 'Location',
   user: 'User',
   adId: 'Ad ID',
+  emptyUserAds: 'User has no available Ads',
+  userAds: 'User Ads',
 };
 
 const home = {
@@ -168,6 +170,16 @@ const userDetails = {
   userId: 'User ID',
 };
 
+const payment = {
+  title: 'Get a Chance to Win',
+  submit: 'Pay fee of ¥555',
+  cancel: 'Cancel',
+};
+
+const uploadProgress = {
+  inProgress: length => `Uploading ${length} ${length > 1 ? 'Ads' : 'Ad'}`,
+};
+
 export {
   about,
   errors,
@@ -185,4 +197,6 @@ export {
   settings,
   updateUserr,
   userDetails,
+  uploadProgress,
+  payment,
 };

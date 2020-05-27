@@ -65,7 +65,10 @@ const uiTheme = {
     },
   },
   iconSet: 'MaterialIcons',
-  fontFamily: 'Roboto',
+  fontFamily: 'Roboto-Light',
+  typography: {
+    fontFamily: 'Roboto-Light',
+  },
 };
 
 const App = () => {

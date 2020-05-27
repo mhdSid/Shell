@@ -1,15 +1,24 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import invoke from 'lodash/invoke';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {View, Text, TouchableHighlight} from 'react-native';
+import {View, Text} from 'react-native';
+import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 
-export default class CardListItem extends Component {
+export default class CardListItem extends PureComponent {
   static propTypes = {
     item: PropTypes.object,
     onItemPress: PropTypes.func,
+    smallImage: PropTypes.bool,
+    horizontal: PropTypes.bool,
   };
+
+  constructor(props) {
+    super(props);
+    this.ellipsizeMode = 'tail';
+    this.numOfLines = 1;
+  }
 
   handleItemPress = () => {
     const {item} = this.props;
@@ -21,52 +30,54 @@ export default class CardListItem extends Component {
     return `${item.currency} ${item.price}`;
   };
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
-    const {item} = this.props;
+    const {item, smallImage, horizontal} = this.props;
+    const viewStyle = horizontal
+      ? sharedStyles.homeCardItemHorizontal
+      : sharedStyles.homeCardItem;
+    const imageStyle = smallImage
+      ? sharedStyles.homeCardItemImageSmall
+      : sharedStyles.homeCardItemImage;
+    const image = item.images[0] ? (
+      <CachedImage style={imageStyle} source={{uri: item.images[0]}} />
+    ) : null;
+    const emptyImage = !item.images[0] ? (
+      <View style={sharedStyles.homeCardItemImage} />
+    ) : null;
+
     return (
-      <TouchableHighlight
-        style={sharedStyles.homeCardItem}
-        onPress={this.handleItemPress}>
-        <>
-          {item.images && item.images[0] && (
-            <CachedImage
-              style={sharedStyles.homeCardItemImage}
-              source={{uri: item.images[0]}}
-            />
-          )}
-          {!item.images[0] && <View style={sharedStyles.homeCardItemImage} />}
+      <TouchableBounce style={viewStyle} onPress={this.handleItemPress}>
+        <View shouldRasterizeIOS={true}>
+          {image}
+          {emptyImage}
           <View style={sharedStyles.homeCardItemTextContainer}>
             <Text
-              numberOfLines={1}
-              ellipsizeMode={'tail'}
+              numberOfLines={this.numOfLines}
+              ellipsizeMode={this.ellipsizeMode}
               style={sharedStyles.homeCardItemText}>
               {item.name}
             </Text>
             <Text
-              numberOfLines={1}
-              ellipsizeMode={'tail'}
+              numberOfLines={this.numOfLines}
+              ellipsizeMode={this.ellipsizeMode}
               style={sharedStyles.homeCardItemText}>
               {item.description}
             </Text>
             <Text
-              numberOfLines={1}
-              ellipsizeMode={'tail'}
+              numberOfLines={this.numOfLines}
+              ellipsizeMode={this.ellipsizeMode}
               style={sharedStyles.homeCardItemText}>
               {item.category}
             </Text>
             <Text
-              numberOfLines={1}
-              ellipsizeMode={'tail'}
+              numberOfLines={this.numOfLines}
+              ellipsizeMode={this.ellipsizeMode}
               style={sharedStyles.homeCardItemText}>
               {this.getItemFullPrice()}
             </Text>
           </View>
-        </>
-      </TouchableHighlight>
+        </View>
+      </TouchableBounce>
     );
   }
 }
