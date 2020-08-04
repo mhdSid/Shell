@@ -4,7 +4,7 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, Icon} from 'react-native-material-ui';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
-import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
+import FastImage from 'react-native-fast-image';
 import {userDetails} from '../../Constants/Texts';
 
 const UserDetails = props => {
@@ -15,6 +15,7 @@ const UserDetails = props => {
     email,
     image,
     id,
+    mobile,
     country,
     prefecture,
     postalCode,
@@ -37,11 +38,14 @@ const UserDetails = props => {
         />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={sharedStyles.flexRow}>
-            <CachedImage
+            <FastImage
+              style={sharedStyles.adDetailsImage}
               source={{
                 uri: image,
+                priority: FastImage.priority.high,
+                cache: FastImage.cacheControl.immutable,
               }}
-              style={sharedStyles.adDetailsImage}
+              resizeMode={FastImage.resizeMode.cover}
             />
           </View>
           <View style={sharedStyles.adDetailsContainer}>
@@ -64,6 +68,15 @@ const UserDetails = props => {
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{email}</Text>
+            </View>
+            <View style={sharedStyles.userDetailsIconTextContainer}>
+              <Icon color="rgba(0,0,0,.55)" name="phone" />
+              <Text style={sharedStyles.userDetailsText}>
+                {userDetails.mobile}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              <Text style={sharedStyles.aboutFirstSectionText}>{mobile}</Text>
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
@@ -107,7 +120,7 @@ const UserDetails = props => {
                 {fullAddress}
               </Text>
             </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
+            {/* <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="fingerprint" />
               <Text style={sharedStyles.userDetailsText}>
                 {userDetails.userId}
@@ -115,7 +128,7 @@ const UserDetails = props => {
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{id}</Text>
-            </View>
+            </View> */}
           </View>
         </ScrollView>
       </SafeAreaView>

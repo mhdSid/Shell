@@ -118,6 +118,7 @@ const update = async props => {
     id,
     email,
     cityWard,
+    password,
   } = props;
   const formData = new FormData();
   if (mobile) {
@@ -131,6 +132,9 @@ const update = async props => {
   }
   if (prefecture) {
     formData.append('prefecture', prefecture);
+  }
+  if (password) {
+    formData.append('password', password);
   }
   if (firstName) {
     formData.append('firstName', firstName);

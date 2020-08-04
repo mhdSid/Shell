@@ -22,7 +22,7 @@ import {
   countries,
 } from '../../Constants/Countries';
 import {loadingPopup} from '../Loading';
-import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
+import FastImage from 'react-native-fast-image';
 import {updateUserr} from '../../Constants/Texts';
 import {handlerUpdateUserData} from '../../redux/Auth/UpdateUser';
 import {connect} from 'react-redux';
@@ -36,6 +36,7 @@ const UpdateUser = props => {
   const [prefecture, setPrefecture] = useState(
     (user && user.prefecture) || prefecturesList[country],
   );
+  console.log(user);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(undefined);
   const [imageFile, setImageFile] = useState(undefined);
@@ -49,12 +50,14 @@ const UpdateUser = props => {
   const [postalCodeChanged, setPostalCodeChanged] = useState(false);
   const [cityWardChanged, setCityWardChanged] = useState(false);
   const [fullAddressChanged, setFullAddressChanged] = useState(false);
+  const [passwordChanged, setPasswordChanged] = useState(false);
   const mobileRef = createRef();
   const firstNameRef = createRef();
   const lastNameRef = createRef();
   const postalCodeRef = createRef();
   const fullAddressRef = createRef();
   const cityWardRef = createRef();
+  const passwordRef = createRef();
 
   const updateCountry = value => {
     setCountry(value);
@@ -86,17 +89,24 @@ const UpdateUser = props => {
     }
   };
   const handlePostalCodeChangeText = value => {
-    if (value && value.length > 1) {
+    if (value && value.length > 1 && value !== user.postalCode) {
       setPostalCodeChanged(true);
     } else {
       setPostalCodeChanged(false);
     }
   };
   const handleFullAddressChangeText = value => {
-    if (value && value.length > 5) {
+    if (value && value.length > 5 && value !== user.fullAddress) {
       setFullAddressChanged(true);
     } else {
       setFullAddressChanged(false);
+    }
+  };
+  const handlePasswordChangeText = value => {
+    if (value && value.length > 5 && value !== user.passsword) {
+      setPasswordChanged(true);
+    } else {
+      setPasswordChanged(false);
     }
   };
   const handleCityWardChangeText = value => {
@@ -202,6 +212,7 @@ const UpdateUser = props => {
         prefectureChanged ||
         postalCodeChanged ||
         cityWardChanged ||
+        passwordChanged ||
         fullAddressChanged,
     );
   }, [
@@ -214,6 +225,7 @@ const UpdateUser = props => {
     postalCodeChanged,
     fullAddressChanged,
     cityWardChanged,
+    passwordChanged,
   ]);
 
   return (
@@ -261,9 +273,14 @@ const UpdateUser = props => {
                       <Icon name="image" size={35} color="white" />
                     )}
                     {(image || user.image) && (
-                      <CachedImage
+                      <FastImage
                         style={[sharedStyles.adImage, sharedStyles.userImage]}
-                        source={{uri: image || user.image}}
+                        source={{
+                          uri: image || user.image,
+                          priority: FastImage.priority.high,
+                          cache: FastImage.cacheControl.immutable,
+                        }}
+                        resizeMode={FastImage.resizeMode.cover}
                       />
                     )}
                   </TouchableBounce>
@@ -377,7 +394,19 @@ const UpdateUser = props => {
                   disabled={loading}
                 />
               </View>
-              <View style={sharedStyles.loginBtn}>
+              {/* <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>{updateUserr.passsword}</Text>
+                <TextField
+                  label={updateUserr.passsword}
+                  value={user.password}
+                  secureTextEntry={true}
+                  tintColor={'#b69cf6'}
+                  onChangeText={handlePasswordChangeText}
+                  ref={passwordRef}
+                  disabled={loading}
+                />
+              </View> */}
+              <View style={sharedStyles.updateUserSbmtBtn}>
                 <Button
                   disabled={loading || !userDataChanged}
                   raised={true}

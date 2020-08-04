@@ -12,7 +12,7 @@ const request = async options => {
     },
   };
   if (body instanceof FormData) {
-    reqData.headers['Content-Type'] = apiRequest.formContentType;
+    reqData.headers['Content-Type'] = apiRequest.formContentType();
   }
   if (body && Object.keys(body).length > 0) {
     reqData = {

@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, TouchableWithoutFeedback} from 'react-native';
 
 const fullWidthHeight = {
   width: '100%',
@@ -314,6 +314,10 @@ const sharedStyles = StyleSheet.create({
   loginBtn: {
     marginTop: 20,
   },
+  updateUserSbmtBtn: {
+    marginTop: 20,
+    marginBottom: 50,
+  },
   homeCardItem: {
     width: '100%',
     // flexGrow: 1,
@@ -583,9 +587,10 @@ const sharedStyles = StyleSheet.create({
     marginBottom: 15,
   },
   paymentBtnContainer: {
-    backgroundColor: '#1919ff',
+    backgroundColor: '#5014e5',
     color: 'white',
     height: 50,
+    fontWeight: 'bold',
   },
   creditContainer: {
     marginTop: 15,
@@ -601,12 +606,13 @@ const sharedStyles = StyleSheet.create({
     marginVertical: 30,
   },
   paymentTitle: {
-    color: '#b69cf6',
-    textShadowColor: '#1919ff',
-    textShadowRadius: 5,
+    marginLeft: -20,
+    color: '#5014e5', ////'#9cf6b6',
+    textShadowColor: 'white',
+    textShadowRadius: 1,
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 30,
+    fontSize: 26,
   },
 });
 

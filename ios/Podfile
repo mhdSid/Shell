@@ -37,6 +37,7 @@ target 'winadd' do
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
   pod 'react-native-fetch-blob', :path => '../lib/CachedImage//react-native-fetch-blob/react-native-fetch-blob.podspec'
   pod 'RNSVG', :path => '../node_modules/react-native-svg/RNSVG.podspec'
+  pod 'RNFastImage', :path => '../node_modules/react-native-fast-image/RNFastImage.podspec'
 
   pod 'Google-Mobile-Ads-SDK'
 

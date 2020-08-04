@@ -74,7 +74,7 @@ const AdDetails = props => {
   const [showPayment, setShowPayment] = useState(false);
   const [viewImageUri, setViewImageUri] = useState(images[0]);
   const scrollViewRef = createRef();
-
+  console.log(`${userId}`, `${authUser.id}`);
   const onUserDetailsClose = () => {
     setSelectedUser(undefined);
   };
@@ -170,6 +170,7 @@ const AdDetails = props => {
           style={{container: sharedStyles.adDetailsToolbarContainer}}
           leftElement="arrow-back"
           onLeftElementPress={handleCloseModal}
+          centerElement={name}
           rightElement={
             `${userId}` !== `${authUser.id}` && (
               <Button
@@ -203,6 +204,42 @@ const AdDetails = props => {
               <Text style={sharedStyles.aboutFirstSectionText}>
                 {available ? adDetails.adAvailable : adDetails.adNotAvailable}
               </Text>
+            </View>
+            <View style={sharedStyles.userDetailsIconTextContainer}>
+              <Icon color="rgba(0,0,0,.55)" name="dns" />
+              <Text style={sharedStyles.userDetailsText}>{adDetails.name}</Text>
+            </View>
+            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              <Text style={sharedStyles.aboutFirstSectionText}>{name}</Text>
+            </View>
+            <View style={sharedStyles.userDetailsIconTextContainer}>
+              <Icon color="rgba(0,0,0,.55)" name="description" />
+              <Text style={sharedStyles.userDetailsText}>
+                {adDetails.description}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              <Text style={sharedStyles.aboutFirstSectionText}>
+                {description}
+              </Text>
+            </View>
+            <View style={sharedStyles.userDetailsIconTextContainer}>
+              <Icon color="rgba(0,0,0,.55)" name="exposure" />
+              <Text style={sharedStyles.userDetailsText}>
+                {adDetails.status}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              <Text style={sharedStyles.aboutFirstSectionText}>{status}</Text>
+            </View>
+            <View style={sharedStyles.userDetailsIconTextContainer}>
+              <Icon color="rgba(0,0,0,.55)" name="class" />
+              <Text style={sharedStyles.userDetailsText}>
+                {adDetails.category}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              <Text style={sharedStyles.aboutFirstSectionText}>{category}</Text>
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="local-atm" />
@@ -286,42 +323,7 @@ const AdDetails = props => {
               )}
               {!usersDataLoading && !winnerUserData && empty}
             </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="dns" />
-              <Text style={sharedStyles.userDetailsText}>{adDetails.name}</Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>{name}</Text>
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="description" />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.description}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>
-                {description}
-              </Text>
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="exposure" />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.status}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>{status}</Text>
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="class" />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.category}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>{category}</Text>
-            </View>
+
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="today" />
               <Text style={sharedStyles.userDetailsText}>

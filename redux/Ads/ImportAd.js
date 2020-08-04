@@ -3,6 +3,7 @@ import {handleError, adActions} from './actions';
 import invoke from 'lodash/invoke';
 import {adDetailsActions} from '../AdDetails/actions';
 import {uploadProgressActions} from '../UploadProgress/actions';
+import uniq from 'lodash/uniq';
 
 const handleImportAd = payload => {
   return dispatch => {
@@ -31,7 +32,7 @@ const handleImportAd = payload => {
         }
         const newUpdatedAd = {
           ...newAd,
-          images: [...(newAd.images || []), ...(updatedAd.images || [])],
+          images: uniq([...(newAd.images || []), ...(updatedAd.images || [])]),
         };
         dispatch({
           type: adActions.UPDATECURRENTAD,
@@ -62,10 +63,10 @@ const handleImportAd = payload => {
         payload: newAd,
       });
       if (imageFiles && imageFiles.length > 1) {
-        const newImages = imageFiles.filter(Boolean);
+        const newImages = imageFiles.filter(Boolean).slice(1, newImages.length);
         return updateAd({
           id: newAd.id,
-          image: newImages.slice(1, newImages.length),
+          image: newImages,
         }).then(onUpdateAdSuccess(newAd), reason => {
           return handleError({error: reason, onError});
         });

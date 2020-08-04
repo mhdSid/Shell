@@ -23,7 +23,7 @@ import {adStatuses, adCategories, mimeTypes} from '../../Constants/Ads';
 import isUndefined from 'lodash/isUndefined';
 import NoAuth from '../NoAuth';
 import {LoadingComponent} from '../Loading';
-import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
+import FastImage from 'react-native-fast-image';
 import {importAd} from '../../Constants/Texts';
 import invoke from 'lodash/invoke';
 import {handleImportAd} from '../../redux/Ads/ImportAd';
@@ -245,9 +245,14 @@ const ImportAd = props => {
                         <Icon name="image" size={35} color="white" />
                       )}
                       {images[index] && (
-                        <CachedImage
+                        <FastImage
                           style={sharedStyles.adImage}
-                          source={{uri: images[index]}}
+                          source={{
+                            uri: images[index],
+                            priority: FastImage.priority.high,
+                            cache: FastImage.cacheControl.immutable,
+                          }}
+                          resizeMode={FastImage.resizeMode.cover}
                         />
                       )}
                     </TouchableBounce>

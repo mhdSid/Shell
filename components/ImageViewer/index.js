@@ -5,7 +5,7 @@ import {Modal, SafeAreaView} from 'react-native';
 import {Button} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import PropTypes from 'prop-types';
-import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
+import FastImage from 'react-native-fast-image';
 import invoke from 'lodash/invoke';
 
 const ImagesViewer = props => {
@@ -32,7 +32,15 @@ const ImagesViewer = props => {
             style={sharedStyles.imageViewerZoom}
             imageWidth={200}
             imageHeight={200}>
-            <CachedImage style={sharedStyles.imageViewerImage} source={{uri}} />
+            <FastImage
+              style={sharedStyles.imageViewerImage}
+              source={{
+                uri,
+                priority: FastImage.priority.high,
+                cache: FastImage.cacheControl.immutable,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+            />
           </ImageZoom>
         </View>
       </SafeAreaView>

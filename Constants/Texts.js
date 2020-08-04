@@ -32,7 +32,7 @@ const errors = {
 };
 
 const adDetails = {
-  enterDraw: 'Enter Draw',
+  enterDraw: 'Win',
   availability: 'Availabality',
   adAvailable: 'The Ad is currently available',
   adNotAvailable: 'The Ad is not available',
@@ -43,7 +43,7 @@ const adDetails = {
   winner: 'Winner',
   name: 'Name',
   description: 'Description',
-  status: 'Status',
+  status: 'Condition',
   category: 'Category',
   publishDate: 'Publish Date',
   location: 'Location',
@@ -158,6 +158,7 @@ const updateUserr = {
   fullAddress: 'Full Address',
   confirm: 'Confirm',
   japan: 'Japan',
+  passsword: 'Password',
 };
 
 const userDetails = {
@@ -168,6 +169,7 @@ const userDetails = {
   cityWard: 'City / Ward',
   fullAddress: 'Full Address',
   userId: 'User ID',
+  mobile: 'Mobile',
 };
 
 const payment = {

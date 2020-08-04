@@ -4,7 +4,7 @@ import {Modal, SafeAreaView, VirtualizedList} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, ListItem} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
-import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
+import FastImage from 'react-native-fast-image';
 import AdDetails from '../AdDetails';
 import {Loading} from '../Loading';
 import {myyAds} from '../../Constants/Texts';
@@ -52,11 +52,14 @@ const MyAds = props => {
       divider
       leftElement={
         item.images && item.images[0] ? (
-          <CachedImage
+          <FastImage
             style={sharedStyles.homeListItemImage}
             source={{
               uri: item.images[0],
+              priority: FastImage.priority.high,
+              cache: FastImage.cacheControl.immutable,
             }}
+            resizeMode={FastImage.resizeMode.cover}
           />
         ) : null
       }

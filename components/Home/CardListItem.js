@@ -1,12 +1,12 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import invoke from 'lodash/invoke';
-import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {View, Text} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
+import FastImage from 'react-native-fast-image';
 
-export default class CardListItem extends PureComponent {
+export default class CardListItem extends Component {
   static propTypes = {
     item: PropTypes.object,
     onItemPress: PropTypes.func,
@@ -30,6 +30,10 @@ export default class CardListItem extends PureComponent {
     return `${item.currency} ${item.price}`;
   };
 
+  shouldComponentUpdate() {
+    return false;
+  }
+
   render() {
     const {item, smallImage, horizontal} = this.props;
     const viewStyle = horizontal
@@ -39,7 +43,15 @@ export default class CardListItem extends PureComponent {
       ? sharedStyles.homeCardItemImageSmall
       : sharedStyles.homeCardItemImage;
     const image = item.images[0] ? (
-      <CachedImage style={imageStyle} source={{uri: item.images[0]}} />
+      <FastImage
+        style={imageStyle}
+        source={{
+          uri: item.images[0],
+          priority: FastImage.priority.high,
+          cache: FastImage.cacheControl.immutable,
+        }}
+        resizeMode={FastImage.resizeMode.cover}
+      />
     ) : null;
     const emptyImage = !item.images[0] ? (
       <View style={sharedStyles.homeCardItemImage} />
@@ -47,7 +59,7 @@ export default class CardListItem extends PureComponent {
 
     return (
       <TouchableBounce style={viewStyle} onPress={this.handleItemPress}>
-        <View shouldRasterizeIOS={true}>
+        <View>
           {image}
           {emptyImage}
           <View style={sharedStyles.homeCardItemTextContainer}>

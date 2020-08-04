@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Toolbar, ListItem} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {View, VirtualizedList} from 'react-native';
-import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
+import FastImage from 'react-native-fast-image';
 import {Loading} from '../Loading';
 import UserDetails from '../UserDetails';
 import {searchh} from '../../Constants/Texts';
@@ -82,14 +82,17 @@ const SearchComponent = props => {
                 divider
                 leftElement={
                   item.image || (item.images && item.images[0]) ? (
-                    <CachedImage
+                    <FastImage
                       style={[
                         sharedStyles.homeListItemImage,
                         item.type === 'user' && sharedStyles.listItemUserImage,
                       ]}
                       source={{
                         uri: item.image || item.images[0],
+                        priority: FastImage.priority.high,
+                        cache: FastImage.cacheControl.immutable,
                       }}
+                      resizeMode={FastImage.resizeMode.cover}
                     />
                   ) : null
                 }
