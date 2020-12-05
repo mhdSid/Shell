@@ -1,6 +1,6 @@
 const uploadProgressActions = {
-  ADDNEWPROGRESSITEM: 'PROGRESS_ADD_NEW_ITEM',
-  REMOVEPROGRESSITEM: 'PROGRESS_REMOVE_ITEM',
+  addNewProgressItem: 'PROGRESS_ADD_NEW_ITEM',
+  removeProgressItem: 'PROGRESS_REMOVE_ITEM',
 };
 
 export {uploadProgressActions};

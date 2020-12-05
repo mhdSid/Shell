@@ -11,7 +11,7 @@ const handlePing = payload => {
       invoke(payload, 'onError');
       Alert.alert(message);
       return dispatch({
-        type: authActions.LOGIN,
+        type: authActions.login,
         payload: {country, loggedIn: false, user: false},
       });
     };
@@ -23,7 +23,7 @@ const handlePing = payload => {
       initSocket();
       addSocketEventListeners();
       return dispatch({
-        type: authActions.LOGIN,
+        type: authActions.login,
         payload: {
           loggedIn: true,
           user: authUser,

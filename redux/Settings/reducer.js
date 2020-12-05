@@ -4,18 +4,18 @@ const initialState = {
   lang: 'US',
   isHomeListStyle: false,
   isHomeCardStyle: true,
-  isHomeCarouselStyle: false,
+  // isHomeCarouselStyle: false,
 };
 
 const settingsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case settingsActions.SETLANG: {
+    case settingsActions.setLanguage: {
       return {
         ...state,
         lang: action.payload,
       };
     }
-    case settingsActions.SETHOMEVIEWSTYLE: {
+    case settingsActions.setHomeViewStyle: {
       return {
         ...state,
         ...action.payload,

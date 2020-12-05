@@ -3,7 +3,7 @@ import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, View, Text, ScrollView} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, Icon, Button} from 'react-native-material-ui';
-import {Loading} from '../Loading';
+import {SimpleLoaderDefault} from '../Loading';
 import {payment, about} from '../../Constants/Texts';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -14,6 +14,7 @@ import {
   getAdDetailsSelector,
 } from './Selectors';
 import NoAuth from '../NoAuth';
+import {handleEnterLottery} from '../../redux/Payment/EnterLottery';
 
 const Payment = props => {
   const {user, loggedIn, ad} = props;
@@ -28,14 +29,27 @@ const Payment = props => {
   const onCreditChange = data => {
     console.log(data);
   };
+  const onError = () => {
+    setLoading(false);
+  };
+  const handlePayment = () => {
+    setLoading(true);
+    invoke(props, 'handleEnterLottery', {
+      onSuccess: handleCloseModal,
+      onError: onError,
+      adId: ad.id,
+      userId: user.id,
+      email: user.email,
+      password: user.password,
+    });
+  };
 
   if (!loggedIn || !user) {
     return <NoAuth />;
   }
   return (
     <Modal animationType="slide">
-      <SafeAreaView
-        style={[sharedStyles.container, sharedStyles.aboutSafeViewContainer]}>
+      <SafeAreaView style={sharedStyles.fullheightView}>
         <Toolbar
           style={{
             container: sharedStyles.toolbarContainer,
@@ -46,59 +60,71 @@ const Payment = props => {
           }
           // onLeftElementPress={handleCloseModal}
         />
-        {loading && Loading}
-
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={sharedStyles.aboutContainer}>
-          <View style={sharedStyles.creditContainer}>
-            <CreditCardInput
-              inputStyle={sharedStyles.creditInput}
-              onChange={onCreditChange}
-            />
-          </View>
-          <View style={sharedStyles.aboutIconTextContainer}>
-            <Icon color="white" name="receipt" />
-            <Text style={sharedStyles.aboutIconText}>{about.enterLottery}</Text>
-          </View>
-          <View style={sharedStyles.aboutFirstSectionTextContainer}>
-            <Text style={sharedStyles.aboutFirstSectionText}>
-              {about.howToUseTenth}
-            </Text>
-          </View>
-          <View style={sharedStyles.aboutIconTextContainer}>
-            <Icon color="white" name="star" />
-            <Text style={sharedStyles.aboutIconText}>{about.win}</Text>
-          </View>
-          <View style={sharedStyles.aboutFirstSectionTextContainer}>
-            <Text style={sharedStyles.aboutFirstSectionText}>
-              {about.howToUseEleventh}
-            </Text>
-          </View>
-          <View style={sharedStyles.btnContainer}>
-            <View style={sharedStyles.paymentBtn}>
-              <Button
-                // disabled={loading || !userDataChanged}
-                raised
-                primary
-                icon="payment"
-                text={payment.submit}
-                style={{container: sharedStyles.paymentBtnContainer}}
-                // onPress={handleSignupPress}
-              />
-            </View>
-            <View style={sharedStyles.paymentBtn}>
-              <Button
-                // disabled={loading || !userDataChanged}
-                // raised={true}
-                // icon="close"
-                // primary
-                // accent
-                text={payment.cancel}
-                onPress={handleCloseModal}
-              />
-            </View>
-          </View>
+          contentContainerStyle={
+            loading && sharedStyles.paymentSafeViewContentContainer
+          }
+          style={[
+            sharedStyles.aboutContainer,
+            sharedStyles.paymentSafeViewContainer,
+          ]}>
+          {loading && SimpleLoaderDefault}
+          {!loading && (
+            <>
+              <View style={sharedStyles.creditContainer}>
+                <CreditCardInput
+                  allowScroll={true}
+                  inputStyle={sharedStyles.creditInput}
+                  onChange={onCreditChange}
+                />
+              </View>
+              <View style={sharedStyles.aboutIconTextContainer}>
+                <Icon color="white" name="receipt" />
+                <Text style={sharedStyles.aboutIconText}>
+                  {about.enterLottery}
+                </Text>
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                <Text style={sharedStyles.aboutFirstSectionText}>
+                  {about.howToUseTenth}
+                </Text>
+              </View>
+              <View style={sharedStyles.aboutIconTextContainer}>
+                <Icon color="white" name="star" />
+                <Text style={sharedStyles.aboutIconText}>{about.win}</Text>
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                <Text style={sharedStyles.aboutFirstSectionText}>
+                  {about.howToUseEleventh}
+                </Text>
+              </View>
+              <View style={sharedStyles.btnContainer}>
+                <View style={sharedStyles.paymentBtn}>
+                  <Button
+                    // disabled={loading || !userDataChanged}
+                    raised
+                    primary
+                    icon="payment"
+                    text={payment.submit}
+                    style={{container: sharedStyles.paymentBtnContainer}}
+                    onPress={handlePayment}
+                  />
+                </View>
+                <View style={sharedStyles.paymentBtn}>
+                  <Button
+                    // disabled={loading || !userDataChanged}
+                    // raised={true}
+                    // icon="close"
+                    // primary
+                    // accent
+                    text={payment.cancel}
+                    onPress={handleCloseModal}
+                  />
+                </View>
+              </View>
+            </>
+          )}
         </ScrollView>
       </SafeAreaView>
     </Modal>
@@ -119,8 +145,10 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = () => {
-  return {};
+const mapDispatchToProps = dispatch => {
+  return {
+    handleEnterLottery: payload => dispatch(handleEnterLottery(payload)),
+  };
 };
 
 export default connect(

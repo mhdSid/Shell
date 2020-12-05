@@ -18,7 +18,7 @@ const handleVerifyUser = payload => {
       invoke(payload, 'onSuccess');
       if (emailVerified === true && authVerificationId) {
         dispatch({
-          type: authActions.LOGIN,
+          type: authActions.login,
           payload: {
             showSignup: true,
           },

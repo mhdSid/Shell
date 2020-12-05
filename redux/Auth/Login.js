@@ -24,7 +24,7 @@ const handleLogin = payload => {
       // should should confirmation button and go to sign up screen afterwards
       if (emailVerified === false && verificationId) {
         return dispatch({
-          type: authActions.LOGIN,
+          type: authActions.login,
           payload: {
             email,
             password,
@@ -37,7 +37,7 @@ const handleLogin = payload => {
       else if (emailVerified === true && verificationId) {
         if (signedUp === false) {
           return dispatch({
-            type: authActions.LOGIN,
+            type: authActions.login,
             payload: {
               verificationId,
               showSingup: true,
@@ -47,7 +47,7 @@ const handleLogin = payload => {
           });
         }
         return dispatch({
-          type: authActions.LOGIN,
+          type: authActions.login,
           payload: {
             loggedIn: true,
             user: authUser,

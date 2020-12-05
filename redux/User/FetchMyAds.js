@@ -13,7 +13,7 @@ const handleFetchMyAds = payload => {
       }
       invoke(payload, 'onSuccess');
       return dispatch({
-        type: userActions.SETMYADS,
+        type: userActions.setMyAds,
         payload: myAds || [],
       });
     };

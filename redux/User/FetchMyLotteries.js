@@ -13,7 +13,7 @@ const handleFetchMyLotteries = payload => {
       }
       invoke(payload, 'onSuccess');
       return dispatch({
-        type: userActions.SETMYLOTTERIES,
+        type: userActions.setMyLotteries,
         payload: myLotteries || [],
       });
     };

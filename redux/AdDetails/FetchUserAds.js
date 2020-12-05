@@ -13,7 +13,7 @@ const handleFetchUserAds = payload => {
       }
       invoke(payload, 'onSuccess');
       return dispatch({
-        type: adDetailsActions.FETCHUSERADS,
+        type: adDetailsActions.fetchUserAds,
         payload: userAds || [],
       });
     };

@@ -102,16 +102,7 @@ const MainContainer = props => {
             },
           }}
           key="grade"
-          icon={
-            loggedIn === true && user ? (
-              <>
-                <Icon name="grade" size={30} />
-                <Badge text="3" />
-              </>
-            ) : (
-              <Icon name="grade" size={30} />
-            )
-          }
+          icon={<Icon name="grade" size={30} />}
           active={activeView === 'grade'}
           onPress={handleSetActiveView('grade')}
         />
@@ -127,14 +118,14 @@ const MainContainer = props => {
           }}
           key="profile"
           icon={
-            loggedIn === true && user ? (
-              <>
-                <Icon name="account-circle" size={30} />
-                <Badge text="3" />
-              </>
-            ) : (
-              <Icon name="account-circle" size={30} />
-            )
+            // loggedIn === true && user ? (
+            //   <>
+            //     <Icon name="account-circle" size={30} />
+            //     <Badge text="3" />
+            //   </>
+            // ) : (
+            <Icon name="account-circle" size={30} />
+            // )
           }
           active={activeView === 'profile'}
           onPress={handleSetActiveView('profile')}

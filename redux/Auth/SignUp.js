@@ -28,7 +28,7 @@ const handleSignUp = payload => {
       ) {
         invoke(payload, 'onSuccess');
         dispatch({
-          type: authActions.LOGIN,
+          type: authActions.login,
           payload: {
             loggedIn: true,
             user: authUser,

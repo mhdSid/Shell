@@ -11,7 +11,7 @@ const handleFetchAds = payload => {
       if (error) {
         return handleError({error, onError});
       }
-      return dispatch({type: adActions.IMPORTAD, payload: serverAds});
+      return dispatch({type: adActions.importAd, payload: serverAds});
     };
     return getAds().then(onGetAdsSuccess, error => {
       return handleError({error, onError});

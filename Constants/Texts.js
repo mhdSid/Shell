@@ -95,6 +95,12 @@ const notifications = {
   notifications: 'Notifications',
 };
 
+const paymentInformation = {
+  paymentInformation: 'Payment Information',
+  submit: 'Update',
+  creditCard: 'Credit Card',
+};
+
 const profile = {
   japan: 'Japan',
   male: 'Male',
@@ -121,6 +127,7 @@ const profile = {
   checkYourInbox: 'Please check your inbox in order to verify your email',
   howToUseTheApp: 'How To Use The App',
   notifications: 'Notifications',
+  paymentInformation: 'Payment Information',
   myAds: 'My Ads',
   myLotteries: 'My Lotteries',
   personal: 'Personal',
@@ -201,4 +208,5 @@ export {
   userDetails,
   uploadProgress,
   payment,
+  paymentInformation,
 };

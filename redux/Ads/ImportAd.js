@@ -32,18 +32,22 @@ const handleImportAd = payload => {
         }
         const newUpdatedAd = {
           ...newAd,
-          images: uniq([...(newAd.images || []), ...(updatedAd.images || [])]),
+          images: uniq(
+            [...(newAd.images || []), ...(updatedAd.images || [])].filter(
+              Boolean,
+            ),
+          ),
         };
         dispatch({
-          type: adActions.UPDATECURRENTAD,
+          type: adActions.updateCurrentAd,
           payload: newUpdatedAd,
         });
         dispatch({
-          type: uploadProgressActions.REMOVEPROGRESSITEM,
+          type: uploadProgressActions.removeProgressItem,
           payload: uniqId,
         });
         return dispatch({
-          type: adDetailsActions.SHOWADDETAILS,
+          type: adDetailsActions.showAdDetails,
           payload: newUpdatedAd,
         });
       };
@@ -55,15 +59,17 @@ const handleImportAd = payload => {
         return handleError(error);
       }
       dispatch({
-        type: adActions.IMPORTAD,
+        type: adActions.importAd,
         payload: newAd,
       });
       dispatch({
-        type: adDetailsActions.SHOWADDETAILS,
+        type: adDetailsActions.showAdDetails,
         payload: newAd,
       });
       if (imageFiles && imageFiles.length > 1) {
-        const newImages = imageFiles.filter(Boolean).slice(1, newImages.length);
+        const newImages = imageFiles
+          .filter(Boolean)
+          .slice(1, imageFiles.length);
         return updateAd({
           id: newAd.id,
           image: newImages,
@@ -72,12 +78,12 @@ const handleImportAd = payload => {
         });
       }
       return dispatch({
-        type: uploadProgressActions.REMOVEPROGRESSITEM,
+        type: uploadProgressActions.removeProgressItem,
         payload: uniqId,
       });
     };
     dispatch({
-      type: uploadProgressActions.ADDNEWPROGRESSITEM,
+      type: uploadProgressActions.addNewProgressItem,
       payload: uniqId,
     });
     return importAd({
@@ -96,5 +102,121 @@ const handleImportAd = payload => {
     });
   };
 };
+
+// const handleImportAd = payload => {
+//   return dispatch => {
+//     const uniqId = `_${Math.random()
+//       .toString(36)
+//       .substr(2, 9)}`;
+//     const {
+//       onError,
+//       name,
+//       description,
+//       image,
+//       prefecture,
+//       category,
+//       status,
+//       price,
+//       userId,
+//       country,
+//       currency,
+//       imageFiles,
+//     } = payload;
+//     const onUpdateAdSuccess = newAd => {
+//       return data => {
+//         if (!data) {
+//           return handleError({});
+//         }
+//         const {error, updatedAd} = data;
+//         if (error) {
+//           return handleError(error);
+//         }
+//         const newUpdatedAd = {
+//           ...newAd,
+//           images: uniq(
+//             [...(newAd.images || []), ...(updatedAd.images || [])].filter(
+//               Boolean,
+//             ),
+//           ),
+//         };
+//         dispatch({
+//           type: adActions.updateCurrentAd,
+//           payload: newUpdatedAd,
+//         });
+//         dispatch({
+//           type: uploadProgressActions.removeProgressItem,
+//           payload: uniqId,
+//         });
+//         return dispatch({
+//           type: adDetailsActions.showAdDetails,
+//           payload: newUpdatedAd,
+//         });
+//       };
+//     };
+//     const importAdSuccess = data => {
+//       const {error, newAd} = data;
+//       invoke(payload, 'onSuccess');
+//       if (error || !newAd) {
+//         return handleError(error);
+//       }
+//       dispatch({
+//         type: adActions.importAd,
+//         payload: newAd,
+//       });
+//       dispatch({
+//         type: adDetailsActions.showAdDetails,
+//         payload: newAd,
+//       });
+//       if (imageFiles && imageFiles.length > 1) {
+//         const newImages = imageFiles
+//           .filter(Boolean)
+//           .slice(1, imageFiles.length);
+
+//         // LOOP through images and backgroud update one by one
+//         const promises = [];
+//         newImages.forEach(newImage => {
+//           promises.push(
+//             updateAd({
+//               id: newAd.id,
+//               image: newImage,
+//             }),
+//           );
+//         });
+//         return Promise.all(promises).then(onUpdateAdSuccess(newAd), reason => {
+//           return handleError({error: reason, onError});
+//         });
+
+//         // return updateAd({
+//         //   id: newAd.id,
+//         //   image: newImages,
+//         // }).then(onUpdateAdSuccess(newAd), reason => {
+//         //   return handleError({error: reason, onError});
+//         // });
+//       }
+//       return dispatch({
+//         type: uploadProgressActions.removeProgressItem,
+//         payload: uniqId,
+//       });
+//     };
+//     dispatch({
+//       type: uploadProgressActions.addNewProgressItem,
+//       payload: uniqId,
+//     });
+//     return importAd({
+//       name,
+//       description,
+//       image,
+//       prefecture,
+//       category,
+//       status,
+//       price,
+//       userId,
+//       country,
+//       currency,
+//     }).then(importAdSuccess, error => {
+//       return handleError({error, onError});
+//     });
+//   };
+// };
 
 export {handleImportAd};

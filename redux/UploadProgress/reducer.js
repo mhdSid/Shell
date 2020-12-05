@@ -6,12 +6,12 @@ const initialState = {
 
 const uploadProgressReducer = (state = initialState, action) => {
   switch (action.type) {
-    case uploadProgressActions.ADDNEWPROGRESSITEM: {
+    case uploadProgressActions.addNewProgressItem: {
       return {
         progressItems: [...state.progressItems, action.payload],
       };
     }
-    case uploadProgressActions.REMOVEPROGRESSITEM: {
+    case uploadProgressActions.removeProgressItem: {
       const removeProgressId = action.payload;
       let {progressItems} = state;
       progressItems = progressItems.filter(id => removeProgressId !== id);

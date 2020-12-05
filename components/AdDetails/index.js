@@ -162,7 +162,11 @@ const AdDetails = props => {
         <UserDetails onClose={onUserDetailsClose} item={selectedUser} />
       )}
       {showImagesViewer && (
-        <ImagesViewer uri={viewImageUri} onClose={onImagesViewerClose} />
+        <ImagesViewer
+          imageText={name}
+          uri={viewImageUri}
+          onClose={onImagesViewerClose}
+        />
       )}
       {showPayment && <Payment onClose={onPaymentClose} />}
       <SafeAreaView style={sharedStyles.container}>
@@ -174,6 +178,7 @@ const AdDetails = props => {
           rightElement={
             `${userId}` !== `${authUser.id}` && (
               <Button
+                disabled={`${currentCollectedPrice}` === `${price}`}
                 onPress={handleEnterDraw}
                 raised
                 text={adDetails.enterDraw}

@@ -15,7 +15,7 @@ const handleLogout = payload => {
       }
       invoke(payload, 'onSuccess');
       return dispatch({
-        type: authActions.LOGOUT,
+        type: authActions.logout,
         payload: {
           loggedIn: false,
           user: false,

@@ -119,6 +119,10 @@ const update = async props => {
     email,
     cityWard,
     password,
+    creditCardNumber,
+    creditCardExpiryDate,
+    creditCardCVC,
+    creditCardType,
   } = props;
   const formData = new FormData();
   if (mobile) {
@@ -150,6 +154,18 @@ const update = async props => {
   }
   if (lastName) {
     formData.append('lastName', lastName);
+  }
+  if (creditCardNumber) {
+    formData.append('creditCardNumber', creditCardNumber);
+  }
+  if (creditCardExpiryDate) {
+    formData.append('creditCardExpiryDate', creditCardExpiryDate);
+  }
+  if (creditCardCVC) {
+    formData.append('creditCardCVC', creditCardCVC);
+  }
+  if (creditCardType) {
+    formData.append('creditCardType', creditCardType);
   }
   formData.append('id', id);
   formData.append('email', email);

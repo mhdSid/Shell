@@ -3,14 +3,14 @@ import {errors} from '../../Constants/Texts';
 import invoke from 'lodash/invoke';
 
 const adActions = {
-  IMPORTAD: 'AD_IMPORT',
-  UPDATECURRENTAD: 'UPDATE_CURRENT_AD',
+  importAd: 'AD_IMPORT',
+  updateCurrentAd: 'UPDATE_CURRENT_AD',
 };
 
 const addAd = payload => {
   return dispatch => {
     return dispatch({
-      type: adActions.IMPORTAD,
+      type: adActions.importAd,
       payload,
     });
   };
@@ -18,7 +18,7 @@ const addAd = payload => {
 
 const updateCurrentAd = payload => {
   return dispatch => {
-    return dispatch({type: adActions.UPDATECURRENTAD, payload});
+    return dispatch({type: adActions.updateCurrentAd, payload});
   };
 };
 

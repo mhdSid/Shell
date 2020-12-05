@@ -38,6 +38,7 @@ target 'winadd' do
   pod 'react-native-fetch-blob', :path => '../lib/CachedImage//react-native-fetch-blob/react-native-fetch-blob.podspec'
   pod 'RNSVG', :path => '../node_modules/react-native-svg/RNSVG.podspec'
   pod 'RNFastImage', :path => '../node_modules/react-native-fast-image/RNFastImage.podspec'
+  # pod 'VydiaRNFileUploader', :path => '../node_modules/react-native-background-upload/VydiaRNFileUploader.podspec'
 
   pod 'Google-Mobile-Ads-SDK'
 

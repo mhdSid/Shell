@@ -3,22 +3,20 @@ import invoke from 'lodash/invoke';
 import {Alert} from 'react-native';
 
 const authActions = {
-  LOGIN: 'AUTH_LOGIN_ACTION',
-  LOGOUT: 'AUTH_LOGOUT_ACTION',
-  UPDATE: 'AUTH_UPDATE_ACTION',
-  HANDLELOGIN: 'AUTH_HANDLE_LOGIN',
-  UPDATEUSER: 'AUTH_UPDATE_USER',
+  login: 'AUTH_LOGIN_ACTION',
+  logout: 'AUTH_LOGOUT_ACTION',
+  update: 'AUTH_UPDATE_ACTION',
 };
 
 const loginAction = payload => {
   return dispatch => {
-    return dispatch({type: authActions.LOGIN, payload});
+    return dispatch({type: authActions.login, payload});
   };
 };
 
 const logoutAction = payload => {
   return dispatch => {
-    return dispatch({type: authActions.LOGOUT, payload});
+    return dispatch({type: authActions.logout, payload});
   };
 };
 
@@ -36,7 +34,7 @@ const handleError = props => {
     Alert.alert(message);
   }
   return invoke(props, 'dispatch', {
-    type: authActions.LOGOUT,
+    type: authActions.logout,
     payload: {
       loggedIn: false,
       user: false,

@@ -47,6 +47,11 @@ const sharedStyles = StyleSheet.create({
     textAlign: 'center',
     paddingRight: 15,
   },
+  imageViewerToolbarContainer: {
+    ...toolbarStyles,
+    textAlign: 'center',
+    paddingRight: 15,
+  },
   /* End ToolBar */
 
   /* Loading */
@@ -88,6 +93,7 @@ const sharedStyles = StyleSheet.create({
     aspectRatio: 3 / 2,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#f7f5fe',
   },
   profileBlur: {
     position: 'absolute',
@@ -115,6 +121,13 @@ const sharedStyles = StyleSheet.create({
     width: 55,
     height: 55,
     borderRadius: 65 / 2,
+    backgroundColor: '#f7f5fe',
+  },
+  bottomContainerUserImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 30 / 2,
+    // backgroundColor: '#f7f5fe',
   },
   userImageBtnContainer: {
     justifyContent: 'center',
@@ -239,6 +252,9 @@ const sharedStyles = StyleSheet.create({
     ...flex,
     padding: 20,
   },
+  lotteriesContainer: {
+    ...flex,
+  },
   importAdContainerNoAuth: {
     paddingTop: 40,
     paddingBottom: 20,
@@ -290,6 +306,7 @@ const sharedStyles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 60 / 2,
+    backgroundColor: '#f7f5fe',
   },
   adDetailsUsersListItemText: {
     fontSize: 14,
@@ -302,6 +319,9 @@ const sharedStyles = StyleSheet.create({
   },
   updateUserContainer: {
     paddingTop: 10,
+  },
+  paymentInfoContainer: {
+    height: '100%',
   },
   container: {
     paddingTop: 40,
@@ -333,12 +353,14 @@ const sharedStyles = StyleSheet.create({
   },
   homeCardItemImage: {
     aspectRatio: 3 / 3,
+    backgroundColor: '#f7f5fe',
   },
   homeCardItemImageSmall: {
     // aspectRatio: 4 / 3,
     // width: '70%%',
     width: '100%',
     height: '100%',
+    backgroundColor: '#f7f5fe',
     // flexGrow: 1,
     // display: 'flex',
   },
@@ -361,6 +383,7 @@ const sharedStyles = StyleSheet.create({
   homeListItemImage: {
     width: 50,
     height: 50,
+    backgroundColor: '#f7f5fe',
   },
   listItemUserImage: {
     borderRadius: 50 / 2,
@@ -368,6 +391,15 @@ const sharedStyles = StyleSheet.create({
   aboutSafeViewContainer: {
     backgroundColor: '#b69cf6',
     justifyContent: 'center',
+  },
+  paymentSafeViewContainer: {
+    backgroundColor: '#b69cf6',
+  },
+  paymentSafeViewContentContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...fullWidthHeight,
   },
   drawerContainer: {
     borderRadius: 20,
@@ -569,19 +601,22 @@ const sharedStyles = StyleSheet.create({
     // display: 'flex',
     // justifyContent: 'center',
     alignItems: 'center',
-    paddingLeft: 20,
-    paddingRight: 20,
+    // paddingLeft: 20,
+    // paddingRight: 20,
     position: 'relative',
     // ...flex,
     // justifyContent: 'flex-start',
   },
   imageViewerZoom: {
-    marginTop: -50,
+    marginTop: -100,
+    zIndex: 0,
   },
   imageViewerImage: {
     width: 300,
     height: 300,
     alignSelf: 'center',
+    backgroundColor: '#f7f5fe',
+    zIndex: 0,
   },
   paymentBtn: {
     marginBottom: 15,

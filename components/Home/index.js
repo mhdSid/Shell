@@ -1,4 +1,4 @@
-import React, {useState, useEffect, PureComponent} from 'react';
+import React, {PureComponent} from 'react';
 import {Toolbar, ListItem} from 'react-native-material-ui';
 import {View, VirtualizedList} from 'react-native';
 import {connect} from 'react-redux';
@@ -13,7 +13,7 @@ import {
   // PublisherBanner,
   // AdMobRewarded,
 } from 'react-native-admob';
-import {CarouselComponent} from '../Carousel';
+// import {CarouselComponent} from '../Carousel';
 import CardListItem from './CardListItem';
 import {home} from '../../Constants/Texts';
 import {handleFetchAds} from '../../redux/Ads/FetchAds';
@@ -23,7 +23,7 @@ import {
   getAdsSelector,
   getIsListSelector,
   getIsCardSelector,
-  getIsCarouselSelector,
+  // getIsCarouselSelector,
 } from './Selectors';
 import UploadAdProgress from '../UploadAdProgress';
 import {emitSocketEvents} from '../../services/Socket.js';
@@ -47,24 +47,24 @@ class HomeComponent extends PureComponent {
     if (this.isCard) {
       invoke(this.props, 'setHomeViewStyle', {
         isHomeCardStyle: false,
-        isHomeCarouselStyle: false,
+        // isHomeCarouselStyle: false,
         isHomeListStyle: true,
       });
     }
     if (this.isList) {
       invoke(this.props, 'setHomeViewStyle', {
-        isHomeCardStyle: false,
-        isHomeCarouselStyle: true,
-        isHomeListStyle: false,
-      });
-    }
-    if (this.isCarousel) {
-      invoke(this.props, 'setHomeViewStyle', {
         isHomeCardStyle: true,
-        isHomeCarouselStyle: false,
+        // isHomeCarouselStyle: true,
         isHomeListStyle: false,
       });
     }
+    // if (this.isCarousel) {
+    //   invoke(this.props, 'setHomeViewStyle', {
+    //     isHomeCardStyle: true,
+    //     isHomeCarouselStyle: false,
+    //     isHomeListStyle: false,
+    //   });
+    // }
   };
   handleShowAdsDetailsFlatList = item => {
     invoke(this.props, 'showAdDetails', item);
@@ -79,10 +79,10 @@ class HomeComponent extends PureComponent {
     this.fetchAds();
   }
   componentWillReceiveProps(nextProps) {
-    const {ads, isList, isCarousel, isCard} = nextProps;
+    const {ads, isList, isCard} = nextProps;
     this.ads = ads;
     this.isList = isList;
-    this.isCarousel = isCarousel;
+    // this.isCarousel = isCarousel;
     this.isCard = isCard;
   }
 
@@ -129,27 +129,26 @@ class HomeComponent extends PureComponent {
           style={{container: sharedStyles.toolbarContainer}}
           centerElement={home.appName}
           rightElement={
-            this.isCard
-              ? 'view-list'
-              : this.isList
-              ? 'view-carousel'
-              : 'view-comfy'
+            this.isCard ? 'view-list' : 'view-comfy'
+            // this.isList
+            // // ? 'view-carousel'
+            // :
           }
           onRightElementPress={this.changeViewStyle}
         />
         <AdMobBanner
           adSize="fullBanner"
-          adUnitID="ca-app-pub-5703846930890914/6428703368"
+          adUnitID="ca-app-pub-5703846930890914/6105801245"
           style={sharedStyles.adMobBanner}
         />
         <UploadAdProgress />
         {loading && <View style={sharedStyles.homeLoading}>{Loading}</View>}
-        {this.isCarousel && this.ads && this.ads.length > 0 && (
+        {/* {this.isCarousel && this.ads && this.ads.length > 0 && (
           <CarouselComponent
             items={this.ads}
             onItemPress={this.handleShowAdsDetailsFlatList}
           />
-        )}
+        )} */}
         {this.isCard && this.ads && this.ads.length > 0 && (
           <VirtualizedList
             initialNumToRender={2}
@@ -195,7 +194,7 @@ const mapStateToProps = state => {
     ads: getAdsSelector(state),
     isList: getIsListSelector(state),
     isCard: getIsCardSelector(state),
-    isCarousel: getIsCarouselSelector(state),
+    // isCarousel: getIsCarouselSelector(state),
   };
 };
 

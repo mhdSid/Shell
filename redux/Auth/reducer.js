@@ -12,13 +12,13 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case authActions.LOGIN: {
+    case authActions.login: {
       return {
         ...state,
         ...action.payload,
       };
     }
-    case authActions.UPDATE: {
+    case authActions.update: {
       const user = {
         ...state.user,
         ...action.payload,
@@ -28,7 +28,7 @@ const authReducer = (state = initialState, action) => {
         user,
       };
     }
-    case authActions.LOGOUT: {
+    case authActions.logout: {
       return {
         ...initialState,
         ...action.payload,

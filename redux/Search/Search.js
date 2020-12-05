@@ -31,7 +31,7 @@ const handleSearch = payload => {
       ];
       invoke(payload, 'onSuccess');
       return dispatch({
-        type: searchActions.SEARCH,
+        type: searchActions.search,
         payload: newSearchResults,
       });
     };

@@ -103,7 +103,8 @@ const UpdateUser = props => {
     }
   };
   const handlePasswordChangeText = value => {
-    if (value && value.length > 5 && value !== user.passsword) {
+    console.log(value, user.password);
+    if (value && value.length > 5 && value !== user.password) {
       setPasswordChanged(true);
     } else {
       setPasswordChanged(false);
@@ -148,12 +149,15 @@ const UpdateUser = props => {
     const {current: postalCodeField} = postalCodeRef;
     const {current: cityWardField} = cityWardRef;
     const {current: fullAddressField} = fullAddressRef;
+    const {current: passwordField} = passwordRef;
+
     const mobile = mobileField.value();
     const firstName = firstNameField.value();
     const lastName = lastNameField.value();
     const fullAddress = fullAddressField.value();
     const postalCode = postalCodeField.value();
     const cityWard = cityWardField.value();
+    const password = passwordField.value();
     if (userDataChanged) {
       setLoading(true);
       const updatedUserData = {
@@ -166,6 +170,7 @@ const UpdateUser = props => {
         ...(fullAddressChanged && {fullAddress}),
         ...(cityWardChanged && {cityWard}),
         ...(postalCodeChanged && {postalCode}),
+        ...(passwordChanged && {password}),
         id: user.id,
         email: user.email,
       };
@@ -394,7 +399,7 @@ const UpdateUser = props => {
                   disabled={loading}
                 />
               </View>
-              {/* <View style={sharedStyles.mobileContainer}>
+              <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>{updateUserr.passsword}</Text>
                 <TextField
                   label={updateUserr.passsword}
@@ -405,7 +410,7 @@ const UpdateUser = props => {
                   ref={passwordRef}
                   disabled={loading}
                 />
-              </View> */}
+              </View>
               <View style={sharedStyles.updateUserSbmtBtn}>
                 <Button
                   disabled={loading || !userDataChanged}

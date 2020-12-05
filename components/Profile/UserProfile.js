@@ -6,6 +6,7 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {View, Text} from 'react-native';
 import {Button, Drawer, Avatar, Icon} from 'react-native-material-ui';
 import Notifications from '../Notifications';
+import PaymentInformation from '../PaymentInformation';
 import MyAds from '../MyAds';
 import About from '../About';
 import MyLotteries from '../MyLotteries';
@@ -17,6 +18,7 @@ import {connect} from 'react-redux';
 import {logoutAction} from '../../redux/Auth/actions';
 import {handleLogout} from '../../redux/Auth/Logout';
 import {getUserSelector} from './Selectors';
+import FastImage from 'react-native-fast-image';
 
 const UserProfile = props => {
   const {user} = props;
@@ -55,6 +57,7 @@ const UserProfile = props => {
     myAds: <MyAds onClose={onModalClose} />,
     about: <About onClose={onModalClose} />,
     myLotteries: <MyLotteries onClose={onModalClose} />,
+    paymentInformation: <PaymentInformation onClose={onModalClose} />,
   };
 
   return (
@@ -68,7 +71,7 @@ const UserProfile = props => {
               image={
                 user.image && (
                   <CachedImage
-                    blurRadius={15}
+                    blurRadius={250}
                     source={{uri: user.image}}
                     style={sharedStyles.profileBlurredImage}>
                     <View style={sharedStyles.profileBlur} />
@@ -87,12 +90,17 @@ const UserProfile = props => {
                   <Avatar
                     image={
                       user.image ? (
-                        <CachedImage
+                        <FastImage
                           style={sharedStyles.profileImage}
-                          source={{uri: user.image}}
+                          source={{
+                            uri: user.image,
+                            priority: FastImage.priority.high,
+                            cache: FastImage.cacheControl.immutable,
+                          }}
+                          resizeMode={FastImage.resizeMode.cover}
                         />
                       ) : (
-                        <Icon name="image" />
+                        <Icon name="account-circle" />
                       )
                     }
                   />
@@ -155,6 +163,11 @@ const UserProfile = props => {
             <Drawer.Section
               title={profile.personal}
               items={[
+                {
+                  icon: 'credit-card',
+                  value: profile.paymentInformation,
+                  onPress: handleShowModal('paymentInformation'),
+                },
                 {
                   icon: 'settings',
                   value: profile.settings,

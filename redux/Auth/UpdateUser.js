@@ -12,7 +12,7 @@ const handlerUpdateUserData = payload => {
       }
       invoke(payload, 'onSuccess');
       return dispatch({
-        type: authActions.UPDATE,
+        type: authActions.update,
         payload: updatedUser,
       });
     };

@@ -7,13 +7,13 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case userActions.SETMYADS: {
+    case userActions.setMyAds: {
       return {
         ...state,
         myAds: action.payload,
       };
     }
-    case userActions.SETMYLOTTERIES: {
+    case userActions.setMyLotteries: {
       return {
         ...state,
         myLotteries: action.payload,

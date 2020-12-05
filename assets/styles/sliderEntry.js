@@ -85,12 +85,13 @@ export const sliderStyles = StyleSheet.create({
     backgroundColor: 'white',
   },
   image: {
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     ...StyleSheet.absoluteFillObject,
     resizeMode: 'cover',
     borderRadius: IS_IOS ? entryBorderRadius : 0,
     borderTopLeftRadius: entryBorderRadius,
     borderTopRightRadius: entryBorderRadius,
+    backgroundColor: '#f7f5fe',
   },
   // image's border radius is buggy on iOS; let's hack it!
   radiusMask: {

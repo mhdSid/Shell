@@ -6,7 +6,7 @@ const initialState = {
 
 const searchReducer = (state = initialState, action) => {
   switch (action.type) {
-    case searchActions.SEARCH: {
+    case searchActions.search: {
       return {
         ...state,
         searchResults: action.payload,

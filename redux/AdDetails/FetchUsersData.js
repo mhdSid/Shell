@@ -17,12 +17,12 @@ const handleFetchUsersData = payload => {
         users.forEach(user => {
           if (user.id === winnerUserId) {
             dispatch({
-              type: adDetailsActions.SETWINNERUSERDATA,
+              type: adDetailsActions.setWinnerUserData,
               payload: user,
             });
           } else if (user.id === userId) {
             dispatch({
-              type: adDetailsActions.SETADPOSTERDATA,
+              type: adDetailsActions.setAdPosterData,
               payload: user,
             });
           } else {
@@ -30,7 +30,7 @@ const handleFetchUsersData = payload => {
           }
         });
         dispatch({
-          type: adDetailsActions.SETLOTTERYUSERSDATA,
+          type: adDetailsActions.setLotteryUsersData,
           payload: lotteryUsers,
         });
       }

@@ -1,5 +1,6 @@
 import {adActions} from './actions';
 import {ENTRIES1} from '../../Constants/CarouselEntries';
+import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
 
 const initialState = {
@@ -8,7 +9,7 @@ const initialState = {
 
 const adsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case adActions.IMPORTAD: {
+    case adActions.importAd: {
       const {payload} = action;
       let newAds = [];
       if (Array.isArray(payload) && payload.length > 0) {
@@ -19,7 +20,7 @@ const adsReducer = (state = initialState, action) => {
       ) {
         newAds = [payload];
       }
-      newAds = uniqBy([...state.ads, ...newAds], 'id').sort(
+      newAds = uniqBy([...(state.ads || []), ...(newAds || [])], 'id').sort(
         (ad1, ad2) => +new Date(ad2.publishDate) - +new Date(ad1.publishDate),
       );
 
@@ -27,15 +28,24 @@ const adsReducer = (state = initialState, action) => {
         ads: newAds,
       };
     }
-    case adActions.UPDATECURRENTAD: {
+    case adActions.updateCurrentAd: {
       let {ads} = state;
       const ad = action.payload;
       if (ad && ad.id) {
         const updatedAds = ads.map(item => {
-          if (item.id === ad.id) {
+          if (`${item.id}` === `${ad.id}`) {
+            console.log(
+              'current_currentCollectedPrice: ',
+              item.currentCollectedPrice,
+            );
+            console.log(
+              'updated_currentCollectedPrice: ',
+              ad.currentCollectedPrice,
+            );
             return {
               ...item,
               ...ad,
+              lotteryUserIds: uniq(ad.lotteryUserIds),
             };
           }
           return item;

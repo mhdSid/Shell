@@ -1,5 +1,5 @@
 const searchActions = {
-  SEARCH: 'SEARCH',
+  search: 'SEARCH',
 };
 
 export {searchActions};
