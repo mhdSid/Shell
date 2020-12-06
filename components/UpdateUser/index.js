@@ -314,6 +314,18 @@ const UpdateUser = props => {
                 />
               </View>
               <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>{updateUserr.passsword}</Text>
+                <TextField
+                  label={updateUserr.passsword}
+                  value={user.password}
+                  secureTextEntry={true}
+                  tintColor={'#b69cf6'}
+                  onChangeText={handlePasswordChangeText}
+                  ref={passwordRef}
+                  disabled={loading}
+                />
+              </View>
+              <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>
                   {updateUserr.phoneNumber}
                 </Text>
@@ -396,18 +408,6 @@ const UpdateUser = props => {
                   tintColor={'#b69cf6'}
                   onChangeText={handleFullAddressChangeText}
                   ref={fullAddressRef}
-                  disabled={loading}
-                />
-              </View>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>{updateUserr.passsword}</Text>
-                <TextField
-                  label={updateUserr.passsword}
-                  value={user.password}
-                  secureTextEntry={true}
-                  tintColor={'#b69cf6'}
-                  onChangeText={handlePasswordChangeText}
-                  ref={passwordRef}
                   disabled={loading}
                 />
               </View>

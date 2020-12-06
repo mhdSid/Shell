@@ -97,7 +97,7 @@ const notifications = {
 
 const paymentInformation = {
   paymentInformation: 'Payment Information',
-  submit: 'Update',
+  submit: 'Save',
   creditCard: 'Credit Card',
 };
 

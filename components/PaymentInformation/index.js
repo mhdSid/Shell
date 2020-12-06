@@ -34,7 +34,8 @@ const PaymentInformation = props => {
     if (data) {
       const {status} = data;
       const {cvc, expiry, type} = data.values;
-      const number = data.values.number && data.values.number.replace(/\s/g, '');
+      const number =
+        data.values.number && data.values.number.replace(/\s/g, '');
       setCreditCardCVC(cvc);
       setCreditCardExpiryDate(expiry);
       setCreditCardNumber(number);
@@ -71,15 +72,14 @@ const PaymentInformation = props => {
     handleCloseModal();
   };
   const handleUpdateUserPaymentInfo = () => {
-    console.log('handleUpdateUserPaymentInfo');
     if (isValid && userDataChanged) {
       const updatedUserData = {
         id: user.id,
         email: user.email,
         creditCardNumber,
-        creditCardExpiryDate: creditCardExpiryDate,
-        creditCardCVC: creditCardCVC,
-        creditCardType: creditCardType,
+        creditCardExpiryDate,
+        creditCardCVC,
+        creditCardType,
       };
       setLoading(true);
       invoke(props, 'handleUpdateUserData', {
@@ -111,7 +111,11 @@ const PaymentInformation = props => {
     creditCardExpiryDateChanged,
     creditCardNumberChanged,
     creditCardTypeChanged,
-    isValid,
+    creditCardNumber,
+    user,
+    creditCardCVC,
+    creditCardType,
+    creditCardExpiryDate
   ]);
 
   return (

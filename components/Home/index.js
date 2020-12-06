@@ -136,11 +136,11 @@ class HomeComponent extends PureComponent {
           }
           onRightElementPress={this.changeViewStyle}
         />
-        <AdMobBanner
+        {/* <AdMobBanner
           adSize="fullBanner"
           adUnitID="ca-app-pub-5703846930890914/6105801245"
           style={sharedStyles.adMobBanner}
-        />
+        /> */}
         <UploadAdProgress />
         {loading && <View style={sharedStyles.homeLoading}>{Loading}</View>}
         {/* {this.isCarousel && this.ads && this.ads.length > 0 && (
