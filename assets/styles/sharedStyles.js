@@ -34,6 +34,11 @@ const sharedStyles = StyleSheet.create({
   toolbarContainer: {
     ...toolbarStyles,
   },
+  toolbarBackButton: {
+    width: 10,
+    height: 20,
+    color: 'white',
+  },
   toolbarContainerPadding: {
     paddingHorizontal: 15,
     ...toolbarStyles,
@@ -293,14 +298,15 @@ const sharedStyles = StyleSheet.create({
     marginBottom: 20,
   },
   adDetailsUsersListContainer: {
-    display: 'flex',
-    flexDirection: 'row',
+    // display: 'flex',
+    // flexDirection: 'row',
     width: '100%',
   },
   adDetailsUsersListItemContainer: {
     marginRight: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
   },
   adDetailsUsersListItemImage: {
     width: 60,
@@ -393,7 +399,7 @@ const sharedStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   paymentSafeViewContainer: {
-    backgroundColor: '#b69cf6',
+    // backgroundColor: '#b69cf6',
   },
   paymentSafeViewContentContainer: {
     display: 'flex',
@@ -463,6 +469,9 @@ const sharedStyles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
     marginHorizontal: 10,
+  },
+  paymentText: {
+    color: 'black',
   },
   userDetailsText: {
     fontSize: 16,
@@ -584,6 +593,18 @@ const sharedStyles = StyleSheet.create({
     right: 0,
     width: '95%',
   },
+  progressItem: {
+    backgroundColor: 'white',
+    height: 10,
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
+  progressItemInner: {
+    backgroundColor: 'silver',
+    height: '100%',
+  },
   uploadProgressText: {
     fontWeight: '500',
     marginHorizontal: 10,
@@ -648,6 +669,18 @@ const sharedStyles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 26,
+  },
+  userJoinedLotteryCountContainer: {
+    backgroundColor: 'red',
+    padding: 2,
+    zIndex: 100,
+    borderRadius: 5,
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
+  userJoinedLotteryCountText: {
+    color: 'white',
   },
 });
 

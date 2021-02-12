@@ -2,9 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getProgressItemsSelector} from './Selectors';
-import {uploadProgress} from '../../Constants/Texts';
-import {SimpleLoaderDefault} from '../Loading';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 
 const UploadAdProgress = props => {
@@ -19,10 +17,16 @@ const UploadAdProgress = props => {
           ? sharedStyles.uploadProgressRelative
           : sharedStyles.uploadProgressAbsolute
       }>
-      {SimpleLoaderDefault}
-      <Text style={sharedStyles.uploadProgressText}>
-        {uploadProgress.inProgress(progressItems.length)}
-      </Text>
+      {progressItems.map(item => (
+        <View style={sharedStyles.progressItem}>
+          <View
+            style={[
+              sharedStyles.progressItemInner,
+              {width: `${item.progress}%`},
+            ]}
+          />
+        </View>
+      ))}
     </View>
   );
 };

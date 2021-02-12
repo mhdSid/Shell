@@ -6,17 +6,22 @@ import {handlePing} from '../../redux/Ping/Ping';
 import PropTypes from 'prop-types';
 import {showAdDetails} from '../../redux/AdDetails/actions';
 import {getAdDetailsSelector} from './Selectors';
+import {NativeModules} from 'react-native';
+const {CalendarModule} = NativeModules;
 
 const Pinger = props => {
   const {adDetails} = props;
 
+  CalendarModule.createCalendarEvent('Party', 'my house').then(data => {
+    console.log('createCalendarEvent data: ', data);
+  });
+
   const onAdsDetailsClose = () => {
     invoke(props, 'showAdDetails', undefined);
   };
-
   useEffect(() => {
     invoke(props, 'handlePing');
-  }, []);
+  }, [props]);
 
   if (adDetails) {
     return <AdDetails onClose={onAdsDetailsClose} item={adDetails} />;

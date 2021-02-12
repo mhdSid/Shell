@@ -38,24 +38,27 @@ target 'winadd' do
   pod 'react-native-fetch-blob', :path => '../lib/CachedImage//react-native-fetch-blob/react-native-fetch-blob.podspec'
   pod 'RNSVG', :path => '../node_modules/react-native-svg/RNSVG.podspec'
   pod 'RNFastImage', :path => '../node_modules/react-native-fast-image/RNFastImage.podspec'
-  # pod 'VydiaRNFileUploader', :path => '../node_modules/react-native-background-upload/VydiaRNFileUploader.podspec'
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker/react-native-image-picker.podspec'
+  pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo/react-native-netinfo.podspec'
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons/RNVectorIcons.podspec'
+  pod 'react-native-background-upload', :path => '../node_modules/react-native-background-upload/react-native-background-upload.podspec'
 
   pod 'Google-Mobile-Ads-SDK'
 
-  target 'winaddTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+#   target 'winaddTests' do
+#     inherit! :search_paths
+#     # Pods for testing
+#   end
 
-  use_native_modules!
-end
+#   use_native_modules!
+# end
 
-target 'winadd-tvOS' do
-  # Pods for winadd-tvOS
+# target 'winadd-tvOS' do
+#   # Pods for winadd-tvOS
 
-  target 'winadd-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+#   target 'winadd-tvOSTests' do
+#     inherit! :search_paths
+#     # Pods for testing
+#   end
 
 end

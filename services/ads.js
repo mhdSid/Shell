@@ -1,6 +1,9 @@
 // import {apiRequest} from '../Constants/Api';
 import {request} from './Request';
-// import Upload from 'react-native-background-upload';
+import Upload from 'react-native-background-upload';
+import {apiRequest} from '../Constants/Api';
+import CryptoJS from 'crypto-js';
+import {decrypt, password} from './Encrypt';
 // import {decrypt, password} from './Encrypt';
 // import CryptoJS from 'crypto-js';
 
@@ -177,6 +180,197 @@ const importAd = async props => {
   return data;
 };
 
+const addBackgroundUpload = async props => {
+  const {
+    name,
+    description,
+    image,
+    category,
+    prefecture,
+    currency,
+    status,
+    price,
+    userId,
+    country,
+    updateProgress,
+  } = props;
+
+  const options = {
+    url: `${apiRequest.apiUri}ads/add`,
+    path: image.uri,
+    method: 'POST',
+    field: 'image',
+    type: 'multipart',
+    headers: {
+      Accept: apiRequest.jsonContentType,
+      'Content-Type': apiRequest.jsonContentType,
+    },
+    parameters: {
+      name,
+      description,
+      category,
+      prefecture,
+      currency,
+      status,
+      price,
+      userId,
+      country,
+    },
+  };
+  console.log(options);
+  return new Promise(resolve => {
+    Upload.startUpload(options)
+      .then(uploadId => {
+        console.log('Upload started');
+        let progressSubscriber,
+          errorSubscriber,
+          completedSubscriber,
+          cancelledSubscriber;
+        progressSubscriber = Upload.addListener('progress', uploadId, data => {
+          console.log(`Progress: ${data.progress}%`);
+          if (data.progress !== null && data.progress !== undefined) {
+            updateProgress(Math.round(data.progress));
+          }
+          if (data.progress === 100) {
+            progressSubscriber.remove();
+          }
+        });
+        completedSubscriber = Upload.addListener(
+          'completed',
+          uploadId,
+          data => {
+            updateProgress(100);
+            // data includes responseCode: number and responseBody: Object
+            let response = {};
+            if (data.responseBody) {
+              response = decrypt(JSON.parse(data.responseBody).data, password);
+              response = JSON.parse(response.toString(CryptoJS.enc.Utf8));
+            }
+            console.log('Completed!', data, response);
+            resolve(response);
+            errorSubscriber.remove();
+            completedSubscriber.remove();
+            cancelledSubscriber.remove();
+            progressSubscriber.remove();
+          },
+        );
+        cancelledSubscriber = Upload.addListener(
+          'cancelled',
+          uploadId,
+          data => {
+            console.log('Cancelled!');
+            resolve({error: data});
+            errorSubscriber.remove();
+            completedSubscriber.remove();
+            cancelledSubscriber.remove();
+            progressSubscriber.remove();
+          },
+        );
+        errorSubscriber = Upload.addListener('error', uploadId, data => {
+          console.log(`Error: ${data.error}%`);
+          resolve({error: data});
+          errorSubscriber.remove();
+          completedSubscriber.remove();
+          cancelledSubscriber.remove();
+          progressSubscriber.remove();
+        });
+      })
+      .catch(err => {
+        console.log('Upload error!', err);
+        resolve({error: err});
+      });
+  });
+};
+
+const updateAdBackground = async props => {
+  const {id, image, updateProgress} = props;
+
+  const options = {
+    url: `${apiRequest.apiUri}ads/update/v2`,
+    path: image.uri,
+    method: 'POST',
+    field: 'image',
+    type: 'multipart',
+    headers: {
+      Accept: apiRequest.jsonContentType,
+      'Content-Type': apiRequest.jsonContentType,
+    },
+    parameters: {
+      id,
+    },
+  };
+  console.log(options);
+  return new Promise(resolve => {
+    return Upload.startUpload(options)
+      .then(uploadId => {
+        console.log('Upload started');
+        let progressSubscriber,
+          errorSubscriber,
+          completedSubscriber,
+          cancelledSubscriber;
+        progressSubscriber = Upload.addListener('progress', uploadId, data => {
+          console.log(`Progress: ${data.progress}%`);
+          if (data.progress !== null && data.progress !== undefined) {
+            updateProgress(Math.round(data.progress));
+          }
+          if (data.progress === 100) {
+            progressSubscriber.remove();
+          }
+        });
+        completedSubscriber = Upload.addListener(
+          'completed',
+          uploadId,
+          data => {
+            updateProgress(100);
+            // data includes responseCode: number and responseBody: Object
+            let response = {};
+            if (data.responseBody) {
+              response = decrypt(JSON.parse(data.responseBody).data, password);
+              response = JSON.parse(response.toString(CryptoJS.enc.Utf8));
+            }
+            console.log('Completed!', data, response);
+            console.log(
+              'completedSubscriber: ',
+              completedSubscriber.remove,
+              progressSubscriber.remove,
+              errorSubscriber.remove,
+              cancelledSubscriber.remove,
+            );
+            resolve(response);
+            errorSubscriber.remove();
+            completedSubscriber.remove();
+            cancelledSubscriber.remove();
+            progressSubscriber.remove();
+          },
+        );
+        cancelledSubscriber = Upload.addListener(
+          'cancelled',
+          uploadId,
+          data => {
+            console.log('Cancelled!');
+            resolve({error: data});
+            errorSubscriber.remove();
+            completedSubscriber.remove();
+            cancelledSubscriber.remove();
+            progressSubscriber.remove();
+          },
+        );
+        errorSubscriber = Upload.addListener('error', uploadId, data => {
+          console.log(`Error: ${data.error}%`);
+          resolve({error: data});
+          errorSubscriber.remove();
+          completedSubscriber.remove();
+          cancelledSubscriber.remove();
+          progressSubscriber.remove();
+        });
+      })
+      .catch(err => {
+        console.log('Upload error!', err);
+        resolve({error: err});
+      });
+  });
+};
+
 // const updateAd = props => {
 //   const {id, image} = props;
 //   const options = {
@@ -289,4 +483,6 @@ export {
   updateAd,
   enterLottery,
   getLotteries,
+  addBackgroundUpload,
+  updateAdBackground,
 };

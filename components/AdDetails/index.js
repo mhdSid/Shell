@@ -66,7 +66,9 @@ const AdDetails = props => {
     winnerUserId,
     currentCollectedPrice,
     images,
+    disableHeaderActions,
   } = item;
+  console.log(lotteryUsersData);
   const [selectedUser, setSelectedUser] = useState();
   const [usersDataLoading, setUsersDataLoading] = useState(true);
   const [userAdsLoading, setUserAdsLoading] = useState(true);
@@ -147,7 +149,7 @@ const AdDetails = props => {
     />
   );
   const renderLotteryUserItem = ({item: _user}) => (
-    <AdDetailsUserListItem user={_user} onPress={handleUserPress} />
+    <AdDetailsUserListItem user={_user} onPress={handleUserPress} withNotificationNum={true} />
   );
   const handleShowImagesViewer = url => {
     setViewImageUri(url);
@@ -176,7 +178,8 @@ const AdDetails = props => {
           onLeftElementPress={handleCloseModal}
           centerElement={name}
           rightElement={
-            `${userId}` !== `${authUser.id}` && (
+            `${userId}` !== `${authUser.id}` &&
+            !disableHeaderActions && (
               <Button
                 disabled={`${currentCollectedPrice}` === `${price}`}
                 onPress={handleEnterDraw}
@@ -297,13 +300,14 @@ const AdDetails = props => {
                     initialNumToRender={2}
                     windowSize={2}
                     horizontal={true}
-                    showsVerticalScrollIndicator={false}
+                    removeClippedSubviews={true}
+                    showsHorizontalScrollIndicator={false}
                     data={lotteryUsersData}
                     getItem={getItem}
                     getItemCount={getLotteryUsersCount}
-                    contentContainerStyle={
-                      sharedStyles.adDetailsUsersListContainer
-                    }
+                    // contentContainerStyle={
+                    //   sharedStyles.adDetailsUsersListContainer
+                    // }
                     keyExtractor={getVirtualKey}
                     renderItem={renderLotteryUserItem}
                   />
@@ -427,6 +431,7 @@ AdDetails.propTypes = {
   item: PropTypes.object,
   onClose: PropTypes.func,
   updateAdDetails: PropTypes.func,
+  disableHeaderActions: PropTypes.bool
 };
 
 const mapStateToProps = state => {

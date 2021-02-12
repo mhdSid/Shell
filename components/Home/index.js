@@ -7,12 +7,12 @@ import PropTypes from 'prop-types';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Loading} from '../Loading';
 import FastImage from 'react-native-fast-image';
-import {
-  AdMobBanner,
-  // AdMobInterstitial,
-  // PublisherBanner,
-  // AdMobRewarded,
-} from 'react-native-admob';
+// import {
+//   AdMobBanner,
+//   // AdMobInterstitial,
+//   // PublisherBanner,
+//   // AdMobRewarded,
+// } from 'react-native-admob';
 // import {CarouselComponent} from '../Carousel';
 import CardListItem from './CardListItem';
 import {home} from '../../Constants/Texts';
@@ -26,7 +26,7 @@ import {
   // getIsCarouselSelector,
 } from './Selectors';
 import UploadAdProgress from '../UploadAdProgress';
-import {emitSocketEvents} from '../../services/Socket.js';
+import {emitSocketEvents} from '../../services/Socket';
 
 class HomeComponent extends PureComponent {
   state = {
@@ -70,8 +70,8 @@ class HomeComponent extends PureComponent {
     invoke(this.props, 'showAdDetails', item);
   };
   handleShowAdDetails = item => {
-    return () => {
-      invoke(this.props, 'showAdDetails', item);
+    return data => {
+      invoke(this.props, 'showAdDetails', item || data);
     };
   };
   componentWillMount() {

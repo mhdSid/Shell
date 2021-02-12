@@ -8,7 +8,7 @@ import {Text, View} from 'react-native';
 import {Icon} from 'react-native-material-ui';
 
 const AdDetailsUserListItem = props => {
-  const {user} = props;
+  const {user, withNotificationNum} = props;
 
   const handlePress = () => {
     invoke(props, 'onPress', user);
@@ -19,6 +19,11 @@ const AdDetailsUserListItem = props => {
       <TouchableBounce
         style={sharedStyles.adDetailsUsersListItemContainer}
         onPress={handlePress}>
+        {withNotificationNum && user.userJoinedLotteryCount > 1 && (
+          <View style={sharedStyles.userJoinedLotteryCountContainer}>
+            <Text numberOfLines={1} style={sharedStyles.userJoinedLotteryCountText}>{user.userJoinedLotteryCount}</Text>
+          </View>
+        )}
         {user.image ? (
           <FastImage
             style={sharedStyles.adDetailsUsersListItemImage}
@@ -53,6 +58,7 @@ const AdDetailsUserListItem = props => {
 AdDetailsUserListItem.propTypes = {
   user: PropTypes.object,
   onPress: PropTypes.func,
+  withNotificationNum: PropTypes.bool,
 };
 
 export default AdDetailsUserListItem;

@@ -50,7 +50,7 @@ const Payment = props => {
   return (
     <Modal animationType="slide">
       <SafeAreaView style={sharedStyles.fullheightView}>
-        <Toolbar
+        {/* <Toolbar
           style={{
             container: sharedStyles.toolbarContainer,
           }}
@@ -59,7 +59,7 @@ const Payment = props => {
             <Text style={sharedStyles.paymentTitle}>{payment.title}</Text>
           }
           // onLeftElementPress={handleCloseModal}
-        />
+        /> */}
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={
@@ -80,8 +80,12 @@ const Payment = props => {
                 />
               </View>
               <View style={sharedStyles.aboutIconTextContainer}>
-                <Icon color="white" name="receipt" />
-                <Text style={sharedStyles.aboutIconText}>
+                <Icon color="black" name="receipt" />
+                <Text
+                  style={[
+                    sharedStyles.aboutIconText,
+                    sharedStyles.paymentText,
+                  ]}>
                   {about.enterLottery}
                 </Text>
               </View>
@@ -91,8 +95,14 @@ const Payment = props => {
                 </Text>
               </View>
               <View style={sharedStyles.aboutIconTextContainer}>
-                <Icon color="white" name="star" />
-                <Text style={sharedStyles.aboutIconText}>{about.win}</Text>
+                <Icon color="black" name="star" />
+                <Text
+                  style={[
+                    sharedStyles.aboutIconText,
+                    sharedStyles.paymentText,
+                  ]}>
+                  {about.win}
+                </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
                 <Text style={sharedStyles.aboutFirstSectionText}>

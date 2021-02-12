@@ -28,6 +28,7 @@ const MyLotteries = props => {
     setSelectedLottery(item);
   };
   const fetchMyLotteries = () => {
+    setLoading(true);
     invoke(props, 'handleFetchMyLotteries', {
       onSuccess: callback,
       onError: callback,

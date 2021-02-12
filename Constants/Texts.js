@@ -1,28 +1,28 @@
 const about = {
-  howTo: 'How To Guide',
+  howTo: 'How-to Guide',
   sell: 'Sell',
   howToUseFirst:
-    'Are you having problems selling any item you can think about?',
+    'Make a post about the item you want to sell - it could be anything you can think about!',
   howToUseSecond:
-    "Do you want to make money if you have something that you don't use?",
-  howToUseThird: "It's not about selling anymore!",
-  howToUseFourth: 'Post an Ad about anything!',
-  howToUseFifth:
-    'Users pay a fee to enter a Lottery to have a chance to win the item in your Ad.',
+    'Users enter the lottery by paying a fee of ¥555 to have a chance to win the item that you have posted.',
+  howToUseThird: '20% of the fee amount is used to sponsor and fund NGOs.',
+  howToUseFourth:
+    '30% of the fee amount goes to our company to continue running this service.',
+  howToUseFifth: 'The rest 50% of the fee amount is added to the lottery.',
   howToUseSixth:
-    'Once the total amount is collected, our system starts a Lottery and a random user wins the item in your Ad.',
+    'When the total monetary value in the lottery is equal to the price of your item, then our system randomly selects a winner.',
   howToUseSeventh:
-    'The winner takes the item and you take the collected cash which is the price that you initially entered.',
+    'The winner collects the item and you own the collected price value of your item.',
   or: 'Or',
   browse: 'Browse',
-  howtoUseEigtth: 'Browser through a wide variety of uploaded Ads!',
+  howtoUseEigtth: 'Browser through a wide variety of uploaded items!',
   choose: 'Choose',
   howToUseNineth:
     'Make sure you choose any item you love. It can be a Smart Phone, a Laptop, a Car, a House, or anything you can think about.',
   howToUseTenth:
-    'Pay a fee of ¥555 to enter a lottery and have a chance to win any item of your choice.',
+    'Pay a fee of ¥555 to enter a lottery and have a chance to win any item of your choice.\n\n 20% of the fee amount is used to sponsor and fund NGOs.\n\n 30% of the fee amount goes to our company to continue running this service.\n\n The rest 50% of the fee amount is added to the lottery.',
   howToUseEleventh:
-    'Once the total price of your chosen item has been collected, the lottery will start and a radom user will win the item.',
+    'When the total monetary value in the lottery is equal to the price of your chosen item, then our system randomly selects a winner.',
   enterLottery: 'Enter Lottery',
   win: 'Win',
 };
@@ -60,10 +60,10 @@ const home = {
 const importAd = {
   sports: 'Sports',
   noNoticableScratches: 'No Noticable Scratches or Dirt',
-  postAnAd: 'Post an Ad',
+  postAnAd: 'Post an Item',
   post: 'Post',
-  productName: 'Product Name',
-  adName: 'Ad Name',
+  productName: 'Item Name',
+  adName: 'Name',
   description: 'Description',
   price: 'Price',
   images: 'Images',
@@ -187,6 +187,7 @@ const payment = {
 
 const uploadProgress = {
   inProgress: length => `Uploading ${length} ${length > 1 ? 'Ads' : 'Ad'}`,
+  uploadPgress: 'Upload in progress',
 };
 
 export {

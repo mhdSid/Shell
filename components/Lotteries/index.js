@@ -36,7 +36,7 @@ const Lotteries = props => {
   };
   const handleShowAdDetails = item => {
     return () => {
-      invoke(props, 'showAdDetails', item);
+      invoke(props, 'showAdDetails', {...item, disableHeaderActions: true});
     };
   };
   const renderListItem = ({item, index}) => (

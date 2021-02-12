@@ -1,10 +1,10 @@
 import {adActions} from './actions';
-import {ENTRIES1} from '../../Constants/CarouselEntries';
+// import {ENTRIES1} from '../../Constants/CarouselEntries';
 import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
 
 const initialState = {
-  ads: [...ENTRIES1],
+  ads: [],
 };
 
 const adsReducer = (state = initialState, action) => {
@@ -23,7 +23,7 @@ const adsReducer = (state = initialState, action) => {
       newAds = uniqBy([...(state.ads || []), ...(newAds || [])], 'id').sort(
         (ad1, ad2) => +new Date(ad2.publishDate) - +new Date(ad1.publishDate),
       );
-
+      console.log(newAds);
       return {
         ads: newAds,
       };

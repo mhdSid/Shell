@@ -30,7 +30,6 @@ const PaymentInformation = props => {
   const [userDataChanged, setUserDataChanged] = useState(false);
 
   const onCreditChange = data => {
-    console.log(data);
     if (data) {
       const {status} = data;
       const {cvc, expiry, type} = data.values;
@@ -72,7 +71,7 @@ const PaymentInformation = props => {
     handleCloseModal();
   };
   const handleUpdateUserPaymentInfo = () => {
-    if (isValid && userDataChanged) {
+    if ((isValid && userDataChanged) || isValid) {
       const updatedUserData = {
         id: user.id,
         email: user.email,
@@ -115,7 +114,7 @@ const PaymentInformation = props => {
     user,
     creditCardCVC,
     creditCardType,
-    creditCardExpiryDate
+    creditCardExpiryDate,
   ]);
 
   return (
@@ -134,7 +133,7 @@ const PaymentInformation = props => {
           rightElement={
             <Button
               onPress={handleUpdateUserPaymentInfo}
-              disabled={loading || !userDataChanged}
+              disabled={loading || !userDataChanged || !isValid}
               raised
               text={paymentInformation.submit}
               icon="done-all"
@@ -159,7 +158,7 @@ const PaymentInformation = props => {
             </View>
             <View style={sharedStyles.loginBtn}>
               <Button
-                disabled={loading || !userDataChanged}
+                disabled={loading || !userDataChanged || !isValid}
                 raised={true}
                 primary
                 text={paymentInformation.submit}

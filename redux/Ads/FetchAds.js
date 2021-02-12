@@ -8,6 +8,7 @@ const handleFetchAds = payload => {
     const onGetAdsSuccess = data => {
       invoke(payload, 'onSuccess');
       const {error, ads: serverAds} = data;
+      console.log(serverAds);
       if (error) {
         return handleError({error, onError});
       }
