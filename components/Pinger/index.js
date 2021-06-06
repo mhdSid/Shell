@@ -7,6 +7,12 @@ import PropTypes from 'prop-types';
 import {showAdDetails} from '../../redux/AdDetails/actions';
 import {getAdDetailsSelector} from './Selectors';
 import {NativeModules} from 'react-native';
+import {
+  addNewProgressItem,
+  removeProgressItem,
+  updateProgressItem,
+} from '../../redux/UploadProgress/actions';
+import {getProgressItemsSelector} from '../UploadAdProgress/Selectors';
 const {CalendarModule} = NativeModules;
 
 const Pinger = props => {
@@ -21,7 +27,24 @@ const Pinger = props => {
   };
   useEffect(() => {
     invoke(props, 'handlePing');
-  }, [props]);
+
+    // invoke(props, 'addNewProgressItem', {id: 1});
+    // invoke(props, 'updateProgressItem', {
+    //   id: 1,
+    //   progress: 100,
+    //   progressItemsLength: 3,
+    // });
+    // invoke(props, 'updateProgressItem', {
+    //   id: 1,
+    //   progress: 100,
+    //   progressItemsLength: 3,
+    // });
+    // invoke(props, 'updateProgressItem', {
+    //   id: 1,
+    //   progress: 100,
+    //   progressItemsLength: 3,
+    // });
+  }, []);
 
   if (adDetails) {
     return <AdDetails onClose={onAdsDetailsClose} item={adDetails} />;
@@ -32,6 +55,7 @@ const Pinger = props => {
 const mapStateToProps = state => {
   return {
     adDetails: getAdDetailsSelector(state),
+    progressItems: getProgressItemsSelector(state),
   };
 };
 
@@ -39,6 +63,9 @@ const mapDispatchToProps = dispatch => {
   return {
     showAdDetails: payload => dispatch(showAdDetails(payload)),
     handlePing: payload => dispatch(handlePing(payload)),
+    updateProgressItem: payload => dispatch(updateProgressItem(payload)),
+    addNewProgressItem: payload => dispatch(addNewProgressItem(payload)),
+    removeProgressItem: payload => dispatch(removeProgressItem(payload)),
   };
 };
 

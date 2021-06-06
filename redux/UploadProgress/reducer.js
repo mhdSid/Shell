@@ -7,15 +7,17 @@ const initialState = {
 const uploadProgressReducer = (state = initialState, action) => {
   switch (action.type) {
     case uploadProgressActions.addNewProgressItem: {
-      const {id} = action.payload;
       return {
-        progressItems: [...state.progressItems, {id, progress: 0}],
+        progressItems: [
+          ...state.progressItems,
+          {...action.payload, progress: 0},
+        ],
       };
     }
     case uploadProgressActions.removeProgressItem: {
       const {id} = action.payload;
       let {progressItems} = state;
-      progressItems = progressItems.filter(item => id !== item.id);
+      progressItems = progressItems.filter(item => `${id}` !== `${item.id}`);
       return {
         progressItems,
       };
@@ -23,17 +25,23 @@ const uploadProgressReducer = (state = initialState, action) => {
     case uploadProgressActions.updateProgressItem: {
       const {progress, id, progressItemsLength} = action.payload;
       let {progressItems} = state;
-      progressItems = progressItems
-        .map(item => {
-          return id === item.id
-            ? {
-                progress: Math.round(
-                  item.progress + progress / progressItemsLength,
-                ),
-              }
-            : item;
-        })
-        .filter(Boolean);
+      progressItems = progressItems.map(item => {
+        if (`${id}` === `${item.id}`) {
+          console.log(
+            'new Progress: ',
+            Number(progress) / Number(progressItemsLength),
+          );
+        }
+        return `${id}` === `${item.id}`
+          ? {
+              ...item,
+              id,
+              ...action.payload,
+              progressItemsLength,
+              progress: Number(progress) / Number(progressItemsLength),
+            }
+          : item;
+      });
       return {
         progressItems,
       };

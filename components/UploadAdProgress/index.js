@@ -6,8 +6,12 @@ import {View} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 
 const UploadAdProgress = props => {
-  const {progressItems, relative} = props;
+  const {progressItems, relative, id} = props;
   if (progressItems.length === 0) {
+    return null;
+  }
+  const progressItem = progressItems.find(item => `${item.id}` === `${id}`);
+  if (!progressItem) {
     return null;
   }
   return (
@@ -17,16 +21,14 @@ const UploadAdProgress = props => {
           ? sharedStyles.uploadProgressRelative
           : sharedStyles.uploadProgressAbsolute
       }>
-      {progressItems.map(item => (
-        <View style={sharedStyles.progressItem}>
-          <View
-            style={[
-              sharedStyles.progressItemInner,
-              {width: `${item.progress}%`},
-            ]}
-          />
-        </View>
-      ))}
+      <View style={sharedStyles.progressItem}>
+        <View
+          style={[
+            sharedStyles.progressItemInner,
+            {width: `${progressItem.progress}%`},
+          ]}
+        />
+      </View>
     </View>
   );
 };
@@ -34,6 +36,7 @@ const UploadAdProgress = props => {
 UploadAdProgress.propTypes = {
   progressItems: PropTypes.array,
   relative: PropTypes.bool,
+  id: PropTypes.string,
 };
 
 const mapStateToProps = state => {

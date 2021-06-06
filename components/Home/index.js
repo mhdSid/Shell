@@ -27,10 +27,12 @@ import {
 } from './Selectors';
 import UploadAdProgress from '../UploadAdProgress';
 import {emitSocketEvents} from '../../services/Socket';
-
+import UploadAdProgressModal from '../UploadAdProgress/uploadAdProgressModal';
+import {getProgressItemsSelector} from '../UploadAdProgress/Selectors';
 class HomeComponent extends PureComponent {
   state = {
     loading: false,
+    showAdProgressModal: false,
   };
   callback = () => {
     this.setState({loading: false});
@@ -43,15 +45,22 @@ class HomeComponent extends PureComponent {
       });
     });
   };
-  changeViewStyle = () => {
-    if (this.isCard) {
+  changeViewStyle = ({action}) => {
+    if (action === 'cloud-upload') {
+      this.setState({
+        showAdProgressModal: true,
+      });
+      return;
+    }
+    const {isCard, isList} = this.props;
+    if (isCard) {
       invoke(this.props, 'setHomeViewStyle', {
         isHomeCardStyle: false,
         // isHomeCarouselStyle: false,
         isHomeListStyle: true,
       });
     }
-    if (this.isList) {
+    if (isList) {
       invoke(this.props, 'setHomeViewStyle', {
         isHomeCardStyle: true,
         // isHomeCarouselStyle: true,
@@ -78,13 +87,18 @@ class HomeComponent extends PureComponent {
     emitSocketEvents();
     this.fetchAds();
   }
-  componentWillReceiveProps(nextProps) {
-    const {ads, isList, isCard} = nextProps;
-    this.ads = ads;
-    this.isList = isList;
-    // this.isCarousel = isCarousel;
-    this.isCard = isCard;
-  }
+  handleCloseUploadAdProgressModal = () => {
+    this.setState({
+      showAdProgressModal: false,
+    });
+  };
+  // componentWillReceiveProps(nextProps) {
+  //   const {ads, isList, isCard} = nextProps;
+  //   // this.ads = ads;
+  //   // this.isList = isList;
+  //   // // this.isCarousel = isCarousel;
+  //   // this.isCard = isCard;
+  // }
 
   renderCardListItem = ({item}) => (
     <CardListItem item={item} onItemPress={this.handleShowAdsDetailsFlatList} />
@@ -92,7 +106,9 @@ class HomeComponent extends PureComponent {
 
   renderListItem = ({item, index}) => (
     <View
-      style={index === this.ads.length - 1 && sharedStyles.homeListItemMargin}>
+      style={
+        index === this.props.ads.length - 1 && sharedStyles.homeListItemMargin
+      }>
       <ListItem
         divider
         leftElement={
@@ -101,7 +117,7 @@ class HomeComponent extends PureComponent {
               style={sharedStyles.homeListItemImage}
               source={{
                 uri: item.images[0],
-                priority: FastImage.priority.high,
+                priority: FastImage.priority.low,
                 cache: FastImage.cacheControl.immutable,
               }}
               resizeMode={FastImage.resizeMode.cover}
@@ -118,22 +134,32 @@ class HomeComponent extends PureComponent {
     </View>
   );
   getItem = (data, index) => data[index];
-  getItemCount = () => this.ads.length;
-  getItemKey = item => item.id;
-
+  getItemCount = () => this.props.ads.length;
+  getItemKey = item => `${item.id}`;
+  layoutProvider = () => {
+    return 100;
+  };
   render() {
-    const {loading} = this.state;
+    const {loading, showAdProgressModal} = this.state;
+    const {ads, isList, isCard, progressItems} = this.props;
+
     return (
       <View style={sharedStyles.fullheightView} shouldRasterizeIOS={true}>
+        {showAdProgressModal && (
+          <UploadAdProgressModal
+            onClose={this.handleCloseUploadAdProgressModal}
+          />
+        )}
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}
           centerElement={home.appName}
-          rightElement={
-            this.isCard ? 'view-list' : 'view-comfy'
+          rightElement={[
+            progressItems && progressItems.length && 'cloud-upload',
+            this.isCard ? 'view-list' : 'view-comfy',
             // this.isList
             // // ? 'view-carousel'
             // :
-          }
+          ].filter(Boolean)}
           onRightElementPress={this.changeViewStyle}
         />
         {/* <AdMobBanner
@@ -149,7 +175,7 @@ class HomeComponent extends PureComponent {
             onItemPress={this.handleShowAdsDetailsFlatList}
           />
         )} */}
-        {this.isCard && this.ads && this.ads.length > 0 && (
+        {isCard && ads && ads.length > 0 && (
           <VirtualizedList
             initialNumToRender={2}
             windowSize={2}
@@ -157,7 +183,7 @@ class HomeComponent extends PureComponent {
             refreshing={loading}
             onRefresh={this.fetchAds}
             showsVerticalScrollIndicator={false}
-            data={this.ads}
+            data={ads}
             getItem={this.getItem}
             getItemCount={this.getItemCount}
             contentContainerStyle={sharedStyles.homeAdsContainer}
@@ -165,7 +191,7 @@ class HomeComponent extends PureComponent {
             renderItem={this.renderCardListItem}
           />
         )}
-        {this.isList && this.ads && this.ads.length > 0 && (
+        {isList && ads && ads.length > 0 && (
           <VirtualizedList
             removeClippedSubviews={true}
             windowSize={2}
@@ -173,7 +199,7 @@ class HomeComponent extends PureComponent {
             refreshing={loading}
             onRefresh={this.fetchAds}
             showsVerticalScrollIndicator={false}
-            data={this.ads}
+            data={ads}
             getItem={this.getItem}
             getItemCount={this.getItemCount}
             keyExtractor={this.getItemKey}
@@ -187,6 +213,8 @@ class HomeComponent extends PureComponent {
 
 HomeComponent.propTypes = {
   ads: PropTypes.array,
+  isList: PropTypes.bool,
+  isCard: PropTypes.bool,
 };
 
 const mapStateToProps = state => {
@@ -194,6 +222,7 @@ const mapStateToProps = state => {
     ads: getAdsSelector(state),
     isList: getIsListSelector(state),
     isCard: getIsCardSelector(state),
+    progressItems: getProgressItemsSelector(state),
     // isCarousel: getIsCarouselSelector(state),
   };
 };

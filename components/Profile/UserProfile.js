@@ -94,7 +94,7 @@ const UserProfile = props => {
                           style={sharedStyles.profileImage}
                           source={{
                             uri: user.image,
-                            priority: FastImage.priority.high,
+                            priority: FastImage.priority.low,
                             cache: FastImage.cacheControl.immutable,
                           }}
                           resizeMode={FastImage.resizeMode.cover}

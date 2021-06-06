@@ -282,7 +282,7 @@ const UpdateUser = props => {
                         style={[sharedStyles.adImage, sharedStyles.userImage]}
                         source={{
                           uri: image || user.image,
-                          priority: FastImage.priority.high,
+                          priority: FastImage.priority.low,
                           cache: FastImage.cacheControl.immutable,
                         }}
                         resizeMode={FastImage.resizeMode.cover}

@@ -249,7 +249,7 @@ const ImportAd = props => {
                           style={sharedStyles.adImage}
                           source={{
                             uri: images[index],
-                            priority: FastImage.priority.high,
+                            priority: FastImage.priority.low,
                             cache: FastImage.cacheControl.immutable,
                           }}
                           resizeMode={FastImage.resizeMode.cover}

@@ -239,7 +239,6 @@ const addBackgroundUpload = async props => {
           'completed',
           uploadId,
           data => {
-            updateProgress(100);
             // data includes responseCode: number and responseBody: Object
             let response = {};
             if (data.responseBody) {
@@ -301,7 +300,7 @@ const updateAdBackground = async props => {
   };
   console.log(options);
   return new Promise(resolve => {
-    return Upload.startUpload(options)
+    Upload.startUpload(options)
       .then(uploadId => {
         console.log('Upload started');
         let progressSubscriber,
@@ -321,7 +320,6 @@ const updateAdBackground = async props => {
           'completed',
           uploadId,
           data => {
-            updateProgress(100);
             // data includes responseCode: number and responseBody: Object
             let response = {};
             if (data.responseBody) {

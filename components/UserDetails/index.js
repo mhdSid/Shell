@@ -42,7 +42,7 @@ const UserDetails = props => {
               style={sharedStyles.adDetailsImage}
               source={{
                 uri: image,
-                priority: FastImage.priority.high,
+                priority: FastImage.priority.low,
                 cache: FastImage.cacheControl.immutable,
               }}
               resizeMode={FastImage.resizeMode.cover}

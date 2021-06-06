@@ -123,20 +123,20 @@ const handleImportAd = payload => {
             : {error, onError},
         );
       }
-      dispatch({
-        type: adActions.importAd,
-        payload: newAd,
-      });
-      dispatch({
-        type: adDetailsActions.showAdDetails,
-        payload: newAd,
-      });
+      // dispatch({
+      //   type: adActions.importAd,
+      //   payload: newAd,
+      // });
+      // dispatch({
+      //   type: adDetailsActions.showAdDetails,
+      //   payload: newAd,
+      // });
       if (imageFiles && imageFiles.length > 1) {
         const newImages = imageFiles
           .filter(Boolean)
           .slice(1, imageFiles.length);
         const updatePromises = [];
-        newImages.forEach(newImage => {
+        newImages.forEach((newImage, index) => {
           updatePromises.push(
             new Promise(resolve => {
               updateAdBackground({
@@ -169,7 +169,7 @@ const handleImportAd = payload => {
                   return handleError(errorObj);
                 }
                 dispatch({
-                  type: adActions.updateCurrentAd,
+                  type: adActions.importAd,
                   payload: updatedAd,
                 });
                 dispatch({
@@ -216,15 +216,45 @@ const handleImportAd = payload => {
         type: uploadProgressActions.removeProgressItem,
         payload: {
           id: uniqId,
+          adId: newAd.id,
         },
       });
     };
+    // dispatch({
+    //   type: adActions.importAd,
+    //   payload: {
+    //     name,
+    //     description,
+    //     images: imageFiles && imageFiles.map(item => item.uri),
+    //     prefecture,
+    //     category,
+    //     status,
+    //     price,
+    //     userId,
+    //     country,
+    //     currency,
+    //     id: uniqId,
+    //     uniqId,
+    //     publishDate: new Date(),
+    //   },
+    // });
     dispatch({
       type: uploadProgressActions.addNewProgressItem,
       payload: {
         id: uniqId,
+        name,
+        description,
+        images: imageFiles && imageFiles.map(item => item.uri),
+        prefecture,
+        category,
+        status,
+        price,
+        userId,
+        country,
+        currency,
       },
     });
+    // return false;
     return addBackgroundUpload({
       name,
       description,
@@ -242,6 +272,7 @@ const handleImportAd = payload => {
           payload: {
             id: uniqId,
             progress,
+            // progress: progress * 100,
             progressItemsLength: imageFiles.length,
           },
         });

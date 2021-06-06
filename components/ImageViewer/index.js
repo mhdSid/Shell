@@ -36,7 +36,7 @@ const ImagesViewer = props => {
               style={sharedStyles.imageViewerImage}
               source={{
                 uri,
-                priority: FastImage.priority.high,
+                priority: FastImage.priority.low,
                 cache: FastImage.cacheControl.immutable,
               }}
               resizeMode={FastImage.resizeMode.cover}

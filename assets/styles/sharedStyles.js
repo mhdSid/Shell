@@ -24,7 +24,8 @@ const uploadProgressContainer = {
   backgroundColor: '#b69cf6',
   alignSelf: 'center',
   borderRadius: 7,
-  padding: 5,
+  // padding: 5,
+  paddingHorizontal: 5,
   margin: 10,
   zIndex: 100,
 };
@@ -583,9 +584,13 @@ const sharedStyles = StyleSheet.create({
     ...uploadProgressContainer,
     position: 'relative',
     width: '95%',
+    display: 'flex',
+    flexDirection: 'column',
   },
   uploadProgressAbsolute: {
     ...uploadProgressContainer,
+    display: 'flex',
+    flexDirection: 'column',
     position: 'absolute',
     bottom: 0,
     flexGrow: 1,
@@ -595,15 +600,19 @@ const sharedStyles = StyleSheet.create({
   },
   progressItem: {
     backgroundColor: 'white',
-    height: 10,
+    height: 5,
     width: '100%',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    marginVertical: 5,
+    borderRadius: 7,
+    // display: 'flex',
+    // justifyContent: 'flex-start',
+    // alignItems: 'flex-start',
   },
   progressItemInner: {
-    backgroundColor: 'silver',
+    backgroundColor: 'lightgrey',
     height: '100%',
+    borderRadius: 7,
+    // alignSelf: 'flex-start',
   },
   uploadProgressText: {
     fontWeight: '500',
@@ -681,6 +690,9 @@ const sharedStyles = StyleSheet.create({
   },
   userJoinedLotteryCountText: {
     color: 'white',
+  },
+  uploadProgressModalListItemContainer: {
+    marginBottom: 20,
   },
 });
 

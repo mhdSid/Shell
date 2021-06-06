@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
-import {Toolbar, ListItem} from 'react-native-material-ui';
+import React, {PureComponent, useState} from 'react';
+import {Toolbar} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {View, VirtualizedList} from 'react-native';
-import FastImage from 'react-native-fast-image';
 import {Loading} from '../Loading';
 import UserDetails from '../UserDetails';
 import {searchh} from '../../Constants/Texts';
@@ -11,112 +10,96 @@ import invoke from 'lodash/invoke';
 import {showAdDetails} from '../../redux/AdDetails/actions';
 import {handleSearch} from '../../redux/Search/Search';
 import {getSearchResultsSelector} from './Selectors';
+import SearchListItem from './SearchListItem';
 
-const SearchComponent = props => {
-  const {searchResults} = props;
-  const [searchQuery, setSearchQuery] = useState();
-  const [loading, setLoading] = useState(false);
-  const [showUserDetails, setShowUserDetails] = useState();
-  const [selectedItem, setSelectedItem] = useState();
-
-  const callback = () => {
-    setLoading(false);
+class SearchComponent extends PureComponent {
+  state = {
+    loading: false,
+    searchQuery: null,
+    showUserDetails: false,
+    selectedItem: null,
   };
-  const handleSearchPress = () => {
-    if (searchQuery) {
-      setLoading(true);
-      invoke(props, 'handleSearch', {
-        searchQuery,
-        onError: callback,
-        onSuccess: callback,
+
+  callback = () => {
+    this.setState({loading: false});
+  };
+
+  handleSearchPress = () => {
+    if (this.state.searchQuery) {
+      this.setState({loading: true});
+      invoke(this.props, 'handleSearch', {
+        searchQuery: this.state.searchQuery,
+        onError: this.callback,
+        onSuccess: this.callback,
       });
     }
   };
-  const onSearchChangeText = value => {
+  onSearchChangeText = value => {
     if (value) {
-      setSearchQuery(value);
+      this.setState({searchQuery: value});
     }
   };
-  const onUserDetailsClose = () => {
-    setShowUserDetails(false);
+  onUserDetailsClose = () => {
+    this.setState({showUserDetails: false});
   };
-  const handleItemPress = item => {
-    return () => {
-      if (item.type === 'user') {
-        setSelectedItem(item);
-        setShowUserDetails(true);
-      } else if (item.type === 'ad') {
-        invoke(props, 'showAdDetails', item);
-      }
-    };
+  handleItemPress = item => {
+    if (item.type === 'user') {
+      this.setState({
+        selectedItem: item,
+        showUserDetails: true,
+      });
+    } else if (item.type === 'ad') {
+      invoke(this.props, 'showAdDetails', item);
+    }
   };
-
-  return (
-    <>
-      {showUserDetails && (
-        <UserDetails onClose={onUserDetailsClose} item={selectedItem} />
-      )}
-      <View style={sharedStyles.fullheightView}>
-        <Toolbar
-          style={{container: sharedStyles.toolbarContainer}}
-          centerElement={searchh.search}
-          searchable={{
-            autoFocus: true,
-            placeholder: searchh.search,
-            onSubmitEditing: handleSearchPress,
-            onChangeText: onSearchChangeText,
-          }}
-        />
-        {loading && Loading}
-        {searchResults && (
-          <VirtualizedList
-            refreshing={loading}
-            onRefresh={handleSearchPress}
-            showsVerticalScrollIndicator={false}
-            data={searchResults}
-            getItem={(data, index) => data[index]}
-            getItemCount={() => searchResults.length}
-            keyExtractor={item => item.id}
-            renderItem={({item}) => (
-              <ListItem
-                divider
-                leftElement={
-                  item.image || (item.images && item.images[0]) ? (
-                    <FastImage
-                      style={[
-                        sharedStyles.homeListItemImage,
-                        item.type === 'user' && sharedStyles.listItemUserImage,
-                      ]}
-                      source={{
-                        uri: item.image || item.images[0],
-                        priority: FastImage.priority.high,
-                        cache: FastImage.cacheControl.immutable,
-                      }}
-                      resizeMode={FastImage.resizeMode.cover}
-                    />
-                  ) : null
-                }
-                centerElement={{
-                  primaryText:
-                    item.type === 'user'
-                      ? `${item.firstName} ${item.lastName}`
-                      : item.name,
-                  secondaryText:
-                    item.type === 'user' ? item.email : item.category,
-                  tertiaryText:
-                    item.type === 'user'
-                      ? `${item.prefecture}, ${item.country}`
-                      : `${item.currency} ${item.price}`,
-                }}
-                onPress={handleItemPress(item)}
-              />
-            )}
-          />
-        )}
-      </View>
-    </>
+  keyExtractor = item => item.id;
+  getItemCount = () =>
+    this.props.searchResults && this.props.searchResults.length;
+  getItem = (data, index) => data[index];
+  renderItem = ({item}) => (
+    <SearchListItem item={item} onPress={this.handleItemPress} />
   );
-};
+
+  render() {
+    const {showUserDetails, selectedItem, loading} = this.state;
+    const {searchResults} = this.props;
+    return (
+      <View>
+        {showUserDetails && (
+          <UserDetails onClose={this.onUserDetailsClose} item={selectedItem} />
+        )}
+        <View style={sharedStyles.fullheightView}>
+          <Toolbar
+            style={{container: sharedStyles.toolbarContainer}}
+            centerElement={searchh.search}
+            searchable={{
+              autoFocus: true,
+              placeholder: searchh.search,
+              onSubmitEditing: this.handleSearchPress,
+              onChangeText: this.onSearchChangeText,
+            }}
+          />
+          {loading && Loading}
+          {searchResults && (
+            <VirtualizedList
+              removeClippedSubviews={true}
+              windowSize={2}
+              initialNumToRender={2}
+              refreshing={loading}
+              onRefresh={this.handleSearchPress}
+              showsVerticalScrollIndicator={false}
+              data={searchResults}
+              getItem={this.getItem}
+              getItemCount={this.getItemCount}
+              keyExtractor={this.keyExtractor}
+              renderItem={this.renderItem}
+            />
+          )}
+        </View>
+      </View>
+    );
+  }
+}
 
 const mapStateToProps = state => {
   return {

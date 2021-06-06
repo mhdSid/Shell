@@ -21,7 +21,11 @@ const AdDetailsUserListItem = props => {
         onPress={handlePress}>
         {withNotificationNum && user.userJoinedLotteryCount > 1 && (
           <View style={sharedStyles.userJoinedLotteryCountContainer}>
-            <Text numberOfLines={1} style={sharedStyles.userJoinedLotteryCountText}>{user.userJoinedLotteryCount}</Text>
+            <Text
+              numberOfLines={1}
+              style={sharedStyles.userJoinedLotteryCountText}>
+              {user.userJoinedLotteryCount}
+            </Text>
           </View>
         )}
         {user.image ? (
@@ -29,7 +33,7 @@ const AdDetailsUserListItem = props => {
             style={sharedStyles.adDetailsUsersListItemImage}
             source={{
               uri: user.image,
-              priority: FastImage.priority.high,
+              priority: FastImage.priority.low,
               cache: FastImage.cacheControl.immutable,
             }}
             resizeMode={FastImage.resizeMode.cover}

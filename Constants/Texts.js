@@ -95,6 +95,10 @@ const notifications = {
   notifications: 'Notifications',
 };
 
+const uploadAdProgress = {
+  uploading: 'Currently Uploading',
+};
+
 const paymentInformation = {
   paymentInformation: 'Payment Information',
   submit: 'Save',
@@ -210,4 +214,5 @@ export {
   uploadProgress,
   payment,
   paymentInformation,
+  uploadAdProgress,
 };

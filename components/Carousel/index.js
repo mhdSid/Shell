@@ -71,7 +71,7 @@ class CarouselItem extends PureComponent {
               style={sliderStyles.image}
               source={{
                 uri: imageOnly ? item : images[0],
-                priority: FastImage.priority.high,
+                priority: FastImage.priority.low,
                 cache: FastImage.cacheControl.immutable,
               }}
               resizeMode={FastImage.resizeMode.cover}

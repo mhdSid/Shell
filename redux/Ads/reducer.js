@@ -20,10 +20,14 @@ const adsReducer = (state = initialState, action) => {
       ) {
         newAds = [payload];
       }
-      newAds = uniqBy([...(state.ads || []), ...(newAds || [])], 'id').sort(
+      newAds = [...(state.ads || []), ...(newAds || [])].map(item => ({
+        ...item,
+        id: `${item.id}`,
+      }));
+      newAds = uniqBy(newAds, 'id').sort(
         (ad1, ad2) => +new Date(ad2.publishDate) - +new Date(ad1.publishDate),
       );
-      console.log(newAds);
+      console.log(newAds[0], newAds[1]);
       return {
         ads: newAds,
       };
@@ -45,6 +49,7 @@ const adsReducer = (state = initialState, action) => {
             return {
               ...item,
               ...ad,
+              id: `${ad.id}`,
               lotteryUserIds: uniq(ad.lotteryUserIds),
             };
           }

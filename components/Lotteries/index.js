@@ -50,7 +50,7 @@ const Lotteries = props => {
               style={sharedStyles.homeListItemImage}
               source={{
                 uri: item.images[0],
-                priority: FastImage.priority.high,
+                priority: FastImage.priority.low,
                 cache: FastImage.cacheControl.immutable,
               }}
               resizeMode={FastImage.resizeMode.cover}
