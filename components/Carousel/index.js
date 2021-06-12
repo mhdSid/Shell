@@ -10,7 +10,6 @@ import {
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import FastImage from 'react-native-fast-image';
-
 class CarouselItem extends PureComponent {
   static propTypes = {
     item: PropTypes.object,

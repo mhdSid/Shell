@@ -14,7 +14,6 @@ import UploadAdProgressItem from './index';
 
 const UploadAdProgressModal = props => {
   const {progressItems} = props;
-  console.log('UploadAdProgressModal: ', progressItems);
 
   const [loading] = useState(false);
 
@@ -50,7 +49,6 @@ const UploadAdProgressModal = props => {
           secondaryText: item.category,
           tertiaryText: `${item.currency} ${item.price}`,
         }}
-        // onPress={handleItemPress(item)}
       />
       <UploadAdProgressItem id={item.id} />
     </View>
@@ -68,7 +66,6 @@ const UploadAdProgressModal = props => {
         {progressItems && progressItems.length && (
           <VirtualizedList
             refreshing={loading}
-            // onRefresh={fetchMyLotteries}
             showsVerticalScrollIndicator={false}
             data={progressItems}
             getItem={getItem}

@@ -4,7 +4,6 @@ import {
   Picker,
   ScrollView,
   Text,
-  // Alert,
   KeyboardAvoidingView,
 } from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
@@ -122,15 +121,12 @@ const ImportAd = props => {
     }
   };
   const updateAdCategory = value => {
-    // Alert.alert('updateAdCategory: ' + value);
     setAdCategory(value);
   };
   const updateAdStatus = value => {
-    // Alert.alert('updateAdStatus: ' + value);
     setAdStatus(value);
   };
   const updatePrefecture = value => {
-    // Alert.alert('updatePrefecture: ' + value);
     setPrefecture(value);
   };
   const handleChoosePhoto = index => {

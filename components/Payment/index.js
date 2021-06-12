@@ -18,9 +18,6 @@ import {handleEnterLottery} from '../../redux/Payment/EnterLottery';
 
 const Payment = props => {
   const {user, loggedIn, ad} = props;
-  console.log('user: ', user);
-  console.log('loggedIn: ', loggedIn);
-  console.log('ad: ', ad);
   const [loading, setLoading] = useState(false);
 
   const handleCloseModal = () => {
@@ -50,16 +47,6 @@ const Payment = props => {
   return (
     <Modal animationType="slide">
       <SafeAreaView style={sharedStyles.fullheightView}>
-        {/* <Toolbar
-          style={{
-            container: sharedStyles.toolbarContainer,
-          }}
-          // leftElement="arrow-back"
-          centerElement={
-            <Text style={sharedStyles.paymentTitle}>{payment.title}</Text>
-          }
-          // onLeftElementPress={handleCloseModal}
-        /> */}
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={
@@ -112,7 +99,6 @@ const Payment = props => {
               <View style={sharedStyles.btnContainer}>
                 <View style={sharedStyles.paymentBtn}>
                   <Button
-                    // disabled={loading || !userDataChanged}
                     raised
                     primary
                     icon="payment"
@@ -122,15 +108,7 @@ const Payment = props => {
                   />
                 </View>
                 <View style={sharedStyles.paymentBtn}>
-                  <Button
-                    // disabled={loading || !userDataChanged}
-                    // raised={true}
-                    // icon="close"
-                    // primary
-                    // accent
-                    text={payment.cancel}
-                    onPress={handleCloseModal}
-                  />
+                  <Button text={payment.cancel} onPress={handleCloseModal} />
                 </View>
               </View>
             </>

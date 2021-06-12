@@ -2,7 +2,7 @@ import React from 'react';
 import {Dimensions, View} from 'react-native';
 import ImageZoom from 'react-native-image-pan-zoom';
 import {Modal, SafeAreaView} from 'react-native';
-import {Button, Icon, Toolbar} from 'react-native-material-ui';
+import {Toolbar} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import PropTypes from 'prop-types';
 import FastImage from 'react-native-fast-image';

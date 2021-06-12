@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native';
-import {BottomNavigation, Icon, Badge} from 'react-native-material-ui';
+import {BottomNavigation, Icon} from 'react-native-material-ui';
 import AuthComponent from '../Profile';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import ImportAd from '../ImportAd';
@@ -22,7 +22,6 @@ const viewLoader = {
 };
 
 const MainContainer = props => {
-  const {user, loggedIn} = props;
   const [activeView, setActiveView] = useState('home');
 
   const handleSetActiveView = type => {
@@ -117,16 +116,7 @@ const MainContainer = props => {
             },
           }}
           key="profile"
-          icon={
-            // loggedIn === true && user ? (
-            //   <>
-            //     <Icon name="account-circle" size={30} />
-            //     <Badge text="3" />
-            //   </>
-            // ) : (
-            <Icon name="account-circle" size={30} />
-            // )
-          }
+          icon={<Icon name="account-circle" size={30} />}
           active={activeView === 'profile'}
           onPress={handleSetActiveView('profile')}
         />

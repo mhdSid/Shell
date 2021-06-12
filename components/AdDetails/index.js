@@ -68,7 +68,6 @@ const AdDetails = props => {
     images,
     disableHeaderActions,
   } = item;
-  console.log(lotteryUsersData);
   const [selectedUser, setSelectedUser] = useState();
   const [usersDataLoading, setUsersDataLoading] = useState(true);
   const [userAdsLoading, setUserAdsLoading] = useState(true);
@@ -76,7 +75,6 @@ const AdDetails = props => {
   const [showPayment, setShowPayment] = useState(false);
   const [viewImageUri, setViewImageUri] = useState(images[0]);
   const scrollViewRef = createRef();
-  console.log(`${userId}`, `${authUser.id}`);
   const onUserDetailsClose = () => {
     setSelectedUser(undefined);
   };
@@ -149,7 +147,11 @@ const AdDetails = props => {
     />
   );
   const renderLotteryUserItem = ({item: _user}) => (
-    <AdDetailsUserListItem user={_user} onPress={handleUserPress} withNotificationNum={true} />
+    <AdDetailsUserListItem
+      user={_user}
+      onPress={handleUserPress}
+      withNotificationNum={true}
+    />
   );
   const handleShowImagesViewer = url => {
     setViewImageUri(url);
@@ -406,9 +408,6 @@ const AdDetails = props => {
             </View>
             <Text>{cancelled}</Text>
             <Text>{cancelDate}</Text>
-            {/* <Text>{lotteryUserIds}</Text> */}
-            {/* <Text>{winnerUserId}</Text> */}
-            {/* <ActionButton icon="done" /> */}
           </View>
         </ScrollView>
         <ActionButton
@@ -431,7 +430,7 @@ AdDetails.propTypes = {
   item: PropTypes.object,
   onClose: PropTypes.func,
   updateAdDetails: PropTypes.func,
-  disableHeaderActions: PropTypes.bool
+  disableHeaderActions: PropTypes.bool,
 };
 
 const mapStateToProps = state => {

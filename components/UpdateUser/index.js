@@ -36,7 +36,6 @@ const UpdateUser = props => {
   const [prefecture, setPrefecture] = useState(
     (user && user.prefecture) || prefecturesList[country],
   );
-  console.log(user);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(undefined);
   const [imageFile, setImageFile] = useState(undefined);
@@ -103,7 +102,6 @@ const UpdateUser = props => {
     }
   };
   const handlePasswordChangeText = value => {
-    console.log(value, user.password);
     if (value && value.length > 5 && value !== user.password) {
       setPasswordChanged(true);
     } else {

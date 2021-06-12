@@ -5,7 +5,6 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {View, Text} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import FastImage from 'react-native-fast-image';
-// import UploadAdProgress from '../UploadAdProgress';
 export default class CardListItem extends Component {
   static propTypes = {
     item: PropTypes.object,
@@ -59,7 +58,6 @@ export default class CardListItem extends Component {
 
     return (
       <TouchableBounce style={viewStyle} onPress={this.handleItemPress}>
-        {/* {<UploadAdProgress id={item.uniqId} />} */}
         <View>
           {image}
           {emptyImage}

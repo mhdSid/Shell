@@ -1,4 +1,4 @@
-import { uniqBy } from 'lodash';
+import {uniqBy} from 'lodash';
 import {createSelector} from 'reselect';
 
 const getLotteries = state => state.lotteriesReducer.lotteries;
@@ -27,7 +27,7 @@ const getLotteryUsersDataSelector = createSelector(
   [getLotteryUsersData],
   lotteryUsersData => {
     if (Array.isArray(lotteryUsersData) && lotteryUsersData.length) {
-      let lotteryUsers = [...lotteryUsersData]
+      let lotteryUsers = [...lotteryUsersData];
       for (let i = 0; i < lotteryUsers.length; i++) {
         lotteryUsers[i].userJoinedLotteryCount = 1;
         for (let j = i + 1; j < lotteryUsers.length; j++) {

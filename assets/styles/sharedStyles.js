@@ -1,4 +1,4 @@
-import {StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 const fullWidthHeight = {
   width: '100%',
@@ -24,7 +24,6 @@ const uploadProgressContainer = {
   backgroundColor: '#b69cf6',
   alignSelf: 'center',
   borderRadius: 7,
-  // padding: 5,
   paddingHorizontal: 5,
   margin: 10,
   zIndex: 100,
@@ -133,7 +132,6 @@ const sharedStyles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 30 / 2,
-    // backgroundColor: '#f7f5fe',
   },
   userImageBtnContainer: {
     justifyContent: 'center',
@@ -299,8 +297,6 @@ const sharedStyles = StyleSheet.create({
     marginBottom: 20,
   },
   adDetailsUsersListContainer: {
-    // display: 'flex',
-    // flexDirection: 'row',
     width: '100%',
   },
   adDetailsUsersListItemContainer: {
@@ -347,29 +343,21 @@ const sharedStyles = StyleSheet.create({
   },
   homeCardItem: {
     width: '100%',
-    // flexGrow: 1,
     marginBottom: 10,
   },
   homeCardItemHorizontal: {
     width: 170,
     height: 170,
-    // flexGrow: 1,
     marginHorizontal: 10,
-    // marginBottom: 5,
-    // width: '70%',
   },
   homeCardItemImage: {
     aspectRatio: 3 / 3,
     backgroundColor: '#f7f5fe',
   },
   homeCardItemImageSmall: {
-    // aspectRatio: 4 / 3,
-    // width: '70%%',
     width: '100%',
     height: '100%',
     backgroundColor: '#f7f5fe',
-    // flexGrow: 1,
-    // display: 'flex',
   },
   homeCardItemTextContainer: {
     backgroundColor: 'rgba(0,0,0,.75)',
@@ -398,9 +386,6 @@ const sharedStyles = StyleSheet.create({
   aboutSafeViewContainer: {
     backgroundColor: '#b69cf6',
     justifyContent: 'center',
-  },
-  paymentSafeViewContainer: {
-    // backgroundColor: '#b69cf6',
   },
   paymentSafeViewContentContainer: {
     display: 'flex',
@@ -446,10 +431,6 @@ const sharedStyles = StyleSheet.create({
     marginBottom: 20,
     padding: 20,
     lineHeight: 20,
-    // display: 'flex',
-    // flexDirection: 'column',
-    // justifyContent: 'flex-start',
-    // alignItems: 'flex-start',
   },
   aboutIconTextContainer: {
     display: 'flex',
@@ -604,15 +585,11 @@ const sharedStyles = StyleSheet.create({
     width: '100%',
     marginVertical: 5,
     borderRadius: 7,
-    // display: 'flex',
-    // justifyContent: 'flex-start',
-    // alignItems: 'flex-start',
   },
   progressItemInner: {
     backgroundColor: 'lightgrey',
     height: '100%',
     borderRadius: 7,
-    // alignSelf: 'flex-start',
   },
   uploadProgressText: {
     fontWeight: '500',
@@ -624,18 +601,11 @@ const sharedStyles = StyleSheet.create({
     right: 0,
     top: 10,
     zIndex: 100,
-    // alignSelf: 'flex-end',
   },
   imageViewer: {
     backgroundColor: 'black',
-    // display: 'flex',
-    // justifyContent: 'center',
     alignItems: 'center',
-    // paddingLeft: 20,
-    // paddingRight: 20,
     position: 'relative',
-    // ...flex,
-    // justifyContent: 'flex-start',
   },
   imageViewerZoom: {
     marginTop: -100,
@@ -672,7 +642,7 @@ const sharedStyles = StyleSheet.create({
   },
   paymentTitle: {
     marginLeft: -20,
-    color: '#5014e5', ////'#9cf6b6',
+    color: '#5014e5',
     textShadowColor: 'white',
     textShadowRadius: 1,
     textAlign: 'center',

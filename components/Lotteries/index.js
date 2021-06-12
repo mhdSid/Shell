@@ -1,5 +1,5 @@
-import React, {useEffect, useState, useCallback} from 'react';
-import {Text, View, VirtualizedList} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, VirtualizedList, Text} from 'react-native';
 import {connect} from 'react-redux';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import NoAuth from '../NoAuth';
@@ -87,9 +87,9 @@ const Lotteries = props => {
       />
       <View style={sharedStyles.lotteriesContainer}>
         {loading && loadingPopup}
-        {/* {!lotteries && (
+        {!lotteries && (
           <Text style={sharedStyles.appText}>{lottteries.emptyLotteries}</Text>
-        )} */}
+        )}
         {lotteries && lotteries.length > 0 && (
           <VirtualizedList
             removeClippedSubviews={true}

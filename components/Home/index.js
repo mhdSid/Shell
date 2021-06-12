@@ -7,13 +7,6 @@ import PropTypes from 'prop-types';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Loading} from '../Loading';
 import FastImage from 'react-native-fast-image';
-// import {
-//   AdMobBanner,
-//   // AdMobInterstitial,
-//   // PublisherBanner,
-//   // AdMobRewarded,
-// } from 'react-native-admob';
-// import {CarouselComponent} from '../Carousel';
 import CardListItem from './CardListItem';
 import {home} from '../../Constants/Texts';
 import {handleFetchAds} from '../../redux/Ads/FetchAds';
@@ -23,7 +16,6 @@ import {
   getAdsSelector,
   getIsListSelector,
   getIsCardSelector,
-  // getIsCarouselSelector,
 } from './Selectors';
 import UploadAdProgress from '../UploadAdProgress';
 import {emitSocketEvents} from '../../services/Socket';
@@ -56,24 +48,15 @@ class HomeComponent extends PureComponent {
     if (isCard) {
       invoke(this.props, 'setHomeViewStyle', {
         isHomeCardStyle: false,
-        // isHomeCarouselStyle: false,
         isHomeListStyle: true,
       });
     }
     if (isList) {
       invoke(this.props, 'setHomeViewStyle', {
         isHomeCardStyle: true,
-        // isHomeCarouselStyle: true,
         isHomeListStyle: false,
       });
     }
-    // if (this.isCarousel) {
-    //   invoke(this.props, 'setHomeViewStyle', {
-    //     isHomeCardStyle: true,
-    //     isHomeCarouselStyle: false,
-    //     isHomeListStyle: false,
-    //   });
-    // }
   };
   handleShowAdsDetailsFlatList = item => {
     invoke(this.props, 'showAdDetails', item);
@@ -92,13 +75,6 @@ class HomeComponent extends PureComponent {
       showAdProgressModal: false,
     });
   };
-  // componentWillReceiveProps(nextProps) {
-  //   const {ads, isList, isCard} = nextProps;
-  //   // this.ads = ads;
-  //   // this.isList = isList;
-  //   // // this.isCarousel = isCarousel;
-  //   // this.isCard = isCard;
-  // }
 
   renderCardListItem = ({item}) => (
     <CardListItem item={item} onItemPress={this.handleShowAdsDetailsFlatList} />
@@ -156,9 +132,6 @@ class HomeComponent extends PureComponent {
           rightElement={[
             progressItems && progressItems.length && 'cloud-upload',
             this.isCard ? 'view-list' : 'view-comfy',
-            // this.isList
-            // // ? 'view-carousel'
-            // :
           ].filter(Boolean)}
           onRightElementPress={this.changeViewStyle}
         />
@@ -169,12 +142,6 @@ class HomeComponent extends PureComponent {
         /> */}
         <UploadAdProgress />
         {loading && <View style={sharedStyles.homeLoading}>{Loading}</View>}
-        {/* {this.isCarousel && this.ads && this.ads.length > 0 && (
-          <CarouselComponent
-            items={this.ads}
-            onItemPress={this.handleShowAdsDetailsFlatList}
-          />
-        )} */}
         {isCard && ads && ads.length > 0 && (
           <VirtualizedList
             initialNumToRender={2}
@@ -223,7 +190,6 @@ const mapStateToProps = state => {
     isList: getIsListSelector(state),
     isCard: getIsCardSelector(state),
     progressItems: getProgressItemsSelector(state),
-    // isCarousel: getIsCarouselSelector(state),
   };
 };
 

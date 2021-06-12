@@ -27,23 +27,6 @@ const Pinger = props => {
   };
   useEffect(() => {
     invoke(props, 'handlePing');
-
-    // invoke(props, 'addNewProgressItem', {id: 1});
-    // invoke(props, 'updateProgressItem', {
-    //   id: 1,
-    //   progress: 100,
-    //   progressItemsLength: 3,
-    // });
-    // invoke(props, 'updateProgressItem', {
-    //   id: 1,
-    //   progress: 100,
-    //   progressItemsLength: 3,
-    // });
-    // invoke(props, 'updateProgressItem', {
-    //   id: 1,
-    //   progress: 100,
-    //   progressItemsLength: 3,
-    // });
   }, []);
 
   if (adDetails) {

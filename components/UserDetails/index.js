@@ -14,7 +14,6 @@ const UserDetails = props => {
     lastName,
     email,
     image,
-    id,
     mobile,
     country,
     prefecture,
@@ -120,15 +119,6 @@ const UserDetails = props => {
                 {fullAddress}
               </Text>
             </View>
-            {/* <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="fingerprint" />
-              <Text style={sharedStyles.userDetailsText}>
-                {userDetails.userId}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>{id}</Text>
-            </View> */}
           </View>
         </ScrollView>
       </SafeAreaView>
