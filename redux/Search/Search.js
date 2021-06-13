@@ -11,28 +11,11 @@ const handleSearch = payload => {
       if (error) {
         return handleError({error, onError});
       }
-      const newSearchResults = [
-        ...((searchResults.users &&
-          searchResults.users.map(user => {
-            return {
-              ...user,
-              type: 'user',
-            };
-          })) ||
-          []),
-        ...((searchResults.ads &&
-          searchResults.ads.map(ad => {
-            return {
-              ...ad,
-              type: 'ad',
-            };
-          })) ||
-          []),
-      ];
       invoke(payload, 'onSuccess');
       return dispatch({
         type: searchActions.search,
-        payload: newSearchResults,
+        payload:
+          searchResults.ads && searchResults.ads.length && searchResults.ads,
       });
     };
     return search({searchQuery}).then(onSeachSuccess, error => {

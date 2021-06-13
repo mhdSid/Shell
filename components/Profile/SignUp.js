@@ -28,6 +28,7 @@ import {
   getUserSelector,
   getCountrySelector,
 } from './Selectors';
+import {handlePing} from '../../redux/Ping/Ping';
 
 const SignUp = props => {
   const {
@@ -146,8 +147,9 @@ const SignUp = props => {
     setCityWardChanged(false);
   };
   const callback = () => {
-    setLoading(false);
     setDefaultsDataChanged();
+    invoke(props, 'ping');
+    setLoading(false);
   };
   const handleSignupPress = () => {
     const {current: firstNameField} = firstNameRef;
@@ -191,7 +193,7 @@ const SignUp = props => {
         cityWard,
       };
       setLoading(true);
-      invoke(props, 'handleSignup', {
+      invoke(props, 'signUp', {
         newUser,
         onSuccess: callback,
         onError: callback,
@@ -410,7 +412,8 @@ const mapDispatchToProps = dispatch => {
   return {
     login: payload => dispatch(loginAction(payload)),
     logout: payload => dispatch(logoutAction(payload)),
-    handleSignUp: payload => dispatch(handleSignUp(payload)),
+    signUp: payload => dispatch(handleSignUp(payload)),
+    ping: payload => dispatch(handlePing(payload)),
   };
 };
 

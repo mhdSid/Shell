@@ -63,7 +63,7 @@ const UploadAdProgressModal = props => {
           centerElement={uploadAdProgress.uploading}
           onLeftElementPress={handleCloseModal}
         />
-        {progressItems && progressItems.length && (
+        {progressItems && progressItems.length ? (
           <VirtualizedList
             refreshing={loading}
             showsVerticalScrollIndicator={false}
@@ -73,7 +73,7 @@ const UploadAdProgressModal = props => {
             keyExtractor={getKeyExtractor}
             renderItem={renderItem}
           />
-        )}
+        ) : null}
       </SafeAreaView>
     </Modal>
   );

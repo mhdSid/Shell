@@ -8,12 +8,12 @@ import {
 } from '../../redux/Auth/actions';
 import isUndefined from 'lodash/isUndefined';
 import {Loading} from '../Loading';
-import {
-  //   // AdMobBanner,
-  AdMobInterstitial,
-  //   // PublisherBanner,
-  //   // AdMobRewarded,
-} from 'react-native-admob';
+// import {
+//   //   // AdMobBanner,
+//   AdMobInterstitial,
+//   //   // PublisherBanner,
+//   //   // AdMobRewarded,
+// } from 'react-native-admob';
 import Login from './Login';
 import UserProfile from './UserProfile';
 import VerifyUser from './VerifyUser';
@@ -28,31 +28,25 @@ import {
 
 const AuthComponent = props => {
   const {loggedIn, user, showSignup, verificationId} = props;
-
-  useEffect(() => {
-    if (loggedIn && user) {
-      AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/4925593277');
-      AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
-      AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
-    }
-  }, []);
-
+  // useEffect(() => {
+  //   if (loggedIn && user) {
+  //     // AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/4925593277');
+  //     // AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
+  //     // AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
+  //   }
+  // }, []);
   if (isUndefined(loggedIn) && isUndefined(user)) {
     return Loading;
   }
-
   if (showSignup === true && verificationId) {
     return <SignUp />;
   }
-
   if (verificationId) {
     return <VerifyUser />;
   }
-
   if (loggedIn && user) {
     return <UserProfile />;
   }
-
   return <Login />;
 };
 

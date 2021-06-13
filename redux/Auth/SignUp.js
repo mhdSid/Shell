@@ -10,7 +10,7 @@ const handleSignUp = payload => {
      * signup Handler
      */
     const onSignupSuccess = data => {
-      const {error, user: authUser} = data;
+      const {error, user} = data;
       if (error) {
         return handleError({error, onError, dispatch});
       }
@@ -18,22 +18,31 @@ const handleSignUp = payload => {
         verificationId: authVerificationId,
         emailVerified,
         signedUp,
-      } = authUser;
+      } = user;
       if (
         emailVerified === true &&
         authVerificationId &&
         authVerificationId === verificationId &&
-        authUser.email === email &&
+        user.email === email &&
         signedUp === true
       ) {
         invoke(payload, 'onSuccess');
-        dispatch({
+        return dispatch({
           type: authActions.login,
           payload: {
             loggedIn: true,
-            user: authUser,
+            user,
+            sessionID: user.sessionID,
             showSignup: false,
-            verificationId: undefined,
+          },
+        });
+      } else {
+        invoke(payload, 'onError');
+        dispatch({
+          type: authActions.logout,
+          payload: {
+            loggedIn: false,
+            user: false,
           },
         });
       }

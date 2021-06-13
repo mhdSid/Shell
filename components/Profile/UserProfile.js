@@ -118,11 +118,11 @@ const UserProfile = props => {
                         {`${userGameStatus} • ${userGamePoints} ${points} - ${userPrefecture}, ${userCountry}`}
                       </Text>
                     ),
-                    tertiaryText: (
-                      <Text style={sharedStyles.profileUserText}>
-                        {user.id}
-                      </Text>
-                    ),
+                    // tertiaryText: (
+                    //   <Text style={sharedStyles.profileUserText}>
+                    //     {user.id}
+                    //   </Text>
+                    // ),
                   },
                   rightElement: (
                     <Button

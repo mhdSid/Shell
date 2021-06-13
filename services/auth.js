@@ -1,4 +1,6 @@
 import {request} from './Request';
+import sha256 from 'crypto-js/sha256';
+import {password as hashkey} from './Encrypt';
 
 const login = async props => {
   const {email, password} = props;
@@ -8,6 +10,7 @@ const login = async props => {
     body: {
       email,
       password,
+      hash: sha256(email + password + hashkey).toString(),
     },
   });
   return data;
@@ -16,7 +19,10 @@ const login = async props => {
 const logout = async () => {
   const data = await request({
     endpoint: 'users/authenticate/logout',
-    method: 'GET',
+    method: 'POST',
+    body: {
+      hash: sha256(hashkey).toString(),
+    },
   });
   return data;
 };
@@ -24,7 +30,10 @@ const logout = async () => {
 const ping = async () => {
   const data = await request({
     endpoint: 'users/authenticate/ping',
-    method: 'GET',
+    method: 'POST',
+    body: {
+      hash: sha256(hashkey).toString(),
+    },
   });
   return data;
 };
@@ -38,6 +47,7 @@ const verify = async props => {
       email,
       password,
       verificationId,
+      hash: sha256(email + password + verificationId + hashkey).toString(),
     },
   });
   return data;
@@ -76,6 +86,22 @@ const signup = async props => {
       postalCode,
       fullAddress,
       cityWard,
+      hash: sha256(
+        email +
+          password +
+          verificationId +
+          dob +
+          gender +
+          mobile +
+          country +
+          prefecture +
+          firstName +
+          lastName +
+          postalCode +
+          fullAddress +
+          cityWard +
+          hashkey,
+      ).toString(),
     },
   });
   return data;
@@ -88,6 +114,7 @@ const search = async props => {
     method: 'POST',
     body: {
       query: searchQuery,
+      hash: sha256(searchQuery + hashkey).toString(),
     },
   });
   return data;
@@ -100,6 +127,7 @@ const getUsersData = async props => {
     method: 'POST',
     body: {
       users,
+      hash: sha256(JSON.stringify(users).toString() + hashkey).toString(),
     },
   });
   return data;
@@ -169,6 +197,27 @@ const update = async props => {
   }
   formData.append('id', id);
   formData.append('email', email);
+  formData.append(
+    'hash',
+    sha256(
+      mobile +
+        country +
+        prefecture +
+        password +
+        firstName +
+        postalCode +
+        cityWard +
+        fullAddress +
+        lastName +
+        creditCardNumber +
+        creditCardExpiryDate +
+        creditCardCVC +
+        creditCardType +
+        id +
+        email +
+        hashkey,
+    ).toString(),
+  );
   const data = await request({
     endpoint: 'users/authenticate/update',
     method: 'POST',

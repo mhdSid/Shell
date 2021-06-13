@@ -1,9 +1,8 @@
-import React, {PureComponent, useState} from 'react';
+import React, {PureComponent} from 'react';
 import {Toolbar} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {View, VirtualizedList} from 'react-native';
 import {Loading} from '../Loading';
-import UserDetails from '../UserDetails';
 import {searchh} from '../../Constants/Texts';
 import {connect} from 'react-redux';
 import invoke from 'lodash/invoke';
@@ -16,8 +15,6 @@ class SearchComponent extends PureComponent {
   state = {
     loading: false,
     searchQuery: null,
-    showUserDetails: false,
-    selectedItem: null,
   };
 
   callback = () => {
@@ -39,18 +36,8 @@ class SearchComponent extends PureComponent {
       this.setState({searchQuery: value});
     }
   };
-  onUserDetailsClose = () => {
-    this.setState({showUserDetails: false});
-  };
   handleItemPress = item => {
-    if (item.type === 'user') {
-      this.setState({
-        selectedItem: item,
-        showUserDetails: true,
-      });
-    } else if (item.type === 'ad') {
-      invoke(this.props, 'showAdDetails', item);
-    }
+    invoke(this.props, 'showAdDetails', item);
   };
   keyExtractor = item => item.id;
   getItemCount = () =>
@@ -61,13 +48,10 @@ class SearchComponent extends PureComponent {
   );
 
   render() {
-    const {showUserDetails, selectedItem, loading} = this.state;
+    const {loading} = this.state;
     const {searchResults} = this.props;
     return (
       <View>
-        {showUserDetails && (
-          <UserDetails onClose={this.onUserDetailsClose} item={selectedItem} />
-        )}
         <View style={sharedStyles.fullheightView}>
           <Toolbar
             style={{container: sharedStyles.toolbarContainer}}

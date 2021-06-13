@@ -19,12 +19,12 @@ import {SimpleLoader} from '../Loading';
 import formatDate from '../../lib/CachedImage/formatDate';
 import AdDetailsUserListItem from './AdDetailsUserListItem.js';
 import {adDetails} from '../../Constants/Texts';
-import {handleFetchUsersData} from '../../redux/AdDetails/FetchUsersData';
+// import {handleFetchUsersData} from '../../redux/AdDetails/FetchUsersData';
 import {
   getLotteriesSelector,
   getUsersSelector,
   getAdPosterDataSelector,
-  getLotteryUsersDataSelector,
+  // getLotteryUsersDataSelector,
   getWinnerUserDataSelector,
   getUserAdsSelector,
 } from './Selectors';
@@ -42,7 +42,7 @@ const AdDetails = props => {
   const {
     item,
     user: authUser,
-    lotteryUsersData,
+    // lotteryUsersData,
     adPosterData,
     winnerUserData,
     userAds,
@@ -100,43 +100,43 @@ const AdDetails = props => {
   const onPaymentClose = () => {
     setShowPayment(false);
   };
-  const fetchUsersDataCallback = () => {
-    setUsersDataLoading(false);
-  };
+  // const fetchUsersDataCallback = () => {
+  //   setUsersDataLoading(false);
+  // };
   const fetchUsersAdsCallback = () => {
     setUserAdsLoading(false);
   };
-  const fetchUsersData = () => {
-    const users = [
-      userId,
-      ...(lotteryUserIds || []),
-      winnerUserId || false,
-    ].filter(Boolean);
-    if (users.length > 0) {
-      invoke(props, 'handleFetchUsersData', {
-        winnerUserId,
-        userId,
-        users,
-        onError: fetchUsersDataCallback,
-        onSuccess: fetchUsersDataCallback,
-      });
-    }
-  };
+  // const fetchUsersData = () => {
+  //   const users = [
+  //     userId,
+  //     ...(lotteryUserIds || []),
+  //     winnerUserId || false,
+  //   ].filter(Boolean);
+  //   if (users.length > 0) {
+  //     invoke(props, 'handleFetchUsersData', {
+  //       winnerUserId,
+  //       userId,
+  //       users,
+  //       onError: fetchUsersDataCallback,
+  //       onSuccess: fetchUsersDataCallback,
+  //     });
+  //   }
+  // };
   const onShow = () => {
-    fetchUsersData();
+    // fetchUsersData();
     invoke(props, 'handleFetchUserAds', {
       userId,
       onError: fetchUsersAdsCallback,
       onSuccess: fetchUsersAdsCallback,
     });
   };
-  const handleUserPress = user => {
-    setSelectedUser(user);
-  };
+  // const handleUserPress = user => {
+  //   setSelectedUser(user);
+  // };
   const empty = <Icon name="face" size={40} />;
   const getItem = (data, index) => data[index];
   const getUserAdsCount = () => userAds.length;
-  const getLotteryUsersCount = () => lotteryUsersData.length;
+  // const getLotteryUsersCount = () => lotteryUsersData.length;
   const getVirtualKey = _item => _item.id;
   const renderUserAdItem = ({item: ad}) => (
     <CardListItem
@@ -146,13 +146,13 @@ const AdDetails = props => {
       onItemPress={handleUserAdPress(ad)}
     />
   );
-  const renderLotteryUserItem = ({item: _user}) => (
-    <AdDetailsUserListItem
-      user={_user}
-      onPress={handleUserPress}
-      withNotificationNum={true}
-    />
-  );
+  // const renderLotteryUserItem = ({item: _user}) => (
+  //   <AdDetailsUserListItem
+  //     user={_user}
+  //     onPress={handleUserPress}
+  //     withNotificationNum={true}
+  //   />
+  // );
   const handleShowImagesViewer = url => {
     setViewImageUri(url);
     setShowImagesViewer(true);
@@ -294,6 +294,14 @@ const AdDetails = props => {
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              {lotteryUserIds && lotteryUserIds.length ? (
+                <Text style={sharedStyles.aboutFirstSectionText}>
+                  {adDetails.currentLotteryUsersNumber(lotteryUserIds)}
+                </Text>
+              ) : null}
+              {!lotteryUserIds || !lotteryUserIds.length ? empty : null}
+            </View>
+            {/* <View style={sharedStyles.aboutFirstSectionTextContainer}>
               {usersDataLoading && SimpleLoader}
               {!usersDataLoading &&
                 lotteryUsersData &&
@@ -317,7 +325,7 @@ const AdDetails = props => {
               {!usersDataLoading &&
                 (!lotteryUsersData || lotteryUsersData.length === 0) &&
                 empty}
-            </View>
+            </View> */}
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="green" name="star" />
               <Text style={sharedStyles.userDetailsText}>
@@ -329,7 +337,7 @@ const AdDetails = props => {
               {!usersDataLoading && winnerUserData && (
                 <AdDetailsUserListItem
                   user={winnerUserData}
-                  onPress={winnerUserData && handleUserPress}
+                  // onPress={winnerUserData && handleUserPress}
                 />
               )}
               {!usersDataLoading && !winnerUserData && empty}
@@ -366,7 +374,7 @@ const AdDetails = props => {
               {!usersDataLoading && adPosterData && (
                 <AdDetailsUserListItem
                   user={adPosterData}
-                  onPress={handleUserPress}
+                  // onPress={handleUserPress}
                 />
               )}
               {!usersDataLoading && !adPosterData && empty}
@@ -399,13 +407,13 @@ const AdDetails = props => {
                 </Text>
               )}
             </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
+            {/* <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="fingerprint" />
               <Text style={sharedStyles.userDetailsText}>{adDetails.adId}</Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+            </View> */}
+            {/* <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{id}</Text>
-            </View>
+            </View> */}
             <Text>{cancelled}</Text>
             <Text>{cancelDate}</Text>
           </View>
@@ -438,7 +446,7 @@ const mapStateToProps = state => {
     lotteries: getLotteriesSelector(state),
     user: getUsersSelector(state),
     adPosterData: getAdPosterDataSelector(state),
-    lotteryUsersData: getLotteryUsersDataSelector(state),
+    // lotteryUsersData: getLotteryUsersDataSelector(state),
     winnerUserData: getWinnerUserDataSelector(state),
     userAds: getUserAdsSelector(state),
   };
@@ -446,7 +454,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleFetchUsersData: payload => dispatch(handleFetchUsersData(payload)),
+    // handleFetchUsersData: payload => dispatch(handleFetchUsersData(payload)),
     handleFetchUserAds: payload => dispatch(handleFetchUserAds(payload)),
     showAdDetails: payload => dispatch(showAdDetails(payload)),
   };

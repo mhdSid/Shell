@@ -22,7 +22,7 @@ const logoutAction = payload => {
 
 const updateAction = payload => {
   return dispatch => {
-    return dispatch({type: authActions.UPDATE, payload});
+    return dispatch({type: authActions.update, payload});
   };
 };
 

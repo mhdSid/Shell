@@ -71,6 +71,7 @@ const Lotteries = props => {
       fetchLotteries();
     }
   }, [loggedIn, user]);
+
   if (isUndefined(loggedIn) && isUndefined(user)) {
     return Loading;
   }
@@ -86,11 +87,13 @@ const Lotteries = props => {
         centerElement={lottteries.lotteries}
       />
       <View style={sharedStyles.lotteriesContainer}>
-        {loading && loadingPopup}
-        {!lotteries && (
-          <Text style={sharedStyles.appText}>{lottteries.emptyLotteries}</Text>
-        )}
-        {lotteries && lotteries.length > 0 && (
+        {loading ? loadingPopup : null}
+        {(!lotteries || !lotteries.length) && !loading ? (
+          <Text style={[sharedStyles.label, sharedStyles.noAuthLabel]}>
+            {lottteries.emptyLotteries}
+          </Text>
+        ) : null}
+        {!loading && lotteries && lotteries.length > 0 ? (
           <VirtualizedList
             removeClippedSubviews={true}
             windowSize={2}
@@ -104,7 +107,7 @@ const Lotteries = props => {
             keyExtractor={getItemKey}
             renderItem={renderListItem}
           />
-        )}
+        ) : null}
       </View>
     </View>
   );

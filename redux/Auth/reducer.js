@@ -3,7 +3,7 @@ import {authActions} from './actions';
 const initialState = {
   loggedIn: undefined,
   user: undefined,
-  country: 'LB',
+  country: 'JP',
   email: undefined,
   password: undefined,
   verificationId: undefined,
@@ -35,11 +35,6 @@ const authReducer = (state = initialState, action) => {
       };
     }
     default: {
-      // return (
-      //   state || {
-      //     ...initialState,
-      //   }
-      // );
       return {
         ...state,
       };

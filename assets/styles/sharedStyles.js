@@ -258,6 +258,7 @@ const sharedStyles = StyleSheet.create({
   },
   lotteriesContainer: {
     ...flex,
+    justifyContent: 'center'
   },
   importAdContainerNoAuth: {
     paddingTop: 40,

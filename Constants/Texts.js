@@ -40,6 +40,16 @@ const adDetails = {
   collectedPrice: 'Collected Price',
   payToWin: 'Pay To Win The Item In The Lottery',
   currentLotteryUsers: 'Current lottery users',
+  currentLotteryUsersNumber: lotteryUserIds => {
+    if (!lotteryUserIds || !lotteryUserIds.length) {
+      return;
+    }
+    const lotteryUserIdsLength = lotteryUserIds.length;
+    if (lotteryUserIdsLength === 1) {
+      return `${lotteryUserIdsLength} user has joined this lottery.`;
+    }
+    return `${lotteryUserIdsLength} users have joined this lottery.`;
+  },
   winner: 'Winner',
   name: 'Name',
   description: 'Description',
@@ -74,7 +84,7 @@ const importAd = {
 
 const lottteries = {
   lotteries: 'Lotteries',
-  emptyLotteries: 'No Lotteries available',
+  emptyLotteries: 'No Lotteries available.',
 };
 
 const myyAds = {
