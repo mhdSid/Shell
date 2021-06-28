@@ -79,7 +79,10 @@ const MyLotteries = props => {
     />
   );
   return (
-    <Modal animationType="slide" onShow={fetchMyLotteries}>
+    <Modal
+      animationType="slide"
+      onShow={fetchMyLotteries}
+      onRequestClose={handleCloseModal}>
       {adDetailsModal}
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
@@ -91,6 +94,9 @@ const MyLotteries = props => {
         {loading && Loading}
         {myLotteries && myLotteries.length > 0 && (
           <VirtualizedList
+            initialNumToRender={10}
+            windowSize={1}
+            removeClippedSubviews={true}
             refreshing={loading}
             onRefresh={fetchMyLotteries}
             showsVerticalScrollIndicator={false}

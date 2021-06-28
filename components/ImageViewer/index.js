@@ -10,21 +10,21 @@ import invoke from 'lodash/invoke';
 
 const ImagesViewer = props => {
   const {uri, imageText} = props;
-  const onModalDissmiss = () => {
+  const handleCloseModal = () => {
     invoke(props, 'onClose');
   };
   const cropWidth = Dimensions.get('window').width;
   const cropHeight = Dimensions.get('window').height;
 
   return (
-    <Modal animationType="slide">
+    <Modal animationType="slide" onRequestClose={handleCloseModal}>
       <SafeAreaView style={sharedStyles.fullheightView}>
         <View style={[sharedStyles.fullheightView, sharedStyles.imageViewer]}>
           <Toolbar
             style={{container: sharedStyles.adDetailsToolbarContainer}}
             leftElement="arrow-back"
             centerElement={imageText}
-            onLeftElementPress={onModalDissmiss}
+            onLeftElementPress={handleCloseModal}
           />
           <ImageZoom
             cropWidth={cropWidth}

@@ -16,11 +16,7 @@ import {TextField} from 'react-native-material-textfield';
 import ImagePicker from 'react-native-image-picker';
 import {mimeTypes} from '../../Constants/Ads';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
-import {
-  prefecturesList,
-  prefectures,
-  countries,
-} from '../../Constants/Countries';
+import {prefectures, cities} from '../../Constants/Countries';
 import {loadingPopup} from '../Loading';
 import FastImage from 'react-native-fast-image';
 import {updateUserr} from '../../Constants/Texts';
@@ -30,12 +26,11 @@ import {getUserSelector} from './Selectors';
 
 const UpdateUser = props => {
   const {user} = props;
-  const [country, setCountry] = useState(
-    (user && user.country) || updateUserr.japan,
-  );
-  const [prefecture, setPrefecture] = useState(
-    (user && user.prefecture) || prefecturesList[country],
-  );
+  // const [country, setCountry] = useState(
+  //   (user && user.country) || updateUserr.japan,
+  // );
+  const [prefecture, setPrefecture] = useState(user.prefecture || '');
+  const [city, setCity] = useState(user.city || '');
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(undefined);
   const [imageFile, setImageFile] = useState(undefined);
@@ -44,28 +39,25 @@ const UpdateUser = props => {
   const [mobileChanged, setMobileChanged] = useState(false);
   const [firstNameChanged, setFirstNameChanged] = useState(false);
   const [lastNameChanged, setLastNameChanged] = useState(false);
-  const [countryChanged, setCountryChanged] = useState(false);
+  // const [countryChanged, setCountryChanged] = useState(false);
   const [prefectureChanged, setPrefectureChanged] = useState(false);
-  const [postalCodeChanged, setPostalCodeChanged] = useState(false);
-  const [cityWardChanged, setCityWardChanged] = useState(false);
+  const [cityChanged, setCityChanged] = useState(false);
+  // const [postalCodeChanged, setPostalCodeChanged] = useState(false);
   const [fullAddressChanged, setFullAddressChanged] = useState(false);
-  const [passwordChanged, setPasswordChanged] = useState(false);
   const mobileRef = createRef();
   const firstNameRef = createRef();
   const lastNameRef = createRef();
-  const postalCodeRef = createRef();
+  // const postalCodeRef = createRef();
   const fullAddressRef = createRef();
-  const cityWardRef = createRef();
-  const passwordRef = createRef();
 
-  const updateCountry = value => {
-    setCountry(value);
-    if (value && value !== user.country) {
-      setCountryChanged(true);
-    } else {
-      setCountryChanged(false);
-    }
-  };
+  // const updateCountry = value => {
+  //   setCountry(value);
+  //   if (value && value !== user.country) {
+  //     setCountryChanged(true);
+  //   } else {
+  //     setCountryChanged(false);
+  //   }
+  // };
   const handleMobileChangeText = value => {
     if (value && value.length > 3 && value !== user.mobile) {
       setMobileChanged(true);
@@ -87,32 +79,18 @@ const UpdateUser = props => {
       setLastNameChanged(false);
     }
   };
-  const handlePostalCodeChangeText = value => {
-    if (value && value.length > 1 && value !== user.postalCode) {
-      setPostalCodeChanged(true);
-    } else {
-      setPostalCodeChanged(false);
-    }
-  };
+  // const handlePostalCodeChangeText = value => {
+  //   if (value && value.length > 1 && value !== user.postalCode) {
+  //     setPostalCodeChanged(true);
+  //   } else {
+  //     setPostalCodeChanged(false);
+  //   }
+  // };
   const handleFullAddressChangeText = value => {
     if (value && value.length > 5 && value !== user.fullAddress) {
       setFullAddressChanged(true);
     } else {
       setFullAddressChanged(false);
-    }
-  };
-  const handlePasswordChangeText = value => {
-    if (value && value.length > 5 && value !== user.password) {
-      setPasswordChanged(true);
-    } else {
-      setPasswordChanged(false);
-    }
-  };
-  const handleCityWardChangeText = value => {
-    if (value && value.length > 2) {
-      setCityWardChanged(true);
-    } else {
-      setCityWardChanged(false);
     }
   };
   const updatePrefecture = value => {
@@ -123,6 +101,14 @@ const UpdateUser = props => {
       setPrefectureChanged(false);
     }
   };
+  const updateCity = value => {
+    setCity(value);
+    if (value && value !== user.city) {
+      setCityChanged(true);
+    } else {
+      setCityChanged(false);
+    }
+  };
   const setDefaultsDataChanged = () => {
     setLoading(false);
     setUserDataChanged(false);
@@ -130,11 +116,11 @@ const UpdateUser = props => {
     setMobileChanged(false);
     setFirstNameChanged(false);
     setLastNameChanged(false);
-    setCountryChanged(false);
+    // setCountryChanged(false);
     setPrefectureChanged(false);
-    setPostalCodeChanged(false);
+    setCityChanged(false);
+    // setPostalCodeChanged(false);
     setFullAddressChanged(false);
-    setCityWardChanged(false);
   };
   const onSuccessCallback = () => {
     setDefaultsDataChanged();
@@ -144,18 +130,14 @@ const UpdateUser = props => {
     const {current: mobileField} = mobileRef;
     const {current: firstNameField} = firstNameRef;
     const {current: lastNameField} = lastNameRef;
-    const {current: postalCodeField} = postalCodeRef;
-    const {current: cityWardField} = cityWardRef;
+    // const {current: postalCodeField} = postalCodeRef;
     const {current: fullAddressField} = fullAddressRef;
-    const {current: passwordField} = passwordRef;
 
     const mobile = mobileField.value();
     const firstName = firstNameField.value();
     const lastName = lastNameField.value();
     const fullAddress = fullAddressField.value();
-    const postalCode = postalCodeField.value();
-    const cityWard = cityWardField.value();
-    const password = passwordField.value();
+    // const postalCode = postalCodeField.value();
     if (userDataChanged) {
       setLoading(true);
       const updatedUserData = {
@@ -163,12 +145,10 @@ const UpdateUser = props => {
         ...(firstNameChanged && {firstName}),
         ...(lastNameChanged && {lastName}),
         ...(prefectureChanged && {prefecture}),
-        ...(countryChanged && {country}),
+        ...(cityChanged && {city}),
         ...(imageChanged && {image: imageFile}),
         ...(fullAddressChanged && {fullAddress}),
-        ...(cityWardChanged && {cityWard}),
-        ...(postalCodeChanged && {postalCode}),
-        ...(passwordChanged && {password}),
+        // ...(postalCodeChanged && {postalCode}),
         id: user.id,
         email: user.email,
       };
@@ -211,11 +191,9 @@ const UpdateUser = props => {
         mobileChanged ||
         firstNameChanged ||
         lastNameChanged ||
-        countryChanged ||
         prefectureChanged ||
-        postalCodeChanged ||
-        cityWardChanged ||
-        passwordChanged ||
+        cityChanged ||
+        // postalCodeChanged ||
         fullAddressChanged,
     );
   }, [
@@ -223,28 +201,27 @@ const UpdateUser = props => {
     mobileChanged,
     firstNameChanged,
     lastNameChanged,
-    countryChanged,
+    cityChanged,
     prefectureChanged,
-    postalCodeChanged,
+    // postalCodeChanged,
     fullAddressChanged,
-    cityWardChanged,
-    passwordChanged,
   ]);
 
   return (
-    <Modal animationType="slide">
+    <Modal animationType="slide" onRequestClose={handleCloseModal}>
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
           style={{container: sharedStyles.toolbarContainerPaddingRight}}
           leftElement="arrow-back"
           onLeftElementPress={handleCloseModal}
+          centerElement={updateUserr.updateProfile}
           rightElement={
             <Button
               color="white"
               onPress={handleUpdateUser}
               disabled={loading || !userDataChanged}
               raised
-              text={updateUserr.save}
+              text={updateUserr.update}
               icon="done-all"
             />
           }
@@ -272,10 +249,10 @@ const UpdateUser = props => {
                       sharedStyles.imageBtn,
                       sharedStyles.updateUserImgBtn,
                     ]}>
-                    {!image && !user.image && (
+                    {!image && !user.image ? (
                       <Icon name="image" size={35} color="white" />
-                    )}
-                    {(image || user.image) && (
+                    ) : null}
+                    {image || user.image ? (
                       <FastImage
                         style={[sharedStyles.adImage, sharedStyles.userImage]}
                         source={{
@@ -285,7 +262,7 @@ const UpdateUser = props => {
                         }}
                         resizeMode={FastImage.resizeMode.cover}
                       />
-                    )}
+                    ) : null}
                   </TouchableBounce>
                 </View>
               </View>
@@ -312,18 +289,6 @@ const UpdateUser = props => {
                 />
               </View>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>{updateUserr.passsword}</Text>
-                <TextField
-                  label={updateUserr.passsword}
-                  value={user.password}
-                  secureTextEntry={true}
-                  tintColor={'#b69cf6'}
-                  onChangeText={handlePasswordChangeText}
-                  ref={passwordRef}
-                  disabled={loading}
-                />
-              </View>
-              <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>
                   {updateUserr.phoneNumber}
                 </Text>
@@ -337,22 +302,33 @@ const UpdateUser = props => {
                   disabled={loading}
                 />
               </View>
-              <Text style={sharedStyles.label}>{updateUserr.country}</Text>
+              <Text style={sharedStyles.label}>{updateUserr.prefecture}</Text>
               <View style={sharedStyles.pickerView}>
                 <Picker
                   mode="dropdown"
-                  selectedValue={country}
-                  onValueChange={updateCountry}>
-                  {countries.map((_country, index) => (
+                  selectedValue={prefecture}
+                  onValueChange={updatePrefecture}>
+                  {prefectures[user.country].map((_prefecture, index) => (
                     <Picker.Item
                       key={index}
-                      label={_country}
-                      value={_country}
+                      label={_prefecture.kanji}
+                      value={_prefecture.name}
                     />
                   ))}
                 </Picker>
               </View>
-              <View style={sharedStyles.mobileContainer}>
+              <Text style={sharedStyles.label}>{updateUserr.city}</Text>
+              <View style={sharedStyles.pickerView}>
+                <Picker
+                  mode="dialog"
+                  selectedValue={city}
+                  onValueChange={updateCity}>
+                  {cities[prefecture].map((_city, index) => (
+                    <Picker.Item key={index} label={_city} value={_city} />
+                  ))}
+                </Picker>
+              </View>
+              {/* <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>{updateUserr.postalCode}</Text>
                 <TextField
                   label={updateUserr.postalCode}
@@ -363,39 +339,7 @@ const UpdateUser = props => {
                   ref={postalCodeRef}
                   disabled={loading}
                 />
-              </View>
-              {prefecture && (
-                <>
-                  <Text style={sharedStyles.label}>
-                    {updateUserr.prefecture}
-                  </Text>
-                  <View style={sharedStyles.pickerView}>
-                    <Picker
-                      mode="dropdown"
-                      selectedValue={prefecture}
-                      onValueChange={updatePrefecture}>
-                      {prefectures[country].map((_prefecture, index) => (
-                        <Picker.Item
-                          key={index}
-                          label={_prefecture}
-                          value={_prefecture}
-                        />
-                      ))}
-                    </Picker>
-                  </View>
-                </>
-              )}
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>{updateUserr.cityWard}</Text>
-                <TextField
-                  label={updateUserr.cityWard}
-                  value={user.cityWard}
-                  tintColor={'#b69cf6'}
-                  onChangeText={handleCityWardChangeText}
-                  ref={cityWardRef}
-                  disabled={loading}
-                />
-              </View>
+              </View> */}
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>
                   {updateUserr.fullAddress}
@@ -414,7 +358,7 @@ const UpdateUser = props => {
                   disabled={loading || !userDataChanged}
                   raised={true}
                   primary
-                  text={updateUserr.confirm}
+                  text={updateUserr.update}
                   onPress={handleUpdateUser}
                 />
               </View>

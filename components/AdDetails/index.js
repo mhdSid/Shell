@@ -14,19 +14,17 @@ import {Button, Icon, ActionButton} from 'react-native-material-ui';
 import {Toolbar} from 'react-native-material-ui';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
-import UserDetails from '../UserDetails';
 import {SimpleLoader} from '../Loading';
 import formatDate from '../../lib/CachedImage/formatDate';
 import AdDetailsUserListItem from './AdDetailsUserListItem.js';
 import {adDetails} from '../../Constants/Texts';
-// import {handleFetchUsersData} from '../../redux/AdDetails/FetchUsersData';
 import {
   getLotteriesSelector,
   getUsersSelector,
   getAdPosterDataSelector,
-  // getLotteryUsersDataSelector,
   getWinnerUserDataSelector,
   getUserAdsSelector,
+  getLotteryUsersDataSelector,
 } from './Selectors';
 import {handleFetchUserAds} from '../../redux/AdDetails/FetchUserAds';
 import CardListItem from '../Home/CardListItem';
@@ -34,6 +32,7 @@ import {showAdDetails} from '../../redux/AdDetails/actions';
 import {CarouselComponent} from '../Carousel';
 import ImagesViewer from '../ImageViewer';
 import Payment from '../Payment';
+import {handleFetchUsersData} from '../../redux/AdDetails/FetchUsersData';
 
 const myActions = ['share', 'favorite', 'cancel', 'delete'];
 const defaultActions = ['share', 'favorite', 'shop'];
@@ -42,7 +41,6 @@ const AdDetails = props => {
   const {
     item,
     user: authUser,
-    // lotteryUsersData,
     adPosterData,
     winnerUserData,
     userAds,
@@ -50,7 +48,6 @@ const AdDetails = props => {
   const {
     name,
     description,
-    id,
     category,
     currency,
     price,
@@ -68,16 +65,16 @@ const AdDetails = props => {
     images,
     disableHeaderActions,
   } = item;
-  const [selectedUser, setSelectedUser] = useState();
+  // const [selectedUser, setSelectedUser] = useState();
   const [usersDataLoading, setUsersDataLoading] = useState(true);
   const [userAdsLoading, setUserAdsLoading] = useState(true);
   const [showImagesViewer, setShowImagesViewer] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [viewImageUri, setViewImageUri] = useState(images[0]);
   const scrollViewRef = createRef();
-  const onUserDetailsClose = () => {
-    setSelectedUser(undefined);
-  };
+  // const onUserDetailsClose = () => {
+  //   setSelectedUser(undefined);
+  // };
   const handleUserAdPress = ad => {
     return () => {
       scrollViewRef.current.scrollTo({x: 0, y: 0, animated: true});
@@ -100,30 +97,30 @@ const AdDetails = props => {
   const onPaymentClose = () => {
     setShowPayment(false);
   };
-  // const fetchUsersDataCallback = () => {
-  //   setUsersDataLoading(false);
-  // };
+  const fetchUsersDataCallback = () => {
+    setUsersDataLoading(false);
+  };
   const fetchUsersAdsCallback = () => {
     setUserAdsLoading(false);
   };
-  // const fetchUsersData = () => {
-  //   const users = [
-  //     userId,
-  //     ...(lotteryUserIds || []),
-  //     winnerUserId || false,
-  //   ].filter(Boolean);
-  //   if (users.length > 0) {
-  //     invoke(props, 'handleFetchUsersData', {
-  //       winnerUserId,
-  //       userId,
-  //       users,
-  //       onError: fetchUsersDataCallback,
-  //       onSuccess: fetchUsersDataCallback,
-  //     });
-  //   }
-  // };
+  const fetchUsersData = () => {
+    const users = [
+      userId,
+      ...(lotteryUserIds || []),
+      winnerUserId || false,
+    ].filter(Boolean);
+    if (users.length > 0) {
+      invoke(props, 'handleFetchUsersData', {
+        winnerUserId,
+        userId,
+        users,
+        onError: fetchUsersDataCallback,
+        onSuccess: fetchUsersDataCallback,
+      });
+    }
+  };
   const onShow = () => {
-    // fetchUsersData();
+    fetchUsersData();
     invoke(props, 'handleFetchUserAds', {
       userId,
       onError: fetchUsersAdsCallback,
@@ -161,10 +158,13 @@ const AdDetails = props => {
     setShowImagesViewer(false);
   };
   return (
-    <Modal animationType="slide" onShow={onShow}>
-      {selectedUser && (
+    <Modal
+      animationType="slide"
+      onShow={onShow}
+      onRequestClose={handleCloseModal}>
+      {/* {selectedUser && (
         <UserDetails onClose={onUserDetailsClose} item={selectedUser} />
-      )}
+      )} */}
       {showImagesViewer && (
         <ImagesViewer
           imageText={name}
@@ -285,7 +285,7 @@ const AdDetails = props => {
               <Text
                 style={
                   sharedStyles.aboutFirstSectionText
-                }>{`${currency} ${'555'}`}</Text>
+                }>{`${currency} ${'100'}`}</Text>
             </View>
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="group-add" />
@@ -382,7 +382,7 @@ const AdDetails = props => {
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="collections" />
               <Text style={sharedStyles.userDetailsText}>
-                {adDetails.userAds}
+                {adDetails.userLotteries}
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainerNoFlex}>
@@ -446,7 +446,7 @@ const mapStateToProps = state => {
     lotteries: getLotteriesSelector(state),
     user: getUsersSelector(state),
     adPosterData: getAdPosterDataSelector(state),
-    // lotteryUsersData: getLotteryUsersDataSelector(state),
+    lotteryUsersData: getLotteryUsersDataSelector(state),
     winnerUserData: getWinnerUserDataSelector(state),
     userAds: getUserAdsSelector(state),
   };
@@ -454,7 +454,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    // handleFetchUsersData: payload => dispatch(handleFetchUsersData(payload)),
+    handleFetchUsersData: payload => dispatch(handleFetchUsersData(payload)),
     handleFetchUserAds: payload => dispatch(handleFetchUserAds(payload)),
     showAdDetails: payload => dispatch(showAdDetails(payload)),
   };

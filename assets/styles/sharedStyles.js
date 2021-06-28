@@ -128,6 +128,16 @@ const sharedStyles = StyleSheet.create({
     borderRadius: 65 / 2,
     backgroundColor: '#f7f5fe',
   },
+  bottomBarUserImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 30 / 2,
+    backgroundColor: '#f7f5fe',
+  },
+  bottomBarUserImageSelected: {
+    borderColor: '#b69cf6',
+    borderWidth: 1,
+  },
   bottomContainerUserImage: {
     width: 30,
     height: 30,
@@ -157,6 +167,9 @@ const sharedStyles = StyleSheet.create({
     display: 'flex',
     borderRadius: 4,
     backgroundColor: '#c4aff7',
+  },
+  imageBtnError: {
+    borderColor: 'red',
   },
   updateUserImgBtn: {
     width: 100,
@@ -258,7 +271,7 @@ const sharedStyles = StyleSheet.create({
   },
   lotteriesContainer: {
     ...flex,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   importAdContainerNoAuth: {
     paddingTop: 40,
@@ -323,6 +336,12 @@ const sharedStyles = StyleSheet.create({
   },
   updateUserContainer: {
     paddingTop: 10,
+  },
+  updatePasswordContainer: {
+    marginTop: 50,
+  },
+  settingsView: {
+    marginBottom: 50,
   },
   paymentInfoContainer: {
     height: '100%',
@@ -628,11 +647,15 @@ const sharedStyles = StyleSheet.create({
     height: 50,
     fontWeight: 'bold',
   },
+  paymentBtnContainerDisabled: {
+    height: 50,
+    fontWeight: 'bold',
+  },
   creditContainer: {
     marginTop: 15,
     marginBottom: 30,
     flex: 1,
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
   },
   creditInput: {
     width: '70%',

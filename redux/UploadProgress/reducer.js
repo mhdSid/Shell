@@ -25,17 +25,30 @@ const uploadProgressReducer = (state = initialState, action) => {
     case uploadProgressActions.updateProgressItem: {
       const {progress, id, progressItemsLength} = action.payload;
       let {progressItems} = state;
+      let updatedProgress;
       progressItems = progressItems.map(item => {
-        return `${id}` === `${item.id}`
-          ? {
+        if (`${id}` === `${item.id}`) {
+          updatedProgress =
+            (item.progress || 0) +
+            Number(progress) / Number(progressItemsLength);
+          if (updatedProgress < 100) {
+            return {
               ...item,
               id,
               ...action.payload,
               progressItemsLength,
-              progress: Number(progress) / Number(progressItemsLength),
-            }
-          : item;
+              progress: updatedProgress,
+            };
+          }
+        } else {
+          return item;
+        }
       });
+      if (updatedProgress > 100) {
+        return {
+          ...state,
+        };
+      }
       return {
         progressItems,
       };

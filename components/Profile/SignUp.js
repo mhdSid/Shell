@@ -11,11 +11,15 @@ import {loadingPopup} from '../Loading';
 import {TextField} from 'react-native-material-textfield';
 import {profile} from '../../Constants/Texts';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {countries, prefectures} from '../../Constants/Countries';
+import {
+  prefectures,
+  cities,
+  prefecturesList,
+  countryCodeList,
+} from '../../Constants/Countries';
 import {months, days, years} from '../../Constants/Dates';
 import PropTypes from 'prop-types';
 import {phoneNumbersRegexs} from '../../Constants/Regexes';
-import {prefecturesList, countryCodeList} from '../../Constants/Countries';
 import {monthsNumbers} from '../../Constants/Dates';
 import invoke from 'lodash/invoke';
 import {loginAction, logoutAction} from '../../redux/Auth/actions';
@@ -23,174 +27,236 @@ import {connect} from 'react-redux';
 import {handleSignUp} from '../../redux/Auth/SignUp';
 import {
   getEmailSelector,
-  getPasswordSelector,
   getVerificationIdSelector,
   getUserSelector,
-  getCountrySelector,
+  getPasswordHashSelector,
+  // getCountrySelector,
 } from './Selectors';
 import {handlePing} from '../../redux/Ping/Ping';
 
 const SignUp = props => {
-  const {
-    email,
-    password,
-    verificationId,
-    user,
-    country: serverCountryCode,
-  } = props;
+  const {email, passwordHash, verificationId} = props;
+  console.log('SignUp: ', props);
   const [loading, setLoading] = useState(false);
   const [userDataChanged, setUserDataChanged] = useState(false);
-  const [dobChanged, setDobChanged] = useState(false);
+  // const [dobChanged, setDobChanged] = useState(false);
   const [firstNameChanged, setFirsNameChanged] = useState(false);
   const [lastNameChanged, setLastNameChanged] = useState(false);
   const [mobileChanged, setMobileChanged] = useState(false);
-  const [postalCodeChanged, setPostalCodeChanged] = useState(false);
+  // const [postalCodeChanged, setPostalCodeChanged] = useState(false);
   const [fullAddressChanged, setFullAddressChanged] = useState(false);
-  const [cityWardChanged, setCityWardChanged] = useState(false);
-  const [year, setYear] = useState(profile.initialYear);
-  const [month, setMonth] = useState(profile.initialMonth);
-  const [day, setDay] = useState(profile.initialDay);
-  const [gender, setGender] = useState(profile.male);
-  const [country, setCountry] = useState(
-    (user && user.country) ||
-      (serverCountryCode && countryCodeList[serverCountryCode]) ||
-      profile.japan,
-  );
-  const [prefecture, setPrefecture] = useState(
-    (user && user.country && prefecturesList[user.country]) ||
-      prefecturesList[countryCodeList[serverCountryCode]],
-  );
-  const mobileRegex = new RegExp(phoneNumbersRegexs[country]);
+  const [cityChanged, setCityChanged] = useState(false);
+  const [prefectureChanged, setPrefectureChanged] = useState(false);
+  // const [year, setYear] = useState(profile.initialYear);
+  // const [month, setMonth] = useState(profile.initialMonth);
+  // const [day, setDay] = useState(profile.initialDay);
+  // const [gender, setGender] = useState(profile.male);
+  const [prefecture, setPrefecture] = useState('');
+  const [city, setCity] = useState('');
+  const mobileRegex = new RegExp(phoneNumbersRegexs.Japan);
+
+  const [errors, setErrors] = useState({
+    firstName: false,
+    lastName: false,
+    phoneNumber: false,
+    // postalCode: false,
+    fullAddress: false,
+  });
 
   const mobileRef = createRef();
   const firstNameRef = createRef();
   const lastNameRef = createRef();
-  const postalCodeRef = createRef();
-  const cityWardRef = createRef();
+  // const postalCodeRef = createRef();
   const fullAddressRef = createRef();
 
-  const updateCountry = value => {
-    setCountry(value);
-    setPrefecture(prefecturesList[value]);
-  };
   const updatePrefecture = value => {
+    setPrefectureChanged(true);
     setPrefecture(value);
   };
-
-  const updateGender = value => {
+  const updateCity = value => {
+    setCityChanged(true);
+    setCity(value);
+  };
+  // const updateGender = value => {
+  //   return () => {
+  //     setGender(value);
+  //   };
+  // };
+  // const updateYear = value => {
+  //   setYear(value);
+  //   setDobChanged(true);
+  // };
+  // const updateMonth = value => {
+  //   setMonth(value);
+  //   setDobChanged(true);
+  // };
+  // const updateDay = value => {
+  //   setDay(value);
+  //   setDobChanged(true);
+  // };
+  const handleChange = {
+    firstName: () => {
+      return value => {
+        if (value && value.length >= 1 && value.length <= 20) {
+          setFirsNameChanged(true);
+          setErrors({
+            ...errors,
+            firstName: false,
+          });
+        } else {
+          setFirsNameChanged(false);
+          setErrors({
+            ...errors,
+            firstName: true,
+          });
+        }
+      };
+    },
+    lastName: () => {
+      return value => {
+        if (value && value.length >= 1 && value.length <= 20) {
+          setLastNameChanged(true);
+          setErrors({
+            ...errors,
+            lastName: false,
+          });
+        } else {
+          setLastNameChanged(false);
+          setErrors({
+            ...errors,
+            lastName: true,
+          });
+        }
+      };
+    },
+    phoneNumber: () => {
+      return value => {
+        if (
+          value &&
+          value.match(mobileRegex) &&
+          value.length >= 1 &&
+          value.length <= 15
+        ) {
+          setMobileChanged(true);
+          setErrors({
+            ...errors,
+            phoneNumber: false,
+          });
+        } else {
+          setMobileChanged(false);
+          setErrors({
+            ...errors,
+            phoneNumber: true,
+          });
+        }
+      };
+    },
+    // postalCode: () => {
+    //   return value => {
+    //     if (value && value.length >= 1 && value.length <= 10) {
+    //       setPostalCodeChanged(true);
+    //       setErrors({
+    //         ...errors,
+    //         postalCode: false,
+    //       });
+    //     } else {
+    //       setPostalCodeChanged(false);
+    //       setErrors({
+    //         ...errors,
+    //         postalCode: true,
+    //       });
+    //     }
+    //   };
+    // },
+    fullAddress: () => {
+      return value => {
+        if (value && value.length >= 1 && value.length <= 100) {
+          setFullAddressChanged(true);
+          setErrors({
+            ...errors,
+            fullAddress: false,
+          });
+        } else {
+          setFullAddressChanged(false);
+          setErrors({
+            ...errors,
+            fullAddress: true,
+          });
+        }
+      };
+    },
+  };
+  const handleBlur = fieldName => {
     return () => {
-      setGender(value);
+      const {current: firstNameField} = firstNameRef;
+      const {current: lastNameField} = lastNameRef;
+      const {current: mobileField} = mobileRef;
+      // const {current: postalCodeField} = postalCodeRef;
+      const {current: fullAddressField} = fullAddressRef;
+
+      const values = {
+        firstName: firstNameField && firstNameField.value(),
+        lastName: lastNameField && lastNameField.value(),
+        phoneNumber: mobileField && mobileField.value(),
+        // postalCode: postalCodeField && postalCodeField.value(),
+        fullAddress: fullAddressField && fullAddressField.value(),
+      };
+      handleChange[fieldName]()(values[fieldName]);
     };
-  };
-  const updateYear = value => {
-    setYear(value);
-    setDobChanged(true);
-  };
-  const updateMonth = value => {
-    setMonth(value);
-    setDobChanged(true);
-  };
-  const updateDay = value => {
-    setDay(value);
-    setDobChanged(true);
-  };
-  const handleMobileChangeText = value => {
-    if (value && value.match(mobileRegex)) {
-      setMobileChanged(true);
-    } else {
-      setMobileChanged(false);
-    }
-  };
-  const handlePostalCodeChangeText = value => {
-    if (value && value.length > 1) {
-      setPostalCodeChanged(true);
-    } else {
-      setPostalCodeChanged(false);
-    }
-  };
-  const handleFullAddressChangeText = value => {
-    if (value && value.length > 3) {
-      setFullAddressChanged(true);
-    } else {
-      setFullAddressChanged(false);
-    }
-  };
-  const handleCityWardChangeText = value => {
-    if (value && value.length > 2) {
-      setCityWardChanged(true);
-    } else {
-      setCityWardChanged(false);
-    }
-  };
-  const handleFirstNameChangeText = value => {
-    if (value && value.length > 1) {
-      setFirsNameChanged(true);
-    } else {
-      setFirsNameChanged(false);
-    }
-  };
-  const handleLastNameChangeText = value => {
-    if (value && value.length > 1) {
-      setLastNameChanged(true);
-    } else {
-      setLastNameChanged(false);
-    }
   };
   const setDefaultsDataChanged = () => {
     setUserDataChanged(false);
-    setDobChanged(false);
+    // setDobChanged(false);
     setFirsNameChanged(false);
     setLastNameChanged(false);
     setMobileChanged(false);
-    setPostalCodeChanged(false);
+    // setPostalCodeChanged(false);
     setFullAddressChanged(false);
-    setCityWardChanged(false);
+    setCityChanged(false);
+    setPrefectureChanged(false);
   };
   const callback = () => {
     setDefaultsDataChanged();
-    invoke(props, 'ping');
+    // invoke(props, 'ping');
     setLoading(false);
   };
   const handleSignupPress = () => {
     const {current: firstNameField} = firstNameRef;
     const {current: lastNameField} = lastNameRef;
     const {current: mobileField} = mobileRef;
-    const {current: postalCodeField} = postalCodeRef;
+    // const {current: postalCodeField} = postalCodeRef;
     const {current: fullAddressField} = fullAddressRef;
-    const {current: cityWardField} = cityWardRef;
     const firstName = firstNameField.value();
     const lastName = lastNameField.value();
     const mobile = mobileField.value();
-    const postalCode = postalCodeField.value();
+    // const postalCode = postalCodeField.value();
     const fullAddress = fullAddressField.value();
-    const cityWard = cityWardField.value();
     if (
       email &&
-      password &&
+      passwordHash &&
       mobile &&
       verificationId &&
       prefecture &&
-      country &&
-      postalCode &&
+      city &&
+      // postalCode &&
       firstName &&
       lastName &&
-      fullAddress &&
-      cityWard
+      fullAddress
     ) {
       const newUser = {
         email,
-        password,
+        passwordHash,
         verificationId,
-        dob: new Date(`${year}/${monthsNumbers[month]}/${day}`),
-        gender,
+        // dob: new Date(`${year}/${monthsNumbers[month]}/${day}`),
+        // gender,
         mobile,
-        country,
+        country: 'Japan',
         prefecture,
+        city,
         firstName,
         lastName,
-        postalCode,
+        // postalCode,
         fullAddress,
-        cityWard,
       };
       setLoading(true);
       invoke(props, 'signUp', {
@@ -203,22 +269,24 @@ const SignUp = props => {
 
   useEffect(() => {
     setUserDataChanged(
-      dobChanged &&
-        firstNameChanged &&
+      // dobChanged &&
+      firstNameChanged &&
         lastNameChanged &&
         mobileChanged &&
-        postalCodeChanged &&
-        fullAddressChanged &&
-        cityWardChanged,
+        // postalCodeChanged &&
+        prefectureChanged &&
+        cityChanged &&
+        fullAddressChanged,
     );
   }, [
-    dobChanged,
+    // dobChanged,
     firstNameChanged,
     lastNameChanged,
     mobileChanged,
-    postalCodeChanged,
+    // postalCodeChanged,
+    prefectureChanged,
+    cityChanged,
     fullAddressChanged,
-    cityWardChanged,
   ]);
 
   return (
@@ -235,7 +303,11 @@ const SignUp = props => {
               <TextField
                 label={profile.firstName}
                 tintColor={'#b69cf6'}
-                onChangeText={handleFirstNameChangeText}
+                maxLength={20}
+                minLength={1}
+                onBlur={handleBlur('firstName')}
+                error={errors.firstName}
+                onChangeText={handleChange.firstName()}
                 ref={firstNameRef}
                 disabled={loading}
               />
@@ -244,7 +316,11 @@ const SignUp = props => {
               <Text style={sharedStyles.label}>{profile.lastName}</Text>
               <TextField
                 label={profile.lastName}
-                onChangeText={handleLastNameChangeText}
+                maxLength={20}
+                minLength={1}
+                onBlur={handleBlur('lastName')}
+                error={errors.lastName}
+                onChangeText={handleChange.lastName()}
                 tintColor={'#b69cf6'}
                 ref={lastNameRef}
                 disabled={loading}
@@ -256,12 +332,16 @@ const SignUp = props => {
                 label={profile.mobile}
                 keyboardType="phone-pad"
                 tintColor={'#b69cf6'}
-                onChangeText={handleMobileChangeText}
+                maxLength={15}
+                minLength={1}
+                onBlur={handleBlur('phoneNumber')}
+                error={errors.phoneNumber}
+                onChangeText={handleChange.phoneNumber()}
                 ref={mobileRef}
                 disabled={loading}
               />
             </View>
-            <View style={sharedStyles.genderContainer}>
+            {/* <View style={sharedStyles.genderContainer}>
               <Text style={sharedStyles.label}>{profile.gender}</Text>
               <View style={sharedStyles.genderView}>
                 <RadioButton
@@ -277,8 +357,8 @@ const SignUp = props => {
                   onSelect={updateGender(profile.female)}
                 />
               </View>
-            </View>
-            <View style={sharedStyles.dobContainer}>
+            </View> */}
+            {/* <View style={sharedStyles.dobContainer}>
               <Text style={[sharedStyles.dobLabel, sharedStyles.label]}>
                 {profile.dateOfBirth}
               </Text>
@@ -311,62 +391,60 @@ const SignUp = props => {
                   ))}
                 </Picker>
               </View>
-            </View>
-            <Text style={sharedStyles.label}>{profile.country}</Text>
-            <View style={sharedStyles.pickerView}>
-              <Picker
-                mode="dropdown"
-                selectedValue={country}
-                onValueChange={updateCountry}>
-                {countries.map((_country, index) => (
-                  <Picker.Item key={index} label={_country} value={_country} />
-                ))}
-              </Picker>
-            </View>
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>{profile.postalCode}</Text>
-              <TextField
-                label={profile.postalCode}
-                keyboardType="phone-pad"
-                tintColor={'#b69cf6'}
-                onChangeText={handlePostalCodeChangeText}
-                ref={postalCodeRef}
-                disabled={loading}
-              />
-            </View>
+            </View> */}
             <Text style={sharedStyles.label}>{profile.prefecture}</Text>
             <View style={sharedStyles.pickerView}>
               <Picker
                 mode="dropdown"
                 selectedValue={prefecture}
                 onValueChange={updatePrefecture}>
-                {prefectures[country].map((_prefecture, index) => (
+                {prefectures.Japan.map((_prefecture, index) => (
                   <Picker.Item
                     key={index}
-                    label={_prefecture}
-                    value={_prefecture}
+                    label={_prefecture.kanji}
+                    value={_prefecture.name}
                   />
                 ))}
               </Picker>
             </View>
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>{profile.cityWard}</Text>
+            <Text style={sharedStyles.label}>{profile.city}</Text>
+            <View style={sharedStyles.pickerView}>
+              <Picker
+                mode="dropdown"
+                selectedValue={city}
+                onValueChange={updateCity}>
+                {cities[prefecture].map((_city, index) => (
+                  <Picker.Item key={index} label={_city} value={_city} />
+                ))}
+              </Picker>
+            </View>
+            {/* <View style={sharedStyles.mobileContainer}>
+              <Text style={sharedStyles.label}>{profile.postalCode}</Text>
               <TextField
-                label={profile.cityWard}
+                label={profile.postalCode}
+                keyboardType="phone-pad"
                 tintColor={'#b69cf6'}
-                onChangeText={handleCityWardChangeText}
-                ref={cityWardRef}
+                maxLength={10}
+                minLength={1}
+                onBlur={handleBlur('postalCode')}
+                error={errors.postalCode}
+                onChangeText={handleChange.postalCode()}
+                ref={postalCodeRef}
                 disabled={loading}
               />
-            </View>
+            </View> */}
             <View style={sharedStyles.mobileContainer}>
               <Text style={sharedStyles.label}>{profile.fullAddress}</Text>
               <TextField
                 label={profile.fullAddress}
                 tintColor={'#b69cf6'}
-                onChangeText={handleFullAddressChangeText}
                 ref={fullAddressRef}
                 disabled={loading}
+                maxLength={100}
+                minLength={1}
+                onBlur={handleBlur('fullAddress')}
+                error={errors.fullAddress}
+                onChangeText={handleChange.fullAddress()}
               />
             </View>
             <Text style={[sharedStyles.label, sharedStyles.signUpLabel]}>
@@ -390,10 +468,8 @@ const SignUp = props => {
 
 SignUp.propTypes = {
   email: PropTypes.string,
-  password: PropTypes.string,
+  passwordHash: PropTypes.string,
   verificationId: PropTypes.string,
-  user: PropTypes.object,
-  country: PropTypes.string,
   login: PropTypes.func,
   logout: PropTypes.func,
 };
@@ -401,10 +477,8 @@ SignUp.propTypes = {
 const mapStateToProps = state => {
   return {
     email: getEmailSelector(state),
-    password: getPasswordSelector(state),
+    passwordHash: getPasswordHashSelector(state),
     verificationId: getVerificationIdSelector(state),
-    user: getUserSelector(state),
-    country: getCountrySelector(state),
   };
 };
 
@@ -413,7 +487,7 @@ const mapDispatchToProps = dispatch => {
     login: payload => dispatch(loginAction(payload)),
     logout: payload => dispatch(logoutAction(payload)),
     signUp: payload => dispatch(handleSignUp(payload)),
-    ping: payload => dispatch(handlePing(payload)),
+    // ping: payload => dispatch(handlePing(payload)),
   };
 };
 

@@ -10,19 +10,22 @@ import Lotteries from '../Lotteries';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getLoggedInSelector, getUserSelector} from './Selectors';
+import FastImage from 'react-native-fast-image';
 
 export let navigate;
+export let setUserBottomBarImage;
 
 const viewLoader = {
-  grade: <Lotteries />,
+  lotteries: <Lotteries />,
   profile: <AuthComponent />,
   home: <HomeComponent />,
   search: <SearchComponent />,
-  'add-circle-outline': <ImportAd />,
+  importAd: <ImportAd />,
 };
 
-const MainContainer = props => {
+const MainContainer = () => {
   const [activeView, setActiveView] = useState('home');
+  const [userImage, setUserImage] = useState(null);
 
   const handleSetActiveView = type => {
     return () => {
@@ -31,7 +34,7 @@ const MainContainer = props => {
   };
 
   navigate = handleSetActiveView;
-
+  setUserBottomBarImage = setUserImage;
   return (
     <SafeAreaView style={sharedStyles.fullheightView}>
       <SafeAreaView style={sharedStyles.container}>
@@ -77,33 +80,31 @@ const MainContainer = props => {
           style={{
             container: sharedStyles.bottomNavigationMiddleActionContainer,
             icon: {
-              color:
-                activeView === 'add-circle-outline' ? '#b69cf6' : '#d8d8d8',
+              color: activeView === 'importAd' ? '#b69cf6' : '#d8d8d8',
             },
             label: {
-              color:
-                activeView === 'add-circle-outline' ? '#b69cf6' : '#d8d8d8',
+              color: activeView === 'importAd' ? '#b69cf6' : '#d8d8d8',
             },
           }}
-          key="add-circle-outline"
-          icon={<Icon name="add-circle-outline" size={40} />}
-          active={activeView === 'add-circle-outline'}
-          onPress={handleSetActiveView('add-circle-outline')}
+          key="importAd"
+          icon={<Icon name="cloud-upload" size={40} />}
+          active={activeView === 'importAd'}
+          onPress={handleSetActiveView('importAd')}
         />
         <BottomNavigation.Action
           style={{
             container: sharedStyles.bottomNavigationLeftActionContainer,
             icon: {
-              color: activeView === 'grade' ? '#b69cf6' : '#d8d8d8',
+              color: activeView === 'lotteries' ? '#b69cf6' : '#d8d8d8',
             },
             label: {
-              color: activeView === 'grade' ? '#b69cf6' : '#d8d8d8',
+              color: activeView === 'lotteries' ? '#b69cf6' : '#d8d8d8',
             },
           }}
-          key="grade"
+          key="lotteries"
           icon={<Icon name="grade" size={30} />}
-          active={activeView === 'grade'}
-          onPress={handleSetActiveView('grade')}
+          active={activeView === 'lotteries'}
+          onPress={handleSetActiveView('lotteries')}
         />
         <BottomNavigation.Action
           style={{
@@ -116,7 +117,27 @@ const MainContainer = props => {
             },
           }}
           key="profile"
-          icon={<Icon name="account-circle" size={30} />}
+          icon={
+            userImage ? (
+              <>
+                <FastImage
+                  style={[
+                    sharedStyles.bottomBarUserImage,
+                    activeView === 'profile' &&
+                      sharedStyles.bottomBarUserImageSelected,
+                  ]}
+                  source={{
+                    uri: userImage,
+                    priority: FastImage.priority.high,
+                    cache: FastImage.cacheControl.immutable,
+                  }}
+                  resizeMode={FastImage.resizeMode.cover}
+                />
+              </>
+            ) : (
+              <Icon name="account-circle" size={30} />
+            )
+          }
           active={activeView === 'profile'}
           onPress={handleSetActiveView('profile')}
         />

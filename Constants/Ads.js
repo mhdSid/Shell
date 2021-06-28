@@ -1,4 +1,6 @@
 let adCategories = [
+  '',
+
   'Electronic Devices',
   'Home Applicances',
   'Software',
@@ -69,6 +71,8 @@ const mimeTypes = {
 };
 
 const adStatuses = [
+  '',
+
   'New',
   'Used',
   'Nearly Used',

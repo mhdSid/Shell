@@ -4,12 +4,13 @@ import invoke from 'lodash/invoke';
 
 const handleVerifyUser = payload => {
   return dispatch => {
-    const {email, password, verificationId, onError} = payload;
+    const {email, passwordHash, verificationId, onError} = payload;
     /*
      * Verify user Handler
      */
     // show confirmation button and request to /authenticate/email/verify with email and password again and verification id
     const onVerifyUserSuccess = data => {
+      console.log('onVerifyUserSuccess', data);
       const {error, user: authUser} = data;
       if (error) {
         return handleError({error, onError, dispatch});
@@ -25,8 +26,8 @@ const handleVerifyUser = payload => {
         });
       }
     };
-    if (email && password && verificationId) {
-      return verify({email, password, verificationId}).then(
+    if (email && passwordHash && verificationId) {
+      return verify({email, passwordHash, verificationId}).then(
         onVerifyUserSuccess,
         error => {
           return handleError({error, onError, dispatch});

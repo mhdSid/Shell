@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {createRef, useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, View, Text, ScrollView} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {Toolbar, Icon, Button} from 'react-native-material-ui';
-import {SimpleLoaderDefault} from '../Loading';
+import {Icon, Button} from 'react-native-material-ui';
+import {loadingPopup} from '../Loading';
 import {payment, about} from '../../Constants/Texts';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -19,15 +19,50 @@ import {handleEnterLottery} from '../../redux/Payment/EnterLottery';
 const Payment = props => {
   const {user, loggedIn, ad} = props;
   const [loading, setLoading] = useState(false);
+  const [isValid, setIsValid] = useState(false);
+  const [creditCardCVC, setCreditCardCVC] = useState(false);
+  const [creditCardExpiryDate, setCreditCardExpiryDate] = useState(false);
+  const [creditCardNumber, setCreditCardNumber] = useState(false);
+  const [creditCardType, setCreditCardType] = useState(false);
 
+  const creditCardInputRef = createRef();
+
+  const onShowModal = () => {
+    if (
+      user.creditCardNumber &&
+      user.creditCardExpiryDate &&
+      user.creditCardCVC
+    ) {
+      creditCardInputRef.current.setValues({
+        number: user.creditCardNumber,
+        expiry: user.creditCardExpiryDate,
+        cvc: user.creditCardCVC,
+      });
+      setIsValid(true);
+    }
+  };
   const handleCloseModal = () => {
+    setDefaultsDataChanged();
     invoke(props, 'onClose');
   };
   const onCreditChange = data => {
-    console.log(data);
+    if (data) {
+      const {cvc, expiry, type} = data.values;
+      const number =
+        data.values.number && data.values.number.replace(/\s/g, '');
+      setCreditCardCVC(cvc);
+      setCreditCardExpiryDate(expiry);
+      setCreditCardNumber(number);
+      setCreditCardType(type);
+      setIsValid(data.valid);
+    }
+  };
+  const setDefaultsDataChanged = () => {
+    setLoading(false);
+    setIsValid(false);
   };
   const onError = () => {
-    setLoading(false);
+    setDefaultsDataChanged();
   };
   const handlePayment = () => {
     setLoading(true);
@@ -37,7 +72,11 @@ const Payment = props => {
       adId: ad.id,
       userId: user.id,
       email: user.email,
-      password: user.password,
+      passwordHash: user.passwordHash,
+      creditCardNumber,
+      creditCardCVC,
+      creditCardExpiryDate,
+      creditCardType,
     });
   };
 
@@ -45,74 +84,72 @@ const Payment = props => {
     return <NoAuth />;
   }
   return (
-    <Modal animationType="slide">
+    <Modal
+      animationType="slide"
+      onShow={onShowModal}
+      onRequestClose={handleCloseModal}>
+      {loading && loadingPopup}
       <SafeAreaView style={sharedStyles.fullheightView}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={
-            loading && sharedStyles.paymentSafeViewContentContainer
-          }
           style={[
             sharedStyles.aboutContainer,
             sharedStyles.paymentSafeViewContainer,
           ]}>
-          {loading && SimpleLoaderDefault}
-          {!loading && (
-            <>
-              <View style={sharedStyles.creditContainer}>
-                <CreditCardInput
-                  allowScroll={true}
-                  inputStyle={sharedStyles.creditInput}
-                  onChange={onCreditChange}
-                />
-              </View>
-              <View style={sharedStyles.aboutIconTextContainer}>
-                <Icon color="black" name="receipt" />
-                <Text
-                  style={[
-                    sharedStyles.aboutIconText,
-                    sharedStyles.paymentText,
-                  ]}>
-                  {about.enterLottery}
-                </Text>
-              </View>
-              <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                <Text style={sharedStyles.aboutFirstSectionText}>
-                  {about.howToUseTenth}
-                </Text>
-              </View>
-              <View style={sharedStyles.aboutIconTextContainer}>
-                <Icon color="black" name="star" />
-                <Text
-                  style={[
-                    sharedStyles.aboutIconText,
-                    sharedStyles.paymentText,
-                  ]}>
-                  {about.win}
-                </Text>
-              </View>
-              <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                <Text style={sharedStyles.aboutFirstSectionText}>
-                  {about.howToUseEleventh}
-                </Text>
-              </View>
-              <View style={sharedStyles.btnContainer}>
-                <View style={sharedStyles.paymentBtn}>
-                  <Button
-                    raised
-                    primary
-                    icon="payment"
-                    text={payment.submit}
-                    style={{container: sharedStyles.paymentBtnContainer}}
-                    onPress={handlePayment}
-                  />
-                </View>
-                <View style={sharedStyles.paymentBtn}>
-                  <Button text={payment.cancel} onPress={handleCloseModal} />
-                </View>
-              </View>
-            </>
-          )}
+          <View style={sharedStyles.creditContainer}>
+            <CreditCardInput
+              allowScroll={true}
+              autoFocus={true}
+              inputStyle={sharedStyles.creditInput}
+              onChange={onCreditChange}
+              ref={creditCardInputRef}
+            />
+          </View>
+          <View style={sharedStyles.aboutIconTextContainer}>
+            <Icon color="black" name="receipt" />
+            <Text
+              style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
+              {about.enterLottery}
+            </Text>
+          </View>
+          <View style={sharedStyles.aboutFirstSectionTextContainer}>
+            <Text style={sharedStyles.aboutFirstSectionText}>
+              {about.howToUseTenth}
+            </Text>
+          </View>
+          <View style={sharedStyles.aboutIconTextContainer}>
+            <Icon color="black" name="star" />
+            <Text
+              style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
+              {about.win}
+            </Text>
+          </View>
+          <View style={sharedStyles.aboutFirstSectionTextContainer}>
+            <Text style={sharedStyles.aboutFirstSectionText}>
+              {about.howToUseEleventh}
+            </Text>
+          </View>
+          <View style={sharedStyles.btnContainer}>
+            <View style={sharedStyles.paymentBtn}>
+              <Button
+                raised
+                primary
+                disabled={loading || !isValid}
+                icon="payment"
+                text={payment.submit}
+                style={{
+                  container:
+                    loading || !isValid
+                      ? sharedStyles.paymentBtnContainerDisabled
+                      : sharedStyles.paymentBtnContainer,
+                }}
+                onPress={handlePayment}
+              />
+            </View>
+            <View style={sharedStyles.paymentBtn}>
+              <Button text={payment.cancel} onPress={handleCloseModal} />
+            </View>
+          </View>
         </ScrollView>
       </SafeAreaView>
     </Modal>

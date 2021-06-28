@@ -15,7 +15,7 @@ const Notifications = props => {
   };
 
   return (
-    <Modal animationType="slide">
+    <Modal animationType="slide" onRequestClose={handleCloseModal}>
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}

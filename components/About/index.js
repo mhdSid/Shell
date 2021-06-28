@@ -11,7 +11,7 @@ const About = props => {
     invoke(props, 'onClose');
   };
   return (
-    <Modal animationType="fade">
+    <Modal animationType="fade" onRequestClose={handleCloseModal}>
       <SafeAreaView
         style={[sharedStyles.container, sharedStyles.aboutSafeViewContainer]}>
         <Toolbar

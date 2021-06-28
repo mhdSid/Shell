@@ -26,8 +26,7 @@ const request = async options => {
   if (response) {
     let data = await response.json();
     if (data.data || data.error || data.user) {
-      data = decrypt(data.data || data.error || data.user, password);
-      data = JSON.parse(data.toString(CryptoJS.enc.Utf8));
+      data = decrypt(data.data || data.error || data.user, true);
       if (data && Object.keys(data).length > 0) {
         data = {...data};
         return data;

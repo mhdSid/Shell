@@ -9,6 +9,7 @@ const handleLogin = payload => {
      * First submit Handler
      */
     const onSubmitSuccess = data => {
+      console.log('handleLoginSuccess: ', data);
       const {error, user: authUser} = data;
       if (error) {
         return handleError({error, onError, dispatch});
@@ -18,7 +19,7 @@ const handleLogin = payload => {
         emailVerified,
         signedUp,
         email: authEmail,
-        password: authPassword,
+        passwordHash,
       } = authUser;
       invoke(payload, 'onSuccess');
       // should should confirmation button and go to sign up screen afterwards
@@ -27,7 +28,7 @@ const handleLogin = payload => {
           type: authActions.login,
           payload: {
             email,
-            password,
+            passwordHash,
             // show confirmation button and request to /authenticate/email/verify with email and password again and verification id
             verificationId,
           },
@@ -42,7 +43,7 @@ const handleLogin = payload => {
               verificationId,
               showSingup: true,
               email: authEmail,
-              password: authPassword,
+              passwordHash,
             },
           });
         }

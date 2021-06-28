@@ -2,9 +2,9 @@ const about = {
   howTo: 'How-to Guide',
   sell: 'Sell',
   howToUseFirst:
-    'Make a post about the item you want to sell - it could be anything you can think about!',
+    'Make a lottery about the item you want to sell - it could be anything you can think about!',
   howToUseSecond:
-    'Users enter the lottery by paying a fee of ¥555 to have a chance to win the item that you have posted.',
+    'Users enter the lottery by paying a fee of ¥100 to have a chance to win the item that you have upload.',
   howToUseThird: '20% of the fee amount is used to sponsor and fund NGOs.',
   howToUseFourth:
     '30% of the fee amount goes to our company to continue running this service.',
@@ -20,7 +20,7 @@ const about = {
   howToUseNineth:
     'Make sure you choose any item you love. It can be a Smart Phone, a Laptop, a Car, a House, or anything you can think about.',
   howToUseTenth:
-    'Pay a fee of ¥555 to enter a lottery and have a chance to win any item of your choice.\n\n 20% of the fee amount is used to sponsor and fund NGOs.\n\n 30% of the fee amount goes to our company to continue running this service.\n\n The rest 50% of the fee amount is added to the lottery.',
+    'Pay a fee of ¥100 to enter a lottery and have a chance to win any item of your choice.\n\n 20% of the fee amount is used to sponsor and fund NGOs.\n\n 30% of the fee amount goes to our company to continue running this service.\n\n The rest 50% of the fee amount is added to the lottery.',
   howToUseEleventh:
     'When the total monetary value in the lottery is equal to the price of your chosen item, then our system randomly selects a winner.',
   enterLottery: 'Enter Lottery',
@@ -34,11 +34,11 @@ const errors = {
 const adDetails = {
   enterDraw: 'Win',
   availability: 'Availabality',
-  adAvailable: 'The Ad is currently available',
-  adNotAvailable: 'The Ad is not available',
+  adAvailable: 'The lottery is currently available',
+  adNotAvailable: 'The lottery is not available',
   totalPrice: 'Total Price',
   collectedPrice: 'Collected Price',
-  payToWin: 'Pay To Win The Item In The Lottery',
+  payToWin: 'Pay to Win the Lottery',
   currentLotteryUsers: 'Current lottery users',
   currentLotteryUsersNumber: lotteryUserIds => {
     if (!lotteryUserIds || !lotteryUserIds.length) {
@@ -59,8 +59,8 @@ const adDetails = {
   location: 'Location',
   user: 'User',
   adId: 'Ad ID',
-  emptyUserAds: 'User has no available Ads',
-  userAds: 'User Ads',
+  emptyUserAds: 'User has no available lotteries',
+  userLotteries: 'User Lotteries',
 };
 
 const home = {
@@ -70,14 +70,15 @@ const home = {
 const importAd = {
   sports: 'Sports',
   noNoticableScratches: 'No Noticable Scratches or Dirt',
-  postAnAd: 'Post an Item',
-  post: 'Post',
+  createLottery: 'Create a lottery',
+  create: 'Create',
   productName: 'Item Name',
   adName: 'Name',
   description: 'Description',
   price: 'Price',
   images: 'Images',
   prefecture: 'Prefecture',
+  city: 'City',
   category: 'Category',
   status: 'Condition',
 };
@@ -132,6 +133,7 @@ const profile = {
   country: 'Country',
   postalCode: 'Postal Code',
   prefecture: 'Prefecture',
+  city: 'City',
   cityWard: 'City Ward',
   fullAddress: 'Full Address',
   fillInformationCorrectly:
@@ -139,7 +141,7 @@ const profile = {
   signUp: 'Sign up',
   verify: 'Verify',
   checkYourInbox: 'Please check your inbox in order to verify your email',
-  howToUseTheApp: 'How To Use The App',
+  howToUseTheApp: 'How to Use the App',
   notifications: 'Notifications',
   paymentInformation: 'Payment Information',
   myAds: 'My Ads',
@@ -158,7 +160,14 @@ const searchh = {
 
 const settings = {
   settings: 'Settings',
+  changePassword: 'Change Password',
   language: 'Language',
+  privacy: 'Privacy',
+  privacyAndTerms: 'Terms and Privacy Policy',
+  contactUs: 'Contact Us',
+  security: 'Security',
+  faq: 'FAQ',
+  licenses: 'Licenses',
   en: 'US',
   jp: 'JP',
   english: 'English',
@@ -167,6 +176,7 @@ const settings = {
 };
 
 const updateUserr = {
+  updateProfile: 'Update Profile',
   save: 'Save',
   firstName: 'First Name',
   lastName: 'Last Name',
@@ -175,11 +185,15 @@ const updateUserr = {
   country: 'Country',
   postalCode: 'Postal Code',
   prefecture: 'Prefecture',
+  city: 'City',
   cityWard: 'City Ward',
   fullAddress: 'Full Address',
   confirm: 'Confirm',
   japan: 'Japan',
   passsword: 'Password',
+  currentPassword: 'Current Password',
+  newPassword: 'New Password',
+  update: 'Update',
 };
 
 const userDetails = {
@@ -195,7 +209,7 @@ const userDetails = {
 
 const payment = {
   title: 'Get a Chance to Win',
-  submit: 'Pay fee of ¥555',
+  submit: 'Pay fee of ¥100',
   cancel: 'Cancel',
 };
 

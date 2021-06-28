@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, ScrollView, View, Text} from 'react-native';
 import {connect} from 'react-redux';
@@ -10,9 +10,14 @@ import {Flag} from 'react-native-svg-flagkit';
 import {settings} from '../../Constants/Texts';
 import pkg from '../../package.json';
 import {getLangSelector} from './Selectors';
+import FaqMofal from './FaqModal';
+import ChangePassword from './ChangePassword';
+import ContactUsModal from './ContactUsModal';
+import TermsAndPrivacyPolicyModal from './TermsAndPrivacyPolicyModal';
 
 const Settings = props => {
   const {lang} = props;
+  const [settingsModal, setSettingsModal] = useState(false);
 
   const handleSetLanguage = value => {
     return () => {
@@ -22,91 +27,157 @@ const Settings = props => {
   const handleCloseModal = () => {
     invoke(props, 'onClose');
   };
+  const handleSettingsModalClick = modalType => {
+    return () => {
+      setSettingsModal(modalType);
+    };
+  };
+  const handleSettingsModalClose = () => {
+    setSettingsModal(null);
+  };
+  const settingsModals = {
+    faq: <FaqMofal onClose={handleSettingsModalClose} />,
+    contactUs: <ContactUsModal onClose={handleSettingsModalClose} />,
+    privacyAndTerms: (
+      <TermsAndPrivacyPolicyModal onClose={handleSettingsModalClose} />
+    ),
+    changePassword: <ChangePassword onClose={handleSettingsModalClose} />,
+  };
 
   return (
-    <Modal animationType="slide">
+    <Modal animationType="slide" onRequestClose={handleCloseModal}>
+      {settingsModal && settingsModals[settingsModal]}
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}
           leftElement="arrow-back"
+          centerElement={settings.settings}
           onLeftElementPress={handleCloseModal}
         />
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Drawer>
-            <Drawer.Section
-              title={settings.settings}
-              items={[
-                {
-                  icon: 'language',
-                  value: settings.language,
-                },
-              ]}
-            />
-            <Drawer.Section
-              style={{
-                container: sharedStyles.settingsDrawerLanguageSection,
-                icon: sharedStyles.langIcon,
-              }}
-              items={[
-                {
-                  key: settings.en,
-                  icon: <Flag id={settings.en} width={30} height={30} />,
-                  value:
-                    lang === settings.en ? (
-                      <View
-                        style={[
-                          sharedStyles.flexRow,
-                          sharedStyles.textAlignVertical,
-                        ]}>
-                        <Text style={sharedStyles.appText}>
-                          {settings.english}
-                        </Text>
-                        <Icon
-                          style={sharedStyles.langChecked}
-                          color="green"
-                          name="check"
-                          size={15}
-                        />
-                      </View>
-                    ) : (
-                      settings.english
+          <View style={sharedStyles.settingsView}>
+            <Drawer>
+              <Drawer.Section title={settings.language} />
+              <Drawer.Section
+                style={{
+                  container: sharedStyles.settingsDrawerLanguageSection,
+                  icon: sharedStyles.langIcon,
+                }}
+                items={[
+                  {
+                    key: settings.en,
+                    icon: <Flag id={settings.en} width={30} height={30} />,
+                    value:
+                      lang === settings.en ? (
+                        <View
+                          style={[
+                            sharedStyles.flexRow,
+                            sharedStyles.textAlignVertical,
+                          ]}>
+                          <Text style={sharedStyles.appText}>
+                            {settings.english}
+                          </Text>
+                          <Icon
+                            style={sharedStyles.langChecked}
+                            color="green"
+                            name="check"
+                            size={15}
+                          />
+                        </View>
+                      ) : (
+                        settings.english
+                      ),
+                    onPress: handleSetLanguage(settings.en),
+                  },
+                  {
+                    key: settings.jp,
+                    icon: <Flag id={settings.jp} width={30} height={30} />,
+                    value:
+                      lang === settings.jp ? (
+                        <View style={sharedStyles.flexRow}>
+                          <Text style={sharedStyles.appText}>
+                            {settings.japanese}
+                          </Text>
+                          <Icon
+                            style={sharedStyles.langChecked}
+                            color="green"
+                            name="check"
+                            size={15}
+                          />
+                        </View>
+                      ) : (
+                        settings.japanese
+                      ),
+                    onPress: handleSetLanguage(settings.jp),
+                  },
+                ]}
+              />
+              <Drawer.Section title={settings.privacy} />
+              <Drawer.Section
+                style={{
+                  container: sharedStyles.settingsDrawerLanguageSection,
+                  icon: sharedStyles.langIcon,
+                }}
+                items={[
+                  {
+                    key: settings.faq,
+                    icon: 'question-answer',
+                    value: settings.faq,
+                    onPress: handleSettingsModalClick('faq'),
+                  },
+                  {
+                    key: settings.contactUs,
+                    icon: 'contact-mail',
+                    value: settings.contactUs,
+                    onPress: handleSettingsModalClick('contactUs'),
+                  },
+                  {
+                    key: settings.privacyAndTerms,
+                    icon: 'security',
+                    value: settings.privacyAndTerms,
+                    onPress: handleSettingsModalClick('privacyAndTerms'),
+                  },
+                  // {
+                  //   key: settings.licenses,
+                  //   icon: 'questionsAnswers',
+                  //   value: settings.licenses,
+                  //   // onPress: handleSetLanguage(settings.en),
+                  // },
+                ]}
+              />
+              <Drawer.Section title={settings.security} />
+              <Drawer.Section
+                style={{
+                  container: sharedStyles.settingsDrawerLanguageSection,
+                  icon: sharedStyles.langIcon,
+                }}
+                items={[
+                  {
+                    key: settings.faq,
+                    icon: 'lock',
+                    value: settings.changePassword,
+                    onPress: handleSettingsModalClick('changePassword'),
+                  },
+                  // {
+                  //   key: settings.licenses,
+                  //   icon: 'questionsAnswers',
+                  //   value: settings.licenses,
+                  //   // onPress: handleSetLanguage(settings.en),
+                  // },
+                ]}
+              />
+              <Drawer.Section
+                title={settings.version}
+                items={[
+                  {
+                    value: (
+                      <Text style={sharedStyles.appText}>{pkg.version}</Text>
                     ),
-                  onPress: handleSetLanguage(settings.en),
-                },
-                {
-                  key: settings.jp,
-                  icon: <Flag id={settings.jp} width={30} height={30} />,
-                  value:
-                    lang === settings.jp ? (
-                      <View style={sharedStyles.flexRow}>
-                        <Text style={sharedStyles.appText}>
-                          {settings.japanese}
-                        </Text>
-                        <Icon
-                          style={sharedStyles.langChecked}
-                          color="green"
-                          name="check"
-                          size={15}
-                        />
-                      </View>
-                    ) : (
-                      settings.japanese
-                    ),
-                  onPress: handleSetLanguage(settings.jp),
-                },
-              ]}
-            />
-            <Drawer.Section
-              title={settings.version}
-              items={[
-                {
-                  value: (
-                    <Text style={sharedStyles.appText}>{pkg.version}</Text>
-                  ),
-                },
-              ]}
-            />
-          </Drawer>
+                  },
+                ]}
+              />
+            </Drawer>
+          </View>
         </ScrollView>
       </SafeAreaView>
     </Modal>

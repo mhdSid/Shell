@@ -27,7 +27,7 @@ const Pinger = props => {
   };
   useEffect(() => {
     invoke(props, 'handlePing');
-  }, []);
+  }, [props]);
 
   if (adDetails) {
     return <AdDetails onClose={onAdsDetailsClose} item={adDetails} />;

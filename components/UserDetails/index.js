@@ -18,7 +18,6 @@ const UserDetails = props => {
     country,
     prefecture,
     postalCode,
-    cityWard,
     fullAddress,
   } = item;
 
@@ -27,7 +26,7 @@ const UserDetails = props => {
   };
 
   return (
-    <Modal animationType="slide">
+    <Modal animationType="slide" onRequestClose={handleCloseModal}>
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}
@@ -88,7 +87,7 @@ const UserDetails = props => {
                 {`${prefecture}, ${country}`}
               </Text>
             </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
+            {/* <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
               <Text style={sharedStyles.userDetailsText}>
                 {userDetails.postalCode}
@@ -98,16 +97,7 @@ const UserDetails = props => {
               <Text style={sharedStyles.aboutFirstSectionText}>
                 {postalCode}
               </Text>
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
-              <Text style={sharedStyles.userDetailsText}>
-                {userDetails.cityWard}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>{cityWard}</Text>
-            </View>
+            </View> */}
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
               <Text style={sharedStyles.userDetailsText}>

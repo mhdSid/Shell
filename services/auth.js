@@ -1,16 +1,17 @@
 import {request} from './Request';
 import sha256 from 'crypto-js/sha256';
-import {password as hashkey} from './Encrypt';
+import {encrypt, password as hashkey} from './Encrypt';
 
 const login = async props => {
   const {email, password} = props;
+  const passwordHash = sha256(password + hashkey).toString();
   const data = await request({
     endpoint: 'users/authenticate/email',
     method: 'POST',
     body: {
       email,
-      password,
-      hash: sha256(email + password + hashkey).toString(),
+      passwordHash,
+      hash: sha256(email + passwordHash + hashkey).toString(),
     },
   });
   return data;
@@ -39,67 +40,88 @@ const ping = async () => {
 };
 
 const verify = async props => {
-  const {email, password, verificationId} = props;
+  const {email, passwordHash, verificationId} = props;
   const data = await request({
     endpoint: 'users/authenticate/email/verify',
     method: 'POST',
     body: {
       email,
-      password,
+      passwordHash,
       verificationId,
-      hash: sha256(email + password + verificationId + hashkey).toString(),
+      hash: sha256(email + passwordHash + verificationId + hashkey).toString(),
     },
   });
   return data;
 };
 
 const signup = async props => {
+  console.log(' ');
+  console.log('SignupSignUp: ', props);
   const {
     email,
-    password,
+    passwordHash,
     verificationId,
-    dob,
-    gender,
+    // dob,
+    // gender,
     mobile,
     country,
     prefecture,
     firstName,
     lastName,
-    postalCode,
+    // postalCode,
+    city,
     fullAddress,
-    cityWard,
   } = props;
+  console.log(
+    'hash: ',
+    sha256(
+      email +
+        passwordHash +
+        verificationId +
+        // `${dob}` +
+        // gender +
+        mobile +
+        country +
+        prefecture +
+        city +
+        firstName +
+        lastName +
+        // postalCode +
+        fullAddress +
+        hashkey,
+    ).toString(),
+  );
   const data = await request({
     endpoint: 'users/authenticate/signup',
     method: 'POST',
     body: {
       email,
-      password,
+      passwordHash,
       verificationId,
-      dob,
-      gender,
+      // dob: `${dob}`,
+      // gender,
       mobile,
       country,
       prefecture,
+      city,
       firstName,
       lastName,
-      postalCode,
+      // postalCode,
       fullAddress,
-      cityWard,
       hash: sha256(
         email +
-          password +
+          passwordHash +
           verificationId +
-          dob +
-          gender +
+          // dob +
+          // gender +
           mobile +
           country +
           prefecture +
+          city +
           firstName +
           lastName +
-          postalCode +
+          // postalCode +
           fullAddress +
-          cityWard +
           hashkey,
       ).toString(),
     },
@@ -138,26 +160,33 @@ const update = async props => {
     mobile,
     country,
     prefecture,
-    postalCode,
+    // postalCode,
     fullAddress,
     firstName,
     lastName,
     image,
+    city,
     id,
     email,
-    cityWard,
-    password,
+    passwordHash,
     creditCardNumber,
     creditCardExpiryDate,
     creditCardCVC,
     creditCardType,
   } = props;
   const formData = new FormData();
+  let creditCardNumberEnc;
+  let creditCardCVCEnc;
+  let creditCardExpiryDateEnc;
+  let creditCardTypeEnc;
   if (mobile) {
     formData.append('mobile', mobile);
   }
   if (country) {
     formData.append('country', country);
+  }
+  if (city) {
+    formData.append('city', city);
   }
   if (image) {
     formData.append('image', image);
@@ -165,18 +194,15 @@ const update = async props => {
   if (prefecture) {
     formData.append('prefecture', prefecture);
   }
-  if (password) {
-    formData.append('password', password);
+  if (passwordHash) {
+    formData.append('passwordHash', passwordHash);
   }
   if (firstName) {
     formData.append('firstName', firstName);
   }
-  if (postalCode) {
-    formData.append('postalCode', postalCode);
-  }
-  if (cityWard) {
-    formData.append('cityWard', cityWard);
-  }
+  // if (postalCode) {
+  //   formData.append('postalCode', postalCode);
+  // }
   if (fullAddress) {
     formData.append('fullAddress', fullAddress);
   }
@@ -184,16 +210,20 @@ const update = async props => {
     formData.append('lastName', lastName);
   }
   if (creditCardNumber) {
-    formData.append('creditCardNumber', creditCardNumber);
+    creditCardNumberEnc = encrypt(creditCardNumber);
+    formData.append('creditCardNumber', creditCardNumberEnc);
   }
   if (creditCardExpiryDate) {
-    formData.append('creditCardExpiryDate', creditCardExpiryDate);
+    creditCardExpiryDateEnc = encrypt(creditCardExpiryDate);
+    formData.append('creditCardExpiryDate', creditCardExpiryDateEnc);
   }
   if (creditCardCVC) {
-    formData.append('creditCardCVC', creditCardCVC);
+    creditCardCVCEnc = encrypt(creditCardCVC);
+    formData.append('creditCardCVC', creditCardCVCEnc);
   }
   if (creditCardType) {
-    formData.append('creditCardType', creditCardType);
+    creditCardTypeEnc = encrypt(creditCardType);
+    formData.append('creditCardType', creditCardTypeEnc);
   }
   formData.append('id', id);
   formData.append('email', email);
@@ -203,16 +233,16 @@ const update = async props => {
       mobile +
         country +
         prefecture +
-        password +
+        city +
+        passwordHash +
         firstName +
-        postalCode +
-        cityWard +
+        // postalCode +
         fullAddress +
         lastName +
-        creditCardNumber +
-        creditCardExpiryDate +
-        creditCardCVC +
-        creditCardType +
+        creditCardNumberEnc +
+        creditCardExpiryDateEnc +
+        creditCardCVCEnc +
+        creditCardTypeEnc +
         id +
         email +
         hashkey,

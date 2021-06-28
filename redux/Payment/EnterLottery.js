@@ -6,7 +6,7 @@ import {adDetailsActions} from '../AdDetails/actions';
 
 const handleEnterLottery = payload => {
   return dispatch => {
-    const {onError, adId, userId, email, password} = payload;
+    const {onError, adId, userId, email, passwordHash} = payload;
     const onEnterLotterySuccess = data => {
       invoke(payload, 'onSuccess');
       const {error, updatedAd} = data;
@@ -23,7 +23,7 @@ const handleEnterLottery = payload => {
       adId,
       userId,
       email,
-      password,
+      passwordHash,
     }).then(onEnterLotterySuccess, error => {
       return handleError({error, onError});
     });

@@ -88,16 +88,15 @@ const PaymentInformation = props => {
       });
     }
   };
-  useEffect(() => {
+  const onShowModal = () => {
     if (creditCardInputRef && creditCardInputRef.current && user) {
-      const values = {
+      creditCardInputRef.current.setValues({
         ...(user.creditCardNumber && {number: user.creditCardNumber}),
         ...(user.creditCardCVC && {cvc: user.creditCardCVC}),
         ...(user.creditCardExpiryDate && {expiry: user.creditCardExpiryDate}),
-      };
-      creditCardInputRef.current.setValues(values);
+      });
     }
-  }, []);
+  };
   useEffect(() => {
     setUserDataChanged(
       creditCardCVCChanged ||
@@ -118,7 +117,10 @@ const PaymentInformation = props => {
   ]);
 
   return (
-    <Modal animationType="slide">
+    <Modal
+      animationType="slide"
+      onShow={onShowModal}
+      onRequestClose={handleCloseModal}>
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
           style={{
@@ -150,6 +152,7 @@ const PaymentInformation = props => {
             ]}>
             <View style={sharedStyles.creditContainer}>
               <CreditCardInput
+                autoFocus={true}
                 ref={creditCardInputRef}
                 allowScroll={true}
                 inputStyle={sharedStyles.creditInput}

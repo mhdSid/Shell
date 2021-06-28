@@ -19,6 +19,7 @@ const handleImportAd = payload => {
       category,
       status,
       price,
+      city,
       userId,
       country,
       currency,
@@ -136,6 +137,7 @@ const handleImportAd = payload => {
         id: uniqId,
         name,
         description,
+        city,
         images: imageFiles && imageFiles.map(item => item.uri),
         prefecture,
         category,
@@ -149,6 +151,7 @@ const handleImportAd = payload => {
     return addBackgroundUpload({
       name,
       description,
+      city,
       image,
       prefecture,
       category,

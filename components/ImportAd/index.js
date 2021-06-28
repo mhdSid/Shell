@@ -13,11 +13,7 @@ import {Button, Icon, Toolbar} from 'react-native-material-ui';
 import {TextField} from 'react-native-material-textfield';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import ImagePicker from 'react-native-image-picker';
-import {
-  prefectures,
-  prefecturesList,
-  currencies,
-} from '../../Constants/Countries';
+import {prefectures, cities, currencies} from '../../Constants/Countries';
 import {adStatuses, adCategories, mimeTypes} from '../../Constants/Ads';
 import isUndefined from 'lodash/isUndefined';
 import NoAuth from '../NoAuth';
@@ -32,44 +28,92 @@ import UploadAdProgress from '../UploadAdProgress';
 const ImportAd = props => {
   const {loggedIn, user} = props;
   const userCountry = user && user.country;
-  const [adCategory, setAdCategory] = useState(importAd.sports);
-  const [adStatus, setAdStatus] = useState(importAd.noNoticableScratches);
+  const userCity = user && user.city;
+  const userPrefecture = user && user.prefecture;
+  const [adCategory, setAdCategory] = useState('');
+  const [adStatus, setAdStatus] = useState('');
   const [images, setImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
-  const [prefecture, setPrefecture] = useState(
-    userCountry && prefecturesList[userCountry],
-  );
+  const [prefecture, setPrefecture] = useState(userPrefecture || '');
+  const [city, setCity] = useState(userCity || '');
   const [adDataChanged, setADataChanged] = useState(false);
   const [imagesChanged, setImagesChanged] = useState(false);
   const [adNameChanged, setAdNameChanged] = useState(false);
   const [descriptionChanged, setDescriptionChanged] = useState(false);
   const [priceChanged, setPriceChanged] = useState(false);
+  const [cityChanged, setCityChanged] = useState(false);
+  const [prefectureChanged, setPrefectureChanged] = useState(false);
+  const [adCategoryChanged, setAdCategoryChanged] = useState(false);
+  const [adStatusChanged, setAdStatusChanged] = useState(false);
+
+  const [errors, setErrors] = useState({
+    adName: false,
+    description: false,
+    price: false,
+    images: false,
+  });
   const userCurrency = userCountry && currencies[userCountry];
   const adNameRef = createRef();
   const descriptionRef = createRef();
   const priceRef = createRef();
   const adImages = [0, 1, 2, 3, 4];
-
-  const handleAdNameChangeText = value => {
-    if (value && value.length > 5) {
-      setAdNameChanged(true);
-    } else {
-      setAdNameChanged(false);
-    }
-  };
-  const handleDescriptionChangeText = value => {
-    if (value && value.length > 20) {
-      setDescriptionChanged(true);
-    } else {
-      setDescriptionChanged(false);
-    }
-  };
-  const handlePriceChangeText = value => {
-    if (value && value.length > 1) {
-      setPriceChanged(true);
-    } else {
-      setPriceChanged(false);
-    }
+  const handleChange = {
+    adName: () => {
+      return value => {
+        if (value && value.length >= 5 && value.length <= 30) {
+          setAdNameChanged(true);
+          setErrors({
+            ...errors,
+            adName: false,
+          });
+        } else {
+          setErrors({
+            ...errors,
+            adName: true,
+          });
+          setAdNameChanged(false);
+        }
+      };
+    },
+    description: () => {
+      return value => {
+        if (value && value.length >= 20 && value.length <= 100) {
+          setDescriptionChanged(true);
+          setErrors({
+            ...errors,
+            description: false,
+          });
+        } else {
+          setErrors({
+            ...errors,
+            description: true,
+          });
+          setDescriptionChanged(false);
+        }
+      };
+    },
+    price: () => {
+      return value => {
+        if (
+          value &&
+          value.length >= 4 &&
+          value.length <= 9 &&
+          value % 100 === 0
+        ) {
+          setPriceChanged(true);
+          setErrors({
+            ...errors,
+            price: false,
+          });
+        } else {
+          setErrors({
+            ...errors,
+            price: true,
+          });
+          setPriceChanged(false);
+        }
+      };
+    },
   };
   const setDefault = (nameField, descriptionField, priceField) => {
     nameField.setValue('');
@@ -82,6 +126,10 @@ const ImportAd = props => {
     setAdNameChanged(false);
     setDescriptionChanged(false);
     setPriceChanged(false);
+    setCityChanged(false);
+    setPrefectureChanged(false);
+    setAdStatusChanged(false);
+    setAdCategoryChanged(false);
   };
   const handleUploadAd = () => {
     const {current: nameField} = adNameRef;
@@ -95,6 +143,7 @@ const ImportAd = props => {
       description &&
       price &&
       prefecture &&
+      city &&
       adStatus &&
       adCategory &&
       imageFiles &&
@@ -107,6 +156,7 @@ const ImportAd = props => {
         description,
         image: filteredImages[0],
         prefecture,
+        city,
         category: adCategory,
         status: adStatus,
         price,
@@ -121,46 +171,97 @@ const ImportAd = props => {
     }
   };
   const updateAdCategory = value => {
+    setAdCategoryChanged(true);
     setAdCategory(value);
   };
   const updateAdStatus = value => {
+    setAdStatusChanged(true);
     setAdStatus(value);
   };
   const updatePrefecture = value => {
+    setPrefectureChanged(true);
     setPrefecture(value);
+  };
+  const updateCity = value => {
+    setCityChanged(true);
+    setCity(value);
   };
   const handleChoosePhoto = index => {
     return () => {
-      const options = {
-        noData: true,
-      };
-      ImagePicker.launchImageLibrary(options, response => {
-        if (response.uri) {
-          const imagePath = response.uri;
-          images[index] = imagePath;
-          setImages([...images]);
-          const imageName = imagePath.slice(
-            imagePath.lastIndexOf('/') + 1,
-            imagePath.length,
-          );
-          const typeRegex = imageName.match(/\.jpg|png|jpeg/);
-          imageFiles[index] = {
-            uri: response.uri,
-            type: mimeTypes[typeRegex[0]],
-            name: imageName,
-          };
-          setImagesChanged(true);
-          setImageFiles([...imageFiles]);
-        }
-      });
+      ImagePicker.launchImageLibrary(
+        {
+          noData: true,
+        },
+        response => {
+          if (response.didCancel && imageFiles.length === 0) {
+            setErrors({
+              ...errors,
+              images: true,
+            });
+            return;
+          }
+          if (response.uri) {
+            const imagePath = response.uri;
+            images[index] = imagePath;
+            setImages([...images]);
+            const imageName = imagePath.slice(
+              imagePath.lastIndexOf('/') + 1,
+              imagePath.length,
+            );
+            const typeRegex = imageName.match(/\.jpg|png|jpeg/);
+            imageFiles[index] = {
+              uri: response.uri,
+              type: mimeTypes[typeRegex[0]],
+              name: imageName,
+            };
+            setImagesChanged(true);
+            setImageFiles([...imageFiles]);
+          }
+          if (imageFiles.length > 0) {
+            setErrors({
+              ...errors,
+              images: false,
+            });
+          }
+        },
+      );
     };
   };
-
+  const handleBlur = fieldName => {
+    return () => {
+      const {current: nameField} = adNameRef;
+      const {current: descriptionField} = descriptionRef;
+      const {current: priceField} = priceRef;
+      const values = {
+        adName: nameField && nameField.value(),
+        description: descriptionField && descriptionField.value(),
+        price: priceField && priceField.value(),
+      };
+      console.log(values);
+      handleChange[fieldName]()(values[fieldName]);
+    };
+  };
   useEffect(() => {
     setADataChanged(
-      imagesChanged && adNameChanged && descriptionChanged && priceChanged,
+      imagesChanged &&
+        adNameChanged &&
+        descriptionChanged &&
+        priceChanged &&
+        cityChanged &&
+        prefectureChanged &&
+        adStatusChanged &&
+        adCategoryChanged,
     );
-  }, [imagesChanged, adNameChanged, descriptionChanged, priceChanged]);
+  }, [
+    imagesChanged,
+    adNameChanged,
+    descriptionChanged,
+    priceChanged,
+    cityChanged,
+    prefectureChanged,
+    adStatusChanged,
+    adCategoryChanged,
+  ]);
 
   if (isUndefined(loggedIn) && isUndefined(user)) {
     return <LoadingComponent />;
@@ -181,14 +282,14 @@ const ImportAd = props => {
             style={{
               container: sharedStyles.toolbarContainerPadding,
             }}
-            centerElement={importAd.postAnAd}
-            leftElement={<Icon color="white" name="add-box" />}
+            centerElement={importAd.createLottery}
+            leftElement={<Icon color="white" name="cloud-upload" />}
             rightElement={
               <Button
                 onPress={handleUploadAd}
                 disabled={!adDataChanged}
                 raised
-                text={importAd.post}
+                text={importAd.create}
                 icon="done-all"
               />
             }
@@ -200,8 +301,12 @@ const ImportAd = props => {
                 <Text style={sharedStyles.label}>{importAd.productName}</Text>
                 <TextField
                   label={importAd.adName}
-                  onChangeText={handleAdNameChangeText}
+                  onBlur={handleBlur('adName')}
+                  onChangeText={handleChange.adName()}
                   tintColor={'#b69cf6'}
+                  maxLength={30}
+                  minLength={5}
+                  error={errors.adName}
                   ref={adNameRef}
                 />
               </View>
@@ -209,8 +314,12 @@ const ImportAd = props => {
                 <Text style={sharedStyles.label}>{importAd.description}</Text>
                 <TextField
                   label={importAd.description}
-                  onChangeText={handleDescriptionChangeText}
+                  onChangeText={handleChange.description()}
+                  maxLength={100}
+                  minLength={20}
                   tintColor={'#b69cf6'}
+                  error={errors.description}
+                  onBlur={handleBlur('description')}
                   ref={descriptionRef}
                 />
               </View>
@@ -222,8 +331,12 @@ const ImportAd = props => {
                     <TextField
                       label={importAd.price}
                       keyboardType="phone-pad"
+                      maxLength={9}
+                      minLength={4}
                       tintColor={'#b69cf6'}
-                      onChangeText={handlePriceChangeText}
+                      onBlur={handleBlur('price')}
+                      error={errors.price}
+                      onChangeText={handleChange.price()}
                       ref={priceRef}
                     />
                   </View>
@@ -236,7 +349,12 @@ const ImportAd = props => {
                     <TouchableBounce
                       key={index}
                       onPress={handleChoosePhoto(index)}
-                      style={sharedStyles.imageBtn}>
+                      style={[
+                        sharedStyles.imageBtn,
+                        index === 0 && errors.images
+                          ? sharedStyles.imageBtnError
+                          : '',
+                      ]}>
                       {!images[index] && (
                         <Icon name="image" size={35} color="white" />
                       )}
@@ -259,14 +377,25 @@ const ImportAd = props => {
               <View style={sharedStyles.pickerView}>
                 <Picker
                   mode="dropdown"
-                  selectedValue={prefecture}
+                  selectedValue={prefecture || userPrefecture}
                   onValueChange={updatePrefecture}>
-                  {prefectures[userCountry].map((_prefecture, index) => (
+                  {prefectures.Japan.map((_prefecture, index) => (
                     <Picker.Item
                       key={index}
-                      label={_prefecture}
-                      value={_prefecture}
+                      label={_prefecture.kanji}
+                      value={_prefecture.name}
                     />
+                  ))}
+                </Picker>
+              </View>
+              <Text style={sharedStyles.label}>{importAd.city}</Text>
+              <View style={sharedStyles.pickerView}>
+                <Picker
+                  mode="dropdown"
+                  selectedValue={city || userCity}
+                  onValueChange={updateCity}>
+                  {cities[prefecture].map((_city, index) => (
+                    <Picker.Item key={index} label={_city} value={_city} />
                   ))}
                 </Picker>
               </View>
@@ -301,7 +430,7 @@ const ImportAd = props => {
                   disabled={!adDataChanged}
                   raised={true}
                   primary
-                  text={importAd.post}
+                  text={importAd.createLottery}
                   onPress={handleUploadAd}
                 />
               </View>

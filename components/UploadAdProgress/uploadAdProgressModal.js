@@ -55,7 +55,7 @@ const UploadAdProgressModal = props => {
   );
 
   return (
-    <Modal animationType="slide">
+    <Modal animationType="slide" onRequestClose={handleCloseModal}>
       <SafeAreaView style={sharedStyles.container}>
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}
@@ -65,6 +65,9 @@ const UploadAdProgressModal = props => {
         />
         {progressItems && progressItems.length ? (
           <VirtualizedList
+            initialNumToRender={10}
+            windowSize={1}
+            removeClippedSubviews={true}
             refreshing={loading}
             showsVerticalScrollIndicator={false}
             data={progressItems}

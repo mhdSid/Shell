@@ -6,7 +6,7 @@ import {Toolbar, ListItem} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import FastImage from 'react-native-fast-image';
 import AdDetails from '../AdDetails';
-import {Loading} from '../Loading';
+import {Loading, loadingPopup} from '../Loading';
 import {myyAds} from '../../Constants/Texts';
 import {connect} from 'react-redux';
 import {handleFetchMyAds} from '../../redux/User/FetchMyAds';
@@ -80,7 +80,10 @@ const MyAds = props => {
   );
 
   return (
-    <Modal animationType="slide" onShow={fetchMyAds}>
+    <Modal
+      animationType="slide"
+      onShow={fetchMyAds}
+      onRequestClose={handleCloseModal}>
       <SafeAreaView style={sharedStyles.container}>
         {adDetailsModal}
         <Toolbar
@@ -89,9 +92,12 @@ const MyAds = props => {
           centerElement={myyAds.myAds}
           onLeftElementPress={handleCloseModal}
         />
-        {loading && Loading}
+        {loading ? loadingPopup : null}
         {myAds && myAds.length > 0 && (
           <VirtualizedList
+            initialNumToRender={10}
+            windowSize={1}
+            removeClippedSubviews={true}
             refreshing={loading}
             onRefresh={fetchMyAds}
             showsVerticalScrollIndicator={false}

@@ -1,3 +1,5 @@
+import {setUserBottomBarImage} from '../../components/MainContainer';
+import {decrypt, password} from '../../services/Encrypt';
 import {authActions} from './actions';
 
 const initialState = {
@@ -5,7 +7,7 @@ const initialState = {
   user: undefined,
   country: 'JP',
   email: undefined,
-  password: undefined,
+  passwordHash: undefined,
   verificationId: undefined,
   showSignup: undefined,
 };
@@ -13,9 +15,29 @@ const initialState = {
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case authActions.login: {
+      const {user} = action.payload;
+      console.log(user);
+      if (user) {
+        if (user.creditCardNumber) {
+          user.creditCardNumber = decrypt(user.creditCardNumber);
+        }
+        if (user.creditCardExpiryDate) {
+          user.creditCardExpiryDate = decrypt(user.creditCardExpiryDate);
+        }
+        if (user.creditCardCVC) {
+          user.creditCardCVC = decrypt(user.creditCardCVC);
+        }
+        if (user.creditCardType) {
+          user.creditCardType = decrypt(user.creditCardType);
+        }
+        if (user.image) {
+          setUserBottomBarImage(user.image);
+        }
+      }
       return {
         ...state,
         ...action.payload,
+        user,
       };
     }
     case authActions.update: {
@@ -23,12 +45,25 @@ const authReducer = (state = initialState, action) => {
         ...state.user,
         ...action.payload,
       };
+      if (user.creditCardNumber) {
+        user.creditCardNumber = decrypt(user.creditCardNumber);
+      }
+      if (user.creditCardExpiryDate) {
+        user.creditCardExpiryDate = decrypt(user.creditCardExpiryDate);
+      }
+      if (user.creditCardCVC) {
+        user.creditCardCVC = decrypt(user.creditCardCVC);
+      }
+      if (user.creditCardType) {
+        user.creditCardType = decrypt(user.creditCardType);
+      }
       return {
         ...state,
         user,
       };
     }
     case authActions.logout: {
+      setUserBottomBarImage();
       return {
         ...initialState,
         ...action.payload,

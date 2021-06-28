@@ -1,41 +1,44 @@
 import CryptoJS from 'crypto-js';
 
-const keySize = 256;
-const iterations = 100;
 const password = 'sippi44448888';
 
-const encrypt = (msg, pass) => {
-  const salt = CryptoJS.lib.WordArray.random(128 / 8);
-  const key = CryptoJS.PBKDF2(pass, salt, {
-    keySize: keySize / 32,
-    iterations,
-  });
-  const iv = CryptoJS.lib.WordArray.random(128 / 8);
-  const encrypted = CryptoJS.AES.encrypt(msg, key, {
-    iv,
-    padding: CryptoJS.pad.Pkcs7,
-    mode: CryptoJS.mode.CBC,
-  });
-  // salt, iv will be hex 32 in length
-  // append them to the ciphertext for use  in decryption
-  const transitmessage = salt.toString() + iv.toString() + encrypted.toString();
-  return transitmessage;
+const encrypt = str => {
+  // const salt = CryptoJS.lib.WordArray.random(128 / 8);
+  // const key = CryptoJS.PBKDF2(pass, salt, {
+  //   keySize: keySize / 32,
+  //   iterations,
+  // });
+  // const iv = CryptoJS.lib.WordArray.random(128 / 8);
+  // const encrypted = CryptoJS.AES.encrypt(msg, key, {
+  //   iv,
+  //   padding: CryptoJS.pad.Pkcs7,
+  //   mode: CryptoJS.mode.CBC,
+  // });
+  // // salt, iv will be hex 32 in length
+  // // append them to the ciphertext for use  in decryption
+  // const transitmessage = salt.toString() + iv.toString() + encrypted.toString();
+  // return transitmessage;
+  return CryptoJS.TripleDES.encrypt(str, password).toString();
 };
 
-const decrypt = (transitmessage, pass) => {
-  const salt = CryptoJS.enc.Hex.parse(transitmessage.substr(0, 32));
-  const iv = CryptoJS.enc.Hex.parse(transitmessage.substr(32, 32));
-  const encrypted = transitmessage.substring(64);
-  const key = CryptoJS.PBKDF2(pass, salt, {
-    keySize: keySize / 32,
-    iterations,
-  });
-  const decrypted = CryptoJS.AES.decrypt(encrypted, key, {
-    iv,
-    padding: CryptoJS.pad.Pkcs7,
-    mode: CryptoJS.mode.CBC,
-  });
-  return decrypted;
+const decrypt = (data, isObj) => {
+  // const salt = CryptoJS.enc.Hex.parse(transitmessage.substr(0, 32));
+  // const iv = CryptoJS.enc.Hex.parse(transitmessage.substr(32, 32));
+  // const encrypted = transitmessage.substring(64);
+  // const key = CryptoJS.PBKDF2(pass, salt, {
+  //   keySize: keySize / 32,
+  //   iterations,
+  // });
+  // const decrypted = CryptoJS.AES.decrypt(encrypted, key, {
+  //   iv,
+  //   padding: CryptoJS.pad.Pkcs7,
+  //   mode: CryptoJS.mode.CBC,
+  // });
+  // return decrypted.toString(CryptoJS.enc.Utf8);
+  const bytes = CryptoJS.TripleDES.decrypt(data, password);
+  return isObj
+    ? JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+    : bytes.toString(CryptoJS.enc.Utf8);
 };
 
 export {encrypt, decrypt, password};

@@ -11,25 +11,26 @@ import {logoutAction, loginAction} from '../../redux/Auth/actions';
 import {handleVerifyUser} from '../../redux/Auth/VerifyUser';
 import {
   getEmailSelector,
-  getPasswordSelector,
+  getPasswordHashSelector,
   getVerificationIdSelector,
 } from './Selectors';
 
 const VerifyUser = props => {
-  const {email, password, verificationId} = props;
+  console.log('VerifyUser: ', props);
+  const {email, passwordHash, verificationId} = props;
   const [loading, setLoading] = useState(false);
 
   const callback = () => {
     setLoading(false);
   };
   const handleVerifyUserPress = () => {
-    if (email && password && verificationId) {
+    if (email && passwordHash && verificationId) {
       setLoading(true);
       invoke(props, 'handleVerifyUser', {
         onSuccess: callback,
         onError: callback,
         email,
-        password,
+        passwordHash,
         verificationId,
       });
     }
@@ -58,7 +59,7 @@ const VerifyUser = props => {
 
 VerifyUser.propTypes = {
   email: PropTypes.string,
-  password: PropTypes.string,
+  passwordHash: PropTypes.string,
   verificationId: PropTypes.oneOfType([PropTypes.string, PropTypes.any]),
   logout: PropTypes.func,
   login: PropTypes.func,
@@ -67,7 +68,7 @@ VerifyUser.propTypes = {
 const mapStateToProps = state => {
   return {
     email: getEmailSelector(state),
-    password: getPasswordSelector(state),
+    passwordHash: getPasswordHashSelector(state),
     verificationId: getVerificationIdSelector(state),
   };
 };

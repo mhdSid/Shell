@@ -20,10 +20,18 @@ const Login = props => {
   const userEmailRegex = new RegExp(emailsRegex);
   const emailRef = createRef();
   const passwordRef = createRef();
-
+  const [errors, setErrors] = useState({
+    email: false,
+    password: false,
+  });
   const setDefaultsDataChanged = () => {
-    setEmailChanged(false);
-    setPasswordChanged(false);
+    // setEmailChanged(false);
+    // setPasswordChanged(false);
+    // setEmailPassChanged(true);
+    setErrors({
+      email: false,
+      password: false,
+    });
   };
   const callback = () => {
     setLoading(false);
@@ -45,19 +53,60 @@ const Login = props => {
       });
     }
   };
-  const handleEmailChangeText = value => {
-    if (value && value.match(userEmailRegex)) {
-      setEmailChanged(true);
-    } else {
-      setEmailChanged(false);
-    }
+
+  const handleChange = {
+    email: () => {
+      return value => {
+        if (
+          value &&
+          value.match(userEmailRegex) &&
+          value.length >= 1 &&
+          value.length <= 50
+        ) {
+          setEmailChanged(true);
+          setErrors({
+            ...errors,
+            email: false,
+          });
+        } else {
+          setEmailChanged(false);
+          setErrors({
+            ...errors,
+            email: true,
+          });
+        }
+      };
+    },
+    password: () => {
+      return value => {
+        if (value && value.length >= 6 && value.length <= 50) {
+          setPasswordChanged(true);
+          setErrors({
+            ...errors,
+            password: false,
+          });
+        } else {
+          setPasswordChanged(false);
+          setErrors({
+            ...errors,
+            password: true,
+          });
+        }
+      };
+    },
   };
-  const handlePasswordChangeText = value => {
-    if (value && value.length > 5) {
-      setPasswordChanged(true);
-    } else {
-      setPasswordChanged(false);
-    }
+  const handleBlur = fieldName => {
+    return () => {
+      const {current: emailField} = emailRef;
+      const {current: passField} = passwordRef;
+
+      const values = {
+        email: emailField && emailField.value(),
+        password: passField && passField.value(),
+      };
+      console.log(values);
+      handleChange[fieldName]()(values[fieldName]);
+    };
   };
 
   useEffect(() => {
@@ -70,18 +119,26 @@ const Login = props => {
       <View style={sharedStyles.loginContainer}>
         <TextField
           label={profile.email}
-          onChangeText={handleEmailChangeText}
           ref={emailRef}
           tintColor={'#b69cf6'}
           disabled={loading}
+          maxLength={50}
+          minLength={1}
+          onBlur={handleBlur('email')}
+          error={errors.email}
+          onChangeText={handleChange.email()}
         />
         <TextField
           label={profile.password}
-          onChangeText={handlePasswordChangeText}
           ref={passwordRef}
           secureTextEntry={true}
           disabled={loading}
           tintColor={'#b69cf6'}
+          maxLength={50}
+          minLength={8}
+          onBlur={handleBlur('password')}
+          error={errors.password}
+          onChangeText={handleChange.password()}
         />
         <View style={sharedStyles.loginBtn}>
           <Button
