@@ -22,33 +22,27 @@ import {password as hashkey} from '../../services/Encrypt';
 
 const ChangePassword = props => {
   const {user} = props;
+  const currentPasswordRef = createRef();
+  const newPasswordRef = createRef();
   const [currentPasswordChanged, setCurrentPasswordChanged] = useState(false);
   const [loading, setLoading] = useState(false);
   const [newPasswordChanged, setNewPasswordChanged] = useState(false);
+  const [currentPasswordValue, setCurrentPasswordValue] = useState(null);
+  const [newPasswordValue, setNewPasswordValue] = useState(null);
 
-  const currentPasswordRef = createRef();
-  const newPasswordRef = createRef();
-
-  const getCurrentPasswordValue = () => {
-    const {current: currentPassField} = currentPasswordRef;
-    return currentPassField.value();
+  const getCurrentPasswordHash = value => {
+    return sha256(value + hashkey).toString();
   };
-  const getNewPasswordValue = () => {
-    const {current: newPassField} = newPasswordRef;
-    return newPassField.value();
-  };
-  const getCurrentPasswordHash = () => {
-    return sha256(getCurrentPasswordValue() + hashkey);
-  };
-  const getNewPasswordHash = () => {
-    return sha256(getNewPasswordValue() + hashkey);
+  const getNewPasswordHash = value => {
+    return sha256(value + hashkey).toString();
   };
   const handleCurrentPasswordChangeText = value => {
+    setCurrentPasswordValue(value);
     if (
       value &&
       value.length >= 6 &&
       value.length <= 50 &&
-      getCurrentPasswordHash() !== user.passwordHash
+      getCurrentPasswordHash(value) === user.passwordHash
     ) {
       setCurrentPasswordChanged(true);
     } else {
@@ -56,13 +50,14 @@ const ChangePassword = props => {
     }
   };
   const handleNewPasswordChangedText = value => {
+    setNewPasswordValue(value);
     if (
       value &&
       value.length >= 6 &&
       value.length <= 50 &&
-      getCurrentPasswordValue() !== value &&
-      getCurrentPasswordHash() !== user.passwordHash &&
-      getNewPasswordHash() !== user.passwordHash
+      currentPasswordValue !== value &&
+      getCurrentPasswordHash(currentPasswordValue) === user.passwordHash &&
+      getNewPasswordHash(value) !== user.passwordHash
     ) {
       setNewPasswordChanged(true);
     } else {
@@ -81,15 +76,14 @@ const ChangePassword = props => {
   const handleUpdateUser = () => {
     if (currentPasswordChanged && newPasswordChanged) {
       setLoading(true);
-      const updatedUserData = {
-        passwordHash: getNewPasswordHash(),
-        id: user.id,
-        email: user.email,
-      };
       invoke(props, 'handleUpdateUserData', {
         onError: setDefaultsDataChanged,
         onSuccess: onSuccessCallback,
-        updatedUserData,
+        updatedUserData: {
+          passwordHash: getNewPasswordHash(newPasswordValue),
+          id: user.id,
+          email: user.email,
+        },
       });
     }
   };

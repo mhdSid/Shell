@@ -133,10 +133,11 @@ const sharedStyles = StyleSheet.create({
     height: 30,
     borderRadius: 30 / 2,
     backgroundColor: '#f7f5fe',
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
   bottomBarUserImageSelected: {
-    borderColor: '#b69cf6',
-    borderWidth: 1,
+    borderColor: '#000000',
   },
   bottomContainerUserImage: {
     width: 30,
@@ -210,6 +211,9 @@ const sharedStyles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     color: '#b69cf6',
+  },
+  dropdownView: {
+    marginBottom: 20,
   },
   noAuthLabel: {
     fontWeight: 'bold',
@@ -299,6 +303,18 @@ const sharedStyles = StyleSheet.create({
     ...flex,
     justifyContent: 'flex-start',
   },
+  signUpContainer: {
+    height: '100%',
+    width: '100%',
+    // justifyContent: 'center',
+    alignSelf: 'center',
+    marginTop: 50,
+    // textAlignVertical:
+    // alignItems: 'center',
+  },
+  relativeConatainer: {
+    position: 'relative',
+  },
   homeAdsContainer: {
     paddingTop: 10,
     paddingHorizontal: 10,
@@ -336,6 +352,7 @@ const sharedStyles = StyleSheet.create({
   },
   updateUserContainer: {
     paddingTop: 10,
+    marginBottom: 50,
   },
   updatePasswordContainer: {
     marginTop: 50,
@@ -355,6 +372,15 @@ const sharedStyles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   loginBtn: {
+    marginTop: 20,
+  },
+  signUpBtnContainer: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    display: 'flex',
+  },
+  loginBtnMargin: {
     marginTop: 20,
   },
   updateUserSbmtBtn: {

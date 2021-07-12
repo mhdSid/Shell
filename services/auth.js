@@ -5,6 +5,7 @@ import {encrypt, password as hashkey} from './Encrypt';
 const login = async props => {
   const {email, password} = props;
   const passwordHash = sha256(password + hashkey).toString();
+  console.log(passwordHash);
   const data = await request({
     endpoint: 'users/authenticate/email',
     method: 'POST',
@@ -63,14 +64,14 @@ const signup = async props => {
     verificationId,
     // dob,
     // gender,
-    mobile,
+    // mobile,
     country,
     prefecture,
-    firstName,
-    lastName,
+    // firstName,
+    // lastName,
     // postalCode,
     city,
-    fullAddress,
+    // fullAddress,
   } = props;
   console.log(
     'hash: ',
@@ -80,14 +81,14 @@ const signup = async props => {
         verificationId +
         // `${dob}` +
         // gender +
-        mobile +
+        // mobile +
         country +
         prefecture +
         city +
-        firstName +
-        lastName +
+        // firstName +
+        // lastName +
         // postalCode +
-        fullAddress +
+        // fullAddress +
         hashkey,
     ).toString(),
   );
@@ -100,28 +101,28 @@ const signup = async props => {
       verificationId,
       // dob: `${dob}`,
       // gender,
-      mobile,
+      // mobile,
       country,
       prefecture,
       city,
-      firstName,
-      lastName,
+      // firstName,
+      // lastName,
       // postalCode,
-      fullAddress,
+      // fullAddress,
       hash: sha256(
         email +
           passwordHash +
           verificationId +
           // dob +
           // gender +
-          mobile +
+          // mobile +
           country +
           prefecture +
           city +
-          firstName +
-          lastName +
+          // firstName +
+          // lastName +
           // postalCode +
-          fullAddress +
+          // fullAddress +
           hashkey,
       ).toString(),
     },
@@ -157,13 +158,13 @@ const getUsersData = async props => {
 
 const update = async props => {
   const {
-    mobile,
+    // mobile,
     country,
     prefecture,
     // postalCode,
-    fullAddress,
-    firstName,
-    lastName,
+    // fullAddress,
+    // firstName,
+    // lastName,
     image,
     city,
     id,
@@ -179,9 +180,9 @@ const update = async props => {
   let creditCardCVCEnc;
   let creditCardExpiryDateEnc;
   let creditCardTypeEnc;
-  if (mobile) {
-    formData.append('mobile', mobile);
-  }
+  // if (mobile) {
+  //   formData.append('mobile', mobile);
+  // }
   if (country) {
     formData.append('country', country);
   }
@@ -196,18 +197,6 @@ const update = async props => {
   }
   if (passwordHash) {
     formData.append('passwordHash', passwordHash);
-  }
-  if (firstName) {
-    formData.append('firstName', firstName);
-  }
-  // if (postalCode) {
-  //   formData.append('postalCode', postalCode);
-  // }
-  if (fullAddress) {
-    formData.append('fullAddress', fullAddress);
-  }
-  if (lastName) {
-    formData.append('lastName', lastName);
   }
   if (creditCardNumber) {
     creditCardNumberEnc = encrypt(creditCardNumber);
@@ -230,24 +219,20 @@ const update = async props => {
   formData.append(
     'hash',
     sha256(
-      mobile +
-        country +
-        prefecture +
-        city +
-        passwordHash +
-        firstName +
-        // postalCode +
-        fullAddress +
-        lastName +
-        creditCardNumberEnc +
-        creditCardExpiryDateEnc +
-        creditCardCVCEnc +
-        creditCardTypeEnc +
-        id +
-        email +
+      (country || '') +
+        (prefecture || '') +
+        (city || '') +
+        (passwordHash || '') +
+        (creditCardNumberEnc || '') +
+        (creditCardExpiryDateEnc || '') +
+        (creditCardCVCEnc || '') +
+        (creditCardTypeEnc || '') +
+        (id || '') +
+        (email || '') +
         hashkey,
     ).toString(),
   );
+  console.log(formData);
   const data = await request({
     endpoint: 'users/authenticate/update',
     method: 'POST',

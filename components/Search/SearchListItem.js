@@ -15,13 +15,9 @@ export default class SearchListItem extends PureComponent {
     super(props);
     const {item} = this.props;
     this.centerElement = {
-      primaryText:
-        item.type === 'user' ? `${item.firstName} ${item.lastName}` : item.name,
-      secondaryText: item.type === 'user' ? item.email : item.category,
-      tertiaryText:
-        item.type === 'user'
-          ? `${item.prefecture}, ${item.country}`
-          : `${item.currency} ${item.price}`,
+      primaryText: item.name,
+      secondaryText: item.category,
+      tertiaryText: `${item.currency} ${item.price}`,
     };
   }
 

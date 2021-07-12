@@ -81,6 +81,8 @@ const importAd = {
   city: 'City',
   category: 'Category',
   status: 'Condition',
+  chooseCategory: 'Choose category',
+  chooseStatus: 'Choose status',
 };
 
 const lottteries = {
@@ -100,7 +102,11 @@ const noAuth = {
   loginSingup: 'Please login or signup to add a new item',
 };
 
-const loginSingup = 'Login / Signup';
+const loginSingup = 'Login / Sign up';
+const login = 'Login';
+const signUp = 'Sign up';
+const orLogin = 'Or Login';
+const orSignUp = 'Or Signup';
 
 const notifications = {
   notifications: 'Notifications',
@@ -134,6 +140,9 @@ const profile = {
   postalCode: 'Postal Code',
   prefecture: 'Prefecture',
   city: 'City',
+  agreePriacyPolicy: 'Agree on privacy policy',
+  choosePrefecture: 'Enter prefecture',
+  chooseCity: 'Enter city',
   cityWard: 'City Ward',
   fullAddress: 'Full Address',
   fillInformationCorrectly:
@@ -239,4 +248,8 @@ export {
   payment,
   paymentInformation,
   uploadAdProgress,
+  login,
+  signUp,
+  orLogin,
+  orSignUp,
 };

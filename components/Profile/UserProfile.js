@@ -27,8 +27,8 @@ const UserProfile = props => {
   const {
     gameStatus: userGameStatus,
     gamePoints: userGamePoints,
-    prefecture: userPrefecture,
-    city: userCity,
+    // prefecture: userPrefecture,
+    // city: userCity,
   } = user;
   const {points} = profile;
 
@@ -110,12 +110,12 @@ const UserProfile = props => {
                   centerElement: {
                     primaryText: (
                       <Text style={sharedStyles.profileUserText}>
-                        {`${user.firstName} ${user.lastName}`}
+                        {`${user.email}`}
                       </Text>
                     ),
                     secondaryText: (
                       <Text style={sharedStyles.profileUserText}>
-                        {`${userGameStatus} • ${userGamePoints} ${points} - ${userPrefecture}, ${userCity}`}
+                        {`${userGameStatus} • ${userGamePoints} ${points}`}
                       </Text>
                     ),
                     // tertiaryText: (

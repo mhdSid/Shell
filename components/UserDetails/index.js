@@ -10,15 +10,15 @@ import {userDetails} from '../../Constants/Texts';
 const UserDetails = props => {
   const {item} = props;
   const {
-    firstName,
-    lastName,
+    // firstName,
+    // lastName,
     email,
     image,
-    mobile,
+    // mobile,
     country,
     prefecture,
-    postalCode,
-    fullAddress,
+    // postalCode,
+    // fullAddress,
   } = item;
 
   const handleCloseModal = () => {
@@ -32,7 +32,7 @@ const UserDetails = props => {
           style={{container: sharedStyles.toolbarContainer}}
           leftElement="arrow-back"
           onLeftElementPress={handleCloseModal}
-          centerElement={`${firstName} ${lastName}`}
+          // centerElement={`${email} ${lastName}`}
         />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={sharedStyles.flexRow}>
@@ -47,7 +47,7 @@ const UserDetails = props => {
             />
           </View>
           <View style={sharedStyles.adDetailsContainer}>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
+            {/* <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="person" />
               <Text style={sharedStyles.userDetailsText}>
                 {userDetails.name}
@@ -57,7 +57,7 @@ const UserDetails = props => {
               <Text style={sharedStyles.aboutFirstSectionText}>
                 {`${firstName} ${lastName}`}
               </Text>
-            </View>
+            </View> */}
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="email" />
               <Text style={sharedStyles.userDetailsText}>
@@ -67,7 +67,7 @@ const UserDetails = props => {
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{email}</Text>
             </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
+            {/* <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="phone" />
               <Text style={sharedStyles.userDetailsText}>
                 {userDetails.mobile}
@@ -75,7 +75,7 @@ const UserDetails = props => {
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{mobile}</Text>
-            </View>
+            </View> */}
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
               <Text style={sharedStyles.userDetailsText}>
@@ -98,7 +98,7 @@ const UserDetails = props => {
                 {postalCode}
               </Text>
             </View> */}
-            <View style={sharedStyles.userDetailsIconTextContainer}>
+            {/* <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
               <Text style={sharedStyles.userDetailsText}>
                 {userDetails.fullAddress}
@@ -108,7 +108,7 @@ const UserDetails = props => {
               <Text style={sharedStyles.aboutFirstSectionText}>
                 {fullAddress}
               </Text>
-            </View>
+            </View> */}
           </View>
         </ScrollView>
       </SafeAreaView>

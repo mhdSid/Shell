@@ -140,7 +140,7 @@ class HomeComponent extends PureComponent {
           adUnitID="ca-app-pub-5703846930890914/6105801245"
           style={sharedStyles.adMobBanner}
         /> */}
-        <UploadAdProgress />
+        {/* <UploadAdProgress /> */}
         {loading && <View style={sharedStyles.homeLoading}>{Loading}</View>}
         {isCard && ads && ads.length > 0 && (
           <VirtualizedList

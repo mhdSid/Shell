@@ -19,23 +19,28 @@ import isUndefined from 'lodash/isUndefined';
 import NoAuth from '../NoAuth';
 import {LoadingComponent} from '../Loading';
 import FastImage from 'react-native-fast-image';
-import {importAd} from '../../Constants/Texts';
+import {importAd, profile} from '../../Constants/Texts';
 import invoke from 'lodash/invoke';
 import {handleImportAd} from '../../redux/Ads/ImportAd';
 import {getLoggedInSelector, getUserSelector} from './Selectors';
 import UploadAdProgress from '../UploadAdProgress';
+import {Dropdown} from 'react-native-material-dropdown';
 
 const ImportAd = props => {
   const {loggedIn, user} = props;
+  let userPrefecture;
+  if (user) {
+    userPrefecture = prefectures.Japan.find(
+      item => item.kanji === user.prefecture,
+    ).name;
+  }
   const userCountry = user && user.country;
-  const userCity = user && user.city;
-  const userPrefecture = user && user.prefecture;
   const [adCategory, setAdCategory] = useState('');
   const [adStatus, setAdStatus] = useState('');
   const [images, setImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
-  const [prefecture, setPrefecture] = useState(userPrefecture || '');
-  const [city, setCity] = useState(userCity || '');
+  const [prefecture, setPrefecture] = useState(user && user.prefecture);
+  const [city, setCity] = useState(user && user.city);
   const [adDataChanged, setADataChanged] = useState(false);
   const [imagesChanged, setImagesChanged] = useState(false);
   const [adNameChanged, setAdNameChanged] = useState(false);
@@ -45,6 +50,26 @@ const ImportAd = props => {
   const [prefectureChanged, setPrefectureChanged] = useState(false);
   const [adCategoryChanged, setAdCategoryChanged] = useState(false);
   const [adStatusChanged, setAdStatusChanged] = useState(false);
+  const [cityDropdownData, setCityDropdownData] = useState(
+    userPrefecture ? cities[userPrefecture].map(item => ({value: item})) : [],
+  );
+  const prefecturesDropdownData = prefectures.Japan.map(item => ({
+    ...item,
+    value: item.kanji,
+  }));
+  const prefectureOnChangeText = (value, index) => {
+    setPrefectureChanged(true);
+    setCityDropdownData(
+      cities[prefecturesDropdownData[index].name].map(item => ({
+        value: item,
+      })),
+    );
+    setPrefecture(prefecturesDropdownData[index].kanji);
+  };
+  const cityOnChangeText = value => {
+    setCityChanged(true);
+    setCity(value);
+  };
 
   const [errors, setErrors] = useState({
     adName: false,
@@ -177,14 +202,6 @@ const ImportAd = props => {
   const updateAdStatus = value => {
     setAdStatusChanged(true);
     setAdStatus(value);
-  };
-  const updatePrefecture = value => {
-    setPrefectureChanged(true);
-    setPrefecture(value);
-  };
-  const updateCity = value => {
-    setCityChanged(true);
-    setCity(value);
   };
   const handleChoosePhoto = index => {
     return () => {
@@ -373,57 +390,46 @@ const ImportAd = props => {
                   ))}
                 </View>
               </View>
-              <Text style={sharedStyles.label}>{importAd.prefecture}</Text>
-              <View style={sharedStyles.pickerView}>
-                <Picker
-                  mode="dropdown"
-                  selectedValue={prefecture || userPrefecture}
-                  onValueChange={updatePrefecture}>
-                  {prefectures.Japan.map((_prefecture, index) => (
-                    <Picker.Item
-                      key={index}
-                      label={_prefecture.kanji}
-                      value={_prefecture.name}
-                    />
-                  ))}
-                </Picker>
+              <Text style={sharedStyles.label}>{profile.prefecture}</Text>
+              <View style={sharedStyles.dropdownView}>
+                <Dropdown
+                  label={profile.choosePrefecture}
+                  data={prefecturesDropdownData}
+                  onChangeText={prefectureOnChangeText}
+                  selectedItemColor={'rgba(0, 0, 0, .87)'}
+                  value={prefecture}
+                />
               </View>
-              <Text style={sharedStyles.label}>{importAd.city}</Text>
-              <View style={sharedStyles.pickerView}>
-                <Picker
-                  mode="dropdown"
-                  selectedValue={city || userCity}
-                  onValueChange={updateCity}>
-                  {cities[prefecture].map((_city, index) => (
-                    <Picker.Item key={index} label={_city} value={_city} />
-                  ))}
-                </Picker>
+              <Text style={sharedStyles.label}>{profile.city}</Text>
+              <View style={sharedStyles.dropdownView}>
+                <Dropdown
+                  label={profile.chooseCity}
+                  selectedItemColor={'rgba(0, 0, 0, .87)'}
+                  data={cityDropdownData}
+                  onChangeText={cityOnChangeText}
+                  value={city}
+                />
               </View>
+
               <Text style={sharedStyles.label}>{importAd.category}</Text>
-              <View style={sharedStyles.pickerView}>
-                <Picker
-                  mode="dropdown"
-                  selectedValue={adCategory}
-                  onValueChange={updateAdCategory}>
-                  {adCategories.map((_category, index) => (
-                    <Picker.Item
-                      key={index}
-                      label={_category}
-                      value={_category}
-                    />
-                  ))}
-                </Picker>
+              <View style={sharedStyles.dropdownView}>
+                <Dropdown
+                  label={importAd.chooseCategory}
+                  selectedItemColor={'rgba(0, 0, 0, .87)'}
+                  data={adCategories}
+                  onChangeText={updateAdCategory}
+                  value={adCategory}
+                />
               </View>
               <Text style={sharedStyles.label}>{importAd.status}</Text>
-              <View style={sharedStyles.pickerView}>
-                <Picker
-                  mode="dropdown"
-                  selectedValue={adStatus}
-                  onValueChange={updateAdStatus}>
-                  {adStatuses.map((_status, index) => (
-                    <Picker.Item key={index} label={_status} value={_status} />
-                  ))}
-                </Picker>
+              <View style={sharedStyles.dropdownView}>
+                <Dropdown
+                  label={importAd.chooseStatus}
+                  selectedItemColor={'rgba(0, 0, 0, .87)'}
+                  data={adStatuses}
+                  onChangeText={updateAdStatus}
+                  value={adStatus}
+                />
               </View>
               <View style={sharedStyles.loginBtn}>
                 <Button

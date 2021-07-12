@@ -57,6 +57,9 @@ const authReducer = (state = initialState, action) => {
       if (user.creditCardType) {
         user.creditCardType = decrypt(user.creditCardType);
       }
+      if (user.image) {
+        setUserBottomBarImage(user.image);
+      }
       return {
         ...state,
         user,

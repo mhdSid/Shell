@@ -1,7 +1,14 @@
 import React, {useState, useEffect, createRef} from 'react';
 import {View} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {profile, loginSingup} from '../../Constants/Texts';
+import {
+  profile,
+  loginSingup,
+  login,
+  signUp,
+  orLogin,
+  orSignUp,
+} from '../../Constants/Texts';
 import {TextField} from 'react-native-material-textfield';
 import {Button} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';
@@ -13,6 +20,7 @@ import {loginAction, logoutAction} from '../../redux/Auth/actions';
 import {handleLogin} from '../../redux/Auth/Login';
 
 const Login = props => {
+  const [isSignup, setIsSignup] = useState(false);
   const [loading, setLoading] = useState(false);
   const [emailPassChanged, setEmailPassChanged] = useState(false);
   const [emailChanged, setEmailChanged] = useState(false);
@@ -116,7 +124,8 @@ const Login = props => {
   return (
     <View style={sharedStyles.fullheightView}>
       {loading && loadingPopup}
-      <View style={sharedStyles.loginContainer}>
+      <View
+        style={[sharedStyles.loginContainer, sharedStyles.relativeConatainer]}>
         <TextField
           label={profile.email}
           ref={emailRef}

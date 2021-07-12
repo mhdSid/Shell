@@ -1,6 +1,4 @@
 let adCategories = [
-  '',
-
   'Electronic Devices',
   'Home Applicances',
   'Software',
@@ -25,7 +23,7 @@ let adCategories = [
   'Sports',
 ].sort();
 
-adCategories = [...adCategories, 'Other'];
+adCategories = [...adCategories.map(item => ({value: item})), {value: 'Other'}];
 
 const adTypes = {
   'Home Appliances': [],
@@ -71,8 +69,6 @@ const mimeTypes = {
 };
 
 const adStatuses = [
-  '',
-
   'New',
   'Used',
   'Nearly Used',
@@ -82,6 +78,8 @@ const adStatuses = [
   'Excellent',
   'Good',
   'Great',
-].sort();
+]
+  .sort()
+  .map(item => ({value: item}));
 
 export {adCategories, adStatuses, mimeTypes, adTypes};
