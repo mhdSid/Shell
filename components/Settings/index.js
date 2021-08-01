@@ -47,138 +47,141 @@ const Settings = props => {
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
       {settingsModal && settingsModals[settingsModal]}
-      <SafeAreaView style={sharedStyles.container}>
-        <Toolbar
-          style={{container: sharedStyles.toolbarContainer}}
-          leftElement="arrow-back"
-          centerElement={settings.settings}
-          onLeftElementPress={handleCloseModal}
-        />
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={sharedStyles.settingsView}>
-            <Drawer>
-              <Drawer.Section title={settings.language} />
-              <Drawer.Section
-                style={{
-                  container: sharedStyles.settingsDrawerLanguageSection,
-                  icon: sharedStyles.langIcon,
-                }}
-                items={[
-                  {
-                    key: settings.en,
-                    icon: <Flag id={settings.en} width={30} height={30} />,
-                    value:
-                      lang === settings.en ? (
-                        <View
-                          style={[
-                            sharedStyles.flexRow,
-                            sharedStyles.textAlignVertical,
-                          ]}>
-                          <Text style={sharedStyles.appText}>
-                            {settings.english}
-                          </Text>
-                          <Icon
-                            style={sharedStyles.langChecked}
-                            color="green"
-                            name="check"
-                            size={15}
-                          />
-                        </View>
-                      ) : (
-                        settings.english
+      <SafeAreaView
+        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
+        <View style={sharedStyles.innerSafeAreaView}>
+          <Toolbar
+            style={{container: sharedStyles.toolbarContainer}}
+            leftElement="arrow-back"
+            centerElement={settings.settings}
+            onLeftElementPress={handleCloseModal}
+          />
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={sharedStyles.settingsView}>
+              <Drawer>
+                <Drawer.Section title={settings.language} />
+                <Drawer.Section
+                  style={{
+                    container: sharedStyles.settingsDrawerLanguageSection,
+                    icon: sharedStyles.langIcon,
+                  }}
+                  items={[
+                    {
+                      key: settings.en,
+                      icon: <Flag id={settings.en} width={30} height={30} />,
+                      value:
+                        lang === settings.en ? (
+                          <View
+                            style={[
+                              sharedStyles.flexRow,
+                              sharedStyles.textAlignVertical,
+                            ]}>
+                            <Text style={sharedStyles.appText}>
+                              {settings.english}
+                            </Text>
+                            <Icon
+                              style={sharedStyles.langChecked}
+                              color="green"
+                              name="check"
+                              size={15}
+                            />
+                          </View>
+                        ) : (
+                          settings.english
+                        ),
+                      onPress: handleSetLanguage(settings.en),
+                    },
+                    {
+                      key: settings.jp,
+                      icon: <Flag id={settings.jp} width={30} height={30} />,
+                      value:
+                        lang === settings.jp ? (
+                          <View style={sharedStyles.flexRow}>
+                            <Text style={sharedStyles.appText}>
+                              {settings.japanese}
+                            </Text>
+                            <Icon
+                              style={sharedStyles.langChecked}
+                              color="green"
+                              name="check"
+                              size={15}
+                            />
+                          </View>
+                        ) : (
+                          settings.japanese
+                        ),
+                      onPress: handleSetLanguage(settings.jp),
+                    },
+                  ]}
+                />
+                <Drawer.Section title={settings.privacy} />
+                <Drawer.Section
+                  style={{
+                    container: sharedStyles.settingsDrawerLanguageSection,
+                    icon: sharedStyles.langIcon,
+                  }}
+                  items={[
+                    {
+                      key: settings.faq,
+                      icon: 'question-answer',
+                      value: settings.faq,
+                      onPress: handleSettingsModalClick('faq'),
+                    },
+                    {
+                      key: settings.contactUs,
+                      icon: 'contact-mail',
+                      value: settings.contactUs,
+                      onPress: handleSettingsModalClick('contactUs'),
+                    },
+                    {
+                      key: settings.privacyAndTerms,
+                      icon: 'security',
+                      value: settings.privacyAndTerms,
+                      onPress: handleSettingsModalClick('privacyAndTerms'),
+                    },
+                    // {
+                    //   key: settings.licenses,
+                    //   icon: 'questionsAnswers',
+                    //   value: settings.licenses,
+                    //   // onPress: handleSetLanguage(settings.en),
+                    // },
+                  ]}
+                />
+                <Drawer.Section title={settings.security} />
+                <Drawer.Section
+                  style={{
+                    container: sharedStyles.settingsDrawerLanguageSection,
+                    icon: sharedStyles.langIcon,
+                  }}
+                  items={[
+                    {
+                      key: settings.faq,
+                      icon: 'lock',
+                      value: settings.changePassword,
+                      onPress: handleSettingsModalClick('changePassword'),
+                    },
+                    // {
+                    //   key: settings.licenses,
+                    //   icon: 'questionsAnswers',
+                    //   value: settings.licenses,
+                    //   // onPress: handleSetLanguage(settings.en),
+                    // },
+                  ]}
+                />
+                <Drawer.Section
+                  title={settings.version}
+                  items={[
+                    {
+                      value: (
+                        <Text style={sharedStyles.appText}>{pkg.version}</Text>
                       ),
-                    onPress: handleSetLanguage(settings.en),
-                  },
-                  {
-                    key: settings.jp,
-                    icon: <Flag id={settings.jp} width={30} height={30} />,
-                    value:
-                      lang === settings.jp ? (
-                        <View style={sharedStyles.flexRow}>
-                          <Text style={sharedStyles.appText}>
-                            {settings.japanese}
-                          </Text>
-                          <Icon
-                            style={sharedStyles.langChecked}
-                            color="green"
-                            name="check"
-                            size={15}
-                          />
-                        </View>
-                      ) : (
-                        settings.japanese
-                      ),
-                    onPress: handleSetLanguage(settings.jp),
-                  },
-                ]}
-              />
-              <Drawer.Section title={settings.privacy} />
-              <Drawer.Section
-                style={{
-                  container: sharedStyles.settingsDrawerLanguageSection,
-                  icon: sharedStyles.langIcon,
-                }}
-                items={[
-                  {
-                    key: settings.faq,
-                    icon: 'question-answer',
-                    value: settings.faq,
-                    onPress: handleSettingsModalClick('faq'),
-                  },
-                  {
-                    key: settings.contactUs,
-                    icon: 'contact-mail',
-                    value: settings.contactUs,
-                    onPress: handleSettingsModalClick('contactUs'),
-                  },
-                  {
-                    key: settings.privacyAndTerms,
-                    icon: 'security',
-                    value: settings.privacyAndTerms,
-                    onPress: handleSettingsModalClick('privacyAndTerms'),
-                  },
-                  // {
-                  //   key: settings.licenses,
-                  //   icon: 'questionsAnswers',
-                  //   value: settings.licenses,
-                  //   // onPress: handleSetLanguage(settings.en),
-                  // },
-                ]}
-              />
-              <Drawer.Section title={settings.security} />
-              <Drawer.Section
-                style={{
-                  container: sharedStyles.settingsDrawerLanguageSection,
-                  icon: sharedStyles.langIcon,
-                }}
-                items={[
-                  {
-                    key: settings.faq,
-                    icon: 'lock',
-                    value: settings.changePassword,
-                    onPress: handleSettingsModalClick('changePassword'),
-                  },
-                  // {
-                  //   key: settings.licenses,
-                  //   icon: 'questionsAnswers',
-                  //   value: settings.licenses,
-                  //   // onPress: handleSetLanguage(settings.en),
-                  // },
-                ]}
-              />
-              <Drawer.Section
-                title={settings.version}
-                items={[
-                  {
-                    value: (
-                      <Text style={sharedStyles.appText}>{pkg.version}</Text>
-                    ),
-                  },
-                ]}
-              />
-            </Drawer>
-          </View>
-        </ScrollView>
+                    },
+                  ]}
+                />
+              </Drawer>
+            </View>
+          </ScrollView>
+        </View>
       </SafeAreaView>
     </Modal>
   );

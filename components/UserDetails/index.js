@@ -1,10 +1,9 @@
 import React from 'react';
-import {Text, View, Modal, SafeAreaView, ScrollView} from 'react-native';
+import {Text, View, Modal, SafeAreaView, ScrollView, Image} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, Icon} from 'react-native-material-ui';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
-import FastImage from 'react-native-fast-image';
 import {userDetails} from '../../Constants/Texts';
 
 const UserDetails = props => {
@@ -27,7 +26,8 @@ const UserDetails = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView style={sharedStyles.container}>
+      <SafeAreaView
+        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}
           leftElement="arrow-back"
@@ -36,14 +36,13 @@ const UserDetails = props => {
         />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={sharedStyles.flexRow}>
-            <FastImage
+            <Image
               style={sharedStyles.adDetailsImage}
               source={{
                 uri: image,
-                priority: FastImage.priority.low,
-                cache: FastImage.cacheControl.immutable,
+                cache: 'force-cache',
               }}
-              resizeMode={FastImage.resizeMode.cover}
+              resizeMode={'cover'}
             />
           </View>
           <View style={sharedStyles.adDetailsContainer}>

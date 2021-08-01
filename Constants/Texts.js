@@ -72,7 +72,7 @@ const importAd = {
   noNoticableScratches: 'No Noticable Scratches or Dirt',
   createLottery: 'Create a lottery',
   create: 'Create',
-  productName: 'Item Name',
+  productName: 'Item name',
   adName: 'Name',
   description: 'Description',
   price: 'Price',
@@ -81,13 +81,20 @@ const importAd = {
   city: 'City',
   category: 'Category',
   status: 'Condition',
-  chooseCategory: 'Choose category',
-  chooseStatus: 'Choose status',
+  enterCategory: 'Enter category',
+  enterStatus: 'Enter status',
+  enterName: 'Enter name',
+  enterDescription: 'Enter description',
+  enterPrice: 'Enter price',
 };
 
 const lottteries = {
-  lotteries: 'Lotteries',
+  lotteries: 'My joined lotteries',
   emptyLotteries: 'No Lotteries available.',
+};
+
+const chat = {
+  chat: 'Chat',
 };
 
 const myyAds = {
@@ -99,7 +106,7 @@ const myyLotteries = {
 };
 
 const noAuth = {
-  loginSingup: 'Please login or signup to add a new item',
+  loginSingup: 'Please login or signup to add a new item.',
 };
 
 const loginSingup = 'Login / Sign up';
@@ -114,6 +121,7 @@ const notifications = {
 
 const uploadAdProgress = {
   uploading: 'Currently Uploading',
+  noItems: 'No items are being uploaded.',
 };
 
 const paymentInformation = {
@@ -134,27 +142,34 @@ const profile = {
   lastName: 'Last Name',
   phoneNumber: 'Phone Number',
   mobile: 'Mobile',
+  enterEmail: 'Enter email',
+  enterPassword: 'Enter password',
   gender: 'Gender',
+  loginOrSignup: 'Login or Sign up',
   dateOfBirth: 'Date of birth',
   country: 'Country',
   postalCode: 'Postal Code',
   prefecture: 'Prefecture',
   city: 'City',
   agreePriacyPolicy: 'Agree on privacy policy',
-  choosePrefecture: 'Enter prefecture',
-  chooseCity: 'Enter city',
+  enterPrefecture: 'Enter prefecture',
+  enterCity: 'Enter city',
   cityWard: 'City Ward',
   fullAddress: 'Full Address',
   fillInformationCorrectly:
     'Make sure to correctly fill all this required information as it affects your selling/winning process!',
   signUp: 'Sign up',
+  shellSignUp: 'Sign up to Shell',
+  verifyAccount: 'Verify your account',
   verify: 'Verify',
-  checkYourInbox: 'Please check your inbox in order to verify your email',
-  howToUseTheApp: 'How to Use the App',
+  checkYourInbox:
+    'Please check your e-mail inbox in order to verify your email.',
+  howToUseTheApp: 'How to use the App',
   notifications: 'Notifications',
-  paymentInformation: 'Payment Information',
-  myAds: 'My Ads',
-  myLotteries: 'My Lotteries',
+  paymentInformation: 'Payment information',
+  // myAds: 'My Ads',
+  myLotteries: 'My lotteries',
+  myCreatedLotteries: 'My created lotteries',
   personal: 'Personal',
   settings: 'Settings',
   logout: 'Logout',
@@ -252,4 +267,5 @@ export {
   signUp,
   orLogin,
   orSignUp,
+  chat,
 };

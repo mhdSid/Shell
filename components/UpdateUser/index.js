@@ -120,94 +120,100 @@ const UpdateUser = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView style={sharedStyles.container}>
-        <Toolbar
-          style={{container: sharedStyles.toolbarContainerPaddingRight}}
-          leftElement="arrow-back"
-          onLeftElementPress={handleCloseModal}
-          centerElement={updateUserr.updateProfile}
-          rightElement={
-            <Button
-              color="white"
-              onPress={handleUpdateUser}
-              disabled={loading || !userDataChanged}
-              raised
-              text={updateUserr.update}
-              icon="done-all"
-            />
-          }
-        />
-        {loading && loadingPopup}
-        <KeyboardAvoidingView
-          behavior="padding"
-          enabled
-          keyboardVerticalOffset={25}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View
-              style={[
-                sharedStyles.loginContainer,
-                sharedStyles.updateUserContainer,
-              ]}>
-              <View style={sharedStyles.mobileContainer}>
-                <View
-                  style={[
-                    sharedStyles.imageBtnContainer,
-                    sharedStyles.userImageBtnContainer,
-                  ]}>
-                  <TouchableBounce
-                    onPress={handleChoosePhoto}
+      <SafeAreaView
+        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
+        <View style={sharedStyles.innerSafeAreaView}>
+          <Toolbar
+            style={{container: sharedStyles.toolbarContainerPaddingRight}}
+            leftElement="arrow-back"
+            onLeftElementPress={handleCloseModal}
+            centerElement={updateUserr.updateProfile}
+            rightElement={
+              <Button
+                color="white"
+                onPress={handleUpdateUser}
+                disabled={loading || !userDataChanged}
+                raised
+                text={updateUserr.update}
+                icon="done-all"
+              />
+            }
+          />
+          {loading && loadingPopup}
+          <KeyboardAvoidingView
+            behavior="padding"
+            enabled
+            keyboardVerticalOffset={25}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View
+                style={[
+                  sharedStyles.loginContainer,
+                  sharedStyles.updateUserContainer,
+                ]}>
+                <View style={sharedStyles.mobileContainer}>
+                  <View
                     style={[
-                      sharedStyles.imageBtn,
-                      sharedStyles.updateUserImgBtn,
+                      sharedStyles.imageBtnContainer,
+                      sharedStyles.userImageBtnContainer,
                     ]}>
-                    {!image && !user.image ? (
-                      <Icon name="image" size={35} color="white" />
-                    ) : null}
-                    {image || user.image ? (
-                      <FastImage
-                        style={[sharedStyles.adImage, sharedStyles.userImage]}
-                        source={{
-                          uri: image || user.image,
-                          priority: FastImage.priority.low,
-                          cache: FastImage.cacheControl.immutable,
-                        }}
-                        resizeMode={FastImage.resizeMode.cover}
-                      />
-                    ) : null}
-                  </TouchableBounce>
+                    <TouchableBounce
+                      onPress={handleChoosePhoto}
+                      style={[
+                        sharedStyles.imageBtn,
+                        sharedStyles.updateUserImgBtn,
+                      ]}>
+                      {!image && !user.image ? (
+                        <Icon name="image" size={35} color="white" />
+                      ) : null}
+                      {image || user.image ? (
+                        <FastImage
+                          style={[sharedStyles.adImage, sharedStyles.userImage]}
+                          source={{
+                            uri: image || user.image,
+                            priority: FastImage.priority.low,
+                            cache: FastImage.cacheControl.immutable,
+                          }}
+                          resizeMode={FastImage.resizeMode.cover}
+                        />
+                      ) : null}
+                    </TouchableBounce>
+                  </View>
+                </View>
+                <Text style={sharedStyles.label}>{profile.prefecture}</Text>
+                <View style={sharedStyles.dropdownView}>
+                  <Dropdown
+                    baseColor={'rgba(0,0,0,0.3)'}
+                    label={profile.enterPrefecture}
+                    data={prefecturesDropdownData}
+                    onChangeText={prefectureOnChangeText}
+                    selectedItemColor={'rgba(0, 0, 0, .87)'}
+                    value={prefecture}
+                  />
+                </View>
+                <Text style={sharedStyles.label}>{profile.city}</Text>
+                <View style={sharedStyles.dropdownView}>
+                  <Dropdown
+                    label={profile.enterCity}
+                    baseColor={'rgba(0,0,0,0.3)'}
+                    selectedItemColor={'rgba(0, 0, 0, .87)'}
+                    data={cityDropdownData}
+                    onChangeText={cityOnChangeText}
+                    value={city}
+                  />
+                </View>
+                <View style={sharedStyles.updateUserSbmtBtn}>
+                  <Button
+                    disabled={loading || !userDataChanged}
+                    raised={true}
+                    primary
+                    text={updateUserr.update}
+                    onPress={handleUpdateUser}
+                  />
                 </View>
               </View>
-              <View style={sharedStyles.dropdownView}>
-                <Dropdown
-                  label={profile.choosePrefecture}
-                  data={prefecturesDropdownData}
-                  onChangeText={prefectureOnChangeText}
-                  selectedItemColor={'rgba(0, 0, 0, .87)'}
-                  value={prefecture}
-                />
-              </View>
-              <Text style={sharedStyles.label}>{profile.city}</Text>
-              <View style={sharedStyles.dropdownView}>
-                <Dropdown
-                  label={profile.chooseCity}
-                  selectedItemColor={'rgba(0, 0, 0, .87)'}
-                  data={cityDropdownData}
-                  onChangeText={cityOnChangeText}
-                  value={city}
-                />
-              </View>
-              <View style={sharedStyles.updateUserSbmtBtn}>
-                <Button
-                  disabled={loading || !userDataChanged}
-                  raised={true}
-                  primary
-                  text={updateUserr.update}
-                  onPress={handleUpdateUser}
-                />
-              </View>
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </View>
       </SafeAreaView>
     </Modal>
   );

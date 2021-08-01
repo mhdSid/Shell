@@ -16,7 +16,6 @@ const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case authActions.login: {
       const {user} = action.payload;
-      console.log(user);
       if (user) {
         if (user.creditCardNumber) {
           user.creditCardNumber = decrypt(user.creditCardNumber);

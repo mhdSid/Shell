@@ -6,7 +6,7 @@ import NoAuth from '../NoAuth';
 import isUndefined from 'lodash/isUndefined';
 import {Loading, loadingPopup} from '../Loading';
 import PropTypes from 'prop-types';
-import {ListItem, Toolbar} from 'react-native-material-ui';
+import {Toolbar} from 'react-native-material-ui';
 import {lottteries} from '../../Constants/Texts';
 import {
   getLoggedInSelector,
@@ -14,12 +14,17 @@ import {
   getLotteriesSelector,
 } from './Selectors';
 import invoke from 'lodash/invoke';
-import FastImage from 'react-native-fast-image';
-import {handleFetchLotteries} from '../../redux/Lotteries/FetchLotteries';
+import {handleFetchMyJoinedLotteries} from '../../redux/Lotteries/FetchLotteries';
 import {showAdDetails} from '../../redux/AdDetails/actions';
+import ListItemCommon from '../Home/ListItem';
 
 const Lotteries = props => {
-  const {loggedIn, lotteries, user} = props;
+  const {
+    loggedIn,
+    lotteries,
+    user,
+    handleFetchLotteries: _handleFetchLotteries,
+  } = props;
   const [loading, setLoading] = useState(false);
   const callback = () => {
     setLoading(false);
@@ -30,47 +35,36 @@ const Lotteries = props => {
   const fetchLotteries = () => {
     setLoading(true);
     invoke(props, 'handleFetchLotteries', {
+      userId: user.id,
       onSuccess: callback,
       onError: callback,
     });
   };
-  const handleShowAdDetails = item => {
-    return () => {
-      invoke(props, 'showAdDetails', {...item, disableHeaderActions: true});
-    };
+
+  const onItemPress = index => {
+    invoke(props, 'showAdDetails', {
+      ...lotteries[index],
+      disableHeaderActions: true,
+    });
   };
   const renderListItem = ({item, index}) => (
-    <View
-      style={index === lotteries.length - 1 && sharedStyles.homeListItemMargin}>
-      <ListItem
-        divider
-        leftElement={
-          item.images && item.images[0] ? (
-            <FastImage
-              style={sharedStyles.homeListItemImage}
-              source={{
-                uri: item.images[0],
-                priority: FastImage.priority.low,
-                cache: FastImage.cacheControl.immutable,
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-            />
-          ) : null
-        }
-        centerElement={{
-          primaryText: item.name,
-          secondaryText: item.category,
-          tertiaryText: `${item.currency} ${item.price}`,
-        }}
-        onPress={handleShowAdDetails(item)}
-      />
-    </View>
+    <ListItemCommon
+      item={item}
+      index={index}
+      onItemPress={onItemPress}
+      listLength={lotteries.length}
+    />
   );
   useEffect(() => {
     if (loggedIn && user) {
-      fetchLotteries();
+      setLoading(true);
+      _handleFetchLotteries({
+        onSuccess: callback,
+        onError: callback,
+        userId: user.id,
+      });
     }
-  }, [loggedIn, user]);
+  }, []);
 
   if (isUndefined(loggedIn) && isUndefined(user)) {
     return Loading;
@@ -89,7 +83,7 @@ const Lotteries = props => {
       <View style={sharedStyles.lotteriesContainer}>
         {loading ? loadingPopup : null}
         {(!lotteries || !lotteries.length) && !loading ? (
-          <Text style={[sharedStyles.label, sharedStyles.noAuthLabel]}>
+          <Text style={sharedStyles.uploadProgressModalText}>
             {lottteries.emptyLotteries}
           </Text>
         ) : null}
@@ -129,7 +123,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleFetchLotteries: payload => dispatch(handleFetchLotteries(payload)),
+    handleFetchLotteries: payload => dispatch(handleFetchMyJoinedLotteries(payload)),
     showAdDetails: payload => dispatch(showAdDetails(payload)),
   };
 };

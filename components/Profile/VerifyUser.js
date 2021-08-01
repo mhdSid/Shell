@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {loadingPopup} from '../Loading';
-import {Button} from 'react-native-material-ui';
+import {Button, Icon, Toolbar} from 'react-native-material-ui';
 import {Text, View} from 'react-native';
 import {profile} from '../../Constants/Texts';
 import PropTypes from 'prop-types';
@@ -16,7 +16,6 @@ import {
 } from './Selectors';
 
 const VerifyUser = props => {
-  console.log('VerifyUser: ', props);
   const {email, passwordHash, verificationId} = props;
   const [loading, setLoading] = useState(false);
 
@@ -39,7 +38,17 @@ const VerifyUser = props => {
   return (
     <View style={sharedStyles.fullheightView}>
       {loading && loadingPopup}
+      <Toolbar
+        style={{
+          container: sharedStyles.toolbarContainerPadding,
+        }}
+        centerElement={profile.verifyAccount}
+        leftElement={<Icon color="white" name="verified-user" />}
+      />
       <View style={sharedStyles.loginContainer}>
+        <Text style={sharedStyles.verificationLabel}>
+          {profile.checkYourInbox}
+        </Text>
         <View style={sharedStyles.loginBtn}>
           <Button
             raised={true}
@@ -49,9 +58,6 @@ const VerifyUser = props => {
             disabled={loading}
           />
         </View>
-        <Text style={sharedStyles.verificationLabel}>
-          {profile.checkYourInbox}
-        </Text>
       </View>
     </View>
   );

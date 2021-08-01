@@ -89,68 +89,71 @@ const Payment = props => {
       onShow={onShowModal}
       onRequestClose={handleCloseModal}>
       {loading && loadingPopup}
-      <SafeAreaView style={sharedStyles.fullheightView}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={[
-            sharedStyles.aboutContainer,
-            sharedStyles.paymentSafeViewContainer,
-          ]}>
-          <View style={sharedStyles.creditContainer}>
-            <CreditCardInput
-              allowScroll={true}
-              autoFocus={true}
-              inputStyle={sharedStyles.creditInput}
-              onChange={onCreditChange}
-              ref={creditCardInputRef}
-            />
-          </View>
-          <View style={sharedStyles.aboutIconTextContainer}>
-            <Icon color="black" name="receipt" />
-            <Text
-              style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
-              {about.enterLottery}
-            </Text>
-          </View>
-          <View style={sharedStyles.aboutFirstSectionTextContainer}>
-            <Text style={sharedStyles.aboutFirstSectionText}>
-              {about.howToUseTenth}
-            </Text>
-          </View>
-          <View style={sharedStyles.aboutIconTextContainer}>
-            <Icon color="black" name="star" />
-            <Text
-              style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
-              {about.win}
-            </Text>
-          </View>
-          <View style={sharedStyles.aboutFirstSectionTextContainer}>
-            <Text style={sharedStyles.aboutFirstSectionText}>
-              {about.howToUseEleventh}
-            </Text>
-          </View>
-          <View style={sharedStyles.btnContainer}>
-            <View style={sharedStyles.paymentBtn}>
-              <Button
-                raised
-                primary
-                disabled={loading || !isValid}
-                icon="payment"
-                text={payment.submit}
-                style={{
-                  container:
-                    loading || !isValid
-                      ? sharedStyles.paymentBtnContainerDisabled
-                      : sharedStyles.paymentBtnContainer,
-                }}
-                onPress={handlePayment}
+      <SafeAreaView
+        style={[sharedStyles.rootSafeAreaView, sharedStyles.fullheightView]}>
+        <View style={sharedStyles.innerSafeAreaView}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={[
+              sharedStyles.aboutContainer,
+              sharedStyles.paymentSafeViewContainer,
+            ]}>
+            <View style={sharedStyles.creditContainer}>
+              <CreditCardInput
+                allowScroll={true}
+                autoFocus={true}
+                inputStyle={sharedStyles.creditInput}
+                onChange={onCreditChange}
+                ref={creditCardInputRef}
               />
             </View>
-            <View style={sharedStyles.paymentBtn}>
-              <Button text={payment.cancel} onPress={handleCloseModal} />
+            <View style={sharedStyles.aboutIconTextContainer}>
+              <Icon color="black" name="receipt" />
+              <Text
+                style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
+                {about.enterLottery}
+              </Text>
             </View>
-          </View>
-        </ScrollView>
+            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              <Text style={sharedStyles.aboutFirstSectionText}>
+                {about.howToUseTenth}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutIconTextContainer}>
+              <Icon color="black" name="star" />
+              <Text
+                style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
+                {about.win}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              <Text style={sharedStyles.aboutFirstSectionText}>
+                {about.howToUseEleventh}
+              </Text>
+            </View>
+            <View style={sharedStyles.btnContainer}>
+              <View style={sharedStyles.paymentBtn}>
+                <Button
+                  raised
+                  primary
+                  disabled={loading || !isValid}
+                  icon="payment"
+                  text={payment.submit}
+                  style={{
+                    container:
+                      loading || !isValid
+                        ? sharedStyles.paymentBtnContainerDisabled
+                        : sharedStyles.paymentBtnContainer,
+                  }}
+                  onPress={handlePayment}
+                />
+              </View>
+              <View style={sharedStyles.paymentBtn}>
+                <Button text={payment.cancel} onPress={handleCloseModal} />
+              </View>
+            </View>
+          </ScrollView>
+        </View>
       </SafeAreaView>
     </Modal>
   );

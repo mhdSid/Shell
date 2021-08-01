@@ -95,20 +95,19 @@ const handleImportAd = payload => {
         return Promise.all(updatePromises).then(
           response => {
             if (Array.isArray(response) && response.length > 0) {
-              const updatedAd = response[response.length - 1];
               dispatch({
-                type: adActions.importAd,
-                payload: updatedAd,
-              });
-              dispatch({
-                type: adDetailsActions.showAdDetails,
-                payload: updatedAd,
-              });
-              return dispatch({
                 type: uploadProgressActions.removeProgressItem,
                 payload: {
                   id: uniqId,
                 },
+              });
+              dispatch({
+                type: adActions.importAd,
+                payload: response[response.length - 1],
+              });
+              return dispatch({
+                type: adDetailsActions.showAdDetails,
+                payload: response[response.length - 1],
               });
             }
           },

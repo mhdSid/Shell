@@ -70,7 +70,7 @@ class CarouselItem extends PureComponent {
               style={sliderStyles.image}
               source={{
                 uri: imageOnly ? item : images[0],
-                priority: FastImage.priority.low,
+                priority: FastImage.priority.high,
                 cache: FastImage.cacheControl.immutable,
               }}
               resizeMode={FastImage.resizeMode.cover}
@@ -94,7 +94,7 @@ class CarouselItem extends PureComponent {
   }
 }
 
-const CarouselComponent = props => {
+const CarouselComponentWithSlice = props => {
   const {items, onItemPress, imageOnly} = props;
   const sliceValue = items.length > 5 ? 5 : items.length > 2 ? 2 : items.length;
   const [sliceIndex, setSliceIndex] = useState(sliceValue);
@@ -128,10 +128,38 @@ const CarouselComponent = props => {
   );
 };
 
+CarouselComponentWithSlice.propTypes = {
+  item: PropTypes.object,
+  onItemPress: PropTypes.func,
+  imageOnly: PropTypes.bool,
+};
+
+const CarouselComponent = props => {
+  const {items, onItemPress, imageOnly} = props;
+  const renderCarouselItem = ({item}) => (
+    <CarouselItem onItemPress={onItemPress} item={item} imageOnly={imageOnly} />
+  );
+  return (
+    <Carousel
+      shouldOptimizeUpdates={true}
+      data={items}
+      renderItem={renderCarouselItem}
+      sliderWidth={sliderWidth}
+      itemWidth={itemWidth}
+      hasParallaxImages={false}
+      firstItem={0}
+      inactiveSlideScale={0.94}
+      inactiveSlideOpacity={0.7}
+      containerCustomStyle={sliderStyles.slider}
+      contentContainerCustomStyle={sliderStyles.sliderContentContainer}
+    />
+  );
+};
+
 CarouselComponent.propTypes = {
   item: PropTypes.object,
   onItemPress: PropTypes.func,
   imageOnly: PropTypes.bool,
 };
 
-export {CarouselItem, CarouselComponent};
+export {CarouselItem, CarouselComponent, CarouselComponentWithSlice};

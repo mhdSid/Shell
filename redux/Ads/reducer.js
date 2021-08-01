@@ -24,10 +24,18 @@ const adsReducer = (state = initialState, action) => {
         id: `${item.id}`,
       }));
       newAds = uniqBy(newAds, 'id').sort(
-        (ad1, ad2) => +new Date(ad2.publishDate) - +new Date(ad1.publishDate),
+        (ad1, ad2) =>
+          new Date(ad2.publishDate).getTime() -
+          new Date(ad1.publishDate).getTime(),
       );
       return {
         ads: newAds,
+      };
+    }
+    case adActions.resetAds: {
+      const {payload} = action;
+      return {
+        ads: payload,
       };
     }
     case adActions.updateCurrentAd: {

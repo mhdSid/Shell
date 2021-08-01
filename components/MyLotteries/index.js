@@ -1,16 +1,16 @@
 import React, {useState} from 'react';
 import invoke from 'lodash/invoke';
-import {Modal, SafeAreaView, VirtualizedList} from 'react-native';
+import {Modal, SafeAreaView, View, VirtualizedList} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {Toolbar, ListItem} from 'react-native-material-ui';
+import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import AdDetails from '../AdDetails';
-import {Loading} from '../Loading';
+import {loadingPopup} from '../Loading';
 import {myyLotteries} from '../../Constants/Texts';
 import {connect} from 'react-redux';
-import {handleFetchMyLotteries} from '../../redux/User/FetchMyLotteries';
+import {handleFetchMyCreatedLotteries} from '../../redux/User/FetchMyLotteries';
 import {getUserSelector, getMyLotteriesSelector} from './Selectors';
-import FastImage from 'react-native-fast-image';
+import ListItemCommon from '../Home/ListItem';
 
 const MyLotteries = props => {
   const {user, myLotteries} = props;
@@ -35,11 +35,9 @@ const MyLotteries = props => {
       userId: user.id,
     });
   };
-  const handleItemPress = item => {
-    return () => {
-      setShowLotteryDetails(true);
-      setSelectedLottery(item);
-    };
+  const handleItemPress = index => {
+    setShowLotteryDetails(true);
+    setSelectedLottery(myLotteries[index]);
   };
   const onAdDetailsClose = () => {
     setShowLotteryDetails(false);
@@ -47,28 +45,12 @@ const MyLotteries = props => {
   const getItem = (data, index) => data[index];
   const getItemCount = () => myLotteries.length;
   const getKeyExtractor = item => item.id;
-  const renderItem = ({item}) => (
-    <ListItem
-      divider
-      leftElement={
-        item.images && item.images[0] ? (
-          <FastImage
-            style={sharedStyles.homeListItemImage}
-            source={{
-              uri: item.images[0],
-              priority: FastImage.priority.low,
-              cache: FastImage.cacheControl.immutable,
-            }}
-            resizeMode={FastImage.resizeMode.cover}
-          />
-        ) : null
-      }
-      centerElement={{
-        primaryText: item.name,
-        secondaryText: item.category,
-        tertiaryText: `${item.currency} ${item.price}`,
-      }}
-      onPress={handleItemPress(item)}
+  const renderItem = ({item, index}) => (
+    <ListItemCommon
+      item={item}
+      index={index}
+      onItemPress={handleItemPress}
+      listLength={myLotteries.length}
     />
   );
   const adDetailsModal = showLotteryDetails && (
@@ -84,29 +66,32 @@ const MyLotteries = props => {
       onShow={fetchMyLotteries}
       onRequestClose={handleCloseModal}>
       {adDetailsModal}
-      <SafeAreaView style={sharedStyles.container}>
-        <Toolbar
-          style={{container: sharedStyles.toolbarContainer}}
-          leftElement="arrow-back"
-          centerElement={myyLotteries.myLotteries}
-          onLeftElementPress={handleCloseModal}
-        />
-        {loading && Loading}
-        {myLotteries && myLotteries.length > 0 && (
-          <VirtualizedList
-            initialNumToRender={10}
-            windowSize={1}
-            removeClippedSubviews={true}
-            refreshing={loading}
-            onRefresh={fetchMyLotteries}
-            showsVerticalScrollIndicator={false}
-            data={myLotteries}
-            getItem={getItem}
-            getItemCount={getItemCount}
-            keyExtractor={getKeyExtractor}
-            renderItem={renderItem}
+      <SafeAreaView
+        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
+        <View style={sharedStyles.innerSafeAreaView}>
+          <Toolbar
+            style={{container: sharedStyles.toolbarContainer}}
+            leftElement="arrow-back"
+            centerElement={myyLotteries.myLotteries}
+            onLeftElementPress={handleCloseModal}
           />
-        )}
+          {loading ? loadingPopup : null}
+          {myLotteries && myLotteries.length > 0 ? (
+            <VirtualizedList
+              initialNumToRender={10}
+              windowSize={1}
+              removeClippedSubviews={true}
+              refreshing={loading}
+              onRefresh={fetchMyLotteries}
+              showsVerticalScrollIndicator={false}
+              data={myLotteries}
+              getItem={getItem}
+              getItemCount={getItemCount}
+              keyExtractor={getKeyExtractor}
+              renderItem={renderItem}
+            />
+          ) : null}
+        </View>
       </SafeAreaView>
     </Modal>
   );
@@ -127,7 +112,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     handleFetchMyLotteries: payload =>
-      dispatch(handleFetchMyLotteries(payload)),
+      dispatch(handleFetchMyCreatedLotteries(payload)),
   };
 };
 

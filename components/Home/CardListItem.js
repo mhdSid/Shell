@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import invoke from 'lodash/invoke';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {View, Text} from 'react-native';
+import {View, Text, Image} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import FastImage from 'react-native-fast-image';
 export default class CardListItem extends Component {
@@ -13,10 +13,20 @@ export default class CardListItem extends Component {
     horizontal: PropTypes.bool,
   };
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.ellipsizeMode = 'tail';
     this.numOfLines = 1;
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (
+      JSON.stringify(nextProps.item).toString() !==
+      JSON.stringify(this.props.item).toString()
+    ) {
+      return true;
+    }
+    return false;
   }
 
   handleItemPress = () => {
@@ -28,10 +38,6 @@ export default class CardListItem extends Component {
     const {item} = this.props;
     return `${item.currency} ${item.price}`;
   };
-
-  shouldComponentUpdate() {
-    return false;
-  }
 
   render() {
     const {item, smallImage, horizontal} = this.props;
@@ -46,10 +52,10 @@ export default class CardListItem extends Component {
         style={imageStyle}
         source={{
           uri: item.images[0],
-          priority: FastImage.priority.low,
+          priority: FastImage.priority.high,
           cache: FastImage.cacheControl.immutable,
         }}
-        resizeMode={FastImage.resizeMode.cover}
+        resizeMode={'cover'}
       />
     ) : null;
     const emptyImage = !item.images[0] ? (
@@ -68,12 +74,12 @@ export default class CardListItem extends Component {
               style={sharedStyles.homeCardItemText}>
               {item.name}
             </Text>
-            <Text
+            {/* <Text
               numberOfLines={this.numOfLines}
               ellipsizeMode={this.ellipsizeMode}
               style={sharedStyles.homeCardItemText}>
               {item.description}
-            </Text>
+            </Text> */}
             <Text
               numberOfLines={this.numOfLines}
               ellipsizeMode={this.ellipsizeMode}

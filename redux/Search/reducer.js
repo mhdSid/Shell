@@ -2,6 +2,14 @@ import {searchActions} from './actions';
 
 const initialState = {
   searchResults: undefined,
+  searchFilters: {
+    city: '',
+    prefecture: '',
+    fromDate: '',
+    toDate: '',
+    category: '',
+    status: '',
+  },
 };
 
 const searchReducer = (state = initialState, action) => {
@@ -10,6 +18,15 @@ const searchReducer = (state = initialState, action) => {
       return {
         ...state,
         searchResults: action.payload,
+      };
+    }
+    case searchActions.setSearchFilters: {
+      return {
+        ...state,
+        searchFilters: {
+          ...state.searchFilters,
+          ...action.payload,
+        },
       };
     }
     default: {

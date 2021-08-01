@@ -1,14 +1,12 @@
 import React, {PureComponent} from 'react';
-import {Toolbar, ListItem} from 'react-native-material-ui';
-import {View, VirtualizedList} from 'react-native';
+import {Toolbar} from 'react-native-material-ui';
+import {Animated, View, VirtualizedList} from 'react-native';
 import {connect} from 'react-redux';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Loading} from '../Loading';
-import FastImage from 'react-native-fast-image';
-import CardListItem from './CardListItem';
-import {home} from '../../Constants/Texts';
+import {home, searchh} from '../../Constants/Texts';
 import {handleFetchAds} from '../../redux/Ads/FetchAds';
 import {showAdDetails} from '../../redux/AdDetails/actions';
 import {setHomeViewStyle} from '../../redux/Settings/actions';
@@ -16,19 +14,27 @@ import {
   getAdsSelector,
   getIsListSelector,
   getIsCardSelector,
+  getIsCarouselSelector,
 } from './Selectors';
-import UploadAdProgress from '../UploadAdProgress';
 import {emitSocketEvents} from '../../services/Socket';
 import UploadAdProgressModal from '../UploadAdProgress/uploadAdProgressModal';
 import {getProgressItemsSelector} from '../UploadAdProgress/Selectors';
+import {chunk, uniqBy} from 'lodash';
+import CardListItemRow from './CardListItemRow';
+import ListItemCommon from './ListItem';
+import SearchBox from './SearchBox';
 class HomeComponent extends PureComponent {
   state = {
     loading: false,
     showAdProgressModal: false,
+    adList: null,
+    searchBoxAnimatedOpacity: new Animated.Value(0),
+    searchable: false,
   };
   callback = () => {
     this.setState({loading: false});
   };
+
   fetchAds = () => {
     this.setState({loading: true}, () => {
       invoke(this.props, 'fetchAds', {
@@ -37,7 +43,43 @@ class HomeComponent extends PureComponent {
       });
     });
   };
+  handleOnSearch = () => {
+    this.changeViewStyle({action: 'search'});
+    this.setState({loading: true});
+  };
+  onSearchSuccess = () => {
+    this.setState({loading: false});
+  };
+  onSearchError = () => {
+    this.setState({loading: false});
+  };
   changeViewStyle = ({action}) => {
+    if (action === 'search') {
+      const {searchable} = this.state;
+      if (searchable) {
+        Animated.timing(this.state.searchBoxAnimatedOpacity, {
+          toValue: 0,
+          duration: 300,
+        }).start(() => {
+          this.setState({
+            searchable: !searchable,
+          });
+        });
+      } else {
+        this.setState(
+          {
+            searchable: !searchable,
+          },
+          () => {
+            Animated.timing(this.state.searchBoxAnimatedOpacity, {
+              toValue: 1,
+              duration: 300,
+            }).start();
+          },
+        );
+      }
+      return;
+    }
     if (action === 'cloud-upload') {
       this.setState({
         showAdProgressModal: true,
@@ -58,17 +100,35 @@ class HomeComponent extends PureComponent {
       });
     }
   };
-  handleShowAdsDetailsFlatList = item => {
+  handleCardItemPress = item => {
     invoke(this.props, 'showAdDetails', item);
   };
-  handleShowAdDetails = item => {
-    return data => {
-      invoke(this.props, 'showAdDetails', item || data);
-    };
+  handleListItemPress = index => {
+    invoke(this.props, 'showAdDetails', this.props.ads[index]);
   };
   componentWillMount() {
     emitSocketEvents();
     this.fetchAds();
+  }
+  componentWillReceiveProps(nextProps) {
+    let adList = null;
+    if (Array.isArray(nextProps.ads) && nextProps.ads.length) {
+      adList = uniqBy(nextProps.ads, 'id');
+      adList = chunk(adList, 3).map(list => ({
+        data: list,
+        key: `_${Math.random()
+          .toString(36)
+          .substr(2, 9)}`,
+      }));
+    }
+    this.setState({
+      adList,
+    });
+    if (nextProps.progressItems.length === 0) {
+      this.setState({
+        showAdProgressModal: false,
+      });
+    }
   }
   handleCloseUploadAdProgressModal = () => {
     this.setState({
@@ -76,48 +136,33 @@ class HomeComponent extends PureComponent {
     });
   };
 
-  renderCardListItem = ({item}) => (
-    <CardListItem item={item} onItemPress={this.handleShowAdsDetailsFlatList} />
+  renderCardListItemRow = ({item}) => (
+    <CardListItemRow data={item} onItemPress={this.handleCardItemPress} />
   );
 
   renderListItem = ({item, index}) => (
-    <View
-      style={
-        index === this.props.ads.length - 1 && sharedStyles.homeListItemMargin
-      }>
-      <ListItem
-        divider
-        leftElement={
-          item.images && item.images[0] ? (
-            <FastImage
-              style={sharedStyles.homeListItemImage}
-              source={{
-                uri: item.images[0],
-                priority: FastImage.priority.low,
-                cache: FastImage.cacheControl.immutable,
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-            />
-          ) : null
-        }
-        centerElement={{
-          primaryText: item.name,
-          secondaryText: item.category,
-          tertiaryText: `${item.currency} ${item.price}`,
-        }}
-        onPress={this.handleShowAdDetails(item)}
-      />
-    </View>
+    <ListItemCommon
+      item={item}
+      index={index}
+      onItemPress={this.handleListItemPress}
+      listLength={this.props.ads.length}
+    />
   );
   getItem = (data, index) => data[index];
-  getItemCount = () => this.props.ads.length;
-  getItemKey = item => `${item.id}`;
-  layoutProvider = () => {
-    return 100;
-  };
+  getItemCount = () => this.state.adList.length;
+  getListItemCount = () => this.props.ads.length;
+  getItemKey = (item, index) => `${item.key}`;
+  getListItemKey = item => `${item.id}`;
+
   render() {
-    const {loading, showAdProgressModal} = this.state;
-    const {ads, isList, isCard, progressItems} = this.props;
+    const {
+      loading,
+      showAdProgressModal,
+      adList,
+      searchable,
+      searchBoxAnimatedOpacity,
+    } = this.state;
+    const {isList, isCard, ads} = this.props;
 
     return (
       <View style={sharedStyles.fullheightView} shouldRasterizeIOS={true}>
@@ -130,11 +175,22 @@ class HomeComponent extends PureComponent {
           style={{container: sharedStyles.toolbarContainer}}
           centerElement={home.appName}
           rightElement={[
-            progressItems && progressItems.length && 'cloud-upload',
-            this.isCard ? 'view-list' : 'view-comfy',
+            'search',
+            'cloud-upload',
+            isCard ? 'view-list' : 'view-comfy',
           ].filter(Boolean)}
           onRightElementPress={this.changeViewStyle}
         />
+        {searchable ? (
+          <SearchBox
+            onSearchPress={this.handleOnSearch}
+            onSearchSuccess={this.onSearchSuccess}
+            onSearchError={this.onSearchError}
+            style={{
+              opacity: searchBoxAnimatedOpacity,
+            }}
+          />
+        ) : null}
         {/* <AdMobBanner
           adSize="fullBanner"
           adUnitID="ca-app-pub-5703846930890914/6105801245"
@@ -142,37 +198,52 @@ class HomeComponent extends PureComponent {
         /> */}
         {/* <UploadAdProgress /> */}
         {loading && <View style={sharedStyles.homeLoading}>{Loading}</View>}
-        {isCard && ads && ads.length > 0 && (
+        {isCard && adList && adList.length ? (
           <VirtualizedList
-            initialNumToRender={2}
-            windowSize={2}
+            initialNumToRender={10}
+            windowSize={10}
             removeClippedSubviews={true}
             refreshing={loading}
             onRefresh={this.fetchAds}
+            horizontal={false}
+            // listKey={adListKey}
+            // maxToRenderPerBatch={10}
+            // updateCellsBatchingPeriod={1}
+            // onEndReachedThreshold={0.5}
+            // contentContainerStyle={{
+            //   display: 'flex',
+            //   justifyContent: 'flex-start',
+            //   alignItems: 'flex-start',
+            // }}
+            // style={{
+            //   display: 'flex',
+            //   justifyContent: 'flex-start',
+            //   alignItems: 'flex-start',
+            // }}
             showsVerticalScrollIndicator={false}
-            data={ads}
+            data={adList}
             getItem={this.getItem}
             getItemCount={this.getItemCount}
             contentContainerStyle={sharedStyles.homeAdsContainer}
             keyExtractor={this.getItemKey}
-            renderItem={this.renderCardListItem}
+            renderItem={this.renderCardListItemRow}
           />
-        )}
-        {isList && ads && ads.length > 0 && (
+        ) : null}
+        {isList && ads && ads.length > 0 ? (
           <VirtualizedList
             removeClippedSubviews={true}
-            windowSize={2}
-            initialNumToRender={2}
+            windowSize={10}
+            initialNumToRender={10}
             refreshing={loading}
             onRefresh={this.fetchAds}
             showsVerticalScrollIndicator={false}
             data={ads}
             getItem={this.getItem}
-            getItemCount={this.getItemCount}
-            keyExtractor={this.getItemKey}
+            getItemCount={this.getListItemCount}
+            keyExtractor={this.getListItemKey}
             renderItem={this.renderListItem}
           />
-        )}
+        ) : null}
       </View>
     );
   }
@@ -182,6 +253,7 @@ HomeComponent.propTypes = {
   ads: PropTypes.array,
   isList: PropTypes.bool,
   isCard: PropTypes.bool,
+  isCarousel: PropTypes.bool,
 };
 
 const mapStateToProps = state => {
@@ -189,6 +261,7 @@ const mapStateToProps = state => {
     ads: getAdsSelector(state),
     isList: getIsListSelector(state),
     isCard: getIsCardSelector(state),
+    isCarousel: getIsCarouselSelector(state),
     progressItems: getProgressItemsSelector(state),
   };
 };

@@ -29,6 +29,7 @@ const handleFetchUsersData = payload => {
             lotteryUsers = [...lotteryUsers, user];
           }
         });
+        console.log(lotteryUsers);
         dispatch({
           type: adDetailsActions.setLotteryUsersData,
           payload: lotteryUsers,

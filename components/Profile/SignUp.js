@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, ScrollView, Text, KeyboardAvoidingView} from 'react-native';
-import {Button, Checkbox} from 'react-native-material-ui';
+import {Button, Checkbox, Icon, Toolbar} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';
 import {profile} from '../../Constants/Texts';
 import sharedStyles from '../../assets/styles/sharedStyles';
@@ -20,7 +20,6 @@ import TermsAndPrivacyPolicyModal from '../Settings/TermsAndPrivacyPolicyModal';
 
 const SignUp = props => {
   const {email, passwordHash, verificationId} = props;
-  console.log('SignUp: ', props);
   const [loading, setLoading] = useState(false);
   const [userDataChanged, setUserDataChanged] = useState(false);
   const [cityChanged, setCityChanged] = useState(false);
@@ -103,23 +102,32 @@ const SignUp = props => {
         behavior="padding"
         enabled
         keyboardVerticalOffset={25}>
+        <Toolbar
+          style={{
+            container: sharedStyles.toolbarContainerPadding,
+          }}
+          centerElement={profile.shellSignUp}
+          leftElement={<Icon color="white" name="perm-identity" />}
+        />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View
             style={[sharedStyles.loginContainer, sharedStyles.signUpContainer]}>
             <Text style={sharedStyles.label}>{profile.prefecture}</Text>
             <View style={sharedStyles.dropdownView}>
               <Dropdown
-                label={profile.choosePrefecture}
+                label={profile.enterPrefecture}
                 data={prefecturesDropdownData}
                 onChangeText={prefectureOnChangeText}
                 selectedItemColor={'rgba(0, 0, 0, .87)'}
+                baseColor={'rgba(0,0,0,0.25)'}
               />
             </View>
             <Text style={sharedStyles.label}>{profile.city}</Text>
             <View style={sharedStyles.dropdownView}>
               <Dropdown
-                label={profile.chooseCity}
+                label={profile.enterCity}
                 selectedItemColor={'rgba(0, 0, 0, .87)'}
+                baseColor={'rgba(0,0,0,0.25)'}
                 data={cityDropdownData}
                 onChangeText={cityOnChangeText}
               />

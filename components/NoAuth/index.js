@@ -16,7 +16,7 @@ const NoAuth = () => {
         sharedStyles.importAdContainerNoAuth,
         sharedStyles.importAdNoAuthContainer,
       ]}>
-      <Text style={[sharedStyles.label, sharedStyles.noAuthLabel]}>
+      <Text style={[sharedStyles.label, sharedStyles.verificationLabel]}>
         {noAuth.loginSingup}
       </Text>
       <View style={sharedStyles.loginBtn}>

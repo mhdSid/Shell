@@ -16,23 +16,26 @@ const Notifications = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView style={sharedStyles.container}>
-        <Toolbar
-          style={{container: sharedStyles.toolbarContainer}}
-          leftElement="arrow-back"
-          centerElement={notifications.notifications}
-          onLeftElementPress={handleCloseModal}
-        />
-        {loading && loadingPopup}
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View
-            style={[
-              sharedStyles.signupView,
-              sharedStyles.loginContainer,
-              sharedStyles.updateUserContainer,
-            ]}
+      <SafeAreaView
+        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
+        <View style={sharedStyles.innerSafeAreaView}>
+          <Toolbar
+            style={{container: sharedStyles.toolbarContainer}}
+            leftElement="arrow-back"
+            centerElement={notifications.notifications}
+            onLeftElementPress={handleCloseModal}
           />
-        </ScrollView>
+          {loading && loadingPopup}
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View
+              style={[
+                sharedStyles.signupView,
+                sharedStyles.loginContainer,
+                sharedStyles.updateUserContainer,
+              ]}
+            />
+          </ScrollView>
+        </View>
       </SafeAreaView>
     </Modal>
   );

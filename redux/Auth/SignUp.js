@@ -10,8 +10,6 @@ const handleSignUp = payload => {
      * signup Handler
      */
     const onSignupSuccess = data => {
-      console.log('onSignupSuccess', data);
-
       const {error, user} = data;
       if (error) {
         return handleError({error, onError, dispatch});

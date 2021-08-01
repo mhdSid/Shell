@@ -121,55 +121,58 @@ const PaymentInformation = props => {
       animationType="slide"
       onShow={onShowModal}
       onRequestClose={handleCloseModal}>
-      <SafeAreaView style={sharedStyles.container}>
-        <Toolbar
-          style={{
-            container: [
-              sharedStyles.toolbarContainer,
-              sharedStyles.toolbarContainerPadding,
-            ],
-          }}
-          leftElement="arrow-back"
-          centerElement={paymentInformation.creditCard}
-          onLeftElementPress={handleCloseModal}
-          rightElement={
-            <Button
-              onPress={handleUpdateUserPaymentInfo}
-              disabled={loading || !userDataChanged || !isValid}
-              raised
-              text={paymentInformation.submit}
-              icon="done-all"
-            />
-          }
-        />
-        {loading && loadingPopup}
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View
-            style={[
-              sharedStyles.paymentInfoContainer,
-              sharedStyles.loginContainer,
-              sharedStyles.updateUserContainer,
-            ]}>
-            <View style={sharedStyles.creditContainer}>
-              <CreditCardInput
-                autoFocus={true}
-                ref={creditCardInputRef}
-                allowScroll={true}
-                inputStyle={sharedStyles.creditInput}
-                onChange={onCreditChange}
-              />
-            </View>
-            <View style={sharedStyles.loginBtn}>
+      <SafeAreaView
+        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
+        <View style={sharedStyles.innerSafeAreaView}>
+          <Toolbar
+            style={{
+              container: [
+                sharedStyles.toolbarContainer,
+                sharedStyles.toolbarContainerPadding,
+              ],
+            }}
+            leftElement="arrow-back"
+            centerElement={paymentInformation.creditCard}
+            onLeftElementPress={handleCloseModal}
+            rightElement={
               <Button
-                disabled={loading || !userDataChanged || !isValid}
-                raised={true}
-                primary
-                text={paymentInformation.submit}
                 onPress={handleUpdateUserPaymentInfo}
+                disabled={loading || !userDataChanged || !isValid}
+                raised
+                text={paymentInformation.submit}
+                icon="done-all"
               />
+            }
+          />
+          {loading && loadingPopup}
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View
+              style={[
+                sharedStyles.paymentInfoContainer,
+                sharedStyles.loginContainer,
+                sharedStyles.updateUserContainer,
+              ]}>
+              <View style={sharedStyles.creditContainer}>
+                <CreditCardInput
+                  autoFocus={true}
+                  ref={creditCardInputRef}
+                  allowScroll={true}
+                  inputStyle={sharedStyles.creditInput}
+                  onChange={onCreditChange}
+                />
+              </View>
+              <View style={sharedStyles.loginBtn}>
+                <Button
+                  disabled={loading || !userDataChanged || !isValid}
+                  raised={true}
+                  primary
+                  text={paymentInformation.submit}
+                  onPress={handleUpdateUserPaymentInfo}
+                />
+              </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </View>
       </SafeAreaView>
     </Modal>
   );

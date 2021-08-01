@@ -33,6 +33,7 @@ import {CarouselComponent} from '../Carousel';
 import ImagesViewer from '../ImageViewer';
 import Payment from '../Payment';
 import {handleFetchUsersData} from '../../redux/AdDetails/FetchUsersData';
+import {uniq} from 'lodash';
 
 const myActions = ['share', 'favorite', 'cancel', 'delete'];
 const defaultActions = ['share', 'favorite', 'shop'];
@@ -44,6 +45,7 @@ const AdDetails = props => {
     adPosterData,
     winnerUserData,
     userAds,
+    lotteryUsersData,
   } = props;
   const {
     name,
@@ -65,6 +67,9 @@ const AdDetails = props => {
     images,
     disableHeaderActions,
   } = item;
+  console.log(props);
+  console.log('    ');
+  console.log('    ');
   // const [selectedUser, setSelectedUser] = useState();
   const [usersDataLoading, setUsersDataLoading] = useState(true);
   const [userAdsLoading, setUserAdsLoading] = useState(true);
@@ -109,6 +114,7 @@ const AdDetails = props => {
       ...(lotteryUserIds || []),
       winnerUserId || false,
     ].filter(Boolean);
+
     if (users.length > 0) {
       invoke(props, 'handleFetchUsersData', {
         winnerUserId,
@@ -133,7 +139,7 @@ const AdDetails = props => {
   const empty = <Icon name="face" size={40} />;
   const getItem = (data, index) => data[index];
   const getUserAdsCount = () => userAds.length;
-  // const getLotteryUsersCount = () => lotteryUsersData.length;
+  const getLotteryUsersCount = () => lotteryUsersData.length;
   const getVirtualKey = _item => _item.id;
   const renderUserAdItem = ({item: ad}) => (
     <CardListItem
@@ -143,13 +149,13 @@ const AdDetails = props => {
       onItemPress={handleUserAdPress(ad)}
     />
   );
-  // const renderLotteryUserItem = ({item: _user}) => (
-  //   <AdDetailsUserListItem
-  //     user={_user}
-  //     onPress={handleUserPress}
-  //     withNotificationNum={true}
-  //   />
-  // );
+  const renderLotteryUserItem = ({item: _user}) => (
+    <AdDetailsUserListItem
+      user={_user}
+      // onPress={handleUserPress}
+      withNotificationNum={true}
+    />
+  );
   const handleShowImagesViewer = url => {
     setViewImageUri(url);
     setShowImagesViewer(true);
@@ -173,262 +179,276 @@ const AdDetails = props => {
         />
       )}
       {showPayment && <Payment onClose={onPaymentClose} />}
-      <SafeAreaView style={sharedStyles.container}>
-        <Toolbar
-          style={{container: sharedStyles.adDetailsToolbarContainer}}
-          leftElement="arrow-back"
-          onLeftElementPress={handleCloseModal}
-          centerElement={name}
-          rightElement={
-            `${userId}` !== `${authUser.id}` &&
-            !disableHeaderActions && (
-              <Button
-                disabled={`${currentCollectedPrice}` === `${price}`}
-                onPress={handleEnterDraw}
-                raised
-                text={adDetails.enterDraw}
-                icon="shop"
+      <SafeAreaView
+        style={[sharedStyles.container, sharedStyles.rootSafeAreaView]}>
+        <View style={sharedStyles.innerSafeAreaView}>
+          <Toolbar
+            style={{container: sharedStyles.adDetailsToolbarContainer}}
+            leftElement="arrow-back"
+            onLeftElementPress={handleCloseModal}
+            centerElement={name}
+            rightElement={
+              authUser &&
+              `${userId}` !== `${authUser.id}` &&
+              !disableHeaderActions ? (
+                <Button
+                  disabled={`${currentCollectedPrice}` === `${price}`}
+                  onPress={handleEnterDraw}
+                  raised
+                  text={adDetails.enterDraw}
+                  icon="shop"
+                />
+              ) : null
+            }
+          />
+          <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
+            <View style={sharedStyles.flexRow}>
+              <CarouselComponent
+                onItemPress={handleShowImagesViewer}
+                items={images}
+                imageOnly={true}
               />
-            )
-          }
-        />
-        <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
-          <View style={sharedStyles.flexRow}>
-            <CarouselComponent
-              onItemPress={handleShowImagesViewer}
-              items={images}
-              imageOnly={true}
-            />
-          </View>
-          <View style={sharedStyles.adDetailsContainer}>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon
-                color={available ? 'green' : 'red'}
-                name={available ? 'verified-user' : 'close'}
-              />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.availability}
-              </Text>
             </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>
-                {available ? adDetails.adAvailable : adDetails.adNotAvailable}
-              </Text>
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="dns" />
-              <Text style={sharedStyles.userDetailsText}>{adDetails.name}</Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>{name}</Text>
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="description" />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.description}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>
-                {description}
-              </Text>
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="exposure" />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.status}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>{status}</Text>
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="class" />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.category}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>{category}</Text>
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="local-atm" />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.totalPrice}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text
-                style={
-                  sharedStyles.aboutFirstSectionText
-                }>{`${currency} ${price}`}</Text>
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="credit-card" />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.collectedPrice}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text
-                style={
-                  sharedStyles.aboutFirstSectionText
-                }>{`${currency} ${currentCollectedPrice || 0}`}</Text>
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="monetization-on" />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.payToWin}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text
-                style={
-                  sharedStyles.aboutFirstSectionText
-                }>{`${currency} ${'100'}`}</Text>
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="group-add" />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.currentLotteryUsers}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              {lotteryUserIds && lotteryUserIds.length ? (
-                <Text style={sharedStyles.aboutFirstSectionText}>
-                  {adDetails.currentLotteryUsersNumber(lotteryUserIds)}
+            <View style={sharedStyles.adDetailsContainer}>
+              <View style={sharedStyles.userDetailsIconTextContainer}>
+                <Icon
+                  color={available ? 'green' : 'red'}
+                  name={available ? 'verified-user' : 'close'}
+                />
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.availability}
                 </Text>
-              ) : null}
-              {!lotteryUserIds || !lotteryUserIds.length ? empty : null}
-            </View>
-            {/* <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              {usersDataLoading && SimpleLoader}
-              {!usersDataLoading &&
-                lotteryUsersData &&
-                lotteryUsersData.length > 0 && (
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                <Text style={sharedStyles.aboutFirstSectionText}>
+                  {available ? adDetails.adAvailable : adDetails.adNotAvailable}
+                </Text>
+              </View>
+              <View style={sharedStyles.userDetailsIconTextContainer}>
+                <Icon color="rgba(0,0,0,.55)" name="dns" />
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.name}
+                </Text>
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                <Text style={sharedStyles.aboutFirstSectionText}>{name}</Text>
+              </View>
+              <View style={sharedStyles.userDetailsIconTextContainer}>
+                <Icon color="rgba(0,0,0,.55)" name="description" />
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.description}
+                </Text>
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                <Text style={sharedStyles.aboutFirstSectionText}>
+                  {description}
+                </Text>
+              </View>
+              <View style={sharedStyles.userDetailsIconTextContainer}>
+                <Icon color="rgba(0,0,0,.55)" name="exposure" />
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.status}
+                </Text>
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                <Text style={sharedStyles.aboutFirstSectionText}>{status}</Text>
+              </View>
+              <View style={sharedStyles.userDetailsIconTextContainer}>
+                <Icon color="rgba(0,0,0,.55)" name="class" />
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.category}
+                </Text>
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                <Text style={sharedStyles.aboutFirstSectionText}>
+                  {category}
+                </Text>
+              </View>
+              <View style={sharedStyles.userDetailsIconTextContainer}>
+                <Icon color="rgba(0,0,0,.55)" name="local-atm" />
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.totalPrice}
+                </Text>
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                <Text
+                  style={
+                    sharedStyles.aboutFirstSectionText
+                  }>{`${currency} ${price}`}</Text>
+              </View>
+              <View style={sharedStyles.userDetailsIconTextContainer}>
+                <Icon color="rgba(0,0,0,.55)" name="credit-card" />
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.collectedPrice}
+                </Text>
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                <Text
+                  style={
+                    sharedStyles.aboutFirstSectionText
+                  }>{`${currency} ${currentCollectedPrice || 0}`}</Text>
+              </View>
+              <View style={sharedStyles.userDetailsIconTextContainer}>
+                <Icon color="rgba(0,0,0,.55)" name="monetization-on" />
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.payToWin}
+                </Text>
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                <Text
+                  style={
+                    sharedStyles.aboutFirstSectionText
+                  }>{`${currency} ${'100'}`}</Text>
+              </View>
+              <View style={sharedStyles.userDetailsIconTextContainer}>
+                <Icon color="rgba(0,0,0,.55)" name="group-add" />
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.currentLotteryUsers}
+                </Text>
+              </View>
+              {/* <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                {lotteryUserIds && lotteryUserIds.length ? (
+                  <Text style={sharedStyles.aboutFirstSectionText}>
+                    {adDetails.currentLotteryUsersNumber(lotteryUserIds)}
+                  </Text>
+                ) : null}
+                {!lotteryUserIds || !lotteryUserIds.length ? empty : null}
+              </View> */}
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                {usersDataLoading && SimpleLoader}
+                {!usersDataLoading &&
+                  lotteryUsersData &&
+                  lotteryUsersData.length > 0 && (
+                    <VirtualizedList
+                      initialNumToRender={2}
+                      windowSize={2}
+                      horizontal={true}
+                      removeClippedSubviews={true}
+                      showsHorizontalScrollIndicator={false}
+                      data={lotteryUsersData}
+                      getItem={getItem}
+                      getItemCount={getLotteryUsersCount}
+                      // contentContainerStyle={
+                      //   sharedStyles.adDetailsUsersListContainer
+                      // }
+                      keyExtractor={getVirtualKey}
+                      renderItem={renderLotteryUserItem}
+                    />
+                  )}
+                {!usersDataLoading &&
+                  (!lotteryUsersData || lotteryUsersData.length === 0) &&
+                  empty}
+              </View>
+              <View style={sharedStyles.userDetailsIconTextContainer}>
+                <Icon color="green" name="star" />
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.winner}
+                </Text>
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                {usersDataLoading && SimpleLoader}
+                {!usersDataLoading && winnerUserData && (
+                  <AdDetailsUserListItem
+                    user={winnerUserData}
+                    // onPress={winnerUserData && handleUserPress}
+                  />
+                )}
+                {!usersDataLoading && !winnerUserData && empty}
+              </View>
+
+              <View style={sharedStyles.userDetailsIconTextContainer}>
+                <Icon color="rgba(0,0,0,.55)" name="today" />
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.publishDate}
+                </Text>
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                <Text style={sharedStyles.aboutFirstSectionText}>
+                  {formatDate(publishDate)}
+                </Text>
+              </View>
+              <View style={sharedStyles.userDetailsIconTextContainer}>
+                <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.location}
+                </Text>
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                <Text style={sharedStyles.aboutFirstSectionText}>
+                  {`${prefecture}, ${country}`}
+                </Text>
+              </View>
+              <View style={sharedStyles.userDetailsIconTextContainer}>
+                <Icon color="rgba(0,0,0,.55)" name="person" />
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.user}
+                </Text>
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                {usersDataLoading && SimpleLoader}
+                {!usersDataLoading && adPosterData && (
+                  <AdDetailsUserListItem
+                    user={adPosterData}
+                    // onPress={handleUserPress}
+                  />
+                )}
+                {!usersDataLoading && !adPosterData && empty}
+              </View>
+              <View style={sharedStyles.userDetailsIconTextContainer}>
+                <Icon color="rgba(0,0,0,.55)" name="collections" />
+                <Text style={sharedStyles.userDetailsText}>
+                  {adDetails.userLotteries}
+                </Text>
+              </View>
+              <View style={sharedStyles.aboutFirstSectionTextContainerNoFlex}>
+                {userAdsLoading && SimpleLoader}
+                {!userAdsLoading && userAds && (
                   <VirtualizedList
                     initialNumToRender={2}
                     windowSize={2}
                     horizontal={true}
                     removeClippedSubviews={true}
                     showsHorizontalScrollIndicator={false}
-                    data={lotteryUsersData}
+                    data={userAds}
                     getItem={getItem}
-                    getItemCount={getLotteryUsersCount}
-                    // contentContainerStyle={
-                    //   sharedStyles.adDetailsUsersListContainer
-                    // }
+                    getItemCount={getUserAdsCount}
                     keyExtractor={getVirtualKey}
-                    renderItem={renderLotteryUserItem}
+                    renderItem={renderUserAdItem}
                   />
                 )}
-              {!usersDataLoading &&
-                (!lotteryUsersData || lotteryUsersData.length === 0) &&
-                empty}
-            </View> */}
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="green" name="star" />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.winner}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              {usersDataLoading && SimpleLoader}
-              {!usersDataLoading && winnerUserData && (
-                <AdDetailsUserListItem
-                  user={winnerUserData}
-                  // onPress={winnerUserData && handleUserPress}
-                />
-              )}
-              {!usersDataLoading && !winnerUserData && empty}
-            </View>
-
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="today" />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.publishDate}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>
-                {formatDate(publishDate)}
-              </Text>
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.location}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>
-                {`${prefecture}, ${country}`}
-              </Text>
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="person" />
-              <Text style={sharedStyles.userDetailsText}>{adDetails.user}</Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              {usersDataLoading && SimpleLoader}
-              {!usersDataLoading && adPosterData && (
-                <AdDetailsUserListItem
-                  user={adPosterData}
-                  // onPress={handleUserPress}
-                />
-              )}
-              {!usersDataLoading && !adPosterData && empty}
-            </View>
-            <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="collections" />
-              <Text style={sharedStyles.userDetailsText}>
-                {adDetails.userLotteries}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainerNoFlex}>
-              {userAdsLoading && SimpleLoader}
-              {!userAdsLoading && userAds && (
-                <VirtualizedList
-                  initialNumToRender={2}
-                  windowSize={2}
-                  horizontal={true}
-                  removeClippedSubviews={true}
-                  showsHorizontalScrollIndicator={false}
-                  data={userAds}
-                  getItem={getItem}
-                  getItemCount={getUserAdsCount}
-                  keyExtractor={getVirtualKey}
-                  renderItem={renderUserAdItem}
-                />
-              )}
-              {!userAdsLoading && !userAds && (
-                <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.emptyUserAds}
-                </Text>
-              )}
-            </View>
-            {/* <View style={sharedStyles.userDetailsIconTextContainer}>
+                {!userAdsLoading && !userAds && (
+                  <Text style={sharedStyles.userDetailsText}>
+                    {adDetails.emptyUserAds}
+                  </Text>
+                )}
+              </View>
+              {/* <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="fingerprint" />
               <Text style={sharedStyles.userDetailsText}>{adDetails.adId}</Text>
             </View> */}
-            {/* <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              {/* <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>{id}</Text>
             </View> */}
-            <Text>{cancelled}</Text>
-            <Text>{cancelDate}</Text>
-          </View>
-        </ScrollView>
-        <ActionButton
-          style={{
-            container: {
-              shadowRadius: 1,
-            },
-          }}
-          onPress={handleActionPress}
-          actions={item.userId === authUser.id ? myActions : defaultActions}
-          icon="more-vert"
-          transition="speedDial"
-        />
+              <Text>{cancelled}</Text>
+              <Text>{cancelDate}</Text>
+            </View>
+          </ScrollView>
+          <ActionButton
+            style={{
+              container: {
+                shadowRadius: 1,
+              },
+            }}
+            onPress={handleActionPress}
+            actions={
+              authUser && item.userId === authUser.id
+                ? myActions
+                : defaultActions
+            }
+            icon="more-vert"
+            transition="speedDial"
+          />
+        </View>
       </SafeAreaView>
     </Modal>
   );

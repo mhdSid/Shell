@@ -5,7 +5,6 @@ import {encrypt, password as hashkey} from './Encrypt';
 const login = async props => {
   const {email, password} = props;
   const passwordHash = sha256(password + hashkey).toString();
-  console.log(passwordHash);
   const data = await request({
     endpoint: 'users/authenticate/email',
     method: 'POST',
@@ -56,8 +55,6 @@ const verify = async props => {
 };
 
 const signup = async props => {
-  console.log(' ');
-  console.log('SignupSignUp: ', props);
   const {
     email,
     passwordHash,
@@ -73,25 +70,6 @@ const signup = async props => {
     city,
     // fullAddress,
   } = props;
-  console.log(
-    'hash: ',
-    sha256(
-      email +
-        passwordHash +
-        verificationId +
-        // `${dob}` +
-        // gender +
-        // mobile +
-        country +
-        prefecture +
-        city +
-        // firstName +
-        // lastName +
-        // postalCode +
-        // fullAddress +
-        hashkey,
-    ).toString(),
-  );
   const data = await request({
     endpoint: 'users/authenticate/signup',
     method: 'POST',
@@ -232,7 +210,6 @@ const update = async props => {
         hashkey,
     ).toString(),
   );
-  console.log(formData);
   const data = await request({
     endpoint: 'users/authenticate/update',
     method: 'POST',

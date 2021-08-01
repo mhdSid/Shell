@@ -10,7 +10,6 @@ const handleVerifyUser = payload => {
      */
     // show confirmation button and request to /authenticate/email/verify with email and password again and verification id
     const onVerifyUserSuccess = data => {
-      console.log('onVerifyUserSuccess', data);
       const {error, user: authUser} = data;
       if (error) {
         return handleError({error, onError, dispatch});

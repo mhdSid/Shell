@@ -2,7 +2,7 @@ import React from 'react';
 import {Dimensions, View} from 'react-native';
 import ImageZoom from 'react-native-image-pan-zoom';
 import {Modal, SafeAreaView} from 'react-native';
-import {Toolbar} from 'react-native-material-ui';
+import {Button, Toolbar} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import PropTypes from 'prop-types';
 import FastImage from 'react-native-fast-image';
@@ -18,8 +18,17 @@ const ImagesViewer = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView style={sharedStyles.fullheightView}>
+      <SafeAreaView
+        style={[sharedStyles.fullheightView, sharedStyles.rootSafeAreaView]}>
         <View style={[sharedStyles.fullheightView, sharedStyles.imageViewer]}>
+          {/* <Button
+            icon="arrow-back"
+            onPress={handleCloseModal}
+            raised={false}
+            primary
+            text={''}
+            style={sharedStyles.imageViewButton}
+          /> */}
           <Toolbar
             style={{container: sharedStyles.adDetailsToolbarContainer}}
             leftElement="arrow-back"
@@ -30,13 +39,13 @@ const ImagesViewer = props => {
             cropWidth={cropWidth}
             cropHeight={cropHeight}
             style={sharedStyles.imageViewerZoom}
-            imageWidth={200}
-            imageHeight={200}>
+            imageWidth={300}
+            imageHeight={300}>
             <FastImage
               style={sharedStyles.imageViewerImage}
               source={{
                 uri,
-                priority: FastImage.priority.low,
+                priority: FastImage.priority.high,
                 cache: FastImage.cacheControl.immutable,
               }}
               resizeMode={FastImage.resizeMode.cover}

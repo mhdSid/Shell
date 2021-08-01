@@ -1,4 +1,6 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
 
 const fullWidthHeight = {
   width: '100%',
@@ -33,6 +35,61 @@ const sharedStyles = StyleSheet.create({
   /* ToolBar */
   toolbarContainer: {
     ...toolbarStyles,
+  },
+  searchBox: {
+    position: 'absolute',
+    top: 55,
+    left: 10,
+    zIndex: 100,
+    display: 'flex',
+    width: windowWidth - 20,
+    flexDirection: 'column',
+  },
+  searchBoxOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: 0,
+    backgroundColor: 'white',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    borderColor: '#b69cf6',
+    borderRightWidth: 2,
+    borderLeftWidth: 2,
+    borderBottomWidth: 2,
+    opacity: 1,
+  },
+  searchBoxInnerContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    position: 'relative',
+    zIndex: 100,
+    width: '100%',
+  },
+  searchBoxRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    position: 'relative',
+    width: '100%',
+  },
+  searchBoxButton: {
+    marginTop: 25,
+  },
+  searchBoxDivision: {
+    display: 'flex',
+    flex: 1,
+    // marginBottom: 5,
+  },
+  searchBoxTextInput: {
+    // height: 30,
+  },
+  searchBoxDivisionFirst: {
+    marginRight: 10,
+  },
+  searchBoxDivisionSecond: {
+    marginLeft: 10,
   },
   toolbarBackButton: {
     width: 10,
@@ -93,6 +150,40 @@ const sharedStyles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  importAdView: {
+    // paddingBottom: 10,
+  },
+  bottomNavigationLeftActionContainer: {
+    // paddingBottom: 12,
+    // paddingTop: 12,
+    // paddingLeft: 10,
+    // paddingRight: 0,
+    // paddingBottom: 5,
+    // paddingTop: 5,
+  },
+  bottomNavigationMiddleActionContainer: {
+    paddingBottom: 5,
+    paddingTop: 5,
+    // paddingLeft: 0,
+    // paddingRight: 0,
+  },
+  bottomNavigationRightActionContainer: {
+    // paddingBottom: 12,
+    // paddingTop: 12,
+    // paddingLeft: 0,
+    // paddingRight: 10,
+    paddingBottom: 5,
+    paddingTop: 5,
+  },
+  rootSafeAreaView: {
+    backgroundColor: '#b69cf6',
+    zIndex: 1000,
+  },
+  innerSafeAreaView: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'white',
+  },
   adDetailsImage: {
     flex: 1,
     aspectRatio: 3 / 2,
@@ -133,8 +224,8 @@ const sharedStyles = StyleSheet.create({
     height: 30,
     borderRadius: 30 / 2,
     backgroundColor: '#f7f5fe',
-    borderWidth: 2,
-    borderColor: 'transparent',
+    // borderWidth: 2,
+    // borderColor: 'transparent',
   },
   bottomBarUserImageSelected: {
     borderColor: '#000000',
@@ -225,17 +316,17 @@ const sharedStyles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
   },
-  currenyLabel: {
+  currencyLabel: {
     fontWeight: 'bold',
     fontSize: 18,
     marginHorizontal: 20,
-    color: 'rgba(0,0,0,.7)',
+    color: 'rgba(0,0,0,.5)',
+    textAlignVertical: 'top',
   },
   verificationLabel: {
-    marginTop: 10,
-    fontWeight: '100',
-    fontSize: 12,
-    color: '#979797',
+    fontWeight: '500',
+    fontSize: 16,
+    color: 'rgba(0,0,0,.5)',
   },
   dobLabel: {
     flex: 1,
@@ -276,6 +367,7 @@ const sharedStyles = StyleSheet.create({
   lotteriesContainer: {
     ...flex,
     justifyContent: 'center',
+    textAlign: 'center',
   },
   importAdContainerNoAuth: {
     paddingTop: 40,
@@ -289,14 +381,14 @@ const sharedStyles = StyleSheet.create({
     ...flex,
     marginTop: 40,
     paddingHorizontal: 30,
-    marginBottom: 150,
+    marginBottom: 100,
     justifyContent: 'flex-start',
   },
   loggedInContainer: {
     ...flex,
   },
   loginContainer: {
-    paddingTop: 40,
+    paddingTop: 20,
     paddingBottom: 30,
     paddingLeft: 30,
     paddingRight: 30,
@@ -308,7 +400,7 @@ const sharedStyles = StyleSheet.create({
     width: '100%',
     // justifyContent: 'center',
     alignSelf: 'center',
-    marginTop: 50,
+    // marginTop: 50,
     // textAlignVertical:
     // alignItems: 'center',
   },
@@ -322,6 +414,8 @@ const sharedStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   homeListItemMargin: {
     marginBottom: 20,
@@ -397,24 +491,35 @@ const sharedStyles = StyleSheet.create({
     marginHorizontal: 10,
   },
   homeCardItemImage: {
-    aspectRatio: 3 / 3,
+    aspectRatio: 4 / 3,
     backgroundColor: '#f7f5fe',
   },
   homeCardItemImageSmall: {
-    width: '100%',
-    height: '100%',
+    height: '60%',
     backgroundColor: '#f7f5fe',
   },
   homeCardItemTextContainer: {
     backgroundColor: 'rgba(0,0,0,.75)',
-    position: 'absolute',
-    bottom: 0,
     padding: 7,
-    left: 0,
     width: '100%',
   },
   homeCardItemText: {
     color: 'white',
+  },
+  homeCardListItemRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  homeCardListItemContainer: {
+    display: 'flex',
+    width: (windowWidth - 20 - 20) / 3,
+    flexDirection: 'column',
+    marginRight: 10,
+  },
+  homeCardListItemContainerNoMargin: {
+    marginRight: 0,
   },
   adMobBanner: {
     width: '100%',
@@ -559,24 +664,7 @@ const sharedStyles = StyleSheet.create({
     margin: 0,
     shadowOpacity: 0,
     borderTopWidth: 0.5,
-  },
-  bottomNavigationLeftActionContainer: {
-    paddingBottom: 12,
-    paddingTop: 12,
-    paddingLeft: 10,
-    paddingRight: 0,
-  },
-  bottomNavigationMiddleActionContainer: {
-    paddingBottom: 5,
-    paddingTop: 5,
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-  bottomNavigationRightActionContainer: {
-    paddingBottom: 12,
-    paddingTop: 12,
-    paddingLeft: 0,
-    paddingRight: 10,
+    backgroundColor: '#b69cf6',
   },
   profileUserText: {
     color: '#d9d9d9',
@@ -625,6 +713,19 @@ const sharedStyles = StyleSheet.create({
     right: 0,
     width: '95%',
   },
+  uploadProgressModalText: {
+    fontWeight: '500',
+    fontSize: 16,
+    color: 'rgba(0,0,0,.5)',
+    marginTop: -55,
+    textAlign: 'center',
+  },
+  uploadProgressModalView: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   progressItem: {
     backgroundColor: 'white',
     height: 5,
@@ -650,12 +751,21 @@ const sharedStyles = StyleSheet.create({
   },
   imageViewer: {
     backgroundColor: 'black',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     position: 'relative',
+  },
+  imageViewButton: {
+    position: 'absolute',
+    top: '20',
+    left: '10',
+    width: '50',
+    display: 'flex',
+    alignSelf: 'flex-start',
+    color: 'white',
   },
   imageViewerZoom: {
     marginTop: -100,
-    zIndex: 0,
+    zIndex: -1,
   },
   imageViewerImage: {
     width: 300,

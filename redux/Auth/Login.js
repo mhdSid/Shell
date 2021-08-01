@@ -9,7 +9,6 @@ const handleLogin = payload => {
      * First submit Handler
      */
     const onSubmitSuccess = data => {
-      console.log('handleLoginSuccess: ', data);
       const {error, user: authUser} = data;
       if (error) {
         return handleError({error, onError, dispatch});

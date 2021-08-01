@@ -1,11 +1,11 @@
-import {getLotteries} from '../../services/Ads';
+import {getMyJoinedLotteries} from '../../services/Ads';
 import {handleError} from '../Auth/actions';
 import invoke from 'lodash/invoke';
 import {lotteriesActions} from './actions';
 
-const handleFetchLotteries = payload => {
+const handleFetchMyJoinedLotteries = payload => {
   return dispatch => {
-    const {onError} = payload;
+    const {onError, userId} = payload;
     const onGetLotteriesSuccess = data => {
       const {lotteries, error} = data;
       if (error) {
@@ -17,9 +17,9 @@ const handleFetchLotteries = payload => {
         payload: lotteries || [],
       });
     };
-    return getLotteries().then(onGetLotteriesSuccess, error => {
+    return getMyJoinedLotteries({userId}).then(onGetLotteriesSuccess, error => {
       return handleError({error, onError});
     });
   };
 };
-export {handleFetchLotteries};
+export {handleFetchMyJoinedLotteries};

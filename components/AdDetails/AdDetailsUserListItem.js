@@ -33,7 +33,7 @@ const AdDetailsUserListItem = props => {
             style={sharedStyles.adDetailsUsersListItemImage}
             source={{
               uri: user.image,
-              priority: FastImage.priority.low,
+              priority: FastImage.priority.high,
               cache: FastImage.cacheControl.immutable,
             }}
             resizeMode={FastImage.resizeMode.cover}
@@ -41,14 +41,14 @@ const AdDetailsUserListItem = props => {
         ) : (
           <Icon name="face" size={40} />
         )}
-        {(user.firstName || user.lastName) && (
+        {/* {(user.firstName || user.lastName) && (
           <Text
             numberOfLines={1}
             ellipsizeMode={'tail'}
             style={sharedStyles.adDetailsUsersListItemText}>
             {`${user.firstName} ${user.lastName}`}
           </Text>
-        )}
+        )} */}
       </TouchableBounce>
     );
   }

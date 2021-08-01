@@ -46,15 +46,21 @@ const adDetailsReducer = (state = initialState, action) => {
       if (action.payload) {
         const adDetails = {
           ...action.payload,
-          lotteryUserIds: uniq(action.payload.lotteryUserIds || []),
+          // lotteryUserIds: action.payload.lotteryUserIds || [],
         };
         return {
-          ...state,
+          lotteryUsersData: undefined,
+          adPosterData: undefined,
+          winnerUserData: undefined,
+          userAds: undefined,
           adDetails,
         };
       }
       return {
-        ...state,
+        lotteryUsersData: undefined,
+        adPosterData: undefined,
+        winnerUserData: undefined,
+        userAds: undefined,
         adDetails: undefined,
       };
     }

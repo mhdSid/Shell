@@ -13,7 +13,11 @@ const About = props => {
   return (
     <Modal animationType="fade" onRequestClose={handleCloseModal}>
       <SafeAreaView
-        style={[sharedStyles.container, sharedStyles.aboutSafeViewContainer]}>
+        style={[
+          sharedStyles.container,
+          sharedStyles.aboutSafeViewContainer,
+          sharedStyles.rootSafeAreaView,
+        ]}>
         <Toolbar
           style={{container: sharedStyles.toolbarContainer}}
           leftElement={

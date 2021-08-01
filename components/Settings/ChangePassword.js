@@ -29,7 +29,10 @@ const ChangePassword = props => {
   const [newPasswordChanged, setNewPasswordChanged] = useState(false);
   const [currentPasswordValue, setCurrentPasswordValue] = useState(null);
   const [newPasswordValue, setNewPasswordValue] = useState(null);
-
+  const [errors, setErrors] = useState({
+    currentPassword: false,
+    newPassword: false,
+  });
   const getCurrentPasswordHash = value => {
     return sha256(value + hashkey).toString();
   };
@@ -45,8 +48,17 @@ const ChangePassword = props => {
       getCurrentPasswordHash(value) === user.passwordHash
     ) {
       setCurrentPasswordChanged(true);
+      setErrors({
+        ...errors,
+        currentPassword: false,
+      });
     } else {
       setCurrentPasswordChanged(false);
+      setErrors({
+        ...errors,
+        currentPassword:
+          'The entered password does not match your current one.',
+      });
     }
   };
   const handleNewPasswordChangedText = value => {
@@ -60,8 +72,17 @@ const ChangePassword = props => {
       getNewPasswordHash(value) !== user.passwordHash
     ) {
       setNewPasswordChanged(true);
+      setErrors({
+        ...errors,
+        newPassword: false,
+      });
     } else {
       setNewPasswordChanged(false);
+      setErrors({
+        ...errors,
+        newPassword:
+          'New password should be diferent than your current one and length should be between 6 and 50 characters.',
+      });
     }
   };
   const setDefaultsDataChanged = () => {
@@ -93,77 +114,84 @@ const ChangePassword = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView style={sharedStyles.container}>
-        <Toolbar
-          style={{container: sharedStyles.toolbarContainerPaddingRight}}
-          leftElement="arrow-back"
-          centerElement={settings.changePassword}
-          onLeftElementPress={handleCloseModal}
-          rightElement={
-            <Button
-              color="white"
-              onPress={handleUpdateUser}
-              disabled={
-                loading || !(currentPasswordChanged && newPasswordChanged)
-              }
-              raised
-              text={updateUserr.save}
-              icon="done-all"
-            />
-          }
-        />
-        {loading && loadingPopup}
-        <KeyboardAvoidingView
-          behavior="padding"
-          enabled
-          keyboardVerticalOffset={25}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View
-              style={[
-                sharedStyles.loginContainer,
-                sharedStyles.updateUserContainer,
-                sharedStyles.updatePasswordContainer,
-              ]}>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>
-                  {updateUserr.currentPassword}
-                </Text>
-                <TextField
-                  label={updateUserr.currentPassword}
-                  secureTextEntry={true}
-                  tintColor={'#b69cf6'}
-                  onChangeText={handleCurrentPasswordChangeText}
-                  ref={currentPasswordRef}
-                  disabled={loading}
-                />
+      <SafeAreaView
+        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
+        <View style={sharedStyles.innerSafeAreaView}>
+          <Toolbar
+            style={{container: sharedStyles.toolbarContainerPaddingRight}}
+            leftElement="arrow-back"
+            centerElement={settings.changePassword}
+            onLeftElementPress={handleCloseModal}
+            rightElement={
+              <Button
+                color="white"
+                onPress={handleUpdateUser}
+                disabled={
+                  loading || !(currentPasswordChanged && newPasswordChanged)
+                }
+                raised
+                text={updateUserr.save}
+                icon="done-all"
+              />
+            }
+          />
+          {loading && loadingPopup}
+          <KeyboardAvoidingView
+            behavior="padding"
+            enabled
+            keyboardVerticalOffset={25}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View
+                style={[
+                  sharedStyles.loginContainer,
+                  sharedStyles.updateUserContainer,
+                  sharedStyles.updatePasswordContainer,
+                ]}>
+                <View style={sharedStyles.mobileContainer}>
+                  <Text style={sharedStyles.label}>
+                    {updateUserr.currentPassword}
+                  </Text>
+                  <TextField
+                    placeholder={updateUserr.currentPassword}
+                    placeholderTextColor={'rgba(0,0,0,0.3)'}
+                    secureTextEntry={true}
+                    tintColor={'#b69cf6'}
+                    onChangeText={handleCurrentPasswordChangeText}
+                    ref={currentPasswordRef}
+                    disabled={loading}
+                    error={errors.currentPassword}
+                  />
+                </View>
+                <View style={sharedStyles.mobileContainer}>
+                  <Text style={sharedStyles.label}>
+                    {updateUserr.newPassword}
+                  </Text>
+                  <TextField
+                    placeholder={updateUserr.newPassword}
+                    placeholderTextColor={'rgba(0,0,0,0.3)'}
+                    secureTextEntry={true}
+                    tintColor={'#b69cf6'}
+                    onChangeText={handleNewPasswordChangedText}
+                    ref={newPasswordRef}
+                    disabled={loading}
+                    error={errors.newPassword}
+                  />
+                </View>
+                <View style={sharedStyles.updateUserSbmtBtn}>
+                  <Button
+                    disabled={
+                      loading || !(currentPasswordChanged && newPasswordChanged)
+                    }
+                    raised={true}
+                    primary
+                    text={updateUserr.save}
+                    onPress={handleUpdateUser}
+                  />
+                </View>
               </View>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>
-                  {updateUserr.newPassword}
-                </Text>
-                <TextField
-                  label={updateUserr.newPassword}
-                  secureTextEntry={true}
-                  tintColor={'#b69cf6'}
-                  onChangeText={handleNewPasswordChangedText}
-                  ref={newPasswordRef}
-                  disabled={loading}
-                />
-              </View>
-              <View style={sharedStyles.updateUserSbmtBtn}>
-                <Button
-                  disabled={
-                    loading || !(currentPasswordChanged && newPasswordChanged)
-                  }
-                  raised={true}
-                  primary
-                  text={updateUserr.save}
-                  onPress={handleUpdateUser}
-                />
-              </View>
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </View>
       </SafeAreaView>
     </Modal>
   );

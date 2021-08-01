@@ -29,9 +29,9 @@ const uploadProgressReducer = (state = initialState, action) => {
       progressItems = progressItems.map(item => {
         if (`${id}` === `${item.id}`) {
           updatedProgress =
-            (item.progress || 0) +
-            Number(progress) / Number(progressItemsLength);
-          if (updatedProgress < 100) {
+            ((item.progress || 0) + Number(progress)) /
+            Number(progressItemsLength);
+          if (updatedProgress <= 100) {
             return {
               ...item,
               id,
@@ -44,11 +44,11 @@ const uploadProgressReducer = (state = initialState, action) => {
           return item;
         }
       });
-      if (updatedProgress > 100) {
-        return {
-          ...state,
-        };
-      }
+      // if (updatedProgress > 100) {
+      //   return {
+      //     ...state,
+      //   };
+      // }
       return {
         progressItems,
       };

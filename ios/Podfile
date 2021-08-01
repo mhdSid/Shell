@@ -44,6 +44,8 @@ target 'winadd' do
   pod 'react-native-background-upload', :path => '../node_modules/react-native-background-upload/react-native-background-upload.podspec'
 
   pod 'Google-Mobile-Ads-SDK'
+  pod 'RNSVG', :path => '../node_modules/react-native-svg/RNSVG.podspec'
+
 
 #   target 'winaddTests' do
 #     inherit! :search_paths
@@ -60,5 +62,13 @@ target 'winadd' do
 #     inherit! :search_paths
 #     # Pods for testing
 #   end
+
+# post_install do |installer|
+#   ## Fix for XCode 13.0
+#   find_and_replace("../node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm",
+#   "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules")
+#   find_and_replace("../node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModuleManager.mm",
+#   "RCTBridgeModuleNameForClass(strongModule))", "RCTBridgeModuleNameForClass(Class(strongModule)))")
+# end
 
 end

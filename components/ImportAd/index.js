@@ -46,8 +46,8 @@ const ImportAd = props => {
   const [adNameChanged, setAdNameChanged] = useState(false);
   const [descriptionChanged, setDescriptionChanged] = useState(false);
   const [priceChanged, setPriceChanged] = useState(false);
-  const [cityChanged, setCityChanged] = useState(false);
-  const [prefectureChanged, setPrefectureChanged] = useState(false);
+  // const [cityChanged, setCityChanged] = useState(false);
+  // const [prefectureChanged, setPrefectureChanged] = useState(false);
   const [adCategoryChanged, setAdCategoryChanged] = useState(false);
   const [adStatusChanged, setAdStatusChanged] = useState(false);
   const [cityDropdownData, setCityDropdownData] = useState(
@@ -58,7 +58,7 @@ const ImportAd = props => {
     value: item.kanji,
   }));
   const prefectureOnChangeText = (value, index) => {
-    setPrefectureChanged(true);
+    // setPrefectureChanged(true);
     setCityDropdownData(
       cities[prefecturesDropdownData[index].name].map(item => ({
         value: item,
@@ -67,7 +67,7 @@ const ImportAd = props => {
     setPrefecture(prefecturesDropdownData[index].kanji);
   };
   const cityOnChangeText = value => {
-    setCityChanged(true);
+    // setCityChanged(true);
     setCity(value);
   };
 
@@ -94,7 +94,7 @@ const ImportAd = props => {
         } else {
           setErrors({
             ...errors,
-            adName: true,
+            adName: 'Length should be between 5 and 30 characters.',
           });
           setAdNameChanged(false);
         }
@@ -111,7 +111,7 @@ const ImportAd = props => {
         } else {
           setErrors({
             ...errors,
-            description: true,
+            description: 'Length should be between 20 and 100 characters.',
           });
           setDescriptionChanged(false);
         }
@@ -133,7 +133,7 @@ const ImportAd = props => {
         } else {
           setErrors({
             ...errors,
-            price: true,
+            price: 'Price should be be divisble by 100',
           });
           setPriceChanged(false);
         }
@@ -151,8 +151,8 @@ const ImportAd = props => {
     setAdNameChanged(false);
     setDescriptionChanged(false);
     setPriceChanged(false);
-    setCityChanged(false);
-    setPrefectureChanged(false);
+    // setCityChanged(false);
+    // setPrefectureChanged(false);
     setAdStatusChanged(false);
     setAdCategoryChanged(false);
   };
@@ -264,8 +264,8 @@ const ImportAd = props => {
         adNameChanged &&
         descriptionChanged &&
         priceChanged &&
-        cityChanged &&
-        prefectureChanged &&
+        // cityChanged &&
+        // prefectureChanged &&
         adStatusChanged &&
         adCategoryChanged,
     );
@@ -274,8 +274,8 @@ const ImportAd = props => {
     adNameChanged,
     descriptionChanged,
     priceChanged,
-    cityChanged,
-    prefectureChanged,
+    // cityChanged,
+    // prefectureChanged,
     adStatusChanged,
     adCategoryChanged,
   ]);
@@ -291,33 +291,34 @@ const ImportAd = props => {
   if (loggedIn === true && user) {
     return (
       <View style={sharedStyles.fullheightView}>
+        <Toolbar
+          style={{
+            container: sharedStyles.toolbarContainerPadding,
+          }}
+          centerElement={importAd.createLottery}
+          leftElement={<Icon color="white" name="cloud-upload" />}
+          rightElement={
+            <Button
+              onPress={handleUploadAd}
+              disabled={!adDataChanged}
+              raised
+              text={importAd.create}
+              icon="done-all"
+            />
+          }
+        />
+        <UploadAdProgress relative={true} />
         <KeyboardAvoidingView
-          behavior="padding"
+          behavior="position"
           enabled
-          keyboardVerticalOffset={25}>
-          <Toolbar
-            style={{
-              container: sharedStyles.toolbarContainerPadding,
-            }}
-            centerElement={importAd.createLottery}
-            leftElement={<Icon color="white" name="cloud-upload" />}
-            rightElement={
-              <Button
-                onPress={handleUploadAd}
-                disabled={!adDataChanged}
-                raised
-                text={importAd.create}
-                icon="done-all"
-              />
-            }
-          />
-          <UploadAdProgress relative={true} />
+          style={sharedStyles.importAdView}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={sharedStyles.importAdContainer}>
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>{importAd.productName}</Text>
                 <TextField
-                  label={importAd.adName}
+                  placeholder={importAd.enterName}
+                  placeholderTextColor={'rgba(0,0,0,0.3)'}
                   onBlur={handleBlur('adName')}
                   onChangeText={handleChange.adName()}
                   tintColor={'#b69cf6'}
@@ -330,7 +331,8 @@ const ImportAd = props => {
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>{importAd.description}</Text>
                 <TextField
-                  label={importAd.description}
+                  placeholder={importAd.enterDescription}
+                  placeholderTextColor={'rgba(0,0,0,0.3)'}
                   onChangeText={handleChange.description()}
                   maxLength={100}
                   minLength={20}
@@ -339,25 +341,6 @@ const ImportAd = props => {
                   onBlur={handleBlur('description')}
                   ref={descriptionRef}
                 />
-              </View>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>{importAd.price}</Text>
-                <View style={sharedStyles.priceContainer}>
-                  <Text style={sharedStyles.currenyLabel}>{userCurrency}</Text>
-                  <View style={sharedStyles.adPriceTextfieldContainer}>
-                    <TextField
-                      label={importAd.price}
-                      keyboardType="phone-pad"
-                      maxLength={9}
-                      minLength={4}
-                      tintColor={'#b69cf6'}
-                      onBlur={handleBlur('price')}
-                      error={errors.price}
-                      onChangeText={handleChange.price()}
-                      ref={priceRef}
-                    />
-                  </View>
-                </View>
               </View>
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>{importAd.images}</Text>
@@ -380,7 +363,7 @@ const ImportAd = props => {
                           style={sharedStyles.adImage}
                           source={{
                             uri: images[index],
-                            priority: FastImage.priority.low,
+                            priority: FastImage.priority.high,
                             cache: FastImage.cacheControl.immutable,
                           }}
                           resizeMode={FastImage.resizeMode.cover}
@@ -390,10 +373,31 @@ const ImportAd = props => {
                   ))}
                 </View>
               </View>
+              <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>{importAd.price}</Text>
+                <View style={sharedStyles.priceContainer}>
+                  <Text style={sharedStyles.currencyLabel}>{userCurrency}</Text>
+                  <View style={sharedStyles.adPriceTextfieldContainer}>
+                    <TextField
+                      placeholder={importAd.enterPrice}
+                      placeholderTextColor={'rgba(0,0,0,0.3)'}
+                      keyboardType="phone-pad"
+                      maxLength={9}
+                      minLength={4}
+                      tintColor={'#b69cf6'}
+                      onBlur={handleBlur('price')}
+                      error={errors.price}
+                      onChangeText={handleChange.price()}
+                      ref={priceRef}
+                    />
+                  </View>
+                </View>
+              </View>
               <Text style={sharedStyles.label}>{profile.prefecture}</Text>
               <View style={sharedStyles.dropdownView}>
                 <Dropdown
-                  label={profile.choosePrefecture}
+                  baseColor={'rgba(0,0,0,0.3)'}
+                  label={profile.enterPrefecture}
                   data={prefecturesDropdownData}
                   onChangeText={prefectureOnChangeText}
                   selectedItemColor={'rgba(0, 0, 0, .87)'}
@@ -403,7 +407,8 @@ const ImportAd = props => {
               <Text style={sharedStyles.label}>{profile.city}</Text>
               <View style={sharedStyles.dropdownView}>
                 <Dropdown
-                  label={profile.chooseCity}
+                  baseColor={'rgba(0,0,0,0.3)'}
+                  label={profile.enterCity}
                   selectedItemColor={'rgba(0, 0, 0, .87)'}
                   data={cityDropdownData}
                   onChangeText={cityOnChangeText}
@@ -414,7 +419,8 @@ const ImportAd = props => {
               <Text style={sharedStyles.label}>{importAd.category}</Text>
               <View style={sharedStyles.dropdownView}>
                 <Dropdown
-                  label={importAd.chooseCategory}
+                  label={importAd.enterCategory}
+                  baseColor={'rgba(0,0,0,0.3)'}
                   selectedItemColor={'rgba(0, 0, 0, .87)'}
                   data={adCategories}
                   onChangeText={updateAdCategory}
@@ -424,7 +430,8 @@ const ImportAd = props => {
               <Text style={sharedStyles.label}>{importAd.status}</Text>
               <View style={sharedStyles.dropdownView}>
                 <Dropdown
-                  label={importAd.chooseStatus}
+                  baseColor={'rgba(0,0,0,0.3)'}
+                  label={importAd.enterStatus}
                   selectedItemColor={'rgba(0, 0, 0, .87)'}
                   data={adStatuses}
                   onChangeText={updateAdStatus}

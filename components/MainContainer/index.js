@@ -4,7 +4,6 @@ import {BottomNavigation, Icon} from 'react-native-material-ui';
 import AuthComponent from '../Profile';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import ImportAd from '../ImportAd';
-import SearchComponent from '../Search';
 import HomeComponent from '../Home';
 import Lotteries from '../Lotteries';
 import {connect} from 'react-redux';
@@ -19,7 +18,6 @@ const viewLoader = {
   lotteries: <Lotteries />,
   profile: <AuthComponent />,
   home: <HomeComponent />,
-  search: <SearchComponent />,
   importAd: <ImportAd />,
 };
 
@@ -36,8 +34,10 @@ const MainContainer = () => {
   navigate = handleSetActiveView;
   setUserBottomBarImage = setUserImage;
   return (
-    <SafeAreaView style={sharedStyles.fullheightView}>
-      <SafeAreaView style={sharedStyles.container}>
+    <SafeAreaView
+      style={[sharedStyles.fullheightView, sharedStyles.rootSafeAreaView]}>
+      <SafeAreaView
+        style={[sharedStyles.innerSafeAreaView, sharedStyles.container]}>
         {viewLoader[activeView]}
       </SafeAreaView>
       <BottomNavigation
@@ -49,10 +49,10 @@ const MainContainer = () => {
           style={{
             container: sharedStyles.bottomNavigationLeftActionContainer,
             icon: {
-              color: activeView === 'home' ? '#b69cf6' : '#d8d8d8',
+              color: activeView === 'home' ? 'white' : '#dacdfa',
             },
             label: {
-              color: activeView === 'home' ? '#b69cf6' : '#d8d8d8',
+              color: activeView === 'home' ? 'white' : '#dacdfa',
               display: 'none',
             },
           }}
@@ -61,44 +61,44 @@ const MainContainer = () => {
           active={activeView === 'home'}
           onPress={handleSetActiveView('home')}
         />
-        <BottomNavigation.Action
+        {/* <BottomNavigation.Action
           style={{
-            container: sharedStyles.bottomNavigationLeftActionContainer,
+            container: sharedStyles.bottomNavigationMiddleActionContainer,
             icon: {
-              color: activeView === 'search' ? '#b69cf6' : '#d8d8d8',
+              color: activeView === 'search' ? 'white' : '#dacdfa',
             },
             label: {
-              color: activeView === 'search' ? '#b69cf6' : '#d8d8d8',
+              color: activeView === 'search' ? 'white' : '#dacdfa',
             },
           }}
           key="search"
           icon={<Icon name="search" size={30} />}
           active={activeView === 'search'}
           onPress={handleSetActiveView('search')}
-        />
+        /> */}
         <BottomNavigation.Action
           style={{
             container: sharedStyles.bottomNavigationMiddleActionContainer,
             icon: {
-              color: activeView === 'importAd' ? '#b69cf6' : '#d8d8d8',
+              color: activeView === 'importAd' ? 'white' : '#dacdfa',
             },
             label: {
-              color: activeView === 'importAd' ? '#b69cf6' : '#d8d8d8',
+              color: activeView === 'importAd' ? 'white' : '#dacdfa',
             },
           }}
           key="importAd"
-          icon={<Icon name="cloud-upload" size={40} />}
+          icon={<Icon name="cloud-upload" size={30} />}
           active={activeView === 'importAd'}
           onPress={handleSetActiveView('importAd')}
         />
         <BottomNavigation.Action
           style={{
-            container: sharedStyles.bottomNavigationLeftActionContainer,
+            container: sharedStyles.bottomNavigationMiddleActionContainer,
             icon: {
-              color: activeView === 'lotteries' ? '#b69cf6' : '#d8d8d8',
+              color: activeView === 'lotteries' ? 'white' : '#dacdfa',
             },
             label: {
-              color: activeView === 'lotteries' ? '#b69cf6' : '#d8d8d8',
+              color: activeView === 'lotteries' ? 'white' : '#dacdfa',
             },
           }}
           key="lotteries"
@@ -110,10 +110,10 @@ const MainContainer = () => {
           style={{
             container: sharedStyles.bottomNavigationRightActionContainer,
             icon: {
-              color: activeView === 'profile' ? '#b69cf6' : '#d8d8d8',
+              color: activeView === 'profile' ? 'white' : '#dacdfa',
             },
             label: {
-              color: activeView === 'profile' ? '#b69cf6' : '#d8d8d8',
+              color: activeView === 'profile' ? 'white' : '#dacdfa',
             },
           }}
           key="profile"
@@ -123,8 +123,8 @@ const MainContainer = () => {
                 <FastImage
                   style={[
                     sharedStyles.bottomBarUserImage,
-                    activeView === 'profile' &&
-                      sharedStyles.bottomBarUserImageSelected,
+                    // activeView === 'profile' &&
+                    //   sharedStyles.bottomBarUserImageSelected,
                   ]}
                   source={{
                     uri: userImage,

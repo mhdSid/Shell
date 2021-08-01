@@ -10,7 +10,7 @@ import {
   orSignUp,
 } from '../../Constants/Texts';
 import {TextField} from 'react-native-material-textfield';
-import {Button} from 'react-native-material-ui';
+import {Button, Icon, Toolbar} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';
 import PropTypes from 'prop-types';
 import {emailsRegex} from '../../Constants/Regexes';
@@ -18,6 +18,7 @@ import invoke from 'lodash/invoke';
 import {connect} from 'react-redux';
 import {loginAction, logoutAction} from '../../redux/Auth/actions';
 import {handleLogin} from '../../redux/Auth/Login';
+import {Text} from 'react-native';
 
 const Login = props => {
   const [isSignup, setIsSignup] = useState(false);
@@ -80,7 +81,7 @@ const Login = props => {
           setEmailChanged(false);
           setErrors({
             ...errors,
-            email: true,
+            email: 'Please enter a valid email.',
           });
         }
       };
@@ -97,7 +98,7 @@ const Login = props => {
           setPasswordChanged(false);
           setErrors({
             ...errors,
-            password: true,
+            password: 'Length should be between 6 and 50 characters.',
           });
         }
       };
@@ -112,7 +113,6 @@ const Login = props => {
         email: emailField && emailField.value(),
         password: passField && passField.value(),
       };
-      console.log(values);
       handleChange[fieldName]()(values[fieldName]);
     };
   };
@@ -124,31 +124,46 @@ const Login = props => {
   return (
     <View style={sharedStyles.fullheightView}>
       {loading && loadingPopup}
+      <Toolbar
+        style={{
+          container: sharedStyles.toolbarContainerPadding,
+        }}
+        centerElement={profile.loginOrSignup}
+        leftElement={<Icon color="white" name="exit-to-app" />}
+      />
       <View
         style={[sharedStyles.loginContainer, sharedStyles.relativeConatainer]}>
-        <TextField
-          label={profile.email}
-          ref={emailRef}
-          tintColor={'#b69cf6'}
-          disabled={loading}
-          maxLength={50}
-          minLength={1}
-          onBlur={handleBlur('email')}
-          error={errors.email}
-          onChangeText={handleChange.email()}
-        />
-        <TextField
-          label={profile.password}
-          ref={passwordRef}
-          secureTextEntry={true}
-          disabled={loading}
-          tintColor={'#b69cf6'}
-          maxLength={50}
-          minLength={8}
-          onBlur={handleBlur('password')}
-          error={errors.password}
-          onChangeText={handleChange.password()}
-        />
+        <View style={sharedStyles.mobileContainer}>
+          <Text style={sharedStyles.label}>{profile.email}</Text>
+          <TextField
+            placeholder={profile.enterEmail}
+            placeholderTextColor={'rgba(0,0,0,0.3)'}
+            ref={emailRef}
+            tintColor={'#b69cf6'}
+            disabled={loading}
+            maxLength={50}
+            minLength={1}
+            onBlur={handleBlur('email')}
+            error={errors.email}
+            onChangeText={handleChange.email()}
+          />
+        </View>
+        <View style={sharedStyles.mobileContainer}>
+          <Text style={sharedStyles.label}>{profile.password}</Text>
+          <TextField
+            placeholder={profile.enterPassword}
+            placeholderTextColor={'rgba(0,0,0,0.3)'}
+            ref={passwordRef}
+            secureTextEntry={true}
+            disabled={loading}
+            tintColor={'#b69cf6'}
+            maxLength={50}
+            minLength={8}
+            onBlur={handleBlur('password')}
+            error={errors.password}
+            onChangeText={handleChange.password()}
+          />
+        </View>
         <View style={sharedStyles.loginBtn}>
           <Button
             disabled={loading || !emailPassChanged}

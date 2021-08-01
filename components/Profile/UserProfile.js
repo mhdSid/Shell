@@ -7,7 +7,6 @@ import {View, Text} from 'react-native';
 import {Button, Drawer, Avatar, Icon} from 'react-native-material-ui';
 import Notifications from '../Notifications';
 import PaymentInformation from '../PaymentInformation';
-import MyAds from '../MyAds';
 import About from '../About';
 import MyLotteries from '../MyLotteries';
 import {loadingPopup} from '../Loading';
@@ -54,7 +53,6 @@ const UserProfile = props => {
     updateUser: <UpdateUser onClose={onModalClose} />,
     settings: <Settings onClose={onModalClose} />,
     notifications: <Notifications onClose={onModalClose} />,
-    myAds: <MyAds onClose={onModalClose} />,
     about: <About onClose={onModalClose} />,
     myLotteries: <MyLotteries onClose={onModalClose} />,
     paymentInformation: <PaymentInformation onClose={onModalClose} />,
@@ -94,7 +92,7 @@ const UserProfile = props => {
                           style={sharedStyles.profileImage}
                           source={{
                             uri: user.image,
-                            priority: FastImage.priority.low,
+                            priority: FastImage.priority.high,
                             cache: FastImage.cacheControl.immutable,
                           }}
                           resizeMode={FastImage.resizeMode.cover}
@@ -148,14 +146,14 @@ const UserProfile = props => {
                   value: profile.notifications,
                   onPress: handleShowModal('notifications'),
                 },
-                {
-                  icon: 'people',
-                  value: profile.myAds,
-                  onPress: handleShowModal('myAds'),
-                },
+                // {
+                //   icon: 'people',
+                //   value: profile.myAds,
+                //   onPress: handleShowModal('myAds'),
+                // },
                 {
                   icon: 'grade',
-                  value: profile.myLotteries,
+                  value: profile.myCreatedLotteries,
                   onPress: handleShowModal('myLotteries'),
                 },
               ]}

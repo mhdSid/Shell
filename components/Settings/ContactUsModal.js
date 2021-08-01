@@ -1,6 +1,6 @@
 import React from 'react';
 import invoke from 'lodash/invoke';
-import {Modal, SafeAreaView, ScrollView} from 'react-native';
+import {Modal, SafeAreaView, ScrollView, View} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
@@ -13,14 +13,17 @@ const ContactUsModal = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView style={sharedStyles.container}>
-        <Toolbar
-          style={{container: sharedStyles.toolbarContainer}}
-          leftElement="arrow-back"
-          centerElement={settings.contactUs}
-          onLeftElementPress={handleCloseModal}
-        />
-        <ScrollView showsVerticalScrollIndicator={false} />
+      <SafeAreaView
+        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
+        <View style={sharedStyles.innerSafeAreaView}>
+          <Toolbar
+            style={{container: sharedStyles.toolbarContainer}}
+            leftElement="arrow-back"
+            centerElement={settings.contactUs}
+            onLeftElementPress={handleCloseModal}
+          />
+          <ScrollView showsVerticalScrollIndicator={false} />
+        </View>
       </SafeAreaView>
     </Modal>
   );

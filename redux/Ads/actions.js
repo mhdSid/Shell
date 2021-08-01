@@ -4,6 +4,7 @@ import invoke from 'lodash/invoke';
 
 const adActions = {
   importAd: 'AD_IMPORT',
+  resetAds: 'RESET_ADS',
   updateCurrentAd: 'UPDATE_CURRENT_AD',
 };
 

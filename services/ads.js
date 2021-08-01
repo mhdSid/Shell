@@ -29,10 +29,10 @@ const getMyAds = async props => {
   return data;
 };
 
-const getMyLotteries = async props => {
+const getMyCreatedLotteries = async props => {
   const {userId} = props;
   const data = await request({
-    endpoint: 'ads/myLotteries',
+    endpoint: 'ads/myCreatedLotteries',
     method: 'POST',
     body: {
       userId,
@@ -42,12 +42,14 @@ const getMyLotteries = async props => {
   return data;
 };
 
-const getLotteries = async () => {
+const getMyJoinedLotteries = async props => {
+  const {userId} = props;
   const data = await request({
-    endpoint: 'ads/lotteries',
+    endpoint: 'ads/myJoinedLotteries',
     method: 'POST',
     body: {
-      hash: sha256(hashkey).toString(),
+      userId,
+      hash: sha256(userId + hashkey).toString(),
     },
   });
   return data;
@@ -115,35 +117,6 @@ const addBackgroundUpload = async props => {
     country,
     updateProgress,
   } = props;
-  console.log(
-    name,
-    description,
-    image,
-    category,
-    prefecture,
-    city,
-    currency,
-    status,
-    price,
-    userId,
-    country,
-  );
-  console.log(
-    'hash: ',
-    sha256(
-      name +
-        description +
-        category +
-        prefecture +
-        city +
-        currency +
-        status +
-        price +
-        userId +
-        country +
-        hashkey,
-    ).toString(),
-  );
   const options = {
     url: `${apiRequest.apiUri}ads/add`,
     path: image.uri,
@@ -365,7 +338,7 @@ const enterLottery = async props => {
           creditCardTypeEnc +
           hashkey,
       ).toString(),
-      creditCardNumber: creditCardTypeEnc,
+      creditCardNumber: creditCardNumberEnc,
       creditCardCVC: creditCardCVCEnc,
       creditCardExpiryDate: creditCardExpiryDateEnc,
       creditCardType: creditCardTypeEnc,
@@ -378,10 +351,10 @@ export {
   // importAd,
   getAds,
   getMyAds,
-  getMyLotteries,
+  getMyCreatedLotteries,
   // updateAd,
   enterLottery,
-  getLotteries,
+  getMyJoinedLotteries,
   addBackgroundUpload,
   updateAdBackground,
 };

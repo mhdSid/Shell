@@ -4,7 +4,7 @@ const initialState = {
   lang: 'US',
   isHomeListStyle: false,
   isHomeCardStyle: true,
-  // isHomeCarouselStyle: false,
+  isHomeCarouselStyle: false,
 };
 
 const settingsReducer = (state = initialState, action) => {
