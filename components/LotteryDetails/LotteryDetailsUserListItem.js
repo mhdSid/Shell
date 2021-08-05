@@ -7,7 +7,7 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {Text, View} from 'react-native';
 import {Icon} from 'react-native-material-ui';
 
-const AdDetailsUserListItem = props => {
+const LotteryDetailsUserListItem = props => {
   const {user, withNotificationNum} = props;
 
   const handlePress = () => {
@@ -17,7 +17,7 @@ const AdDetailsUserListItem = props => {
   if (user) {
     return (
       <TouchableBounce
-        style={sharedStyles.adDetailsUsersListItemContainer}
+        style={sharedStyles.lotteryDetailsUsersListItemContainer}
         onPress={handlePress}>
         {withNotificationNum && user.userJoinedLotteryCount > 1 && (
           <View style={sharedStyles.userJoinedLotteryCountContainer}>
@@ -30,7 +30,7 @@ const AdDetailsUserListItem = props => {
         )}
         {user.image ? (
           <FastImage
-            style={sharedStyles.adDetailsUsersListItemImage}
+            style={sharedStyles.lotteryDetailsUsersListItemImage}
             source={{
               uri: user.image,
               priority: FastImage.priority.high,
@@ -41,28 +41,20 @@ const AdDetailsUserListItem = props => {
         ) : (
           <Icon name="face" size={40} />
         )}
-        {/* {(user.firstName || user.lastName) && (
-          <Text
-            numberOfLines={1}
-            ellipsizeMode={'tail'}
-            style={sharedStyles.adDetailsUsersListItemText}>
-            {`${user.firstName} ${user.lastName}`}
-          </Text>
-        )} */}
       </TouchableBounce>
     );
   }
   return (
-    <View style={sharedStyles.adDetailsUsersListItemContainer}>
+    <View style={sharedStyles.lotteryDetailsUsersListItemContainer}>
       <Icon name="face" size={40} />
     </View>
   );
 };
 
-AdDetailsUserListItem.propTypes = {
+LotteryDetailsUserListItem.propTypes = {
   user: PropTypes.object,
   onPress: PropTypes.func,
   withNotificationNum: PropTypes.bool,
 };
 
-export default AdDetailsUserListItem;
+export default LotteryDetailsUserListItem;

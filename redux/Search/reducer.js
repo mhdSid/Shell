@@ -2,22 +2,23 @@ import {searchActions} from './actions';
 
 const initialState = {
   searchResults: undefined,
+  searchEventFired: null,
   searchFilters: {
     city: '',
     prefecture: '',
     fromDate: '',
     toDate: '',
     category: '',
-    status: '',
+    condition: '',
   },
 };
 
 const searchReducer = (state = initialState, action) => {
   switch (action.type) {
-    case searchActions.search: {
+    case searchActions.setSearchEventFired: {
       return {
         ...state,
-        searchResults: action.payload,
+        searchEventFired: action.payload,
       };
     }
     case searchActions.setSearchFilters: {

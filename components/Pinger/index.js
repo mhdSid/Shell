@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import invoke from 'lodash/invoke';
 import {connect} from 'react-redux';
-import AdDetails from '../AdDetails';
+import LotteryDetails from '../LotteryDetails';
 import {handlePing} from '../../redux/Ping/Ping';
 import PropTypes from 'prop-types';
-import {showAdDetails} from '../../redux/AdDetails/actions';
-import {getAdDetailsSelector} from './Selectors';
+import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
+import {getLotteryDetailsSelector} from './Selectors';
 import {NativeModules} from 'react-native';
 import {
   addNewProgressItem,
@@ -16,35 +16,35 @@ import {getProgressItemsSelector} from '../UploadAdProgress/Selectors';
 const {CalendarModule} = NativeModules;
 
 const Pinger = props => {
-  const {adDetails} = props;
+  const {lotteryDetails} = props;
 
   CalendarModule.createCalendarEvent('Party', 'my house').then(data => {
     console.log('createCalendarEvent data: ', data);
   });
 
   const onAdsDetailsClose = () => {
-    invoke(props, 'showAdDetails', undefined);
+    invoke(props, 'showLotteryDetails', undefined);
   };
   useEffect(() => {
     invoke(props, 'handlePing');
   }, [props]);
 
-  if (adDetails) {
-    return <AdDetails onClose={onAdsDetailsClose} item={adDetails} />;
+  if (lotteryDetails) {
+    return <LotteryDetails onClose={onAdsDetailsClose} item={lotteryDetails} />;
   }
   return null;
 };
 
 const mapStateToProps = state => {
   return {
-    adDetails: getAdDetailsSelector(state),
+    lotteryDetails: getLotteryDetailsSelector(state),
     progressItems: getProgressItemsSelector(state),
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    showAdDetails: payload => dispatch(showAdDetails(payload)),
+    showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
     handlePing: payload => dispatch(handlePing(payload)),
     updateProgressItem: payload => dispatch(updateProgressItem(payload)),
     addNewProgressItem: payload => dispatch(addNewProgressItem(payload)),
@@ -53,7 +53,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 Pinger.propTypes = {
-  showAdDetails: PropTypes.func,
+  showLotteryDetails: PropTypes.func,
   handlePing: PropTypes.func,
 };
 

@@ -1,5 +1,4 @@
-import CryptoJS from 'crypto-js';
-import {decrypt, password} from './Encrypt';
+import {decrypt} from './Encrypt';
 import {apiRequest} from '../Constants/Api';
 
 const request = async options => {
@@ -19,8 +18,6 @@ const request = async options => {
       ...reqData,
       body: body instanceof FormData ? body : JSON.stringify(body),
     };
-
-    // todo: encrypt all bodies
   }
   const response = await fetch(`${apiRequest.apiUri}${endpoint}`, reqData);
   if (response) {

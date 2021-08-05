@@ -1,4 +1,4 @@
-let adCategories = [
+let lotteryItemCategories = [
   'Electronic Devices',
   'Home Applicances',
   'Software',
@@ -23,9 +23,12 @@ let adCategories = [
   'Sports',
 ].sort();
 
-adCategories = [...adCategories.map(item => ({value: item})), {value: 'Other'}];
+lotteryItemCategories = [
+  ...lotteryItemCategories.map(item => ({value: item})),
+  {value: 'Other'},
+];
 
-const adTypes = {
+const lotteryItemTypes = {
   'Home Appliances': [],
   Computer: [
     'Computer',
@@ -68,7 +71,7 @@ const mimeTypes = {
   '.png': 'image/png',
 };
 
-const adStatuses = [
+const lotteryItemConditions = [
   'New',
   'Used',
   'Nearly Used',
@@ -82,4 +85,9 @@ const adStatuses = [
   .sort()
   .map(item => ({value: item}));
 
-export {adCategories, adStatuses, mimeTypes, adTypes};
+export {
+  lotteryItemCategories,
+  lotteryItemConditions,
+  mimeTypes,
+  lotteryItemTypes,
+};

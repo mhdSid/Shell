@@ -1,17 +1,20 @@
-import {handleError, adActions} from './actions';
-import {getAds} from '../../services/Ads';
+import {handleError, homeActions} from './actions';
+import {getAds} from '../../services/Lotteries';
 import invoke from 'lodash/invoke';
 
-const handleFetchAds = payload => {
+const handleFetchLotteries = payload => {
   return dispatch => {
     const {onError} = payload;
     const onGetAdsSuccess = data => {
       invoke(payload, 'onSuccess');
-      const {error, ads: serverAds} = data;
+      const {error, ads: serverLotteries} = data;
       if (error) {
         return handleError({error, onError});
       }
-      return dispatch({type: adActions.importAd, payload: serverAds});
+      return dispatch({
+        type: homeActions.setLotteries,
+        payload: serverLotteries,
+      });
     };
     return getAds().then(onGetAdsSuccess, error => {
       return handleError({error, onError});
@@ -19,4 +22,4 @@ const handleFetchAds = payload => {
   };
 };
 
-export {handleFetchAds};
+export {handleFetchLotteries};

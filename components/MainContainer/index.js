@@ -3,7 +3,7 @@ import {SafeAreaView} from 'react-native';
 import {BottomNavigation, Icon} from 'react-native-material-ui';
 import AuthComponent from '../Profile';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import ImportAd from '../ImportAd';
+import ImportLottery from '../ImportLottery';
 import HomeComponent from '../Home';
 import Lotteries from '../Lotteries';
 import {connect} from 'react-redux';
@@ -18,7 +18,7 @@ const viewLoader = {
   lotteries: <Lotteries />,
   profile: <AuthComponent />,
   home: <HomeComponent />,
-  importAd: <ImportAd />,
+  importLottery: <ImportLottery />,
 };
 
 const MainContainer = () => {
@@ -80,16 +80,16 @@ const MainContainer = () => {
           style={{
             container: sharedStyles.bottomNavigationMiddleActionContainer,
             icon: {
-              color: activeView === 'importAd' ? 'white' : '#dacdfa',
+              color: activeView === 'importLottery' ? 'white' : '#dacdfa',
             },
             label: {
-              color: activeView === 'importAd' ? 'white' : '#dacdfa',
+              color: activeView === 'importLottery' ? 'white' : '#dacdfa',
             },
           }}
-          key="importAd"
+          key="importLottery"
           icon={<Icon name="cloud-upload" size={30} />}
-          active={activeView === 'importAd'}
-          onPress={handleSetActiveView('importAd')}
+          active={activeView === 'importLottery'}
+          onPress={handleSetActiveView('importLottery')}
         />
         <BottomNavigation.Action
           style={{

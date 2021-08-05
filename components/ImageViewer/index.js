@@ -30,7 +30,7 @@ const ImagesViewer = props => {
             style={sharedStyles.imageViewButton}
           /> */}
           <Toolbar
-            style={{container: sharedStyles.adDetailsToolbarContainer}}
+            style={{container: sharedStyles.lotteryDetailsToolbarContainer}}
             leftElement="arrow-back"
             centerElement={imageText}
             onLeftElementPress={handleCloseModal}
@@ -48,7 +48,7 @@ const ImagesViewer = props => {
                 priority: FastImage.priority.high,
                 cache: FastImage.cacheControl.immutable,
               }}
-              resizeMode={FastImage.resizeMode.cover}
+              resizeMode={FastImage.resizeMode.contain}
             />
           </ImageZoom>
         </View>

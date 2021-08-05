@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {ActionSheetIOS, View} from 'react-native';
 import PropTypes from 'prop-types';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import FastImage from 'react-native-fast-image';
@@ -28,6 +28,25 @@ export default class ListItemCommon extends Component {
   }
   handleItemPress = () => {
     invoke(this.props, 'onItemPress', this.props.index);
+  };
+  handleRightElementPress = () => {
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ['Cancel', 'Chat with owner'],
+        // destructiveButtonIndex: 2,
+        cancelButtonIndex: 0,
+        userInterfaceStyle: 'dark',
+      },
+      buttonIndex => {
+        if (buttonIndex === 0) {
+          // cancel action
+        } else if (buttonIndex === 1) {
+          // setResult(Math.floor(Math.random() * 100) + 1);
+        } else if (buttonIndex === 2) {
+          // setResult("🔮");
+        }
+      },
+    );
   };
   render() {
     return (
@@ -63,6 +82,8 @@ export default class ListItemCommon extends Component {
               this.props.item.price
             }`,
           }}
+          rightElement={'more-vert'}
+          onRightElementPress={this.handleRightElementPress}
           onPress={this.handleItemPress}
         />
         {this.props.showUploadProgress ? (

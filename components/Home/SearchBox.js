@@ -1,4 +1,4 @@
-import React, {createRef, useEffect, useState} from 'react';
+import React, {createRef, useState} from 'react';
 import {View} from 'react-native';
 import {connect} from 'react-redux';
 import sharedStyles from '../../assets/styles/sharedStyles';
@@ -6,30 +6,37 @@ import PropTypes from 'prop-types';
 import {Animated} from 'react-native';
 import {Dropdown} from 'react-native-material-dropdown';
 import {prefectures, cities} from '../../Constants/Countries';
-import {importAd, profile} from '../../Constants/Texts';
-import {getUserSelector} from '../Profile/Selectors';
-import {OutlinedTextField, TextField} from 'react-native-material-textfield';
+import {importLottery, profile} from '../../Constants/Texts';
+import {TextField} from 'react-native-material-textfield';
 import {Button} from 'react-native-material-ui';
 import {handleSearch} from '../../redux/Search/Search';
-import {setSearchFilters} from '../../redux/Search/actions';
+import {
+  setSearchEventFired,
+  setSearchFilters,
+} from '../../redux/Search/actions';
 import {invoke} from 'lodash';
-import {getSearchFiltersSelector} from './Selectors';
-import {adStatuses, adCategories} from '../../Constants/Ads';
+import {
+  getSearchEventFiredSelector,
+  getSearchFiltersSelector,
+} from './Selectors';
+import {
+  lotteryItemConditions,
+  lotteryItemCategories,
+} from '../../Constants/Lotteries';
+import {handleFetchLotteries} from '../../redux/Home/FetchLotteries';
 
 const SearchBox = props => {
-  const {user, searchFilters, style} = props;
-  let userOriginalPrefecture = '';
-  let userOriginalCity = '';
-  let userPrefecture;
-  if (user) {
-    userOriginalPrefecture = user.prefecture;
-    userOriginalCity = user.city;
-    userPrefecture = prefectures.Japan.find(
-      item => item.kanji === user.prefecture,
+  const {searchFilters, style, searchEventFired} = props;
+  let searchFiltersPrefecture;
+  if (searchFilters.prefecture) {
+    searchFiltersPrefecture = prefectures.Japan.find(
+      item => item.kanji === searchFilters.prefecture,
     ).name;
   }
   const [cityDropdownData, setCityDropdownData] = useState(
-    userPrefecture ? cities[userPrefecture].map(item => ({value: item})) : [],
+    searchFiltersPrefecture
+      ? cities[searchFiltersPrefecture].map(item => ({value: item}))
+      : [],
   );
   const fromDateRef = createRef();
   const toDateRef = createRef();
@@ -53,8 +60,8 @@ const SearchBox = props => {
   const cityOnChangeText = value => {
     invoke(props, 'handleSetSearchFilters', {city: value});
   };
-  const statusOnChangeText = value => {
-    invoke(props, 'handleSetSearchFilters', {status: value});
+  const conditionOnChangeText = value => {
+    invoke(props, 'handleSetSearchFilters', {condition: value});
   };
   const categoryOnChangeText = value => {
     invoke(props, 'handleSetSearchFilters', {category: value});
@@ -66,58 +73,64 @@ const SearchBox = props => {
   const handleChange = {
     fromDate: () => {
       return value => {
-        if (Date.parse(value) > 0) {
-          let fromDate = `${value}`;
-          console.log('fromDate: ', fromDate);
-          if (fromDate.length === 4 || fromDate.length === 7) {
-            fromDate = `${fromDate}/`;
+        if (value) {
+          if (Date.parse(value) > 0) {
+            // let fromDate = `${value}`;
+            // console.log('fromDate: ', fromDate);
+            // if (fromDate.length === 4 || fromDate.length === 7) {
+            //   fromDate = `${fromDate}/`;
+            // }
+            invoke(props, 'handleSetSearchFilters', {fromDate: value});
+            setErrors({
+              ...errors,
+              fromDate: false,
+            });
+          } else {
+            setErrors({
+              ...errors,
+              fromDate: 'From date should be formatted like yyyy/mm/dd',
+            });
           }
-          invoke(props, 'handleSetSearchFilters', {fromDate});
-          setErrors({
-            ...errors,
-            fromDate: false,
-          });
-        } else {
-          setErrors({
-            ...errors,
-            fromDate: 'From date should be formatted like yyyy/mm/dd',
-          });
         }
       };
     },
     toDate: () => {
       return value => {
-        if (Date.parse(value) > 0) {
-          let toDate = `${value}`;
-          console.log('toDate: ', toDate);
-          if (toDate.length === 4 || toDate.length === 7) {
-            toDate = `${toDate}/`;
+        if (value) {
+          if (Date.parse(value) > 0) {
+            // let toDate = `${value}`;
+            // console.log('toDate: ', toDate);
+            // if (toDate.length === 4 || toDate.length === 7) {
+            //   toDate = `${toDate}/`;
+            // }
+            invoke(props, 'handleSetSearchFilters', {toDate: value});
+            setErrors({
+              ...errors,
+              toDate: false,
+            });
+          } else {
+            setErrors({
+              ...errors,
+              toDate: 'To date should be formatted like yyyy/mm/dd',
+            });
           }
-          invoke(props, 'handleSetSearchFilters', {toDate});
-          setErrors({
-            ...errors,
-            toDate: false,
-          });
-        } else {
-          setErrors({
-            ...errors,
-            toDate: 'To date should be formatted like yyyy/mm/dd',
-          });
         }
       };
     },
     searchQuery: () => {
       return value => {
-        if (value && value.length >= 2 && value.length <= 100) {
-          setErrors({
-            ...errors,
-            searchQuery: false,
-          });
-        } else {
-          setErrors({
-            ...errors,
-            searchQuery: 'Length should be between 2 and 100 characters.',
-          });
+        if (value) {
+          if (value.length >= 2 && value.length <= 100) {
+            setErrors({
+              ...errors,
+              searchQuery: false,
+            });
+          } else {
+            setErrors({
+              ...errors,
+              searchQuery: 'Length should be between 2 and 100 characters.',
+            });
+          }
         }
       };
     },
@@ -140,19 +153,48 @@ const SearchBox = props => {
     toDateRef.current.blur();
     searchQueryRef.current.blur();
     const {current: searchQueryField} = searchQueryRef;
+    const searchQuery = searchQueryField && searchQueryField.value();
+    // if (
+    //   searchQuery ||
+    //   searchFilters.fromDate ||
+    //   searchFilters.toDate ||
+    //   searchFilters.prefecture ||
+    //   searchFilters.city ||
+    //   searchFilters.category ||
+    //   searchFilters.condition
+    // ) {
     invoke(props, 'handleSearch', {
-      searchQuery: searchQueryField && searchQueryField.value(),
+      searchQuery,
+      filters: {
+        ...searchFilters,
+      },
       onError: props.onSearchError,
       onSuccess: props.onSearchSuccess,
     });
+    invoke(props, 'handleSetSearchEventFired', true);
+    // }
     invoke(props, 'onSearchPress');
   };
-  useEffect(() => {
+  const handleResetSearchFilters = () => {
     invoke(props, 'handleSetSearchFilters', {
-      city: userOriginalCity,
-      prefecture: userOriginalPrefecture,
+      city: '',
+      prefecture: '',
+      category: '',
+      condition: '',
+      fromDate: '',
+      toDate: '',
     });
-  }, []);
+    invoke(props, 'onSearchPress');
+    if (searchEventFired) {
+      invoke(props, 'handleSetSearchEventFired', false);
+    }
+    invoke(props, 'fetchLotteries', {
+      onError: props.onSearchError,
+      onSuccess: props.onSearchSuccess,
+    });
+  };
+  const {current: searchQueryField} = searchQueryRef;
+  const searchQuery = searchQueryField && searchQueryField.value();
   return (
     <Animated.View style={[sharedStyles.searchBox, {...style}]}>
       <View style={sharedStyles.searchBoxOverlay} />
@@ -193,44 +235,13 @@ const SearchBox = props => {
               sharedStyles.searchBoxDivision,
               sharedStyles.searchBoxDivisionFirst,
             ]}>
-            <Dropdown
-              label={importAd.category}
-              baseColor={'rgba(0,0,0,0.3)'}
-              selectedItemColor={'rgba(0, 0, 0, .87)'}
-              data={adCategories}
-              onChangeText={categoryOnChangeText}
-              value={searchFilters.category}
-            />
-          </View>
-          <View
-            style={[
-              sharedStyles.searchBoxDivision,
-              sharedStyles.searchBoxDivisionSecond,
-            ]}>
-            <Dropdown
-              baseColor={'rgba(0,0,0,0.3)'}
-              label={importAd.status}
-              selectedItemColor={'rgba(0, 0, 0, .87)'}
-              data={adStatuses}
-              onChangeText={statusOnChangeText}
-              value={searchFilters.status}
-            />
-          </View>
-        </View>
-
-        <View style={sharedStyles.searchBoxRow}>
-          <View
-            style={[
-              sharedStyles.searchBoxDivision,
-              sharedStyles.searchBoxDivisionFirst,
-            ]}>
             <TextField
               blurOnSubmit={true}
               outlined
               placeholder={'yyyy/mm/dd'}
               label={'From'}
               value={searchFilters.fromDate}
-              keyboardType="number-pad"
+              keyboardType="numbers-and-punctuation"
               onBlur={handleBlur('fromDate')}
               tintColor={'rgba(0,0,0,0.3)'}
               onChangeText={handleChange.fromDate()}
@@ -248,7 +259,7 @@ const SearchBox = props => {
               outlined
               placeholder={'yyyy/mm/dd'}
               label={'To'}
-              keyboardType="number-pad"
+              keyboardType="numbers-and-punctuation"
               value={searchFilters.toDate}
               blurOnSubmit={true}
               onBlur={handleBlur('toDate')}
@@ -257,6 +268,36 @@ const SearchBox = props => {
               placeholderTextColor={'rgba(0,0,0,0.3)'}
               error={errors.toDate}
               ref={toDateRef}
+            />
+          </View>
+        </View>
+        <View style={sharedStyles.searchBoxRow}>
+          <View
+            style={[
+              sharedStyles.searchBoxDivision,
+              sharedStyles.searchBoxDivisionFirst,
+            ]}>
+            <Dropdown
+              label={importLottery.category}
+              baseColor={'rgba(0,0,0,0.3)'}
+              selectedItemColor={'rgba(0, 0, 0, .87)'}
+              data={lotteryItemCategories}
+              onChangeText={categoryOnChangeText}
+              value={searchFilters.category}
+            />
+          </View>
+          <View
+            style={[
+              sharedStyles.searchBoxDivision,
+              sharedStyles.searchBoxDivisionSecond,
+            ]}>
+            <Dropdown
+              baseColor={'rgba(0,0,0,0.3)'}
+              label={importLottery.condition}
+              selectedItemColor={'rgba(0, 0, 0, .87)'}
+              data={lotteryItemConditions}
+              onChangeText={conditionOnChangeText}
+              value={searchFilters.condition}
             />
           </View>
         </View>
@@ -278,15 +319,44 @@ const SearchBox = props => {
             />
           </View>
         </View>
-        <View style={sharedStyles.searchBoxButton}>
-          <Button
-            disabled={errors.fromDate || errors.toDate || errors.searchQuery}
-            raised={true}
-            primary
-            text={'Search'}
-            icon="search"
-            onPress={handleSearchPress}
-          />
+        <View style={sharedStyles.searchBoxButtonView}>
+          <View style={sharedStyles.searchBoxDivision}>
+            <Button
+              disabled={
+                !searchQuery &&
+                !searchFilters.prefecture &&
+                !searchFilters.city &&
+                !searchFilters.fromDate &&
+                !searchFilters.toDate &&
+                !searchFilters.category &&
+                !searchFilters.condition
+              }
+              raised={true}
+              primary
+              text={'Search'}
+              icon="search"
+              onPress={handleSearchPress}
+            />
+          </View>
+          <View style={sharedStyles.resetButtonView}>
+            <Button
+              disabled={
+                // !searchQuery &&
+                // !searchFilters.prefecture &&
+                // !searchFilters.city &&
+                // !searchFilters.fromDate &&
+                // !searchFilters.toDate &&
+                // !searchFilters.category &&
+                // !searchFilters.condition
+                !searchEventFired
+              }
+              raised={true}
+              primary
+              text={'Reset'}
+              icon="youtube-searched-for"
+              onPress={handleResetSearchFilters}
+            />
+          </View>
         </View>
       </View>
     </Animated.View>
@@ -295,17 +365,18 @@ const SearchBox = props => {
 
 SearchBox.propTypes = {
   style: PropTypes.object,
-  user: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
   onSearchPress: PropTypes.func,
   onSearchSuccess: PropTypes.func,
   onSearchError: PropTypes.func,
   searchFilters: PropTypes.object,
+  fetchLotteries: PropTypes.func,
+  searchEventFired: PropTypes.bool,
 };
 
 const mapStateToProps = state => {
   return {
-    user: getUserSelector(state),
     searchFilters: getSearchFiltersSelector(state),
+    searchEventFired: getSearchEventFiredSelector(state),
   };
 };
 
@@ -313,6 +384,9 @@ const mapDispatchToProps = dispatch => {
   return {
     handleSearch: payload => dispatch(handleSearch(payload)),
     handleSetSearchFilters: payload => dispatch(setSearchFilters(payload)),
+    handleSetSearchEventFired: payload =>
+      dispatch(setSearchEventFired(payload)),
+    fetchLotteries: payload => dispatch(handleFetchLotteries(payload)),
   };
 };
 

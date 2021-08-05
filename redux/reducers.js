@@ -1,22 +1,20 @@
 import {combineReducers} from 'redux';
 import authReducer from './Auth/reducer';
 import lotteriesReducer from './Lotteries/reducer';
-import adsReducer from './Ads/reducer';
 import settingsReducer from './Settings/reducer';
-import adDetailsReducer from './AdDetails/reducer';
+import lotteryDetailsReducer from './LotteryDetails/reducer';
 import searchReducer from './Search/reducer';
-import userReducer from './User/reducer';
 import uploadProgressReducer from './UploadProgress/reducer';
+import homeReducer from './Home/reducer';
 
 const rootReducer = combineReducers({
   authReducer: authReducer,
   lotteriesReducer: lotteriesReducer,
-  adsReducer: adsReducer,
   settingsReducer: settingsReducer,
-  adDetailsReducer: adDetailsReducer,
+  lotteryDetailsReducer: lotteryDetailsReducer,
   searchReducer: searchReducer,
-  userReducer: userReducer,
   uploadProgressReducer: uploadProgressReducer,
+  homeReducer: homeReducer,
 });
 
 export default rootReducer;

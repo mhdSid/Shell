@@ -37,7 +37,7 @@ const UserDetails = props => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={sharedStyles.flexRow}>
             <Image
-              style={sharedStyles.adDetailsImage}
+              style={sharedStyles.lotteryDetailsImage}
               source={{
                 uri: image,
                 cache: 'force-cache',
@@ -45,7 +45,7 @@ const UserDetails = props => {
               resizeMode={'cover'}
             />
           </View>
-          <View style={sharedStyles.adDetailsContainer}>
+          <View style={sharedStyles.lotteryDetailsContainer}>
             {/* <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="person" />
               <Text style={sharedStyles.userDetailsText}>

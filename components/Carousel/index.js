@@ -73,7 +73,7 @@ class CarouselItem extends PureComponent {
                 priority: FastImage.priority.high,
                 cache: FastImage.cacheControl.immutable,
               }}
-              resizeMode={FastImage.resizeMode.cover}
+              resizeMode={FastImage.resizeMode.contain}
             />
           ) : null}
           {!imageOnly && <View style={radiusMaskStyles} />}
@@ -98,7 +98,7 @@ const CarouselComponentWithSlice = props => {
   const {items, onItemPress, imageOnly} = props;
   const sliceValue = items.length > 5 ? 5 : items.length > 2 ? 2 : items.length;
   const [sliceIndex, setSliceIndex] = useState(sliceValue);
-  const slicedAds = items.slice(0, sliceIndex);
+  const slicedItems = items.slice(0, sliceIndex);
   const renderCarouselItem = ({item}) => (
     <CarouselItem onItemPress={onItemPress} item={item} imageOnly={imageOnly} />
   );
@@ -108,7 +108,7 @@ const CarouselComponentWithSlice = props => {
     }
   };
   const onSnapToItem = imageOnly ? null : onEndReached;
-  const data = imageOnly ? items : slicedAds;
+  const data = imageOnly ? items : slicedItems;
 
   return (
     <Carousel

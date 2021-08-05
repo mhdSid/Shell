@@ -4,16 +4,17 @@ import {Modal, SafeAreaView, View, VirtualizedList} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
-import AdDetails from '../AdDetails';
+import LotteryDetails from '../LotteryDetails';
 import {loadingPopup} from '../Loading';
 import {myyLotteries} from '../../Constants/Texts';
 import {connect} from 'react-redux';
-import {handleFetchMyCreatedLotteries} from '../../redux/User/FetchMyLotteries';
-import {getUserSelector, getMyLotteriesSelector} from './Selectors';
 import ListItemCommon from '../Home/ListItem';
+import {getUserCreatedLotteriesSelector} from '../Lotteries/Selectors';
+import {getUserSelector} from '../Profile/Selectors';
+import {handleFetchUserCreatedLotteries} from '../../redux/Lotteries/FetchUserCreatedLotteries';
 
-const MyLotteries = props => {
-  const {user, myLotteries} = props;
+const UserCreatedLotteries = props => {
+  const {user, userCreatedLotteries} = props;
   const [loading, setLoading] = useState(false);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
   const [selectedLottery, setSelectedLottery] = useState();
@@ -24,12 +25,12 @@ const MyLotteries = props => {
   const callback = () => {
     setLoading(false);
   };
-  const updateAdDetails = item => {
+  const updateLotteryDetails = item => {
     setSelectedLottery(item);
   };
   const fetchMyLotteries = () => {
     setLoading(true);
-    invoke(props, 'handleFetchMyLotteries', {
+    invoke(props, 'fetchUserCreatedLotteries', {
       onSuccess: callback,
       onError: callback,
       userId: user.id,
@@ -37,26 +38,26 @@ const MyLotteries = props => {
   };
   const handleItemPress = index => {
     setShowLotteryDetails(true);
-    setSelectedLottery(myLotteries[index]);
+    setSelectedLottery(userCreatedLotteries[index]);
   };
-  const onAdDetailsClose = () => {
+  const onLotteryDetailsClose = () => {
     setShowLotteryDetails(false);
   };
   const getItem = (data, index) => data[index];
-  const getItemCount = () => myLotteries.length;
+  const getItemCount = () => userCreatedLotteries.length;
   const getKeyExtractor = item => item.id;
   const renderItem = ({item, index}) => (
     <ListItemCommon
       item={item}
       index={index}
       onItemPress={handleItemPress}
-      listLength={myLotteries.length}
+      listLength={userCreatedLotteries.length}
     />
   );
-  const adDetailsModal = showLotteryDetails && (
-    <AdDetails
-      updateAdDetails={updateAdDetails}
-      onClose={onAdDetailsClose}
+  const lotteryDetailsModal = showLotteryDetails && (
+    <LotteryDetails
+      updateLotteryDetails={updateLotteryDetails}
+      onClose={onLotteryDetailsClose}
       item={selectedLottery}
     />
   );
@@ -65,7 +66,7 @@ const MyLotteries = props => {
       animationType="slide"
       onShow={fetchMyLotteries}
       onRequestClose={handleCloseModal}>
-      {adDetailsModal}
+      {lotteryDetailsModal}
       <SafeAreaView
         style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
         <View style={sharedStyles.innerSafeAreaView}>
@@ -76,7 +77,7 @@ const MyLotteries = props => {
             onLeftElementPress={handleCloseModal}
           />
           {loading ? loadingPopup : null}
-          {myLotteries && myLotteries.length > 0 ? (
+          {userCreatedLotteries && userCreatedLotteries.length > 0 ? (
             <VirtualizedList
               initialNumToRender={10}
               windowSize={1}
@@ -84,7 +85,7 @@ const MyLotteries = props => {
               refreshing={loading}
               onRefresh={fetchMyLotteries}
               showsVerticalScrollIndicator={false}
-              data={myLotteries}
+              data={userCreatedLotteries}
               getItem={getItem}
               getItemCount={getItemCount}
               keyExtractor={getKeyExtractor}
@@ -97,26 +98,27 @@ const MyLotteries = props => {
   );
 };
 
-MyLotteries.propTypes = {
+UserCreatedLotteries.propTypes = {
   user: PropTypes.object,
+  userCreatedLotteries: PropTypes.oneOfType([PropTypes.any, PropTypes.array]),
   onClose: PropTypes.func,
 };
 
 const mapStateToProps = state => {
   return {
     user: getUserSelector(state),
-    myLotteries: getMyLotteriesSelector(state),
+    userCreatedLotteries: getUserCreatedLotteriesSelector(state),
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleFetchMyLotteries: payload =>
-      dispatch(handleFetchMyCreatedLotteries(payload)),
+    fetchUserCreatedLotteries: payload =>
+      dispatch(handleFetchUserCreatedLotteries(payload)),
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(MyLotteries);
+)(UserCreatedLotteries);

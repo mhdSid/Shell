@@ -1,11 +1,15 @@
-import {addBackgroundUpload, updateAdBackground} from '../../services/Ads';
-import {handleError, adActions} from './actions';
+import {
+  addBackgroundUpload,
+  updateAdBackground,
+} from '../../services/Lotteries';
+import {handleError} from '../Home/actions';
 import invoke from 'lodash/invoke';
-import {adDetailsActions} from '../AdDetails/actions';
+import {lotteryDetailsActions} from '../LotteryDetails/actions';
 import {uploadProgressActions} from '../UploadProgress/actions';
 import {reject} from 'lodash';
+import {homeActions} from '../Home/actions';
 
-const handleImportAd = payload => {
+const handleImportLottery = payload => {
   return dispatch => {
     const uniqId = `_${Math.random()
       .toString(36)
@@ -17,7 +21,7 @@ const handleImportAd = payload => {
       image,
       prefecture,
       category,
-      status,
+      condition,
       price,
       city,
       userId,
@@ -80,11 +84,11 @@ const handleImportAd = payload => {
                   return handleError(errorObj);
                 }
                 dispatch({
-                  type: adActions.importAd,
+                  type: homeActions.setLotteries,
                   payload: updatedAd,
                 });
                 dispatch({
-                  type: adDetailsActions.showAdDetails,
+                  type: lotteryDetailsActions.showLotteryDetails,
                   payload: updatedAd,
                 });
                 resolve(updatedAd);
@@ -102,11 +106,11 @@ const handleImportAd = payload => {
                 },
               });
               dispatch({
-                type: adActions.importAd,
+                type: homeActions.setLotteries,
                 payload: response[response.length - 1],
               });
               return dispatch({
-                type: adDetailsActions.showAdDetails,
+                type: lotteryDetailsActions.showLotteryDetails,
                 payload: response[response.length - 1],
               });
             }
@@ -140,7 +144,7 @@ const handleImportAd = payload => {
         images: imageFiles && imageFiles.map(item => item.uri),
         prefecture,
         category,
-        status,
+        condition,
         price,
         userId,
         country,
@@ -154,7 +158,7 @@ const handleImportAd = payload => {
       image,
       prefecture,
       category,
-      status,
+      condition,
       price,
       userId,
       country,
@@ -185,4 +189,4 @@ const handleImportAd = payload => {
   };
 };
 
-export {handleImportAd};
+export {handleImportLottery};

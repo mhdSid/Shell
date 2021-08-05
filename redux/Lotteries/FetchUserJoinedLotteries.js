@@ -1,9 +1,9 @@
-import {getMyJoinedLotteries} from '../../services/Ads';
+import {getUserJoinedLotteries} from '../../services/Lotteries';
 import {handleError} from '../Auth/actions';
 import invoke from 'lodash/invoke';
 import {lotteriesActions} from './actions';
 
-const handleFetchMyJoinedLotteries = payload => {
+const handleFetchUserJoinedLotteries = payload => {
   return dispatch => {
     const {onError, userId} = payload;
     const onGetLotteriesSuccess = data => {
@@ -13,13 +13,16 @@ const handleFetchMyJoinedLotteries = payload => {
       }
       invoke(payload, 'onSuccess');
       return dispatch({
-        type: lotteriesActions.fetchLotteries,
+        type: lotteriesActions.setUserJoinedLotteries,
         payload: lotteries || [],
       });
     };
-    return getMyJoinedLotteries({userId}).then(onGetLotteriesSuccess, error => {
-      return handleError({error, onError});
-    });
+    return getUserJoinedLotteries({userId}).then(
+      onGetLotteriesSuccess,
+      error => {
+        return handleError({error, onError});
+      },
+    );
   };
 };
-export {handleFetchMyJoinedLotteries};
+export {handleFetchUserJoinedLotteries};

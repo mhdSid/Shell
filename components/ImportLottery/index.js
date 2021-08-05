@@ -14,19 +14,26 @@ import {TextField} from 'react-native-material-textfield';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import ImagePicker from 'react-native-image-picker';
 import {prefectures, cities, currencies} from '../../Constants/Countries';
-import {adStatuses, adCategories, mimeTypes} from '../../Constants/Ads';
+import {
+  lotteryItemConditions,
+  lotteryItemCategories,
+  mimeTypes,
+} from '../../Constants/Lotteries';
 import isUndefined from 'lodash/isUndefined';
 import NoAuth from '../NoAuth';
 import {LoadingComponent} from '../Loading';
 import FastImage from 'react-native-fast-image';
-import {importAd, profile} from '../../Constants/Texts';
+import {
+  importLottery as importLotteryTexts,
+  profile,
+} from '../../Constants/Texts';
 import invoke from 'lodash/invoke';
-import {handleImportAd} from '../../redux/Ads/ImportAd';
+import {handleImportLottery} from '../../redux/ImportLottery/ImportLottery';
 import {getLoggedInSelector, getUserSelector} from './Selectors';
 import UploadAdProgress from '../UploadAdProgress';
 import {Dropdown} from 'react-native-material-dropdown';
 
-const ImportAd = props => {
+const ImportLottery = props => {
   const {loggedIn, user} = props;
   let userPrefecture;
   if (user) {
@@ -35,21 +42,19 @@ const ImportAd = props => {
     ).name;
   }
   const userCountry = user && user.country;
-  const [adCategory, setAdCategory] = useState('');
-  const [adStatus, setAdStatus] = useState('');
+  const [itemCategory, setItemCategory] = useState('');
+  const [itemCondition, setItemCondition] = useState('');
   const [images, setImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [prefecture, setPrefecture] = useState(user && user.prefecture);
   const [city, setCity] = useState(user && user.city);
-  const [adDataChanged, setADataChanged] = useState(false);
+  const [lotteryDataChanged, setLotteryDataChanged] = useState(false);
   const [imagesChanged, setImagesChanged] = useState(false);
-  const [adNameChanged, setAdNameChanged] = useState(false);
+  const [lotteryNameChanged, setLotteryNameChanged] = useState(false);
   const [descriptionChanged, setDescriptionChanged] = useState(false);
   const [priceChanged, setPriceChanged] = useState(false);
-  // const [cityChanged, setCityChanged] = useState(false);
-  // const [prefectureChanged, setPrefectureChanged] = useState(false);
-  const [adCategoryChanged, setAdCategoryChanged] = useState(false);
-  const [adStatusChanged, setAdStatusChanged] = useState(false);
+  const [itemCategoryChanged, setItemCategoryChanged] = useState(false);
+  const [itemConditionChanged, setItemConditionChanged] = useState(false);
   const [cityDropdownData, setCityDropdownData] = useState(
     userPrefecture ? cities[userPrefecture].map(item => ({value: item})) : [],
   );
@@ -58,7 +63,6 @@ const ImportAd = props => {
     value: item.kanji,
   }));
   const prefectureOnChangeText = (value, index) => {
-    // setPrefectureChanged(true);
     setCityDropdownData(
       cities[prefecturesDropdownData[index].name].map(item => ({
         value: item,
@@ -67,7 +71,6 @@ const ImportAd = props => {
     setPrefecture(prefecturesDropdownData[index].kanji);
   };
   const cityOnChangeText = value => {
-    // setCityChanged(true);
     setCity(value);
   };
 
@@ -86,7 +89,7 @@ const ImportAd = props => {
     adName: () => {
       return value => {
         if (value && value.length >= 5 && value.length <= 30) {
-          setAdNameChanged(true);
+          setLotteryNameChanged(true);
           setErrors({
             ...errors,
             adName: false,
@@ -96,7 +99,7 @@ const ImportAd = props => {
             ...errors,
             adName: 'Length should be between 5 and 30 characters.',
           });
-          setAdNameChanged(false);
+          setLotteryNameChanged(false);
         }
       };
     },
@@ -146,17 +149,15 @@ const ImportAd = props => {
     priceField.setValue('');
     setImages([]);
     setImageFiles([]);
-    setADataChanged(false);
+    setLotteryDataChanged(false);
     setImagesChanged(false);
-    setAdNameChanged(false);
+    setLotteryNameChanged(false);
     setDescriptionChanged(false);
     setPriceChanged(false);
-    // setCityChanged(false);
-    // setPrefectureChanged(false);
-    setAdStatusChanged(false);
-    setAdCategoryChanged(false);
+    setItemCategoryChanged(false);
+    setItemConditionChanged(false);
   };
-  const handleUploadAd = () => {
+  const handleUploadLottery = () => {
     const {current: nameField} = adNameRef;
     const {current: descriptionField} = descriptionRef;
     const {current: priceField} = priceRef;
@@ -169,21 +170,21 @@ const ImportAd = props => {
       price &&
       prefecture &&
       city &&
-      adStatus &&
-      adCategory &&
+      itemCondition &&
+      itemCategory &&
       imageFiles &&
       userCurrency &&
-      adDataChanged
+      lotteryDataChanged
     ) {
       const filteredImages = imageFiles.filter(Boolean);
-      invoke(props, 'handleImportAd', {
+      invoke(props, 'importLottery', {
         name,
         description,
         image: filteredImages[0],
         prefecture,
         city,
-        category: adCategory,
-        status: adStatus,
+        category: itemCategory,
+        condition: itemCondition,
         price,
         userId: user.id,
         country: user.country,
@@ -195,13 +196,13 @@ const ImportAd = props => {
       setDefault(nameField, descriptionField, priceField);
     }
   };
-  const updateAdCategory = value => {
-    setAdCategoryChanged(true);
-    setAdCategory(value);
+  const updateItemCategory = value => {
+    setItemCategoryChanged(true);
+    setItemCategory(value);
   };
-  const updateAdStatus = value => {
-    setAdStatusChanged(true);
-    setAdStatus(value);
+  const updateItemCondition = value => {
+    setItemConditionChanged(true);
+    setItemCondition(value);
   };
   const handleChoosePhoto = index => {
     return () => {
@@ -254,30 +255,25 @@ const ImportAd = props => {
         description: descriptionField && descriptionField.value(),
         price: priceField && priceField.value(),
       };
-      console.log(values);
       handleChange[fieldName]()(values[fieldName]);
     };
   };
   useEffect(() => {
-    setADataChanged(
+    setLotteryDataChanged(
       imagesChanged &&
-        adNameChanged &&
+        lotteryNameChanged &&
         descriptionChanged &&
         priceChanged &&
-        // cityChanged &&
-        // prefectureChanged &&
-        adStatusChanged &&
-        adCategoryChanged,
+        itemCategoryChanged &&
+        itemConditionChanged,
     );
   }, [
     imagesChanged,
-    adNameChanged,
+    lotteryNameChanged,
     descriptionChanged,
     priceChanged,
-    // cityChanged,
-    // prefectureChanged,
-    adStatusChanged,
-    adCategoryChanged,
+    itemCategoryChanged,
+    itemConditionChanged,
   ]);
 
   if (isUndefined(loggedIn) && isUndefined(user)) {
@@ -295,14 +291,14 @@ const ImportAd = props => {
           style={{
             container: sharedStyles.toolbarContainerPadding,
           }}
-          centerElement={importAd.createLottery}
+          centerElement={importLotteryTexts.createLottery}
           leftElement={<Icon color="white" name="cloud-upload" />}
           rightElement={
             <Button
-              onPress={handleUploadAd}
-              disabled={!adDataChanged}
+              onPress={handleUploadLottery}
+              disabled={!lotteryDataChanged}
               raised
-              text={importAd.create}
+              text={importLotteryTexts.create}
               icon="done-all"
             />
           }
@@ -315,9 +311,11 @@ const ImportAd = props => {
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={sharedStyles.importAdContainer}>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>{importAd.productName}</Text>
+                <Text style={sharedStyles.label}>
+                  {importLotteryTexts.productName}
+                </Text>
                 <TextField
-                  placeholder={importAd.enterName}
+                  placeholder={importLotteryTexts.enterName}
                   placeholderTextColor={'rgba(0,0,0,0.3)'}
                   onBlur={handleBlur('adName')}
                   onChangeText={handleChange.adName()}
@@ -329,9 +327,11 @@ const ImportAd = props => {
                 />
               </View>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>{importAd.description}</Text>
+                <Text style={sharedStyles.label}>
+                  {importLotteryTexts.description}
+                </Text>
                 <TextField
-                  placeholder={importAd.enterDescription}
+                  placeholder={importLotteryTexts.enterDescription}
                   placeholderTextColor={'rgba(0,0,0,0.3)'}
                   onChangeText={handleChange.description()}
                   maxLength={100}
@@ -343,7 +343,9 @@ const ImportAd = props => {
                 />
               </View>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>{importAd.images}</Text>
+                <Text style={sharedStyles.label}>
+                  {importLotteryTexts.images}
+                </Text>
                 <View style={sharedStyles.imageBtnContainer}>
                   {adImages.map(index => (
                     <TouchableBounce
@@ -366,7 +368,7 @@ const ImportAd = props => {
                             priority: FastImage.priority.high,
                             cache: FastImage.cacheControl.immutable,
                           }}
-                          resizeMode={FastImage.resizeMode.cover}
+                          resizeMode={FastImage.resizeMode.contain}
                         />
                       )}
                     </TouchableBounce>
@@ -374,12 +376,14 @@ const ImportAd = props => {
                 </View>
               </View>
               <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>{importAd.price}</Text>
+                <Text style={sharedStyles.label}>
+                  {importLotteryTexts.price}
+                </Text>
                 <View style={sharedStyles.priceContainer}>
                   <Text style={sharedStyles.currencyLabel}>{userCurrency}</Text>
                   <View style={sharedStyles.adPriceTextfieldContainer}>
                     <TextField
-                      placeholder={importAd.enterPrice}
+                      placeholder={importLotteryTexts.enterPrice}
                       placeholderTextColor={'rgba(0,0,0,0.3)'}
                       keyboardType="phone-pad"
                       maxLength={9}
@@ -416,35 +420,39 @@ const ImportAd = props => {
                 />
               </View>
 
-              <Text style={sharedStyles.label}>{importAd.category}</Text>
+              <Text style={sharedStyles.label}>
+                {importLotteryTexts.category}
+              </Text>
               <View style={sharedStyles.dropdownView}>
                 <Dropdown
-                  label={importAd.enterCategory}
+                  label={importLotteryTexts.enterCategory}
                   baseColor={'rgba(0,0,0,0.3)'}
                   selectedItemColor={'rgba(0, 0, 0, .87)'}
-                  data={adCategories}
-                  onChangeText={updateAdCategory}
-                  value={adCategory}
+                  data={lotteryItemCategories}
+                  onChangeText={updateItemCategory}
+                  value={itemCategory}
                 />
               </View>
-              <Text style={sharedStyles.label}>{importAd.status}</Text>
+              <Text style={sharedStyles.label}>
+                {importLotteryTexts.condition}
+              </Text>
               <View style={sharedStyles.dropdownView}>
                 <Dropdown
                   baseColor={'rgba(0,0,0,0.3)'}
-                  label={importAd.enterStatus}
+                  label={importLotteryTexts.enterCondition}
                   selectedItemColor={'rgba(0, 0, 0, .87)'}
-                  data={adStatuses}
-                  onChangeText={updateAdStatus}
-                  value={adStatus}
+                  data={lotteryItemConditions}
+                  onChangeText={updateItemCondition}
+                  value={itemCondition}
                 />
               </View>
               <View style={sharedStyles.loginBtn}>
                 <Button
-                  disabled={!adDataChanged}
+                  disabled={!lotteryDataChanged}
                   raised={true}
                   primary
-                  text={importAd.createLottery}
-                  onPress={handleUploadAd}
+                  text={importLotteryTexts.createLottery}
+                  onPress={handleUploadLottery}
                 />
               </View>
             </View>
@@ -455,7 +463,7 @@ const ImportAd = props => {
   }
 };
 
-ImportAd.propTypes = {
+ImportLottery.propTypes = {
   loggedIn: PropTypes.bool,
   user: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
 };
@@ -469,11 +477,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleImportAd: payload => dispatch(handleImportAd(payload)),
+    importLottery: payload => dispatch(handleImportLottery(payload)),
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ImportAd);
+)(ImportLottery);

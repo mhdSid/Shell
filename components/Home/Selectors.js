@@ -1,19 +1,25 @@
 import {createSelector} from 'reselect';
 
-const getAds = state => state.adsReducer.ads;
+const getLotteries = state => state.homeReducer.lotteries;
 const getIsList = state => state.settingsReducer.isHomeListStyle;
 const getIsCard = state => state.settingsReducer.isHomeCardStyle;
 const getIsCarousel = state => state.settingsReducer.isHomeCarouselStyle;
 const getSearchFilters = state => state.searchReducer.searchFilters;
+const getSearchEventFired = state => state.searchReducer.searchEventFired;
 
-const getAdsSelector = createSelector(
-  [getAds],
-  ads => ads,
+const getLotteriesSelector = createSelector(
+  [getLotteries],
+  lotteries => lotteries,
 );
 
 const getIsListSelector = createSelector(
   [getIsList],
   isHomeListStyle => isHomeListStyle,
+);
+
+const getSearchEventFiredSelector = createSelector(
+  [getSearchEventFired],
+  searchEventFired => searchEventFired,
 );
 
 const getIsCardSelector = createSelector(
@@ -32,9 +38,10 @@ const getSearchFiltersSelector = createSelector(
 );
 
 export {
-  getAdsSelector,
+  getLotteriesSelector,
   getIsListSelector,
   getIsCardSelector,
   getIsCarouselSelector,
   getSearchFiltersSelector,
+  getSearchEventFiredSelector,
 };

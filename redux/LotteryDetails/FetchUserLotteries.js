@@ -1,20 +1,20 @@
-import {getMyAds} from '../../services/Ads';
+import {getMyAds} from '../../services/Lotteries';
 import {handleError} from '../Auth/actions';
 import invoke from 'lodash/invoke';
-import {userActions} from './actions';
+import {lotteryDetailsActions} from './actions';
 
-const handleFetchMyAds = payload => {
+const handleFetchUserLotteries = payload => {
   return dispatch => {
     const {userId, onError} = payload;
     const onGetMyAdsSuccess = data => {
-      const {myAds, error} = data;
+      const {myAds: userAds, error} = data;
       if (error) {
         return handleError({error, onError});
       }
       invoke(payload, 'onSuccess');
       return dispatch({
-        type: userActions.setMyAds,
-        payload: myAds || [],
+        type: lotteryDetailsActions.fetchUserAds,
+        payload: userAds || [],
       });
     };
     return getMyAds({userId}).then(onGetMyAdsSuccess, error => {
@@ -22,4 +22,4 @@ const handleFetchMyAds = payload => {
     });
   };
 };
-export {handleFetchMyAds};
+export {handleFetchUserLotteries};

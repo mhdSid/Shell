@@ -74,8 +74,12 @@ const sharedStyles = StyleSheet.create({
     position: 'relative',
     width: '100%',
   },
-  searchBoxButton: {
+  searchBoxButtonView: {
     marginTop: 25,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   searchBoxDivision: {
     display: 'flex',
@@ -91,6 +95,10 @@ const sharedStyles = StyleSheet.create({
   searchBoxDivisionSecond: {
     marginLeft: 10,
   },
+  resetButtonView: {
+    width: '35%',
+    marginLeft: 10,
+  },
   toolbarBackButton: {
     width: 10,
     height: 20,
@@ -104,7 +112,7 @@ const sharedStyles = StyleSheet.create({
     paddingRight: 15,
     ...toolbarStyles,
   },
-  adDetailsToolbarContainer: {
+  lotteryDetailsToolbarContainer: {
     ...toolbarStyles,
     textAlign: 'center',
     paddingRight: 15,
@@ -184,7 +192,7 @@ const sharedStyles = StyleSheet.create({
     height: '100%',
     backgroundColor: 'white',
   },
-  adDetailsImage: {
+  lotteryDetailsImage: {
     flex: 1,
     aspectRatio: 3 / 2,
     justifyContent: 'center',
@@ -350,7 +358,7 @@ const sharedStyles = StyleSheet.create({
     margin: 0,
     padding: 0,
   },
-  adDetailsContainer: {
+  lotteryDetailsContainer: {
     padding: 20,
     backgroundColor: 'rgba(0,0,0,.1)',
     ...flex,
@@ -407,7 +415,7 @@ const sharedStyles = StyleSheet.create({
   relativeConatainer: {
     position: 'relative',
   },
-  homeAdsContainer: {
+  homeLotteriesContainer: {
     paddingTop: 10,
     paddingHorizontal: 10,
     paddingBottom: 20,
@@ -420,22 +428,19 @@ const sharedStyles = StyleSheet.create({
   homeListItemMargin: {
     marginBottom: 20,
   },
-  adDetailsUsersListContainer: {
-    width: '100%',
-  },
-  adDetailsUsersListItemContainer: {
+  lotteryDetailsUsersListItemContainer: {
     marginRight: 10,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
   },
-  adDetailsUsersListItemImage: {
+  lotteryDetailsUsersListItemImage: {
     width: 60,
     height: 60,
     borderRadius: 60 / 2,
     backgroundColor: '#f7f5fe',
   },
-  adDetailsUsersListItemText: {
+  lotteryDetailsUsersListItemText: {
     fontSize: 14,
     marginTop: 5,
     fontWeight: '100',
@@ -625,39 +630,6 @@ const sharedStyles = StyleSheet.create({
   appText: {
     fontWeight: '500',
     color: 'rgba(0,0,0,.85)',
-  },
-  adDetailsImageArrowIconLeft: {
-    alignSelf: 'center',
-    marginTop: -6,
-    marginLeft: -5,
-  },
-  adDetailsImageArrowIconLeftContainer: {
-    position: 'absolute',
-    left: 0,
-    paddingHorizontal: 0,
-    paddingVertical: 0,
-    borderRadius: 0,
-    width: 35,
-    alignSelf: 'center',
-    backgroundColor: 'black',
-  },
-  adDetailsImageArrowIconRightContainer: {
-    position: 'absolute',
-    right: 0,
-    width: 35,
-    borderRadius: 0,
-    paddingVertical: 0,
-    paddingHorizontal: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    backgroundColor: 'black',
-  },
-  adDetailsImageArrowIconRight: {
-    alignSelf: 'center',
-    marginTop: -6,
-    marginLeft: -2,
   },
   bottomNavigationContainer: {
     padding: 0,

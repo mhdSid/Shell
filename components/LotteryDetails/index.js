@@ -16,8 +16,8 @@ import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {SimpleLoader} from '../Loading';
 import formatDate from '../../lib/CachedImage/formatDate';
-import AdDetailsUserListItem from './AdDetailsUserListItem.js';
-import {adDetails} from '../../Constants/Texts';
+import LotteryDetailsUserListItem from './LotteryDetailsUserListItem.js';
+import {lotteryDetails as lotteryDetailsTexts} from '../../Constants/Texts';
 import {
   getLotteriesSelector,
   getUsersSelector,
@@ -26,19 +26,18 @@ import {
   getUserAdsSelector,
   getLotteryUsersDataSelector,
 } from './Selectors';
-import {handleFetchUserAds} from '../../redux/AdDetails/FetchUserAds';
+import {handleFetchUserLotteries} from '../../redux/LotteryDetails/FetchUserLotteries';
 import CardListItem from '../Home/CardListItem';
-import {showAdDetails} from '../../redux/AdDetails/actions';
+import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
 import {CarouselComponent} from '../Carousel';
 import ImagesViewer from '../ImageViewer';
 import Payment from '../Payment';
-import {handleFetchUsersData} from '../../redux/AdDetails/FetchUsersData';
-import {uniq} from 'lodash';
+import {handleFetchUsersData} from '../../redux/LotteryDetails/FetchUsersData';
 
 const myActions = ['share', 'favorite', 'cancel', 'delete'];
 const defaultActions = ['share', 'favorite', 'shop'];
 
-const AdDetails = props => {
+const LotteryDetails = props => {
   const {
     item,
     user: authUser,
@@ -57,7 +56,7 @@ const AdDetails = props => {
     prefecture,
     publishDate,
     cancelDate,
-    status,
+    condition,
     userId,
     cancelled,
     available,
@@ -67,26 +66,19 @@ const AdDetails = props => {
     images,
     disableHeaderActions,
   } = item;
-  console.log(props);
-  console.log('    ');
-  console.log('    ');
-  // const [selectedUser, setSelectedUser] = useState();
   const [usersDataLoading, setUsersDataLoading] = useState(true);
   const [userAdsLoading, setUserAdsLoading] = useState(true);
   const [showImagesViewer, setShowImagesViewer] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [viewImageUri, setViewImageUri] = useState(images[0]);
   const scrollViewRef = createRef();
-  // const onUserDetailsClose = () => {
-  //   setSelectedUser(undefined);
-  // };
   const handleUserAdPress = ad => {
     return () => {
       scrollViewRef.current.scrollTo({x: 0, y: 0, animated: true});
-      if (props.updateAdDetails) {
-        invoke(props, 'updateAdDetails', ad);
+      if (props.updateLotteryDetails) {
+        invoke(props, 'updateLotteryDetails', ad);
       } else {
-        invoke(props, 'showAdDetails', ad);
+        invoke(props, 'showLotteryDetails', ad);
       }
     };
   };
@@ -127,15 +119,12 @@ const AdDetails = props => {
   };
   const onShow = () => {
     fetchUsersData();
-    invoke(props, 'handleFetchUserAds', {
+    invoke(props, 'handleFetchUserLotteries', {
       userId,
       onError: fetchUsersAdsCallback,
       onSuccess: fetchUsersAdsCallback,
     });
   };
-  // const handleUserPress = user => {
-  //   setSelectedUser(user);
-  // };
   const empty = <Icon name="face" size={40} />;
   const getItem = (data, index) => data[index];
   const getUserAdsCount = () => userAds.length;
@@ -150,11 +139,7 @@ const AdDetails = props => {
     />
   );
   const renderLotteryUserItem = ({item: _user}) => (
-    <AdDetailsUserListItem
-      user={_user}
-      // onPress={handleUserPress}
-      withNotificationNum={true}
-    />
+    <LotteryDetailsUserListItem user={_user} withNotificationNum={true} />
   );
   const handleShowImagesViewer = url => {
     setViewImageUri(url);
@@ -168,9 +153,6 @@ const AdDetails = props => {
       animationType="slide"
       onShow={onShow}
       onRequestClose={handleCloseModal}>
-      {/* {selectedUser && (
-        <UserDetails onClose={onUserDetailsClose} item={selectedUser} />
-      )} */}
       {showImagesViewer && (
         <ImagesViewer
           imageText={name}
@@ -183,7 +165,7 @@ const AdDetails = props => {
         style={[sharedStyles.container, sharedStyles.rootSafeAreaView]}>
         <View style={sharedStyles.innerSafeAreaView}>
           <Toolbar
-            style={{container: sharedStyles.adDetailsToolbarContainer}}
+            style={{container: sharedStyles.lotteryDetailsToolbarContainer}}
             leftElement="arrow-back"
             onLeftElementPress={handleCloseModal}
             centerElement={name}
@@ -195,7 +177,7 @@ const AdDetails = props => {
                   disabled={`${currentCollectedPrice}` === `${price}`}
                   onPress={handleEnterDraw}
                   raised
-                  text={adDetails.enterDraw}
+                  text={lotteryDetailsTexts.enterDraw}
                   icon="shop"
                 />
               ) : null
@@ -209,25 +191,27 @@ const AdDetails = props => {
                 imageOnly={true}
               />
             </View>
-            <View style={sharedStyles.adDetailsContainer}>
+            <View style={sharedStyles.lotteryDetailsContainer}>
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon
                   color={available ? 'green' : 'red'}
                   name={available ? 'verified-user' : 'close'}
                 />
                 <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.availability}
+                  {lotteryDetailsTexts.availability}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
                 <Text style={sharedStyles.aboutFirstSectionText}>
-                  {available ? adDetails.adAvailable : adDetails.adNotAvailable}
+                  {available
+                    ? lotteryDetailsTexts.adAvailable
+                    : lotteryDetailsTexts.adNotAvailable}
                 </Text>
               </View>
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="dns" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.name}
+                  {lotteryDetailsTexts.name}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -236,7 +220,7 @@ const AdDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="description" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.description}
+                  {lotteryDetailsTexts.description}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -247,16 +231,18 @@ const AdDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="exposure" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.status}
+                  {lotteryDetailsTexts.condition}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                <Text style={sharedStyles.aboutFirstSectionText}>{status}</Text>
+                <Text style={sharedStyles.aboutFirstSectionText}>
+                  {condition}
+                </Text>
               </View>
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="class" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.category}
+                  {lotteryDetailsTexts.category}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -267,7 +253,7 @@ const AdDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="local-atm" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.totalPrice}
+                  {lotteryDetailsTexts.totalPrice}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -279,7 +265,7 @@ const AdDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="credit-card" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.collectedPrice}
+                  {lotteryDetailsTexts.collectedPrice}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -291,7 +277,7 @@ const AdDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="monetization-on" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.payToWin}
+                  {lotteryDetailsTexts.payToWin}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -303,17 +289,9 @@ const AdDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="group-add" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.currentLotteryUsers}
+                  {lotteryDetailsTexts.currentLotteryUsers}
                 </Text>
               </View>
-              {/* <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                {lotteryUserIds && lotteryUserIds.length ? (
-                  <Text style={sharedStyles.aboutFirstSectionText}>
-                    {adDetails.currentLotteryUsersNumber(lotteryUserIds)}
-                  </Text>
-                ) : null}
-                {!lotteryUserIds || !lotteryUserIds.length ? empty : null}
-              </View> */}
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
                 {usersDataLoading && SimpleLoader}
                 {!usersDataLoading &&
@@ -328,9 +306,6 @@ const AdDetails = props => {
                       data={lotteryUsersData}
                       getItem={getItem}
                       getItemCount={getLotteryUsersCount}
-                      // contentContainerStyle={
-                      //   sharedStyles.adDetailsUsersListContainer
-                      // }
                       keyExtractor={getVirtualKey}
                       renderItem={renderLotteryUserItem}
                     />
@@ -342,16 +317,13 @@ const AdDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="green" name="star" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.winner}
+                  {lotteryDetailsTexts.winner}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
                 {usersDataLoading && SimpleLoader}
                 {!usersDataLoading && winnerUserData && (
-                  <AdDetailsUserListItem
-                    user={winnerUserData}
-                    // onPress={winnerUserData && handleUserPress}
-                  />
+                  <LotteryDetailsUserListItem user={winnerUserData} />
                 )}
                 {!usersDataLoading && !winnerUserData && empty}
               </View>
@@ -359,7 +331,7 @@ const AdDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="today" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.publishDate}
+                  {lotteryDetailsTexts.publishDate}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -370,7 +342,7 @@ const AdDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.location}
+                  {lotteryDetailsTexts.location}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -381,23 +353,20 @@ const AdDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="person" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.user}
+                  {lotteryDetailsTexts.user}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
                 {usersDataLoading && SimpleLoader}
                 {!usersDataLoading && adPosterData && (
-                  <AdDetailsUserListItem
-                    user={adPosterData}
-                    // onPress={handleUserPress}
-                  />
+                  <LotteryDetailsUserListItem user={adPosterData} />
                 )}
                 {!usersDataLoading && !adPosterData && empty}
               </View>
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="collections" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {adDetails.userLotteries}
+                  {lotteryDetailsTexts.userLotteries}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainerNoFlex}>
@@ -418,17 +387,10 @@ const AdDetails = props => {
                 )}
                 {!userAdsLoading && !userAds && (
                   <Text style={sharedStyles.userDetailsText}>
-                    {adDetails.emptyUserAds}
+                    {lotteryDetailsTexts.emptyUserAds}
                   </Text>
                 )}
               </View>
-              {/* <View style={sharedStyles.userDetailsIconTextContainer}>
-              <Icon color="rgba(0,0,0,.55)" name="fingerprint" />
-              <Text style={sharedStyles.userDetailsText}>{adDetails.adId}</Text>
-            </View> */}
-              {/* <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>{id}</Text>
-            </View> */}
               <Text>{cancelled}</Text>
               <Text>{cancelDate}</Text>
             </View>
@@ -454,10 +416,10 @@ const AdDetails = props => {
   );
 };
 
-AdDetails.propTypes = {
+LotteryDetails.propTypes = {
   item: PropTypes.object,
   onClose: PropTypes.func,
-  updateAdDetails: PropTypes.func,
+  updateLotteryDetails: PropTypes.func,
   disableHeaderActions: PropTypes.bool,
 };
 
@@ -475,12 +437,13 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     handleFetchUsersData: payload => dispatch(handleFetchUsersData(payload)),
-    handleFetchUserAds: payload => dispatch(handleFetchUserAds(payload)),
-    showAdDetails: payload => dispatch(showAdDetails(payload)),
+    handleFetchUserLotteries: payload =>
+      dispatch(handleFetchUserLotteries(payload)),
+    showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AdDetails);
+)(LotteryDetails);

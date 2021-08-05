@@ -1,7 +1,8 @@
 import {getUsersData} from '../../services/Auth';
-import {handleError} from '../Ads/actions';
+import {handleError} from '../Home/actions';
 import invoke from 'lodash/invoke';
-import {adDetailsActions} from './actions';
+import {lotteryDetailsActions} from './actions';
+import {uniq} from 'lodash';
 
 const handleFetchUsersData = payload => {
   return dispatch => {
@@ -13,26 +14,22 @@ const handleFetchUsersData = payload => {
       }
       users = users.filter(Boolean);
       if (Array.isArray(users) && users.length > 0) {
-        let lotteryUsers = [];
         users.forEach(user => {
           if (user.id === winnerUserId) {
             dispatch({
-              type: adDetailsActions.setWinnerUserData,
+              type: lotteryDetailsActions.setWinnerUserData,
               payload: user,
             });
           } else if (user.id === userId) {
             dispatch({
-              type: adDetailsActions.setAdPosterData,
+              type: lotteryDetailsActions.setAdPosterData,
               payload: user,
             });
-          } else {
-            lotteryUsers = [...lotteryUsers, user];
           }
         });
-        console.log(lotteryUsers);
         dispatch({
-          type: adDetailsActions.setLotteryUsersData,
-          payload: lotteryUsers,
+          type: lotteryDetailsActions.setLotteryUsersData,
+          payload: uniq(users, 'id'),
         });
       }
       return invoke(payload, 'onSuccess');

@@ -11,30 +11,29 @@ import {lottteries} from '../../Constants/Texts';
 import {
   getLoggedInSelector,
   getUserSelector,
-  getLotteriesSelector,
+  getUserJoinedLotteriesSelector,
 } from './Selectors';
 import invoke from 'lodash/invoke';
-import {handleFetchMyJoinedLotteries} from '../../redux/Lotteries/FetchLotteries';
-import {showAdDetails} from '../../redux/AdDetails/actions';
+import {handleFetchUserJoinedLotteries} from '../../redux/Lotteries/FetchUserJoinedLotteries';
+import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
 import ListItemCommon from '../Home/ListItem';
 
 const Lotteries = props => {
   const {
     loggedIn,
-    lotteries,
-    user,
-    handleFetchLotteries: _handleFetchLotteries,
+    userJoinedLotteries,
+    user
   } = props;
   const [loading, setLoading] = useState(false);
   const callback = () => {
     setLoading(false);
   };
   const getItem = (data, index) => data[index];
-  const getItemCount = () => lotteries.length;
+  const getItemCount = () => userJoinedLotteries.length;
   const getItemKey = item => item.id;
   const fetchLotteries = () => {
     setLoading(true);
-    invoke(props, 'handleFetchLotteries', {
+    invoke(props, 'fetchUserJoinedLotteries', {
       userId: user.id,
       onSuccess: callback,
       onError: callback,
@@ -42,9 +41,9 @@ const Lotteries = props => {
   };
 
   const onItemPress = index => {
-    invoke(props, 'showAdDetails', {
-      ...lotteries[index],
-      disableHeaderActions: true,
+    invoke(props, 'showLotteryDetails', {
+      ...userJoinedLotteries[index],
+      // disableHeaderActions: true,
     });
   };
   const renderListItem = ({item, index}) => (
@@ -52,17 +51,12 @@ const Lotteries = props => {
       item={item}
       index={index}
       onItemPress={onItemPress}
-      listLength={lotteries.length}
+      listLength={userJoinedLotteries.length}
     />
   );
   useEffect(() => {
     if (loggedIn && user) {
-      setLoading(true);
-      _handleFetchLotteries({
-        onSuccess: callback,
-        onError: callback,
-        userId: user.id,
-      });
+      fetchLotteries();
     }
   }, []);
 
@@ -82,12 +76,12 @@ const Lotteries = props => {
       />
       <View style={sharedStyles.lotteriesContainer}>
         {loading ? loadingPopup : null}
-        {(!lotteries || !lotteries.length) && !loading ? (
+        {(!userJoinedLotteries || !userJoinedLotteries.length) && !loading ? (
           <Text style={sharedStyles.uploadProgressModalText}>
             {lottteries.emptyLotteries}
           </Text>
         ) : null}
-        {!loading && lotteries && lotteries.length > 0 ? (
+        {!loading && userJoinedLotteries && userJoinedLotteries.length > 0 ? (
           <VirtualizedList
             removeClippedSubviews={true}
             windowSize={2}
@@ -95,7 +89,7 @@ const Lotteries = props => {
             refreshing={loading}
             onRefresh={fetchLotteries}
             showsVerticalScrollIndicator={false}
-            data={lotteries}
+            data={userJoinedLotteries}
             getItem={getItem}
             getItemCount={getItemCount}
             keyExtractor={getItemKey}
@@ -110,21 +104,22 @@ const Lotteries = props => {
 Lotteries.propTypes = {
   loggedIn: PropTypes.bool,
   user: PropTypes.any,
-  lotteries: PropTypes.any,
+  userJoinedLotteries: PropTypes.any,
 };
 
 const mapStateToProps = state => {
   return {
     loggedIn: getLoggedInSelector(state),
     user: getUserSelector(state),
-    lotteries: getLotteriesSelector(state),
+    userJoinedLotteries: getUserJoinedLotteriesSelector(state),
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleFetchLotteries: payload => dispatch(handleFetchMyJoinedLotteries(payload)),
-    showAdDetails: payload => dispatch(showAdDetails(payload)),
+    fetchUserJoinedLotteries: payload =>
+      dispatch(handleFetchUserJoinedLotteries(payload)),
+      showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
   };
 };
 

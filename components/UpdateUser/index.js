@@ -12,7 +12,7 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, Icon, Button} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import ImagePicker from 'react-native-image-picker';
-import {mimeTypes} from '../../Constants/Ads';
+import {mimeTypes} from '../../Constants/Lotteries';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import {prefectures, cities} from '../../Constants/Countries';
 import {loadingPopup} from '../Loading';

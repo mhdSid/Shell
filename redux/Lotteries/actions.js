@@ -1,5 +1,6 @@
 const lotteriesActions = {
-  fetchLotteries: 'LOTTERY_FETCH_LOTTERIES',
+  setUserJoinedLotteries: 'SET_USER_JOINED_LOTTERIES',
+  setUserCreatedLotteries: 'SET_USER_CREATED_LOTTERIES',
 };
 
 export {lotteriesActions};

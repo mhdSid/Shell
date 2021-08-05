@@ -11,13 +11,13 @@ import {CreditCardInput} from 'react-native-credit-card-input';
 import {
   getUserSelector,
   getLoggedInSelector,
-  getAdDetailsSelector,
 } from './Selectors';
 import NoAuth from '../NoAuth';
 import {handleEnterLottery} from '../../redux/Payment/EnterLottery';
+import { getLotteryDetailsSelector } from '../Pinger/Selectors';
 
 const Payment = props => {
-  const {user, loggedIn, ad} = props;
+  const {user, loggedIn, lottery} = props;
   const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [creditCardCVC, setCreditCardCVC] = useState(false);
@@ -69,7 +69,7 @@ const Payment = props => {
     invoke(props, 'handleEnterLottery', {
       onSuccess: handleCloseModal,
       onError: onError,
-      adId: ad.id,
+      adId: lottery.id,
       userId: user.id,
       email: user.email,
       passwordHash: user.passwordHash,
@@ -169,7 +169,7 @@ const mapStateToProps = state => {
   return {
     user: getUserSelector(state),
     loggedIn: getLoggedInSelector(state),
-    ad: getAdDetailsSelector(state),
+    lottery: getLotteryDetailsSelector(state),
   };
 };
 

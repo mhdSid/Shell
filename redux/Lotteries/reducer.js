@@ -1,15 +1,22 @@
 import {lotteriesActions} from './actions';
 
 const initialState = {
-  lotteries: undefined,
+  userJoinedLotteries: undefined,
+  userCreatedLotteries: undefined,
 };
 
 const lotteriesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case lotteriesActions.fetchLotteries: {
+    case lotteriesActions.setUserCreatedLotteries: {
       return {
         ...state,
-        lotteries: action.payload,
+        userCreatedLotteries: action.payload,
+      };
+    }
+    case lotteriesActions.setUserJoinedLotteries: {
+      return {
+        ...state,
+        userJoinedLotteries: action.payload,
       };
     }
     default: {

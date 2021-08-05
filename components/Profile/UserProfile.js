@@ -3,12 +3,11 @@ import UpdateUser from '../UpdateUser';
 import Settings from '../Settings';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {View, Text} from 'react-native';
+import {View, Text, ActionSheetIOS} from 'react-native';
 import {Button, Drawer, Avatar, Icon} from 'react-native-material-ui';
 import Notifications from '../Notifications';
 import PaymentInformation from '../PaymentInformation';
 import About from '../About';
-import MyLotteries from '../MyLotteries';
 import {loadingPopup} from '../Loading';
 import {profile} from '../../Constants/Texts';
 import PropTypes from 'prop-types';
@@ -18,28 +17,36 @@ import {logoutAction} from '../../redux/Auth/actions';
 import {handleLogout} from '../../redux/Auth/Logout';
 import {getUserSelector} from './Selectors';
 import FastImage from 'react-native-fast-image';
+import UserCreatedLotteries from '../UserCreatedLotteries';
 
 const UserProfile = props => {
   const {user} = props;
   const [userProfileModal, setUserProfileModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const {
-    gameStatus: userGameStatus,
-    gamePoints: userGamePoints,
-    // prefecture: userPrefecture,
-    // city: userCity,
-  } = user;
+  const {gameStatus: userGameStatus, gamePoints: userGamePoints} = user;
   const {points} = profile;
 
-  const callback = () => {
+  const afterLogoutCallback = () => {
     setLoading(false);
   };
   const handleLogoutPress = () => {
-    setLoading(true);
-    invoke(props, 'handleLogout', {
-      onError: callback,
-      onSuccess: callback,
-    });
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: ['Cancel', 'Logout'],
+        destructiveButtonIndex: 1,
+        cancelButtonIndex: 0,
+        userInterfaceStyle: 'dark',
+      },
+      buttonIndex => {
+        if (buttonIndex === 1) {
+          setLoading(true);
+          invoke(props, 'handleLogout', {
+            onError: afterLogoutCallback,
+            onSuccess: afterLogoutCallback,
+          });
+        }
+      },
+    );
   };
   const onModalClose = () => {
     setUserProfileModal(false);
@@ -54,7 +61,7 @@ const UserProfile = props => {
     settings: <Settings onClose={onModalClose} />,
     notifications: <Notifications onClose={onModalClose} />,
     about: <About onClose={onModalClose} />,
-    myLotteries: <MyLotteries onClose={onModalClose} />,
+    userCreatedLotteries: <UserCreatedLotteries onClose={onModalClose} />,
     paymentInformation: <PaymentInformation onClose={onModalClose} />,
   };
 
@@ -116,11 +123,6 @@ const UserProfile = props => {
                         {`${userGameStatus} • ${userGamePoints} ${points}`}
                       </Text>
                     ),
-                    // tertiaryText: (
-                    //   <Text style={sharedStyles.profileUserText}>
-                    //     {user.id}
-                    //   </Text>
-                    // ),
                   },
                   rightElement: (
                     <Button
@@ -146,15 +148,10 @@ const UserProfile = props => {
                   value: profile.notifications,
                   onPress: handleShowModal('notifications'),
                 },
-                // {
-                //   icon: 'people',
-                //   value: profile.myAds,
-                //   onPress: handleShowModal('myAds'),
-                // },
                 {
                   icon: 'grade',
                   value: profile.myCreatedLotteries,
-                  onPress: handleShowModal('myLotteries'),
+                  onPress: handleShowModal('userCreatedLotteries'),
                 },
               ]}
             />

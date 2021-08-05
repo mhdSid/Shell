@@ -1,10 +1,10 @@
 import {createSelector} from 'reselect';
 
-const getAdDetails = state => state.adDetailsReducer.adDetails;
+const getLotteryDetails = state => state.lotteryDetailsReducer.lotteryDetails;
 
-const getAdDetailsSelector = createSelector(
-  [getAdDetails],
-  adDetails => adDetails,
+const getLotteryDetailsSelector = createSelector(
+  [getLotteryDetails],
+  lotteryDetails => lotteryDetails,
 );
 
-export {getAdDetailsSelector};
+export {getLotteryDetailsSelector};

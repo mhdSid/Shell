@@ -59,16 +59,9 @@ const signup = async props => {
     email,
     passwordHash,
     verificationId,
-    // dob,
-    // gender,
-    // mobile,
     country,
     prefecture,
-    // firstName,
-    // lastName,
-    // postalCode,
     city,
-    // fullAddress,
   } = props;
   const data = await request({
     endpoint: 'users/authenticate/signup',
@@ -77,30 +70,16 @@ const signup = async props => {
       email,
       passwordHash,
       verificationId,
-      // dob: `${dob}`,
-      // gender,
-      // mobile,
       country,
       prefecture,
       city,
-      // firstName,
-      // lastName,
-      // postalCode,
-      // fullAddress,
       hash: sha256(
         email +
           passwordHash +
           verificationId +
-          // dob +
-          // gender +
-          // mobile +
           country +
           prefecture +
           city +
-          // firstName +
-          // lastName +
-          // postalCode +
-          // fullAddress +
           hashkey,
       ).toString(),
     },
@@ -109,13 +88,35 @@ const signup = async props => {
 };
 
 const search = async props => {
-  const {searchQuery} = props;
+  const {filters} = props;
+  const searchQuery = props.searchQuery ? props.searchQuery : '';
+  const fromDate = filters.fromDate ? `${new Date(filters.fromDate)}` : '';
+  const toDate = filters.toDate ? `${new Date(filters.toDate)}` : '';
+  const city = filters.city || '';
+  const prefecture = filters.prefecture || '';
+  const category = filters.category || '';
+  const condition = filters.condition || '';
   const data = await request({
     endpoint: 'users/authenticate/search',
     method: 'POST',
     body: {
       query: searchQuery,
-      hash: sha256(searchQuery + hashkey).toString(),
+      fromDate,
+      toDate,
+      city,
+      prefecture,
+      category,
+      condition,
+      hash: sha256(
+        searchQuery +
+          fromDate +
+          toDate +
+          prefecture +
+          city +
+          category +
+          condition +
+          hashkey,
+      ).toString(),
     },
   });
   return data;
@@ -136,13 +137,8 @@ const getUsersData = async props => {
 
 const update = async props => {
   const {
-    // mobile,
     country,
     prefecture,
-    // postalCode,
-    // fullAddress,
-    // firstName,
-    // lastName,
     image,
     city,
     id,
@@ -158,9 +154,6 @@ const update = async props => {
   let creditCardCVCEnc;
   let creditCardExpiryDateEnc;
   let creditCardTypeEnc;
-  // if (mobile) {
-  //   formData.append('mobile', mobile);
-  // }
   if (country) {
     formData.append('country', country);
   }

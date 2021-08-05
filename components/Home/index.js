@@ -6,12 +6,12 @@ import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Loading} from '../Loading';
-import {home, searchh} from '../../Constants/Texts';
-import {handleFetchAds} from '../../redux/Ads/FetchAds';
-import {showAdDetails} from '../../redux/AdDetails/actions';
+import {home} from '../../Constants/Texts';
+import {handleFetchLotteries} from '../../redux/Home/FetchLotteries';
+import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
 import {setHomeViewStyle} from '../../redux/Settings/actions';
 import {
-  getAdsSelector,
+  getLotteriesSelector,
   getIsListSelector,
   getIsCardSelector,
   getIsCarouselSelector,
@@ -35,9 +35,9 @@ class HomeComponent extends PureComponent {
     this.setState({loading: false});
   };
 
-  fetchAds = () => {
+  fetchLotteries = () => {
     this.setState({loading: true}, () => {
-      invoke(this.props, 'fetchAds', {
+      invoke(this.props, 'fetchLotteries', {
         onError: this.callback,
         onSuccess: this.callback,
       });
@@ -101,19 +101,19 @@ class HomeComponent extends PureComponent {
     }
   };
   handleCardItemPress = item => {
-    invoke(this.props, 'showAdDetails', item);
+    invoke(this.props, 'showLotteryDetails', item);
   };
   handleListItemPress = index => {
-    invoke(this.props, 'showAdDetails', this.props.ads[index]);
+    invoke(this.props, 'showLotteryDetails', this.props.lotteries[index]);
   };
   componentWillMount() {
     emitSocketEvents();
-    this.fetchAds();
+    this.fetchLotteries();
   }
   componentWillReceiveProps(nextProps) {
     let adList = null;
-    if (Array.isArray(nextProps.ads) && nextProps.ads.length) {
-      adList = uniqBy(nextProps.ads, 'id');
+    if (Array.isArray(nextProps.lotteries) && nextProps.lotteries.length) {
+      adList = uniqBy(nextProps.lotteries, 'id');
       adList = chunk(adList, 3).map(list => ({
         data: list,
         key: `_${Math.random()
@@ -145,12 +145,12 @@ class HomeComponent extends PureComponent {
       item={item}
       index={index}
       onItemPress={this.handleListItemPress}
-      listLength={this.props.ads.length}
+      listLength={this.props.lotteries.length}
     />
   );
   getItem = (data, index) => data[index];
   getItemCount = () => this.state.adList.length;
-  getListItemCount = () => this.props.ads.length;
+  getListItemCount = () => this.props.lotteries.length;
   getItemKey = (item, index) => `${item.key}`;
   getListItemKey = item => `${item.id}`;
 
@@ -162,7 +162,7 @@ class HomeComponent extends PureComponent {
       searchable,
       searchBoxAnimatedOpacity,
     } = this.state;
-    const {isList, isCard, ads} = this.props;
+    const {isList, isCard, lotteries} = this.props;
 
     return (
       <View style={sharedStyles.fullheightView} shouldRasterizeIOS={true}>
@@ -204,7 +204,7 @@ class HomeComponent extends PureComponent {
             windowSize={10}
             removeClippedSubviews={true}
             refreshing={loading}
-            onRefresh={this.fetchAds}
+            onRefresh={this.fetchLotteries}
             horizontal={false}
             // listKey={adListKey}
             // maxToRenderPerBatch={10}
@@ -224,20 +224,20 @@ class HomeComponent extends PureComponent {
             data={adList}
             getItem={this.getItem}
             getItemCount={this.getItemCount}
-            contentContainerStyle={sharedStyles.homeAdsContainer}
+            contentContainerStyle={sharedStyles.homeLotteriesContainer}
             keyExtractor={this.getItemKey}
             renderItem={this.renderCardListItemRow}
           />
         ) : null}
-        {isList && ads && ads.length > 0 ? (
+        {isList && lotteries && lotteries.length > 0 ? (
           <VirtualizedList
             removeClippedSubviews={true}
             windowSize={10}
             initialNumToRender={10}
             refreshing={loading}
-            onRefresh={this.fetchAds}
+            onRefresh={this.fetchLotteries}
             showsVerticalScrollIndicator={false}
-            data={ads}
+            data={lotteries}
             getItem={this.getItem}
             getItemCount={this.getListItemCount}
             keyExtractor={this.getListItemKey}
@@ -250,7 +250,7 @@ class HomeComponent extends PureComponent {
 }
 
 HomeComponent.propTypes = {
-  ads: PropTypes.array,
+  lotteries: PropTypes.array,
   isList: PropTypes.bool,
   isCard: PropTypes.bool,
   isCarousel: PropTypes.bool,
@@ -258,7 +258,7 @@ HomeComponent.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    ads: getAdsSelector(state),
+    lotteries: getLotteriesSelector(state),
     isList: getIsListSelector(state),
     isCard: getIsCardSelector(state),
     isCarousel: getIsCarouselSelector(state),
@@ -268,8 +268,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchAds: payload => dispatch(handleFetchAds(payload)),
-    showAdDetails: payload => dispatch(showAdDetails(payload)),
+    fetchLotteries: payload => dispatch(handleFetchLotteries(payload)),
+    showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
     setHomeViewStyle: payload => dispatch(setHomeViewStyle(payload)),
   };
 };

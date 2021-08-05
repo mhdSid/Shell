@@ -44,11 +44,6 @@ const uploadProgressReducer = (state = initialState, action) => {
           return item;
         }
       });
-      // if (updatedProgress > 100) {
-      //   return {
-      //     ...state,
-      //   };
-      // }
       return {
         progressItems,
       };

@@ -2,7 +2,10 @@ import {createSelector} from 'reselect';
 
 const getUser = state => state.authReducer.user;
 const getLoggedIn = state => state.authReducer.loggedIn;
-const getLotteries = state => state.lotteriesReducer.lotteries;
+const getUserJoinedLotteries = state =>
+  state.lotteriesReducer.userJoinedLotteries;
+const getUserCreatedLotteries = state =>
+  state.lotteriesReducer.userCreatedLotteries;
 
 const getUserSelector = createSelector(
   [getUser],
@@ -14,9 +17,19 @@ const getLoggedInSelector = createSelector(
   loggedIn => loggedIn,
 );
 
-const getLotteriesSelector = createSelector(
-  [getLotteries],
-  lotteries => lotteries,
+const getUserJoinedLotteriesSelector = createSelector(
+  [getUserJoinedLotteries],
+  userJoinedLotteries => userJoinedLotteries,
 );
 
-export {getUserSelector, getLoggedInSelector, getLotteriesSelector};
+const getUserCreatedLotteriesSelector = createSelector(
+  [getUserCreatedLotteries],
+  userCreatedLotteries => userCreatedLotteries,
+);
+
+export {
+  getUserSelector,
+  getLoggedInSelector,
+  getUserJoinedLotteriesSelector,
+  getUserCreatedLotteriesSelector,
+};

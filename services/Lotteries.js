@@ -29,7 +29,7 @@ const getMyAds = async props => {
   return data;
 };
 
-const getMyCreatedLotteries = async props => {
+const getUserCreatedLotteries = async props => {
   const {userId} = props;
   const data = await request({
     endpoint: 'ads/myCreatedLotteries',
@@ -42,7 +42,7 @@ const getMyCreatedLotteries = async props => {
   return data;
 };
 
-const getMyJoinedLotteries = async props => {
+const getUserJoinedLotteries = async props => {
   const {userId} = props;
   const data = await request({
     endpoint: 'ads/myJoinedLotteries',
@@ -55,53 +55,6 @@ const getMyJoinedLotteries = async props => {
   return data;
 };
 
-// const importAd = async props => {
-//   const {
-//     name,
-//     description,
-//     image,
-//     category,
-//     prefecture,
-//     currency,
-//     status,
-//     price,
-//     userId,
-//     country,
-//   } = props;
-//   const formData = new FormData();
-//   formData.append('name', name);
-//   formData.append('description', description);
-//   formData.append('image', image);
-//   formData.append('category', category);
-//   formData.append('prefecture', prefecture);
-//   formData.append('currency', currency);
-//   formData.append('status', status);
-//   formData.append('price', price);
-//   formData.append('userId', userId);
-//   formData.append('country', country);
-//   formData.append(
-//     'hash',
-//     sha256(
-//       name +
-//         description +
-//         category +
-//         prefecture +
-//         currency +
-//         status +
-//         price +
-//         userId +
-//         country +
-//         hashkey,
-//     ).toString(),
-//   );
-//   const data = await request({
-//     endpoint: 'ads/add',
-//     method: 'POST',
-//     body: formData,
-//   });
-//   return data;
-// };
-
 const addBackgroundUpload = async props => {
   const {
     name,
@@ -111,7 +64,7 @@ const addBackgroundUpload = async props => {
     prefecture,
     city,
     currency,
-    status,
+    condition,
     price,
     userId,
     country,
@@ -134,7 +87,7 @@ const addBackgroundUpload = async props => {
       prefecture,
       city,
       currency,
-      status,
+      condition,
       price,
       userId,
       country,
@@ -145,7 +98,7 @@ const addBackgroundUpload = async props => {
           prefecture +
           city +
           currency +
-          status +
+          condition +
           price +
           userId +
           country +
@@ -283,26 +236,6 @@ const updateAdBackground = async props => {
   });
 };
 
-// const updateAd = async props => {
-//   const {id, image} = props;
-//   const formData = new FormData();
-//   if (Array.isArray(image)) {
-//     image.forEach(item => {
-//       if (item && item.uri) {
-//         formData.append('image', item);
-//       }
-//     });
-//   }
-//   formData.append('id', id);
-//   formData.append('hash', sha256(id + hashkey).toString());
-//   const data = await request({
-//     endpoint: 'ads/update',
-//     method: 'POST',
-//     body: formData,
-//   });
-//   return data;
-// };
-
 const enterLottery = async props => {
   const {
     userId,
@@ -348,13 +281,11 @@ const enterLottery = async props => {
 };
 
 export {
-  // importAd,
   getAds,
   getMyAds,
-  getMyCreatedLotteries,
-  // updateAd,
+  getUserCreatedLotteries,
   enterLottery,
-  getMyJoinedLotteries,
+  getUserJoinedLotteries,
   addBackgroundUpload,
   updateAdBackground,
 };

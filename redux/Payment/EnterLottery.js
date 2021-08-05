@@ -1,8 +1,8 @@
 import {handleError} from './actions';
 import invoke from 'lodash/invoke';
-import {enterLottery} from '../../services/Ads';
-import {adActions} from '../Ads/actions';
-import {adDetailsActions} from '../AdDetails/actions';
+import {enterLottery} from '../../services/Lotteries';
+import {lotteryDetailsActions} from '../LotteryDetails/actions';
+import {homeActions} from '../Home/actions';
 
 const handleEnterLottery = payload => {
   return dispatch => {
@@ -23,9 +23,12 @@ const handleEnterLottery = payload => {
       if (error) {
         return handleError({error, onError});
       }
-      dispatch({type: adActions.updateCurrentAd, payload: updatedAd});
+      dispatch({
+        type: homeActions.updateLottery,
+        payload: updatedAd,
+      });
       return dispatch({
-        type: adDetailsActions.showAdDetails,
+        type: lotteryDetailsActions.showLotteryDetails,
         payload: updatedAd,
       });
     };

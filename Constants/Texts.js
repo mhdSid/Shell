@@ -31,7 +31,7 @@ const errors = {
   error: 'A an error has occured. Please try again.',
 };
 
-const adDetails = {
+const lotteryDetails = {
   enterDraw: 'Win',
   availability: 'Availabality',
   adAvailable: 'The lottery is currently available',
@@ -53,7 +53,7 @@ const adDetails = {
   winner: 'Winner',
   name: 'Name',
   description: 'Description',
-  status: 'Condition',
+  condition: 'Condition',
   category: 'Category',
   publishDate: 'Publish Date',
   location: 'Location',
@@ -67,7 +67,7 @@ const home = {
   appName: 'Shell',
 };
 
-const importAd = {
+const importLottery = {
   sports: 'Sports',
   noNoticableScratches: 'No Noticable Scratches or Dirt',
   createLottery: 'Create a lottery',
@@ -80,9 +80,9 @@ const importAd = {
   prefecture: 'Prefecture',
   city: 'City',
   category: 'Category',
-  status: 'Condition',
+  condition: 'Condition',
   enterCategory: 'Enter category',
-  enterStatus: 'Enter status',
+  enterCondition: 'Enter condition',
   enterName: 'Enter name',
   enterDescription: 'Enter description',
   enterPrice: 'Enter price',
@@ -245,9 +245,9 @@ const uploadProgress = {
 export {
   about,
   errors,
-  adDetails,
+  lotteryDetails,
   home,
-  importAd,
+  importLottery,
   lottteries,
   myyAds,
   myyLotteries,
