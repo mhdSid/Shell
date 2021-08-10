@@ -4,6 +4,7 @@ import {apiRequest} from '../Constants/Api';
 import {decrypt, encrypt} from './Encrypt';
 import sha256 from 'crypto-js/sha256';
 import {password as hashkey} from './Encrypt';
+import {isNil} from 'lodash';
 
 const getAds = async () => {
   const data = await request({
@@ -68,7 +69,6 @@ const addBackgroundUpload = async props => {
     price,
     userId,
     country,
-    updateProgress,
   } = props;
   const options = {
     url: `${apiRequest.apiUri}ads/add`,
@@ -109,18 +109,7 @@ const addBackgroundUpload = async props => {
   return new Promise(resolve => {
     Upload.startUpload(options)
       .then(uploadId => {
-        let progressSubscriber,
-          errorSubscriber,
-          completedSubscriber,
-          cancelledSubscriber;
-        progressSubscriber = Upload.addListener('progress', uploadId, data => {
-          if (data.progress !== null && data.progress !== undefined) {
-            updateProgress(Math.round(data.progress));
-          }
-          if (data.progress === 100) {
-            progressSubscriber.remove();
-          }
-        });
+        let errorSubscriber, completedSubscriber, cancelledSubscriber;
         completedSubscriber = Upload.addListener(
           'completed',
           uploadId,
@@ -134,7 +123,6 @@ const addBackgroundUpload = async props => {
             errorSubscriber.remove();
             completedSubscriber.remove();
             cancelledSubscriber.remove();
-            progressSubscriber.remove();
           },
         );
         cancelledSubscriber = Upload.addListener(
@@ -145,7 +133,6 @@ const addBackgroundUpload = async props => {
             errorSubscriber.remove();
             completedSubscriber.remove();
             cancelledSubscriber.remove();
-            progressSubscriber.remove();
           },
         );
         errorSubscriber = Upload.addListener('error', uploadId, data => {
@@ -153,7 +140,6 @@ const addBackgroundUpload = async props => {
           errorSubscriber.remove();
           completedSubscriber.remove();
           cancelledSubscriber.remove();
-          progressSubscriber.remove();
         });
       })
       .catch(err => {
@@ -163,7 +149,7 @@ const addBackgroundUpload = async props => {
 };
 
 const updateAdBackground = async props => {
-  const {id, image, updateProgress} = props;
+  const {id, image} = props;
 
   const options = {
     url: `${apiRequest.apiUri}ads/update/v2`,
@@ -183,18 +169,7 @@ const updateAdBackground = async props => {
   return new Promise(resolve => {
     Upload.startUpload(options)
       .then(uploadId => {
-        let progressSubscriber,
-          errorSubscriber,
-          completedSubscriber,
-          cancelledSubscriber;
-        progressSubscriber = Upload.addListener('progress', uploadId, data => {
-          if (data.progress !== null && data.progress !== undefined) {
-            updateProgress(Math.round(data.progress));
-          }
-          if (data.progress === 100) {
-            progressSubscriber.remove();
-          }
-        });
+        let errorSubscriber, completedSubscriber, cancelledSubscriber;
         completedSubscriber = Upload.addListener(
           'completed',
           uploadId,
@@ -208,7 +183,6 @@ const updateAdBackground = async props => {
             errorSubscriber.remove();
             completedSubscriber.remove();
             cancelledSubscriber.remove();
-            progressSubscriber.remove();
           },
         );
         cancelledSubscriber = Upload.addListener(
@@ -219,7 +193,6 @@ const updateAdBackground = async props => {
             errorSubscriber.remove();
             completedSubscriber.remove();
             cancelledSubscriber.remove();
-            progressSubscriber.remove();
           },
         );
         errorSubscriber = Upload.addListener('error', uploadId, data => {
@@ -227,7 +200,6 @@ const updateAdBackground = async props => {
           errorSubscriber.remove();
           completedSubscriber.remove();
           cancelledSubscriber.remove();
-          progressSubscriber.remove();
         });
       })
       .catch(err => {

@@ -1,4 +1,4 @@
-import uniq from 'lodash/uniq';
+import {isNil} from 'lodash';
 import {lotteryDetailsActions} from './actions';
 
 const initialState = {

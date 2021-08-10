@@ -10,9 +10,8 @@ import {NativeModules} from 'react-native';
 import {
   addNewProgressItem,
   removeProgressItem,
-  updateProgressItem,
 } from '../../redux/UploadProgress/actions';
-import {getProgressItemsSelector} from '../UploadAdProgress/Selectors';
+import {getProgressItemsSelector} from '../UploadLotteryProgress/Selectors';
 const {CalendarModule} = NativeModules;
 
 const Pinger = props => {
@@ -46,7 +45,6 @@ const mapDispatchToProps = dispatch => {
   return {
     showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
     handlePing: payload => dispatch(handlePing(payload)),
-    updateProgressItem: payload => dispatch(updateProgressItem(payload)),
     addNewProgressItem: payload => dispatch(addNewProgressItem(payload)),
     removeProgressItem: payload => dispatch(removeProgressItem(payload)),
   };

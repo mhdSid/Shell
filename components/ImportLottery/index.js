@@ -1,11 +1,5 @@
 import React, {useState, useEffect, createRef} from 'react';
-import {
-  View,
-  Picker,
-  ScrollView,
-  Text,
-  KeyboardAvoidingView,
-} from 'react-native';
+import {View, ScrollView, Text, KeyboardAvoidingView} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
@@ -30,8 +24,8 @@ import {
 import invoke from 'lodash/invoke';
 import {handleImportLottery} from '../../redux/ImportLottery/ImportLottery';
 import {getLoggedInSelector, getUserSelector} from './Selectors';
-import UploadAdProgress from '../UploadAdProgress';
 import {Dropdown} from 'react-native-material-dropdown';
+import UploadLotteryProgressModal from '../UploadLotteryProgress/UploadLotteryProgressModal';
 
 const ImportLottery = props => {
   const {loggedIn, user} = props;
@@ -42,6 +36,9 @@ const ImportLottery = props => {
     ).name;
   }
   const userCountry = user && user.country;
+  const [showLotteryProgressModal, setShowLotteryProgressModal] = useState(
+    false,
+  );
   const [itemCategory, setItemCategory] = useState('');
   const [itemCondition, setItemCondition] = useState('');
   const [images, setImages] = useState([]);
@@ -258,6 +255,12 @@ const ImportLottery = props => {
       handleChange[fieldName]()(values[fieldName]);
     };
   };
+  const handleCloseUploadLotteryProgressModal = () => {
+    setShowLotteryProgressModal(false);
+  };
+  const handleShowUploadLotteryProgressModal = () => {
+    setShowLotteryProgressModal(true);
+  };
   useEffect(() => {
     setLotteryDataChanged(
       imagesChanged &&
@@ -287,12 +290,18 @@ const ImportLottery = props => {
   if (loggedIn === true && user) {
     return (
       <View style={sharedStyles.fullheightView}>
+        {showLotteryProgressModal ? (
+          <UploadLotteryProgressModal
+            onClose={handleCloseUploadLotteryProgressModal}
+          />
+        ) : null}
         <Toolbar
           style={{
             container: sharedStyles.toolbarContainerPadding,
           }}
           centerElement={importLotteryTexts.createLottery}
-          leftElement={<Icon color="white" name="cloud-upload" />}
+          leftElement={'cloud-upload'}
+          onLeftElementPress={handleShowUploadLotteryProgressModal}
           rightElement={
             <Button
               onPress={handleUploadLottery}
@@ -303,9 +312,8 @@ const ImportLottery = props => {
             />
           }
         />
-        <UploadAdProgress relative={true} />
         <KeyboardAvoidingView
-          behavior="position"
+          behavior="padding"
           enabled
           style={sharedStyles.importAdView}>
           <ScrollView showsVerticalScrollIndicator={false}>

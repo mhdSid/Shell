@@ -10,7 +10,7 @@ import {getProgressItemsSelector} from './Selectors';
 import {VirtualizedList} from 'react-native';
 import ListItemCommon from '../Home/ListItem';
 
-const UploadAdProgressModal = props => {
+const UploadLotteryProgressModal = props => {
   const {progressItems} = props;
 
   const [loading] = useState(false);
@@ -69,7 +69,7 @@ const UploadAdProgressModal = props => {
   );
 };
 
-UploadAdProgressModal.propTypes = {
+UploadLotteryProgressModal.propTypes = {
   onClose: PropTypes.func,
 };
 
@@ -79,4 +79,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(UploadAdProgressModal);
+export default connect(mapStateToProps)(UploadLotteryProgressModal);

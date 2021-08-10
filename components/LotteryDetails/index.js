@@ -114,6 +114,7 @@ const LotteryDetails = props => {
         users,
         onError: fetchUsersDataCallback,
         onSuccess: fetchUsersDataCallback,
+        currentCollectedPrice,
       });
     }
   };

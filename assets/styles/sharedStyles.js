@@ -428,6 +428,10 @@ const sharedStyles = StyleSheet.create({
   homeListItemMargin: {
     marginBottom: 20,
   },
+  listComponentContainer: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0,0,0,0.12)',
+  },
   lotteryDetailsUsersListItemContainer: {
     marginRight: 10,
     justifyContent: 'center',
@@ -743,7 +747,7 @@ const sharedStyles = StyleSheet.create({
     width: 300,
     height: 300,
     alignSelf: 'center',
-    backgroundColor: '#f7f5fe',
+    backgroundColor: 'black',
     zIndex: 0,
   },
   paymentBtn: {
@@ -793,8 +797,9 @@ const sharedStyles = StyleSheet.create({
   userJoinedLotteryCountText: {
     color: 'white',
   },
-  uploadProgressModalListItemContainer: {
-    marginBottom: 20,
+  uploadProgressView: {
+    width: '100%',
+    marginHorizontal: 20,
   },
 });
 

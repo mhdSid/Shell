@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import FastImage from 'react-native-fast-image';
 import {invoke} from 'lodash';
-import UploadAdProgressItem from '../UploadAdProgress';
 import {ListItem} from 'react-native-material-ui';
+import {loadingPopup} from '../Loading';
 
 export default class ListItemCommon extends Component {
   static propTypes = {
@@ -51,17 +51,15 @@ export default class ListItemCommon extends Component {
   render() {
     return (
       <View
-        style={
+        style={[
+          sharedStyles.listComponentContainer,
           this.props.index === this.props.listLength - 1 &&
-          sharedStyles.homeListItemMargin
-        }>
+            sharedStyles.homeListItemMargin,
+        ]}>
+        {loadingPopup}
+        {this.props.showUploadProgress ? loadingPopup : null}
         <ListItem
           divider
-          style={{
-            container:
-              this.props.showUploadProgress &&
-              sharedStyles.uploadProgressModalListItemContainer,
-          }}
           leftElement={
             this.props.item.images && this.props.item.images[0] ? (
               <FastImage
@@ -86,9 +84,6 @@ export default class ListItemCommon extends Component {
           onRightElementPress={this.handleRightElementPress}
           onPress={this.handleItemPress}
         />
-        {this.props.showUploadProgress ? (
-          <UploadAdProgressItem id={this.props.item.id} />
-        ) : null}
       </View>
     );
   }

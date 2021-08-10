@@ -6,7 +6,7 @@ import {handleError} from '../Home/actions';
 import invoke from 'lodash/invoke';
 import {lotteryDetailsActions} from '../LotteryDetails/actions';
 import {uploadProgressActions} from '../UploadProgress/actions';
-import {reject} from 'lodash';
+import {reject, uniq} from 'lodash';
 import {homeActions} from '../Home/actions';
 
 const handleImportLottery = payload => {
@@ -46,7 +46,7 @@ const handleImportLottery = payload => {
             : {error, onError},
         );
       }
-      if (imageFiles && imageFiles.length > 1) {
+      if (imageFiles && imageFiles.length) {
         const newImages = imageFiles
           .filter(Boolean)
           .slice(1, imageFiles.length);
@@ -57,16 +57,6 @@ const handleImportLottery = payload => {
               updateAdBackground({
                 id: newAd.id,
                 image: newImage,
-                updateProgress: progress => {
-                  dispatch({
-                    type: uploadProgressActions.updateProgressItem,
-                    payload: {
-                      id: uniqId,
-                      progress,
-                      progressItemsLength,
-                    },
-                  });
-                },
               }).then(response => {
                 const {error: err, updatedAd} = response;
                 if (err || !updatedAd) {
@@ -87,10 +77,6 @@ const handleImportLottery = payload => {
                   type: homeActions.setLotteries,
                   payload: updatedAd,
                 });
-                dispatch({
-                  type: lotteryDetailsActions.showLotteryDetails,
-                  payload: updatedAd,
-                });
                 resolve(updatedAd);
               });
             }),
@@ -98,20 +84,33 @@ const handleImportLottery = payload => {
         });
         return Promise.all(updatePromises).then(
           response => {
-            if (Array.isArray(response) && response.length > 0) {
+            if (Array.isArray(response) && response.length) {
               dispatch({
                 type: uploadProgressActions.removeProgressItem,
                 payload: {
                   id: uniqId,
                 },
               });
+              const importedLottery = {
+                ...response[response.length - 1],
+                images: uniq(
+                  response
+                    .map(lottery => lottery.images)
+                    .join()
+                    .split(','),
+                ),
+              };
               dispatch({
                 type: homeActions.setLotteries,
-                payload: response[response.length - 1],
+                payload: importedLottery,
+              });
+              dispatch({
+                type: lotteryDetailsActions.showLotteryDetails,
+                payload: null,
               });
               return dispatch({
                 type: lotteryDetailsActions.showLotteryDetails,
-                payload: response[response.length - 1],
+                payload: importedLottery,
               });
             }
           },
@@ -163,16 +162,6 @@ const handleImportLottery = payload => {
       userId,
       country,
       currency,
-      updateProgress: progress => {
-        dispatch({
-          type: uploadProgressActions.updateProgressItem,
-          payload: {
-            id: uniqId,
-            progress,
-            progressItemsLength,
-          },
-        });
-      },
     }).then(importAdSuccessBackground, error => {
       if (imageFiles.length > 1) {
         --progressItemsLength;

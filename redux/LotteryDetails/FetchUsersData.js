@@ -6,7 +6,13 @@ import {uniq} from 'lodash';
 
 const handleFetchUsersData = payload => {
   return dispatch => {
-    const {users: adUsers, winnerUserId, userId, onEror} = payload;
+    const {
+      users: adUsers,
+      winnerUserId,
+      userId,
+      onEror,
+      currentCollectedPrice,
+    } = payload;
     const onGetUsersDataSuccess = data => {
       let {error, users} = data;
       if (error) {
@@ -15,22 +21,24 @@ const handleFetchUsersData = payload => {
       users = users.filter(Boolean);
       if (Array.isArray(users) && users.length > 0) {
         users.forEach(user => {
-          if (user.id === winnerUserId) {
+          if (currentCollectedPrice > 0 && user.id === winnerUserId) {
             dispatch({
               type: lotteryDetailsActions.setWinnerUserData,
               payload: user,
             });
-          } else if (user.id === userId) {
+          } else if (`${user.id}` === `${userId}`) {
             dispatch({
               type: lotteryDetailsActions.setAdPosterData,
               payload: user,
             });
           }
         });
-        dispatch({
-          type: lotteryDetailsActions.setLotteryUsersData,
-          payload: uniq(users, 'id'),
-        });
+        if (currentCollectedPrice > 0) {
+          dispatch({
+            type: lotteryDetailsActions.setLotteryUsersData,
+            payload: uniq(users, 'id'),
+          });
+        }
       }
       return invoke(payload, 'onSuccess');
     };

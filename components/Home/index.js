@@ -17,8 +17,7 @@ import {
   getIsCarouselSelector,
 } from './Selectors';
 import {emitSocketEvents} from '../../services/Socket';
-import UploadAdProgressModal from '../UploadAdProgress/uploadAdProgressModal';
-import {getProgressItemsSelector} from '../UploadAdProgress/Selectors';
+import UploadLotteryProgressModal from '../UploadLotteryProgress/UploadLotteryProgressModal';
 import {chunk, uniqBy} from 'lodash';
 import CardListItemRow from './CardListItemRow';
 import ListItemCommon from './ListItem';
@@ -26,7 +25,7 @@ import SearchBox from './SearchBox';
 class HomeComponent extends PureComponent {
   state = {
     loading: false,
-    showAdProgressModal: false,
+    showLotteryProgressModal: false,
     adList: null,
     searchBoxAnimatedOpacity: new Animated.Value(0),
     searchable: false,
@@ -82,7 +81,7 @@ class HomeComponent extends PureComponent {
     }
     if (action === 'cloud-upload') {
       this.setState({
-        showAdProgressModal: true,
+        showLotteryProgressModal: true,
       });
       return;
     }
@@ -124,15 +123,10 @@ class HomeComponent extends PureComponent {
     this.setState({
       adList,
     });
-    if (nextProps.progressItems.length === 0) {
-      this.setState({
-        showAdProgressModal: false,
-      });
-    }
   }
-  handleCloseUploadAdProgressModal = () => {
+  handleCloseUploadLotteryProgressModal = () => {
     this.setState({
-      showAdProgressModal: false,
+      showLotteryProgressModal: false,
     });
   };
 
@@ -157,7 +151,7 @@ class HomeComponent extends PureComponent {
   render() {
     const {
       loading,
-      showAdProgressModal,
+      showLotteryProgressModal,
       adList,
       searchable,
       searchBoxAnimatedOpacity,
@@ -166,9 +160,9 @@ class HomeComponent extends PureComponent {
 
     return (
       <View style={sharedStyles.fullheightView} shouldRasterizeIOS={true}>
-        {showAdProgressModal && (
-          <UploadAdProgressModal
-            onClose={this.handleCloseUploadAdProgressModal}
+        {showLotteryProgressModal && (
+          <UploadLotteryProgressModal
+            onClose={this.handleCloseUploadLotteryProgressModal}
           />
         )}
         <Toolbar
@@ -262,7 +256,6 @@ const mapStateToProps = state => {
     isList: getIsListSelector(state),
     isCard: getIsCardSelector(state),
     isCarousel: getIsCarouselSelector(state),
-    progressItems: getProgressItemsSelector(state),
   };
 };
 

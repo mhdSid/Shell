@@ -25,7 +25,7 @@ const UploadAdProgress = props => {
         <View
           style={[
             sharedStyles.progressItemInner,
-            {width: `${progressItem.progress}%`},
+            {width: `${progressItem.totalProgress}%`},
           ]}
         />
       </View>
