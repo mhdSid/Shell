@@ -13,7 +13,7 @@ const request = async options => {
   if (body instanceof FormData) {
     reqData.headers['Content-Type'] = apiRequest.formContentType();
   }
-  if (body && Object.keys(body).length > 0) {
+  if (body && Object.keys(body).length) {
     reqData = {
       ...reqData,
       body: body instanceof FormData ? body : JSON.stringify(body),
@@ -24,7 +24,7 @@ const request = async options => {
     let data = await response.json();
     if (data.data || data.error || data.user) {
       data = decrypt(data.data || data.error || data.user, true);
-      if (data && Object.keys(data).length > 0) {
+      if (data && Object.keys(data).length) {
         data = {...data};
         return data;
       }

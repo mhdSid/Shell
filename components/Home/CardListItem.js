@@ -4,7 +4,6 @@ import invoke from 'lodash/invoke';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {View, Text, Image} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
-import FastImage from 'react-native-fast-image';
 export default class CardListItem extends Component {
   static propTypes = {
     item: PropTypes.object,
@@ -48,12 +47,11 @@ export default class CardListItem extends Component {
       ? sharedStyles.homeCardItemImageSmall
       : sharedStyles.homeCardItemImage;
     const image = item.images[0] ? (
-      <FastImage
+      <Image
         style={imageStyle}
         source={{
           uri: item.images[0],
-          priority: FastImage.priority.high,
-          cache: FastImage.cacheControl.immutable,
+          cache: 'default',
         }}
         resizeMode={'cover'}
       />

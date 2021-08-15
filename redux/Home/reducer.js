@@ -11,12 +11,9 @@ const homeReducer = (state = initialState, action) => {
     case homeActions.setLotteries: {
       const {payload} = action;
       let newLotteries = [];
-      if (Array.isArray(payload) && payload.length > 0) {
+      if (Array.isArray(payload) && payload.length) {
         newLotteries = [...payload];
-      } else if (
-        typeof payload === 'object' &&
-        Object.keys(payload).length > 0
-      ) {
+      } else if (typeof payload === 'object' && Object.keys(payload).length) {
         newLotteries = [payload];
       }
       newLotteries = [...(state.lotteries || []), ...(newLotteries || [])].map(

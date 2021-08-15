@@ -17,11 +17,13 @@ import {
   getIsCarouselSelector,
 } from './Selectors';
 import {emitSocketEvents} from '../../services/Socket';
-import UploadLotteryProgressModal from '../UploadLotteryProgress/UploadLotteryProgressModal';
 import {chunk, uniqBy} from 'lodash';
-import CardListItemRow from './CardListItemRow';
-import ListItemCommon from './ListItem';
-import SearchBox from './SearchBox';
+
+let SearchBox = null;
+let UploadLotteryProgressModal = null;
+let CardListItemRow = null;
+let ListItemCommon = null;
+
 class HomeComponent extends PureComponent {
   state = {
     loading: false,
@@ -54,10 +56,14 @@ class HomeComponent extends PureComponent {
   };
   changeViewStyle = ({action}) => {
     if (action === 'search') {
+      if (!SearchBox) {
+        SearchBox = require('./SearchBox').default;
+      }
       const {searchable} = this.state;
       if (searchable) {
         Animated.timing(this.state.searchBoxAnimatedOpacity, {
           toValue: 0,
+          useNativeDriver: true,
           duration: 300,
         }).start(() => {
           this.setState({
@@ -73,6 +79,7 @@ class HomeComponent extends PureComponent {
             Animated.timing(this.state.searchBoxAnimatedOpacity, {
               toValue: 1,
               duration: 300,
+              useNativeDriver: true,
             }).start();
           },
         );
@@ -80,6 +87,10 @@ class HomeComponent extends PureComponent {
       return;
     }
     if (action === 'cloud-upload') {
+      if (!UploadLotteryProgressModal) {
+        UploadLotteryProgressModal = require('../UploadLotteryProgress/UploadLotteryProgressModal')
+          .default;
+      }
       this.setState({
         showLotteryProgressModal: true,
       });
@@ -87,12 +98,18 @@ class HomeComponent extends PureComponent {
     }
     const {isCard, isList} = this.props;
     if (isCard) {
+      if (!ListItemCommon) {
+        ListItemCommon = require('./ListItem').default;
+      }
       invoke(this.props, 'setHomeViewStyle', {
         isHomeCardStyle: false,
         isHomeListStyle: true,
       });
     }
     if (isList) {
+      if (!CardListItemRow) {
+        CardListItemRow = require('./CardListItemRow').default;
+      }
       invoke(this.props, 'setHomeViewStyle', {
         isHomeCardStyle: true,
         isHomeListStyle: false,
@@ -106,10 +123,32 @@ class HomeComponent extends PureComponent {
     invoke(this.props, 'showLotteryDetails', this.props.lotteries[index]);
   };
   componentWillMount() {
-    emitSocketEvents();
+    const {isCard, isList} = this.props;
+    if (isCard) {
+      if (!CardListItemRow) {
+        CardListItemRow = require('./CardListItemRow').default;
+      }
+    }
+    if (isList) {
+      if (!ListItemCommon) {
+        ListItemCommon = require('./ListItem').default;
+      }
+    }
+    // emitSocketEvents();
     this.fetchLotteries();
   }
   componentWillReceiveProps(nextProps) {
+    const {isCard, isList} = nextProps;
+    if (isCard) {
+      if (!CardListItemRow) {
+        CardListItemRow = require('./CardListItemRow').default;
+      }
+    }
+    if (isList) {
+      if (!ListItemCommon) {
+        ListItemCommon = require('./ListItem').default;
+      }
+    }
     let adList = null;
     if (Array.isArray(nextProps.lotteries) && nextProps.lotteries.length) {
       adList = uniqBy(nextProps.lotteries, 'id');
@@ -223,7 +262,7 @@ class HomeComponent extends PureComponent {
             renderItem={this.renderCardListItemRow}
           />
         ) : null}
-        {isList && lotteries && lotteries.length > 0 ? (
+        {isList && lotteries && lotteries.length ? (
           <VirtualizedList
             removeClippedSubviews={true}
             windowSize={10}
@@ -232,6 +271,7 @@ class HomeComponent extends PureComponent {
             onRefresh={this.fetchLotteries}
             showsVerticalScrollIndicator={false}
             data={lotteries}
+            contentContainerStyle={sharedStyles.listViewContainer}
             getItem={this.getItem}
             getItemCount={this.getListItemCount}
             keyExtractor={this.getListItemKey}

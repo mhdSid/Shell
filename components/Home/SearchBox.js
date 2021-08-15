@@ -335,6 +335,7 @@ const SearchBox = props => {
               primary
               text={'Search'}
               icon="search"
+              style={{container: sharedStyles.mainButtonContainer}}
               onPress={handleSearchPress}
             />
           </View>
@@ -353,6 +354,7 @@ const SearchBox = props => {
               raised={true}
               primary
               text={'Reset'}
+              style={{container: sharedStyles.mainButtonContainer}}
               icon="youtube-searched-for"
               onPress={handleResetSearchFilters}
             />

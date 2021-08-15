@@ -14,10 +14,6 @@ import {Loading} from '../Loading';
 //   //   // PublisherBanner,
 //   //   // AdMobRewarded,
 // } from 'react-native-admob';
-import Login from './Login';
-import UserProfile from './UserProfile';
-import VerifyUser from './VerifyUser';
-import SignUp from './SignUp';
 import {
   getLoggedInSelector,
   getUserSelector,
@@ -25,6 +21,11 @@ import {
   getShowSignUpSelector,
   getVerificationIdSelector,
 } from './Selectors';
+
+let SignUp = null;
+let VerifyUser = null;
+let UserProfile = null;
+let Login = null;
 
 const AuthComponent = props => {
   // console.log('AuthComponent: ');
@@ -46,13 +47,25 @@ const AuthComponent = props => {
     return Loading;
   }
   if (showSignup === true && verificationId) {
+    if (!SignUp) {
+      SignUp = require('./SignUp').default;
+    }
     return <SignUp />;
   }
   if (verificationId) {
+    if (!VerifyUser) {
+      VerifyUser = require('./VerifyUser').default;
+    }
     return <VerifyUser />;
   }
   if (loggedIn && user) {
+    if (!UserProfile) {
+      UserProfile = require('./UserProfile').default;
+    }
     return <UserProfile />;
+  }
+  if (!Login) {
+    Login = require('./Login').default;
   }
   return <Login />;
 };

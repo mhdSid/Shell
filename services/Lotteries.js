@@ -4,7 +4,6 @@ import {apiRequest} from '../Constants/Api';
 import {decrypt, encrypt} from './Encrypt';
 import sha256 from 'crypto-js/sha256';
 import {password as hashkey} from './Encrypt';
-import {isNil} from 'lodash';
 
 const getAds = async () => {
   const data = await request({
@@ -38,6 +37,47 @@ const getUserCreatedLotteries = async props => {
     body: {
       userId,
       hash: sha256(userId + hashkey).toString(),
+    },
+  });
+  return data;
+};
+
+const getUserLikedLotteries = async props => {
+  const {userId} = props;
+  const data = await request({
+    endpoint: 'ads/myLikedLotteries',
+    method: 'POST',
+    body: {
+      userId,
+      hash: sha256(userId + hashkey).toString(),
+    },
+  });
+  return data;
+};
+
+const likeLottery = async props => {
+  const {userId, lotteryId} = props;
+  const data = await request({
+    endpoint: 'ads/likeLottery',
+    method: 'POST',
+    body: {
+      userId: `${userId}`,
+      lotteryId: `${lotteryId}`,
+      hash: sha256(`${userId}` + `${lotteryId}` + hashkey).toString(),
+    },
+  });
+  return data;
+};
+
+const dislikeLottery = async props => {
+  const {userId, lotteryId} = props;
+  const data = await request({
+    endpoint: 'ads/dislikeLottery',
+    method: 'POST',
+    body: {
+      userId: `${userId}`,
+      lotteryId: `${lotteryId}`,
+      hash: sha256(`${userId}` + `${lotteryId}` + hashkey).toString(),
     },
   });
   return data;
@@ -260,4 +300,7 @@ export {
   getUserJoinedLotteries,
   addBackgroundUpload,
   updateAdBackground,
+  getUserLikedLotteries,
+  likeLottery,
+  dislikeLottery,
 };

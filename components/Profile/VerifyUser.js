@@ -53,6 +53,9 @@ const VerifyUser = props => {
           <Button
             raised={true}
             primary
+            style={{
+              container: sharedStyles.mainButtonContainer,
+            }}
             text={profile.verify}
             onPress={handleVerifyUserPress}
             disabled={loading}

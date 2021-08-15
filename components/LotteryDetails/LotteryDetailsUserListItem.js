@@ -1,26 +1,24 @@
 import React from 'react';
-import invoke from 'lodash/invoke';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import PropTypes from 'prop-types';
-import FastImage from 'react-native-fast-image';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {Text, View} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import {Icon} from 'react-native-material-ui';
 
 const LotteryDetailsUserListItem = props => {
-  const {user, withNotificationNum} = props;
-
-  const handlePress = () => {
-    invoke(props, 'onPress', user);
-  };
+  const {user, withNotificationNum, largeImage, winnerUserId} = props;
 
   if (user) {
     return (
       <TouchableBounce
-        style={sharedStyles.lotteryDetailsUsersListItemContainer}
-        onPress={handlePress}>
+        style={sharedStyles.lotteryDetailsUsersListItemContainer}>
         {withNotificationNum && user.userJoinedLotteryCount > 1 && (
-          <View style={sharedStyles.userJoinedLotteryCountContainer}>
+          <View
+            style={[
+              sharedStyles.userJoinedLotteryCountContainer,
+              largeImage &&
+                sharedStyles.userJoinedLotteryCountContainerWithLargeImage,
+            ]}>
             <Text
               numberOfLines={1}
               style={sharedStyles.userJoinedLotteryCountText}>
@@ -29,15 +27,27 @@ const LotteryDetailsUserListItem = props => {
           </View>
         )}
         {user.image ? (
-          <FastImage
-            style={sharedStyles.lotteryDetailsUsersListItemImage}
-            source={{
-              uri: user.image,
-              priority: FastImage.priority.high,
-              cache: FastImage.cacheControl.immutable,
-            }}
-            resizeMode={FastImage.resizeMode.cover}
-          />
+          <View
+            style={[
+              user.id === winnerUserId &&
+                sharedStyles.lotteryDetailsUsersListItemWinnerContainer,
+              largeImage
+                ? sharedStyles.lotteryDetailsUsersListItemLargeImageContainer
+                : sharedStyles.lotteryDetailsUsersListItemImageContainer,
+            ]}>
+            <Image
+              style={
+                largeImage
+                  ? sharedStyles.lotteryDetailsUsersListItemLargeImage
+                  : sharedStyles.lotteryDetailsUsersListItemImage
+              }
+              source={{
+                uri: user.image,
+                cache: 'default',
+              }}
+              resizeMode="cover"
+            />
+          </View>
         ) : (
           <Icon name="face" size={40} />
         )}
@@ -55,6 +65,8 @@ LotteryDetailsUserListItem.propTypes = {
   user: PropTypes.object,
   onPress: PropTypes.func,
   withNotificationNum: PropTypes.bool,
+  largeImage: PropTypes.bool,
+  winnerUserId: PropTypes.oneOfType([PropTypes.string, PropTypes.any]),
 };
 
 export default LotteryDetailsUserListItem;

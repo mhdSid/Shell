@@ -8,13 +8,10 @@ import {payment, about} from '../../Constants/Texts';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {CreditCardInput} from 'react-native-credit-card-input';
-import {
-  getUserSelector,
-  getLoggedInSelector,
-} from './Selectors';
+import {getUserSelector, getLoggedInSelector} from './Selectors';
 import NoAuth from '../NoAuth';
 import {handleEnterLottery} from '../../redux/Payment/EnterLottery';
-import { getLotteryDetailsSelector } from '../Pinger/Selectors';
+import {getLotteryDetailsSelector} from '../Pinger/Selectors';
 
 const Payment = props => {
   const {user, loggedIn, lottery} = props;
@@ -107,30 +104,6 @@ const Payment = props => {
                 ref={creditCardInputRef}
               />
             </View>
-            <View style={sharedStyles.aboutIconTextContainer}>
-              <Icon color="black" name="receipt" />
-              <Text
-                style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
-                {about.enterLottery}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>
-                {about.howToUseTenth}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutIconTextContainer}>
-              <Icon color="black" name="star" />
-              <Text
-                style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
-                {about.win}
-              </Text>
-            </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>
-                {about.howToUseEleventh}
-              </Text>
-            </View>
             <View style={sharedStyles.btnContainer}>
               <View style={sharedStyles.paymentBtn}>
                 <Button
@@ -151,6 +124,30 @@ const Payment = props => {
               <View style={sharedStyles.paymentBtn}>
                 <Button text={payment.cancel} onPress={handleCloseModal} />
               </View>
+            </View>
+            <View style={sharedStyles.aboutIconTextContainer}>
+              <Icon color="black" name="receipt" />
+              <Text
+                style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
+                {about.enterLottery}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              <Text style={sharedStyles.aboutFirstSectionText}>
+                {about.howToUseTenth}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutIconTextContainer}>
+              <Icon color="black" name="star" />
+              <Text
+                style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
+                {about.joinLottery}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              <Text style={sharedStyles.aboutFirstSectionText}>
+                {about.howToUseEleventh}
+              </Text>
             </View>
           </ScrollView>
         </View>

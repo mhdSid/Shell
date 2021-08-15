@@ -144,6 +144,9 @@ const SignUp = props => {
                 raised={true}
                 primary
                 text={profile.signUp}
+                style={{
+                  container: sharedStyles.mainButtonContainer,
+                }}
                 onPress={handleSignupPress}
               />
             </View>

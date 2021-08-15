@@ -1,13 +1,8 @@
 import React, {useState} from 'react';
-import UpdateUser from '../UpdateUser';
-import Settings from '../Settings';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {View, Text, ActionSheetIOS} from 'react-native';
+import {View, Text, ActionSheetIOS, Image} from 'react-native';
 import {Button, Drawer, Avatar, Icon} from 'react-native-material-ui';
-import Notifications from '../Notifications';
-import PaymentInformation from '../PaymentInformation';
-import About from '../About';
 import {loadingPopup} from '../Loading';
 import {profile} from '../../Constants/Texts';
 import PropTypes from 'prop-types';
@@ -16,8 +11,14 @@ import {connect} from 'react-redux';
 import {logoutAction} from '../../redux/Auth/actions';
 import {handleLogout} from '../../redux/Auth/Logout';
 import {getUserSelector} from './Selectors';
-import FastImage from 'react-native-fast-image';
-import UserCreatedLotteries from '../UserCreatedLotteries';
+
+let UserLikedLotteries = null;
+let UserCreatedLotteries = null;
+let About = null;
+let PaymentInformation = null;
+let Notifications = null;
+let Settings = null;
+let UpdateUser = null;
 
 const UserProfile = props => {
   const {user} = props;
@@ -57,17 +58,53 @@ const UserProfile = props => {
     };
   };
   const userProfileModals = {
-    updateUser: <UpdateUser onClose={onModalClose} />,
-    settings: <Settings onClose={onModalClose} />,
-    notifications: <Notifications onClose={onModalClose} />,
-    about: <About onClose={onModalClose} />,
-    userCreatedLotteries: <UserCreatedLotteries onClose={onModalClose} />,
-    paymentInformation: <PaymentInformation onClose={onModalClose} />,
+    updateUser: () => {
+      if (!UpdateUser) {
+        UpdateUser = require('../UpdateUser').default;
+      }
+      return <UpdateUser onClose={onModalClose} />;
+    },
+    settings: () => {
+      if (!Settings) {
+        Settings = require('../Settings').default;
+      }
+      return <Settings onClose={onModalClose} />;
+    },
+    notifications: () => {
+      if (!Notifications) {
+        Notifications = require('../Notifications').default;
+      }
+      return <Notifications onClose={onModalClose} />;
+    },
+    about: () => {
+      if (!About) {
+        About = require('../About').default;
+      }
+      return <About onClose={onModalClose} />;
+    },
+    userCreatedLotteries: () => {
+      if (!UserCreatedLotteries) {
+        UserCreatedLotteries = require('../UserCreatedLotteries').default;
+      }
+      return <UserCreatedLotteries onClose={onModalClose} />;
+    },
+    userLikedLotteries: () => {
+      if (!UserLikedLotteries) {
+        UserLikedLotteries = require('../UserLikedLotteries').default;
+      }
+      return <UserLikedLotteries onClose={onModalClose} />;
+    },
+    paymentInformation: () => {
+      if (!PaymentInformation) {
+        PaymentInformation = require('../PaymentInformation').default;
+      }
+      return <PaymentInformation onClose={onModalClose} />;
+    },
   };
 
   return (
     <>
-      {userProfileModal && userProfileModals[userProfileModal]}
+      {userProfileModal && userProfileModals[userProfileModal]()}
       <View style={sharedStyles.fullheightView}>
         {loading && loadingPopup}
         <View style={sharedStyles.loggedInContainer}>
@@ -95,14 +132,13 @@ const UserProfile = props => {
                   <Avatar
                     image={
                       user.image ? (
-                        <FastImage
+                        <Image
                           style={sharedStyles.profileImage}
                           source={{
                             uri: user.image,
-                            priority: FastImage.priority.high,
-                            cache: FastImage.cacheControl.immutable,
+                            cache: 'default',
                           }}
-                          resizeMode={FastImage.resizeMode.cover}
+                          resizeMode="cover"
                         />
                       ) : (
                         <Icon name="account-circle" />
@@ -152,6 +188,11 @@ const UserProfile = props => {
                   icon: 'grade',
                   value: profile.myCreatedLotteries,
                   onPress: handleShowModal('userCreatedLotteries'),
+                },
+                {
+                  icon: 'favorite',
+                  value: profile.myLikedLotteries,
+                  onPress: handleShowModal('userLikedLotteries'),
                 },
               ]}
             />

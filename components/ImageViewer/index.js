@@ -1,11 +1,10 @@
 import React from 'react';
-import {Dimensions, View} from 'react-native';
+import {Dimensions, Image, View} from 'react-native';
 import ImageZoom from 'react-native-image-pan-zoom';
 import {Modal, SafeAreaView} from 'react-native';
 import {Button, Toolbar} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import PropTypes from 'prop-types';
-import FastImage from 'react-native-fast-image';
 import invoke from 'lodash/invoke';
 
 const ImagesViewer = props => {
@@ -41,14 +40,13 @@ const ImagesViewer = props => {
             style={sharedStyles.imageViewerZoom}
             imageWidth={300}
             imageHeight={300}>
-            <FastImage
+            <Image
               style={sharedStyles.imageViewerImage}
               source={{
                 uri,
-                priority: FastImage.priority.high,
-                cache: FastImage.cacheControl.immutable,
+                cache: 'default',
               }}
-              resizeMode={FastImage.resizeMode.contain}
+              resizeMode="cover"
             />
           </ImageZoom>
         </View>

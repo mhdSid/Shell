@@ -170,6 +170,9 @@ const Login = props => {
             raised={true}
             primary
             text={loginSingup}
+            style={{
+              container: sharedStyles.mainButtonContainer,
+            }}
             onPress={handleSubmit}
           />
         </View>

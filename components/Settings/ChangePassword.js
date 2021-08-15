@@ -129,6 +129,10 @@ const ChangePassword = props => {
                 disabled={
                   loading || !(currentPasswordChanged && newPasswordChanged)
                 }
+                style={{
+                  container: sharedStyles.mainButtonContainer,
+                  text: {color: '#b69cf6'},
+                }}
                 raised
                 text={updateUserr.save}
                 icon="done-all"
@@ -182,6 +186,9 @@ const ChangePassword = props => {
                     disabled={
                       loading || !(currentPasswordChanged && newPasswordChanged)
                     }
+                    style={{
+                      container: sharedStyles.mainButtonContainer,
+                    }}
                     raised={true}
                     primary
                     text={updateUserr.save}

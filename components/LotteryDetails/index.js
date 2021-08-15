@@ -1,21 +1,20 @@
-import React, {useState, createRef} from 'react';
+import React, {useState, createRef, useEffect} from 'react';
 import {
   Text,
   View,
   Modal,
   SafeAreaView,
   ScrollView,
-  Alert,
   VirtualizedList,
 } from 'react-native';
 import {connect} from 'react-redux';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {Button, Icon, ActionButton} from 'react-native-material-ui';
+import {Button, Icon} from 'react-native-material-ui';
 import {Toolbar} from 'react-native-material-ui';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {SimpleLoader} from '../Loading';
-import formatDate from '../../lib/CachedImage/formatDate';
+import formatDate from '../../lib/formatDate';
 import LotteryDetailsUserListItem from './LotteryDetailsUserListItem.js';
 import {lotteryDetails as lotteryDetailsTexts} from '../../Constants/Texts';
 import {
@@ -30,12 +29,14 @@ import {handleFetchUserLotteries} from '../../redux/LotteryDetails/FetchUserLott
 import CardListItem from '../Home/CardListItem';
 import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
 import {CarouselComponent} from '../Carousel';
-import ImagesViewer from '../ImageViewer';
-import Payment from '../Payment';
 import {handleFetchUsersData} from '../../redux/LotteryDetails/FetchUsersData';
+import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
+import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
+import {getLotteryDetailsSelector} from '../Pinger/Selectors';
+import Snackbar from '../Snackbar';
 
-const myActions = ['share', 'favorite', 'cancel', 'delete'];
-const defaultActions = ['share', 'favorite', 'shop'];
+let ImagesViewer = null;
+let Payment = null;
 
 const LotteryDetails = props => {
   const {
@@ -45,6 +46,7 @@ const LotteryDetails = props => {
     winnerUserData,
     userAds,
     lotteryUsersData,
+    lotteryDetails,
   } = props;
   const {
     name,
@@ -64,13 +66,19 @@ const LotteryDetails = props => {
     winnerUserId,
     currentCollectedPrice,
     images,
+    likedBy,
     disableHeaderActions,
-  } = item;
+  } = lotteryDetails || item;
   const [usersDataLoading, setUsersDataLoading] = useState(true);
   const [userAdsLoading, setUserAdsLoading] = useState(true);
   const [showImagesViewer, setShowImagesViewer] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [viewImageUri, setViewImageUri] = useState(images[0]);
+
+  const isVisitor = !authUser || userId !== authUser.id;
+  const isLotteryPoster = userId === authUser.id;
+  const isWinner = winnerUserId === authUser.id;
+
   const scrollViewRef = createRef();
   const handleUserAdPress = ad => {
     return () => {
@@ -85,10 +93,10 @@ const LotteryDetails = props => {
   const handleCloseModal = () => {
     invoke(props, 'onClose');
   };
-  const handleActionPress = value => {
-    Alert.alert(value);
-  };
   const handleEnterDraw = () => {
+    if (!Payment) {
+      Payment = require('../Payment').default;
+    }
     setShowPayment(true);
   };
   const onPaymentClose = () => {
@@ -107,11 +115,12 @@ const LotteryDetails = props => {
       winnerUserId || false,
     ].filter(Boolean);
 
-    if (users.length > 0) {
+    if (users.length) {
       invoke(props, 'handleFetchUsersData', {
         winnerUserId,
         userId,
         users,
+        lotteryUserIds,
         onError: fetchUsersDataCallback,
         onSuccess: fetchUsersDataCallback,
         currentCollectedPrice,
@@ -143,17 +152,45 @@ const LotteryDetails = props => {
     <LotteryDetailsUserListItem user={_user} withNotificationNum={true} />
   );
   const handleShowImagesViewer = url => {
+    if (!ImagesViewer) {
+      ImagesViewer = require('../ImageViewer').default;
+    }
     setViewImageUri(url);
     setShowImagesViewer(true);
   };
   const onImagesViewerClose = () => {
     setShowImagesViewer(false);
   };
+  const handleActionPress = {
+    [lotteryDetailsTexts.actionOptions.share]: () => {
+      console.log('share');
+    },
+    [lotteryDetailsTexts.actionOptions.receive]: () => {
+      console.log('receive');
+    },
+    [lotteryDetailsTexts.actionOptions.remove]: () => {
+      console.log('delete');
+    },
+    [lotteryDetailsTexts.actionOptions.like]: () => {
+      invoke(props, 'handleLikeLottery', {
+        userId: authUser.id,
+        lotteryId: (lotteryDetails || item).id,
+      });
+    },
+    [lotteryDetailsTexts.actionOptions.dislike]: () => {
+      invoke(props, 'handleDislikeLottery', {
+        userId: authUser.id,
+        lotteryId: (lotteryDetails || item).id,
+      });
+    },
+    [lotteryDetailsTexts.actionOptions.win]: handleEnterDraw,
+  };
+  useEffect(() => {
+    onShow();
+  }, [item, lotteryDetails]);
+
   return (
-    <Modal
-      animationType="slide"
-      onShow={onShow}
-      onRequestClose={handleCloseModal}>
+    <Modal animationType="slide" onRequestClose={handleCloseModal}>
       {showImagesViewer && (
         <ImagesViewer
           imageText={name}
@@ -178,6 +215,10 @@ const LotteryDetails = props => {
                   disabled={`${currentCollectedPrice}` === `${price}`}
                   onPress={handleEnterDraw}
                   raised
+                  style={{
+                    container: sharedStyles.mainButtonContainer,
+                    text: {color: '#b69cf6'},
+                  }}
                   text={lotteryDetailsTexts.enterDraw}
                   icon="shop"
                 />
@@ -205,8 +246,8 @@ const LotteryDetails = props => {
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
                 <Text style={sharedStyles.aboutFirstSectionText}>
                   {available
-                    ? lotteryDetailsTexts.adAvailable
-                    : lotteryDetailsTexts.adNotAvailable}
+                    ? lotteryDetailsTexts.lotteryAvailable
+                    : lotteryDetailsTexts.lotteryNotAvailable}
                 </Text>
               </View>
               <View style={sharedStyles.userDetailsIconTextContainer}>
@@ -297,7 +338,7 @@ const LotteryDetails = props => {
                 {usersDataLoading && SimpleLoader}
                 {!usersDataLoading &&
                   lotteryUsersData &&
-                  lotteryUsersData.length > 0 && (
+                  lotteryUsersData.length && (
                     <VirtualizedList
                       initialNumToRender={2}
                       windowSize={2}
@@ -396,21 +437,86 @@ const LotteryDetails = props => {
               <Text>{cancelDate}</Text>
             </View>
           </ScrollView>
-          <ActionButton
-            style={{
-              container: {
-                shadowRadius: 1,
-              },
-            }}
-            onPress={handleActionPress}
-            actions={
-              authUser && item.userId === authUser.id
-                ? myActions
-                : defaultActions
-            }
-            icon="more-vert"
-            transition="speedDial"
-          />
+          <View style={sharedStyles.lotteryDetailsBottomToolbar}>
+            {isLotteryPoster
+              ? lotteryDetailsTexts.lotteryPosterActions.map(userAction => (
+                  <Button
+                    primary
+                    raised
+                    style={{
+                      container:
+                        sharedStyles.bottomToolbarActionButtonContainer,
+                    }}
+                    icon={userAction.icon}
+                    text={''}
+                    onPress={handleActionPress[userAction.action]}
+                  />
+                ))
+              : isWinner
+              ? lotteryDetailsTexts.lotteryWinnerActions.map(winnerAction => (
+                  <Button
+                    primary
+                    raised
+                    style={{
+                      container:
+                        sharedStyles.bottomToolbarActionButtonContainer,
+                    }}
+                    icon={winnerAction.icon}
+                    text={''}
+                    onPress={handleActionPress[winnerAction.action]}
+                  />
+                ))
+              : isVisitor
+              ? lotteryDetailsTexts.visitorActions.map(visitorAction => (
+                  <Button
+                    primary
+                    raised
+                    style={{
+                      container:
+                        sharedStyles.bottomToolbarActionButtonContainer,
+                    }}
+                    disabled={
+                      visitorAction.action ===
+                        lotteryDetailsTexts.actionOptions.win &&
+                      `${currentCollectedPrice}` === `${price}`
+                    }
+                    icon={visitorAction.icon}
+                    text={''}
+                    onPress={handleActionPress[visitorAction.action]}
+                  />
+                ))
+              : null}
+            {isVisitor &&
+            Array.isArray(likedBy) &&
+            likedBy.length &&
+            likedBy.includes(authUser.id) ? (
+              <Button
+                primary
+                raised
+                style={{
+                  container: sharedStyles.bottomToolbarActionButtonContainer,
+                }}
+                icon={lotteryDetailsTexts.dislike.icon}
+                text={''}
+                onPress={handleActionPress[lotteryDetailsTexts.dislike.action]}
+              />
+            ) : null}
+            {isVisitor &&
+            (!Array.isArray(likedBy) ||
+              !likedBy.length ||
+              !likedBy.includes(authUser.id)) ? (
+              <Button
+                primary
+                raised
+                style={{
+                  container: sharedStyles.bottomToolbarActionButtonContainer,
+                }}
+                icon={lotteryDetailsTexts.like.icon}
+                text={''}
+                onPress={handleActionPress[lotteryDetailsTexts.like.action]}
+              />
+            ) : null}
+          </View>
         </View>
       </SafeAreaView>
     </Modal>
@@ -422,6 +528,15 @@ LotteryDetails.propTypes = {
   onClose: PropTypes.func,
   updateLotteryDetails: PropTypes.func,
   disableHeaderActions: PropTypes.bool,
+  handleLikeLottery: PropTypes.func,
+  handleDislikeLottery: PropTypes.func,
+  lotteries: PropTypes.oneOfType([PropTypes.array, PropTypes.any]),
+  user: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
+  // adPosterData: ,
+  // lotteryUsersData: ,
+  // winnerUserData: ,
+  userAds: PropTypes.oneOfType([PropTypes.array, PropTypes.any]),
+  lotteryDetails: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
 };
 
 const mapStateToProps = state => {
@@ -432,6 +547,7 @@ const mapStateToProps = state => {
     lotteryUsersData: getLotteryUsersDataSelector(state),
     winnerUserData: getWinnerUserDataSelector(state),
     userAds: getUserAdsSelector(state),
+    lotteryDetails: getLotteryDetailsSelector(state),
   };
 };
 
@@ -441,6 +557,8 @@ const mapDispatchToProps = dispatch => {
     handleFetchUserLotteries: payload =>
       dispatch(handleFetchUserLotteries(payload)),
     showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
+    handleLikeLottery: payload => dispatch(handleLikeLottery(payload)),
+    handleDislikeLottery: payload => dispatch(handleDislikeLottery(payload)),
   };
 };
 

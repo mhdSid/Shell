@@ -25,7 +25,7 @@ const lotteryDetailsReducer = (state = initialState, action) => {
     }
     case lotteryDetailsActions.fetchUserAds: {
       const {payload} = action;
-      if (Array.isArray(payload) && payload.length > 0) {
+      if (Array.isArray(payload) && payload.length) {
         return {
           ...state,
           userAds: [...payload],
@@ -48,6 +48,15 @@ const lotteryDetailsReducer = (state = initialState, action) => {
           ...action.payload,
           lotteryUserIds: action.payload.lotteryUserIds || [],
         };
+        if (
+          !isNil(action.payload.resetState) &&
+          action.payload.resetState === false
+        ) {
+          return {
+            ...state,
+            lotteryDetails,
+          };
+        }
         return {
           lotteryUsersData: undefined,
           adPosterData: undefined,

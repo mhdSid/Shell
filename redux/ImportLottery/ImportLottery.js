@@ -29,7 +29,6 @@ const handleImportLottery = payload => {
       currency,
       imageFiles,
     } = payload;
-    let progressItemsLength = imageFiles.length;
     const importAdSuccessBackground = data => {
       const {error, newAd} = data;
       invoke(payload, 'onSuccess');
@@ -163,16 +162,12 @@ const handleImportLottery = payload => {
       country,
       currency,
     }).then(importAdSuccessBackground, error => {
-      if (imageFiles.length > 1) {
-        --progressItemsLength;
-      } else {
-        dispatch({
-          type: uploadProgressActions.removeProgressItem,
-          payload: {
-            id: uniqId,
-          },
-        });
-      }
+      dispatch({
+        type: uploadProgressActions.removeProgressItem,
+        payload: {
+          id: uniqId,
+        },
+      });
       return handleError({error, onError});
     });
   };

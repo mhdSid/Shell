@@ -113,7 +113,7 @@ const About = props => {
           </View>
           <View style={sharedStyles.aboutIconTextContainer}>
             <Icon color="white" name="star" />
-            <Text style={sharedStyles.aboutIconText}>{about.win}</Text>
+            <Text style={sharedStyles.aboutIconText}>{about.joinLottery}</Text>
           </View>
           <View style={sharedStyles.aboutFirstSectionTextContainer}>
             <Text style={sharedStyles.aboutFirstSectionText}>

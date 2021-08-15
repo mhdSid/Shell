@@ -1,5 +1,13 @@
-import React, {useState, useEffect, createRef} from 'react';
-import {View, ScrollView, Text, KeyboardAvoidingView} from 'react-native';
+import React, {useState, useEffect, createRef, useRef} from 'react';
+import {
+  View,
+  ScrollView,
+  Text,
+  Image,
+  Animated,
+  Easing,
+  Dimensions,
+} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
@@ -16,7 +24,6 @@ import {
 import isUndefined from 'lodash/isUndefined';
 import NoAuth from '../NoAuth';
 import {LoadingComponent} from '../Loading';
-import FastImage from 'react-native-fast-image';
 import {
   importLottery as importLotteryTexts,
   profile,
@@ -25,7 +32,8 @@ import invoke from 'lodash/invoke';
 import {handleImportLottery} from '../../redux/ImportLottery/ImportLottery';
 import {getLoggedInSelector, getUserSelector} from './Selectors';
 import {Dropdown} from 'react-native-material-dropdown';
-import UploadLotteryProgressModal from '../UploadLotteryProgress/UploadLotteryProgressModal';
+
+let UploadLotteryProgressModal = null;
 
 const ImportLottery = props => {
   const {loggedIn, user} = props;
@@ -154,7 +162,54 @@ const ImportLottery = props => {
     setItemCategoryChanged(false);
     setItemConditionChanged(false);
   };
+  const animatedImages = [
+    {
+      translateX: useRef(new Animated.Value(0)).current,
+      translateY: useRef(new Animated.Value(0)).current,
+    },
+    {
+      translateX: useRef(new Animated.Value(0)).current,
+      translateY: useRef(new Animated.Value(0)).current,
+    },
+    {
+      translateX: useRef(new Animated.Value(0)).current,
+      translateY: useRef(new Animated.Value(0)).current,
+    },
+    {
+      translateX: useRef(new Animated.Value(0)).current,
+      translateY: useRef(new Animated.Value(0)).current,
+    },
+    {
+      translateX: useRef(new Animated.Value(0)).current,
+      translateY: useRef(new Animated.Value(0)).current,
+    },
+  ];
+  const startAnimation = () => {
+    const windowWidth = Dimensions.get('window').width;
+    const windowHeight = Dimensions.get('window').height;
+    const animationDelayGap = 100;
+    let animationDelay = 0;
+
+    animatedImages.forEach(animatedImage => {
+      animationDelay += animationDelayGap;
+
+      Animated.parallel([
+        Animated.timing(animatedImage.translateY, {
+          toValue: -windowHeight + 225,
+          duration: 1000,
+          delay: animationDelay,
+          easing: Easing.elastic(1),
+        }),
+        Animated.timing(animatedImage.translateX, {
+          toValue: -windowWidth / 2 + 45,
+          duration: 1000,
+          delay: animationDelay,
+        }),
+      ]).start();
+    });
+  };
   const handleUploadLottery = () => {
+    // startAnimation();
     const {current: nameField} = adNameRef;
     const {current: descriptionField} = descriptionRef;
     const {current: priceField} = priceRef;
@@ -232,7 +287,7 @@ const ImportLottery = props => {
             setImagesChanged(true);
             setImageFiles([...imageFiles]);
           }
-          if (imageFiles.length > 0) {
+          if (imageFiles.length) {
             setErrors({
               ...errors,
               images: false,
@@ -259,6 +314,10 @@ const ImportLottery = props => {
     setShowLotteryProgressModal(false);
   };
   const handleShowUploadLotteryProgressModal = () => {
+    if (!UploadLotteryProgressModal) {
+      UploadLotteryProgressModal = require('../UploadLotteryProgress/UploadLotteryProgressModal')
+        .default;
+    }
     setShowLotteryProgressModal(true);
   };
   useEffect(() => {
@@ -295,177 +354,198 @@ const ImportLottery = props => {
             onClose={handleCloseUploadLotteryProgressModal}
           />
         ) : null}
-        <Toolbar
-          style={{
-            container: sharedStyles.toolbarContainerPadding,
-          }}
-          centerElement={importLotteryTexts.createLottery}
-          leftElement={'cloud-upload'}
-          onLeftElementPress={handleShowUploadLotteryProgressModal}
-          rightElement={
-            <Button
-              onPress={handleUploadLottery}
-              disabled={!lotteryDataChanged}
-              raised
-              text={importLotteryTexts.create}
-              icon="done-all"
-            />
-          }
-        />
-        <KeyboardAvoidingView
-          behavior="padding"
-          enabled
-          style={sharedStyles.importAdView}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={sharedStyles.importAdContainer}>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>
-                  {importLotteryTexts.productName}
-                </Text>
-                <TextField
-                  placeholder={importLotteryTexts.enterName}
-                  placeholderTextColor={'rgba(0,0,0,0.3)'}
-                  onBlur={handleBlur('adName')}
-                  onChangeText={handleChange.adName()}
-                  tintColor={'#b69cf6'}
-                  maxLength={30}
-                  minLength={5}
-                  error={errors.adName}
-                  ref={adNameRef}
-                />
-              </View>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>
-                  {importLotteryTexts.description}
-                </Text>
-                <TextField
-                  placeholder={importLotteryTexts.enterDescription}
-                  placeholderTextColor={'rgba(0,0,0,0.3)'}
-                  onChangeText={handleChange.description()}
-                  maxLength={100}
-                  minLength={20}
-                  tintColor={'#b69cf6'}
-                  error={errors.description}
-                  onBlur={handleBlur('description')}
-                  ref={descriptionRef}
-                />
-              </View>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>
-                  {importLotteryTexts.images}
-                </Text>
-                <View style={sharedStyles.imageBtnContainer}>
-                  {adImages.map(index => (
-                    <TouchableBounce
-                      key={index}
-                      onPress={handleChoosePhoto(index)}
-                      style={[
-                        sharedStyles.imageBtn,
-                        index === 0 && errors.images
-                          ? sharedStyles.imageBtnError
-                          : '',
-                      ]}>
-                      {!images[index] && (
-                        <Icon name="image" size={35} color="white" />
-                      )}
-                      {images[index] && (
-                        <FastImage
-                          style={sharedStyles.adImage}
-                          source={{
-                            uri: images[index],
-                            priority: FastImage.priority.high,
-                            cache: FastImage.cacheControl.immutable,
-                          }}
-                          resizeMode={FastImage.resizeMode.contain}
-                        />
-                      )}
-                    </TouchableBounce>
-                  ))}
-                </View>
-              </View>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>
-                  {importLotteryTexts.price}
-                </Text>
-                <View style={sharedStyles.priceContainer}>
-                  <Text style={sharedStyles.currencyLabel}>{userCurrency}</Text>
-                  <View style={sharedStyles.adPriceTextfieldContainer}>
-                    <TextField
-                      placeholder={importLotteryTexts.enterPrice}
-                      placeholderTextColor={'rgba(0,0,0,0.3)'}
-                      keyboardType="phone-pad"
-                      maxLength={9}
-                      minLength={4}
-                      tintColor={'#b69cf6'}
-                      onBlur={handleBlur('price')}
-                      error={errors.price}
-                      onChangeText={handleChange.price()}
-                      ref={priceRef}
-                    />
-                  </View>
-                </View>
-              </View>
-              <Text style={sharedStyles.label}>{profile.prefecture}</Text>
-              <View style={sharedStyles.dropdownView}>
-                <Dropdown
-                  baseColor={'rgba(0,0,0,0.3)'}
-                  label={profile.enterPrefecture}
-                  data={prefecturesDropdownData}
-                  onChangeText={prefectureOnChangeText}
-                  selectedItemColor={'rgba(0, 0, 0, .87)'}
-                  value={prefecture}
-                />
-              </View>
-              <Text style={sharedStyles.label}>{profile.city}</Text>
-              <View style={sharedStyles.dropdownView}>
-                <Dropdown
-                  baseColor={'rgba(0,0,0,0.3)'}
-                  label={profile.enterCity}
-                  selectedItemColor={'rgba(0, 0, 0, .87)'}
-                  data={cityDropdownData}
-                  onChangeText={cityOnChangeText}
-                  value={city}
-                />
-              </View>
-
+        <View>
+          <Toolbar
+            style={{
+              container: sharedStyles.toolbarContainerPadding,
+            }}
+            centerElement={importLotteryTexts.createLottery}
+            leftElement={'cloud-upload'}
+            onLeftElementPress={handleShowUploadLotteryProgressModal}
+            rightElement={
+              <Button
+                onPress={handleUploadLottery}
+                disabled={!lotteryDataChanged}
+                raised
+                text={importLotteryTexts.create}
+                style={{
+                  container: sharedStyles.mainButtonContainer,
+                  text: {color: '#b69cf6'},
+                }}
+                icon="done-all"
+              />
+            }
+          />
+        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={sharedStyles.importAdContainer}>
+            <View style={sharedStyles.mobileContainer}>
               <Text style={sharedStyles.label}>
-                {importLotteryTexts.category}
+                {importLotteryTexts.productName}
               </Text>
-              <View style={sharedStyles.dropdownView}>
-                <Dropdown
-                  label={importLotteryTexts.enterCategory}
-                  baseColor={'rgba(0,0,0,0.3)'}
-                  selectedItemColor={'rgba(0, 0, 0, .87)'}
-                  data={lotteryItemCategories}
-                  onChangeText={updateItemCategory}
-                  value={itemCategory}
-                />
-              </View>
+              <TextField
+                placeholder={importLotteryTexts.enterName}
+                placeholderTextColor={'rgba(0,0,0,0.3)'}
+                onBlur={handleBlur('adName')}
+                onChangeText={handleChange.adName()}
+                tintColor={'#b69cf6'}
+                maxLength={30}
+                minLength={5}
+                error={errors.adName}
+                ref={adNameRef}
+              />
+            </View>
+            <View style={sharedStyles.mobileContainer}>
               <Text style={sharedStyles.label}>
-                {importLotteryTexts.condition}
+                {importLotteryTexts.description}
               </Text>
-              <View style={sharedStyles.dropdownView}>
-                <Dropdown
-                  baseColor={'rgba(0,0,0,0.3)'}
-                  label={importLotteryTexts.enterCondition}
-                  selectedItemColor={'rgba(0, 0, 0, .87)'}
-                  data={lotteryItemConditions}
-                  onChangeText={updateItemCondition}
-                  value={itemCondition}
-                />
-              </View>
-              <View style={sharedStyles.loginBtn}>
-                <Button
-                  disabled={!lotteryDataChanged}
-                  raised={true}
-                  primary
-                  text={importLotteryTexts.createLottery}
-                  onPress={handleUploadLottery}
-                />
+              <TextField
+                placeholder={importLotteryTexts.enterDescription}
+                placeholderTextColor={'rgba(0,0,0,0.3)'}
+                onChangeText={handleChange.description()}
+                maxLength={100}
+                minLength={20}
+                tintColor={'#b69cf6'}
+                error={errors.description}
+                onBlur={handleBlur('description')}
+                ref={descriptionRef}
+              />
+            </View>
+            <View style={sharedStyles.mobileContainer}>
+              <Text style={sharedStyles.label}>
+                {importLotteryTexts.images}
+              </Text>
+              <View style={sharedStyles.imageBtnContainer}>
+                {adImages.map(index => (
+                  <TouchableBounce
+                    key={index}
+                    onPress={handleChoosePhoto(index)}
+                    style={[
+                      sharedStyles.imageBtn,
+                      index === 0 && errors.images
+                        ? sharedStyles.imageBtnError
+                        : '',
+                    ]}>
+                    {!images[index] && (
+                      <Icon name="image" size={35} color="white" />
+                    )}
+                    {images[index] && (
+                      <Image
+                        style={sharedStyles.adImage}
+                        source={{
+                          uri: images[index],
+                          cache: 'default',
+                        }}
+                        resizeMode="cover"
+                      />
+                    )}
+                  </TouchableBounce>
+                ))}
               </View>
             </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
+            <View style={sharedStyles.mobileContainer}>
+              <Text style={sharedStyles.label}>{importLotteryTexts.price}</Text>
+              <View style={sharedStyles.priceContainer}>
+                <Text style={sharedStyles.currencyLabel}>{userCurrency}</Text>
+                <View style={sharedStyles.adPriceTextfieldContainer}>
+                  <TextField
+                    placeholder={importLotteryTexts.enterPrice}
+                    placeholderTextColor={'rgba(0,0,0,0.3)'}
+                    keyboardType="phone-pad"
+                    maxLength={9}
+                    minLength={4}
+                    tintColor={'#b69cf6'}
+                    onBlur={handleBlur('price')}
+                    error={errors.price}
+                    onChangeText={handleChange.price()}
+                    ref={priceRef}
+                  />
+                </View>
+              </View>
+            </View>
+            <Text style={sharedStyles.label}>{profile.prefecture}</Text>
+            <View style={sharedStyles.dropdownView}>
+              <Dropdown
+                baseColor={'rgba(0,0,0,0.3)'}
+                label={profile.enterPrefecture}
+                data={prefecturesDropdownData}
+                onChangeText={prefectureOnChangeText}
+                selectedItemColor={'rgba(0, 0, 0, .87)'}
+                value={prefecture}
+              />
+            </View>
+            <Text style={sharedStyles.label}>{profile.city}</Text>
+            <View style={sharedStyles.dropdownView}>
+              <Dropdown
+                baseColor={'rgba(0,0,0,0.3)'}
+                label={profile.enterCity}
+                selectedItemColor={'rgba(0, 0, 0, .87)'}
+                data={cityDropdownData}
+                onChangeText={cityOnChangeText}
+                value={city}
+              />
+            </View>
+
+            <Text style={sharedStyles.label}>
+              {importLotteryTexts.category}
+            </Text>
+            <View style={sharedStyles.dropdownView}>
+              <Dropdown
+                label={importLotteryTexts.enterCategory}
+                baseColor={'rgba(0,0,0,0.3)'}
+                selectedItemColor={'rgba(0, 0, 0, .87)'}
+                data={lotteryItemCategories}
+                onChangeText={updateItemCategory}
+                value={itemCategory}
+              />
+            </View>
+            <Text style={sharedStyles.label}>
+              {importLotteryTexts.condition}
+            </Text>
+            <View style={sharedStyles.dropdownView}>
+              <Dropdown
+                baseColor={'rgba(0,0,0,0.3)'}
+                label={importLotteryTexts.enterCondition}
+                selectedItemColor={'rgba(0, 0, 0, .87)'}
+                data={lotteryItemConditions}
+                onChangeText={updateItemCondition}
+                value={itemCondition}
+              />
+            </View>
+          </View>
+        </ScrollView>
+        <View
+          style={[
+            sharedStyles.lotteryDetailsBottomToolbar,
+            {backgroundColor: 'white'},
+          ]}>
+          <Button
+            disabled={!lotteryDataChanged}
+            raised={true}
+            primary
+            icon="done-all"
+            style={{container: sharedStyles.mainButtonContainer}}
+            text={importLotteryTexts.createLottery}
+            onPress={handleUploadLottery}
+          />
+        </View>
+        {/* {animatedImages.map(animatedImage => (
+            <Animated.View
+              style={[
+                sharedStyles.animatedImage,
+                {
+                  transform: [
+                    {
+                      translateY: animatedImage.translateY,
+                    },
+                    {
+                      translateX: animatedImage.translateX,
+                    },
+                  ],
+                },
+              ]}
+            />
+          ))} */}
       </View>
     );
   }

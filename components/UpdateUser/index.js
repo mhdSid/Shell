@@ -7,6 +7,7 @@ import {
   View,
   Text,
   KeyboardAvoidingView,
+  Image,
 } from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, Icon, Button} from 'react-native-material-ui';
@@ -16,12 +17,12 @@ import {mimeTypes} from '../../Constants/Lotteries';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import {prefectures, cities} from '../../Constants/Countries';
 import {loadingPopup} from '../Loading';
-import FastImage from 'react-native-fast-image';
 import {profile, updateUserr} from '../../Constants/Texts';
 import {handlerUpdateUserData} from '../../redux/Auth/UpdateUser';
 import {connect} from 'react-redux';
 import {getUserSelector} from './Selectors';
 import {Dropdown} from 'react-native-material-dropdown';
+import {handlerUpdateUserDataBackground} from '../../redux/Auth/UpdateUserBackground';
 
 const UpdateUser = props => {
   const {user} = props;
@@ -67,10 +68,10 @@ const UpdateUser = props => {
     setPrefectureChanged(false);
     setCityChanged(false);
   };
-  const onSuccessCallback = () => {
-    setDefaultsDataChanged();
-    handleCloseModal();
-  };
+  // const onSuccessCallback = () => {
+  //   setDefaultsDataChanged();
+  //   handleCloseModal();
+  // };
   const handleUpdateUser = () => {
     if (userDataChanged) {
       setLoading(true);
@@ -82,10 +83,12 @@ const UpdateUser = props => {
         email: user.email,
       };
       invoke(props, 'handleUpdateUserData', {
-        onError: setDefaultsDataChanged,
-        onSuccess: onSuccessCallback,
+        onError: () => {},
+        onSuccess: () => {},
         updatedUserData,
       });
+      setDefaultsDataChanged();
+      handleCloseModal();
     }
   };
   const handleChoosePhoto = () => {
@@ -133,6 +136,10 @@ const UpdateUser = props => {
                 color="white"
                 onPress={handleUpdateUser}
                 disabled={loading || !userDataChanged}
+                style={{
+                  container: sharedStyles.mainButtonContainer,
+                  text: {color: '#b69cf6'},
+                }}
                 raised
                 text={updateUserr.update}
                 icon="done-all"
@@ -166,14 +173,13 @@ const UpdateUser = props => {
                         <Icon name="image" size={35} color="white" />
                       ) : null}
                       {image || user.image ? (
-                        <FastImage
+                        <Image
                           style={[sharedStyles.adImage, sharedStyles.userImage]}
                           source={{
                             uri: image || user.image,
-                            priority: FastImage.priority.low,
-                            cache: FastImage.cacheControl.immutable,
+                            cache: 'default',
                           }}
-                          resizeMode={FastImage.resizeMode.cover}
+                          resizeMode="cover"
                         />
                       ) : null}
                     </TouchableBounce>
@@ -206,6 +212,7 @@ const UpdateUser = props => {
                     disabled={loading || !userDataChanged}
                     raised={true}
                     primary
+                    style={{container: sharedStyles.mainButtonContainer}}
                     text={updateUserr.update}
                     onPress={handleUpdateUser}
                   />
@@ -233,7 +240,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleUpdateUserData: payload => dispatch(handlerUpdateUserData(payload)),
+    handleUpdateUserData: payload =>
+      dispatch(handlerUpdateUserDataBackground(payload)),
   };
 };
 

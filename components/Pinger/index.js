@@ -1,34 +1,36 @@
 import React, {useEffect} from 'react';
 import invoke from 'lodash/invoke';
 import {connect} from 'react-redux';
-import LotteryDetails from '../LotteryDetails';
 import {handlePing} from '../../redux/Ping/Ping';
 import PropTypes from 'prop-types';
 import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
 import {getLotteryDetailsSelector} from './Selectors';
-import {NativeModules} from 'react-native';
-import {
-  addNewProgressItem,
-  removeProgressItem,
-} from '../../redux/UploadProgress/actions';
-import {getProgressItemsSelector} from '../UploadLotteryProgress/Selectors';
-const {CalendarModule} = NativeModules;
+import {showLotteryResult} from '../../redux/LotteryResult/actions';
+import {getLotteryResultSelector} from '../LotteryResult/Selectors';
+
+let LotteryDetails = null;
+let LotteryResult = null;
 
 const Pinger = props => {
-  const {lotteryDetails} = props;
-
-  CalendarModule.createCalendarEvent('Party', 'my house').then(data => {
-    console.log('createCalendarEvent data: ', data);
-  });
+  const {lotteryDetails, lotteryResult} = props;
 
   const onAdsDetailsClose = () => {
     invoke(props, 'showLotteryDetails', undefined);
   };
   useEffect(() => {
     invoke(props, 'handlePing');
-  }, [props]);
+  }, []);
 
+  if (lotteryResult) {
+    if (!LotteryResult) {
+      LotteryResult = require('../LotteryResult').default;
+    }
+    return <LotteryResult />;
+  }
   if (lotteryDetails) {
+    if (!LotteryDetails) {
+      LotteryDetails = require('../LotteryDetails').default;
+    }
     return <LotteryDetails onClose={onAdsDetailsClose} item={lotteryDetails} />;
   }
   return null;
@@ -37,7 +39,7 @@ const Pinger = props => {
 const mapStateToProps = state => {
   return {
     lotteryDetails: getLotteryDetailsSelector(state),
-    progressItems: getProgressItemsSelector(state),
+    lotteryResult: getLotteryResultSelector(state),
   };
 };
 
@@ -45,14 +47,16 @@ const mapDispatchToProps = dispatch => {
   return {
     showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
     handlePing: payload => dispatch(handlePing(payload)),
-    addNewProgressItem: payload => dispatch(addNewProgressItem(payload)),
-    removeProgressItem: payload => dispatch(removeProgressItem(payload)),
+    showLotteryResult: payload => dispatch(showLotteryResult(payload)),
   };
 };
 
 Pinger.propTypes = {
   showLotteryDetails: PropTypes.func,
   handlePing: PropTypes.func,
+  showLotteryResult: PropTypes.func,
+  lotteryResult: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
+  lotteryDetails: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
 };
 
 export default connect(

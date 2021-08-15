@@ -16,7 +16,7 @@ const flex = {
 
 const toolbarStyles = {
   height: 55,
-  zIndex: 9999,
+  zIndex: 1001,
 };
 
 const uploadProgressContainer = {
@@ -117,6 +117,29 @@ const sharedStyles = StyleSheet.create({
     textAlign: 'center',
     paddingRight: 15,
   },
+  lotteryDetailsBottomToolbar: {
+    ...toolbarStyles,
+    textAlign: 'center',
+    paddingHorizontal: 15,
+    backgroundColor: 'rgba(0,0,0,.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  bottomToolbarActionButtonContainer: {
+    margin: 10,
+    borderRadius: 20,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 0,
+    paddingLeft: 15,
+    paddingRight: 7,
+  },
+  mainButtonContainer: {
+    borderRadius: 20,
+  },
   imageViewerToolbarContainer: {
     ...toolbarStyles,
     textAlign: 'center',
@@ -160,6 +183,7 @@ const sharedStyles = StyleSheet.create({
   },
   importAdView: {
     // paddingBottom: 10,
+    position: 'relative',
   },
   bottomNavigationLeftActionContainer: {
     // paddingBottom: 12,
@@ -224,7 +248,7 @@ const sharedStyles = StyleSheet.create({
   profileImage: {
     width: 55,
     height: 55,
-    borderRadius: 65 / 2,
+    borderRadius: 55 / 2,
     backgroundColor: '#f7f5fe',
   },
   bottomBarUserImage: {
@@ -363,6 +387,10 @@ const sharedStyles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,.1)',
     ...flex,
   },
+  lotteryResultDetailsContainer: {
+    marginTop: 188,
+    zIndex: 0,
+  },
   aboutContainer: {
     paddingBottom: 20,
     paddingHorizontal: 20,
@@ -376,6 +404,9 @@ const sharedStyles = StyleSheet.create({
     ...flex,
     justifyContent: 'center',
     textAlign: 'center',
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 20,
   },
   importAdContainerNoAuth: {
     paddingTop: 40,
@@ -389,7 +420,7 @@ const sharedStyles = StyleSheet.create({
     ...flex,
     marginTop: 40,
     paddingHorizontal: 30,
-    marginBottom: 100,
+    marginBottom: 50,
     justifyContent: 'flex-start',
   },
   loggedInContainer: {
@@ -425,12 +456,17 @@ const sharedStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
+  listViewContainer: {
+    paddingTop: 10,
+    paddingHorizontal: 10,
+    paddingBottom: 20,
+  },
   homeListItemMargin: {
     marginBottom: 20,
   },
   listComponentContainer: {
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0,0,0,0.12)',
+    borderBottomColor: 'rgba(0,0,0,0.05)',
   },
   lotteryDetailsUsersListItemContainer: {
     marginRight: 10,
@@ -443,6 +479,27 @@ const sharedStyles = StyleSheet.create({
     height: 60,
     borderRadius: 60 / 2,
     backgroundColor: '#f7f5fe',
+  },
+  lotteryDetailsUsersListItemLargeImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 120 / 2,
+    backgroundColor: '#f7f5fe',
+  },
+  lotteryDetailsUsersListItemImageContainer: {
+    width: 68,
+    height: 68,
+    borderRadius: 68 / 2,
+  },
+  lotteryDetailsUsersListItemLargeImageContainer: {
+    width: 128,
+    height: 128,
+    borderRadius: 128 / 2,
+  },
+  lotteryDetailsUsersListItemWinnerContainer: {
+    borderColor: 'green',
+    borderWidth: 4,
+    borderStyle: 'solid',
   },
   lotteryDetailsUsersListItemText: {
     fontSize: 14,
@@ -662,6 +719,17 @@ const sharedStyles = StyleSheet.create({
     flexDirection: 'row',
     display: 'flex',
   },
+  lotteryResultVirtualizedListTop: {
+    flexDirection: 'row',
+    display: 'flex',
+    backgroundColor: 'white',
+    paddingVertical: 30,
+    position: 'absolute',
+    top: 55,
+    left: 0,
+    paddingHorizontal: 5,
+    zIndex: 10,
+  },
   textAlignVertical: {
     textAlignVertical: 'center',
   },
@@ -794,12 +862,58 @@ const sharedStyles = StyleSheet.create({
     right: 0,
     top: 0,
   },
+  userJoinedLotteryCountContainerWithLargeImage: {
+    right: 10,
+  },
   userJoinedLotteryCountText: {
     color: 'white',
   },
   uploadProgressView: {
     width: '100%',
     marginHorizontal: 20,
+  },
+  animatedImage: {
+    position: 'absolute',
+    right: windowWidth / 2,
+    bottom: 100,
+    width: 35,
+    height: 35,
+    backgroundColor: 'red',
+    zIndex: 1010,
+  },
+  snackbarContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    flexDirection: 'column',
+    padding: 0,
+    left: 0,
+    top: 55,
+    width: windowWidth - 20,
+    margin: 10,
+    zIndex: 1001,
+  },
+  snackbarItem: {
+    height: 35,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.1)',
+    width: '100%',
+    marginBottom: 10,
+  },
+  snackbarMessage: {color: 'rgba(0,0,0,0.5)'},
+  congratulationsContainer: {
+    marginBottom: 10,
+  },
+  congratulationsText: {
+    color: 'green',
+    fontSize: 22,
+  },
+  congratulationsWinnerText: {
+    color: 'green',
+    fontSize: 26,
+    fontWeight: 'bold',
   },
 });
 

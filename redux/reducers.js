@@ -6,6 +6,8 @@ import lotteryDetailsReducer from './LotteryDetails/reducer';
 import searchReducer from './Search/reducer';
 import uploadProgressReducer from './UploadProgress/reducer';
 import homeReducer from './Home/reducer';
+import lotteryResultReducer from './LotteryResult/reducer';
+import snackbarReducer from './Snackbar/reducer';
 
 const rootReducer = combineReducers({
   authReducer: authReducer,
@@ -15,6 +17,8 @@ const rootReducer = combineReducers({
   searchReducer: searchReducer,
   uploadProgressReducer: uploadProgressReducer,
   homeReducer: homeReducer,
+  lotteryResultReducer: lotteryResultReducer,
+  snackbarReducer: snackbarReducer,
 });
 
 export default rootReducer;

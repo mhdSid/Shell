@@ -1,6 +1,8 @@
 import {request} from './Request';
 import sha256 from 'crypto-js/sha256';
-import {encrypt, password as hashkey} from './Encrypt';
+import {decrypt, encrypt, password as hashkey} from './Encrypt';
+import {apiRequest} from '../Constants/Api';
+import Upload from 'react-native-background-upload';
 
 const login = async props => {
   const {email, password} = props;
@@ -135,6 +137,148 @@ const getUsersData = async props => {
   return data;
 };
 
+const updateUserBackground = async props => {
+  const {
+    country,
+    prefecture,
+    image,
+    city,
+    id,
+    email,
+    passwordHash,
+    creditCardNumber,
+    creditCardExpiryDate,
+    creditCardCVC,
+    creditCardType,
+  } = props;
+  let creditCardNumberEnc;
+  let creditCardCVCEnc;
+  let creditCardExpiryDateEnc;
+  let creditCardTypeEnc;
+  let formData = {};
+  if (country) {
+    formData = {
+      ...formData,
+      country,
+    };
+  }
+  if (city) {
+    formData = {
+      ...formData,
+      city,
+    };
+  }
+  if (prefecture) {
+    formData = {
+      ...formData,
+      prefecture,
+    };
+  }
+  if (passwordHash) {
+    formData = {
+      ...formData,
+      passwordHash,
+    };
+  }
+  if (creditCardNumber) {
+    creditCardNumberEnc = encrypt(creditCardNumber);
+    formData = {
+      ...formData,
+      creditCardNumber: creditCardNumberEnc,
+    };
+  }
+  if (creditCardExpiryDate) {
+    creditCardExpiryDateEnc = encrypt(creditCardExpiryDate);
+    formData = {
+      ...formData,
+      creditCardExpiryDate: creditCardExpiryDateEnc,
+    };
+  }
+  if (creditCardCVC) {
+    creditCardCVCEnc = encrypt(creditCardCVC);
+    formData = {
+      ...formData,
+      creditCardCVC: creditCardCVCEnc,
+    };
+  }
+  if (creditCardType) {
+    creditCardTypeEnc = encrypt(creditCardType);
+    formData = {
+      ...formData,
+      creditCardType: creditCardTypeEnc,
+    };
+  }
+  const options = {
+    url: `${apiRequest.apiUri}users/authenticate/update`,
+    path: image.uri,
+    method: 'POST',
+    field: 'image',
+    type: 'multipart',
+    headers: {
+      Accept: apiRequest.jsonContentType,
+      'Content-Type': apiRequest.jsonContentType,
+    },
+    parameters: {
+      id,
+      email,
+      ...formData,
+      hash: sha256(
+        (country || '') +
+          (prefecture || '') +
+          (city || '') +
+          (passwordHash || '') +
+          (creditCardNumberEnc || '') +
+          (creditCardExpiryDateEnc || '') +
+          (creditCardCVCEnc || '') +
+          (creditCardTypeEnc || '') +
+          (id || '') +
+          (email || '') +
+          hashkey,
+      ).toString(),
+    },
+  };
+  return new Promise(resolve => {
+    Upload.startUpload(options)
+      .then(uploadId => {
+        let errorSubscriber, completedSubscriber, cancelledSubscriber;
+        completedSubscriber = Upload.addListener(
+          'completed',
+          uploadId,
+          data => {
+            // data includes responseCode: number and responseBody: Object
+            let response = {};
+            if (data.responseBody) {
+              response = decrypt(JSON.parse(data.responseBody).data, true);
+            }
+            resolve(response);
+            errorSubscriber.remove();
+            completedSubscriber.remove();
+            cancelledSubscriber.remove();
+          },
+        );
+        cancelledSubscriber = Upload.addListener(
+          'cancelled',
+          uploadId,
+          data => {
+            resolve({error: data});
+            errorSubscriber.remove();
+            completedSubscriber.remove();
+            cancelledSubscriber.remove();
+          },
+        );
+        errorSubscriber = Upload.addListener('error', uploadId, data => {
+          resolve({error: data});
+          errorSubscriber.remove();
+          completedSubscriber.remove();
+          cancelledSubscriber.remove();
+        });
+      })
+      .catch(err => {
+        resolve({error: err});
+      });
+  });
+};
+
 const update = async props => {
   const {
     country,
@@ -211,4 +355,14 @@ const update = async props => {
   return data;
 };
 
-export {login, logout, ping, verify, signup, update, search, getUsersData};
+export {
+  login,
+  logout,
+  ping,
+  verify,
+  signup,
+  update,
+  search,
+  getUsersData,
+  updateUserBackground,
+};

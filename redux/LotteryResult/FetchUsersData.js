@@ -1,7 +1,7 @@
 import {getUsersData} from '../../services/Auth';
 import {handleError} from '../Home/actions';
 import invoke from 'lodash/invoke';
-import {lotteryDetailsActions} from './actions';
+import {lotteryResultActions} from './actions';
 import {uniq} from 'lodash';
 
 const handleFetchUsersData = payload => {
@@ -24,12 +24,12 @@ const handleFetchUsersData = payload => {
         users.forEach(user => {
           if (currentCollectedPrice > 0 && user.id === winnerUserId) {
             dispatch({
-              type: lotteryDetailsActions.setWinnerUserData,
+              type: lotteryResultActions.setWinnerUserData,
               payload: user,
             });
           } else if (`${user.id}` === `${userId}`) {
             dispatch({
-              type: lotteryDetailsActions.setAdPosterData,
+              type: lotteryResultActions.setAdPosterData,
               payload: user,
             });
           }
@@ -42,7 +42,7 @@ const handleFetchUsersData = payload => {
             };
           });
           dispatch({
-            type: lotteryDetailsActions.setLotteryUsersData,
+            type: lotteryResultActions.setLotteryUsersData,
             payload: lotteryUsersData,
           });
         }

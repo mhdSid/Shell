@@ -1,24 +1,44 @@
 import React, {useState} from 'react';
-import {SafeAreaView} from 'react-native';
+import {Image, SafeAreaView} from 'react-native';
 import {BottomNavigation, Icon} from 'react-native-material-ui';
-import AuthComponent from '../Profile';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import ImportLottery from '../ImportLottery';
-import HomeComponent from '../Home';
-import Lotteries from '../Lotteries';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getLoggedInSelector, getUserSelector} from './Selectors';
-import FastImage from 'react-native-fast-image';
 
 export let navigate;
 export let setUserBottomBarImage;
 
+let HomeComponent = null;
+let AuthComponent = null;
+let Lotteries = null;
+let ImportLottery = null;
+
 const viewLoader = {
-  lotteries: <Lotteries />,
-  profile: <AuthComponent />,
-  home: <HomeComponent />,
-  importLottery: <ImportLottery />,
+  lotteries: () => {
+    if (!Lotteries) {
+      Lotteries = require('../UserJoinedLotteries').default;
+    }
+    return <Lotteries />;
+  },
+  profile: () => {
+    if (!AuthComponent) {
+      AuthComponent = require('../Profile').default;
+    }
+    return <AuthComponent />;
+  },
+  home: () => {
+    if (!HomeComponent) {
+      HomeComponent = require('../Home').default;
+    }
+    return <HomeComponent />;
+  },
+  importLottery: () => {
+    if (!ImportLottery) {
+      ImportLottery = require('../ImportLottery').default;
+    }
+    return <ImportLottery />;
+  },
 };
 
 const MainContainer = () => {
@@ -38,7 +58,7 @@ const MainContainer = () => {
       style={[sharedStyles.fullheightView, sharedStyles.rootSafeAreaView]}>
       <SafeAreaView
         style={[sharedStyles.innerSafeAreaView, sharedStyles.container]}>
-        {viewLoader[activeView]}
+        {viewLoader[activeView]()}
       </SafeAreaView>
       <BottomNavigation
         active={activeView}
@@ -120,7 +140,7 @@ const MainContainer = () => {
           icon={
             userImage ? (
               <>
-                <FastImage
+                <Image
                   style={[
                     sharedStyles.bottomBarUserImage,
                     // activeView === 'profile' &&
@@ -128,10 +148,9 @@ const MainContainer = () => {
                   ]}
                   source={{
                     uri: userImage,
-                    priority: FastImage.priority.high,
-                    cache: FastImage.cacheControl.immutable,
+                    cache: 'default',
                   }}
-                  resizeMode={FastImage.resizeMode.cover}
+                  resizeMode="cover"
                 />
               </>
             ) : (

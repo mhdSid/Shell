@@ -24,21 +24,61 @@ const about = {
   howToUseEleventh:
     'When the total monetary value in the lottery is equal to the price of your chosen item, then our system randomly selects a winner.',
   enterLottery: 'Enter Lottery',
-  win: 'Win',
+  joinLottery: 'Join Lottery',
 };
 
 const errors = {
-  error: 'A an error has occured. Please try again.',
+  error: 'A error has occured. Please try again.',
+};
+
+const lotteryResult = {
+  lotteryResult: 'Lottery Result',
+  actionOptions: {
+    chat: 'chat',
+    receive: 'receive',
+  },
+  lotteryWinnerActions: [
+    {icon: 'chat', text: 'Chat with owner', action: 'chat'},
+    {icon: 'done-all', text: 'Received', action: 'receive'},
+  ],
+  lotteryPosterActions: [
+    {icon: 'chat', text: 'Chat with winner', action: 'chat'},
+  ],
+  congratulations: 'Congratulations!',
 };
 
 const lotteryDetails = {
+  actionOptions: {
+    share: 'share',
+    like: 'like',
+    dislike: 'dislike',
+    win: 'win',
+    receive: 'receive',
+    remove: 'remove',
+  },
+  like: {icon: 'favorite-border', text: 'like', action: 'like'},
+  dislike: {icon: 'favorite', text: 'dislike', action: 'dislike'},
+  visitorActions: [
+    {icon: 'shop', text: 'win', action: 'win'},
+    {icon: 'share', text: 'share', action: 'share'},
+  ],
+  lotteryPosterActions: [
+    {icon: 'share', text: 'share', action: 'share'},
+    {icon: 'delete', text: 'remove', action: 'remove'},
+  ],
+  lotteryWinnerActions: [
+    {icon: 'share', text: 'share', action: 'share'},
+    {icon: 'chat', text: 'chat', action: 'chat'},
+    {icon: 'done-all', text: 'check', action: 'receive'},
+  ],
+  userActions: [{icon: 'share', text: 'share', action: 'share'}],
   enterDraw: 'Win',
   availability: 'Availabality',
-  adAvailable: 'The lottery is currently available',
-  adNotAvailable: 'The lottery is not available',
+  lotteryAvailable: 'The lottery is currently available',
+  lotteryNotAvailable: 'The lottery is not available',
   totalPrice: 'Total Price',
   collectedPrice: 'Collected Price',
-  payToWin: 'Pay to Win the Lottery',
+  payToWin: 'Pay to win the lottery',
   currentLotteryUsers: 'Current lottery users',
   currentLotteryUsersNumber: lotteryUserIds => {
     if (!lotteryUserIds || !lotteryUserIds.length) {
@@ -57,7 +97,7 @@ const lotteryDetails = {
   category: 'Category',
   publishDate: 'Publish Date',
   location: 'Location',
-  user: 'User',
+  user: 'Owner',
   adId: 'Ad ID',
   emptyUserAds: 'User has no available lotteries',
   userLotteries: 'User Lotteries',
@@ -170,6 +210,7 @@ const profile = {
   // myAds: 'My Ads',
   myLotteries: 'My lotteries',
   myCreatedLotteries: 'My created lotteries',
+  myLikedLotteries: 'My liked lotteries',
   personal: 'Personal',
   settings: 'Settings',
   logout: 'Logout',
@@ -268,4 +309,5 @@ export {
   orLogin,
   orSignUp,
   chat,
+  lotteryResult,
 };

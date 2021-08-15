@@ -19,6 +19,7 @@ const persistConfig = {
     'lotteryDetailsReducer',
     'searchReducer',
     'uploadProgressReducer',
+    'lotteryResultReducer',
   ],
   // Blacklist (Don't Save Specific Reducers)
 };

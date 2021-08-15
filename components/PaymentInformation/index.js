@@ -140,6 +140,10 @@ const PaymentInformation = props => {
                 disabled={loading || !userDataChanged || !isValid}
                 raised
                 text={paymentInformation.submit}
+                style={{
+                  container: sharedStyles.mainButtonContainer,
+                  text: {color: '#b69cf6'},
+                }}
                 icon="done-all"
               />
             }
@@ -166,6 +170,7 @@ const PaymentInformation = props => {
                   disabled={loading || !userDataChanged || !isValid}
                   raised={true}
                   primary
+                  style={{container: sharedStyles.mainButtonContainer}}
                   text={paymentInformation.submit}
                   onPress={handleUpdateUserPaymentInfo}
                 />

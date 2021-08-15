@@ -17,14 +17,12 @@ import invoke from 'lodash/invoke';
 import {handleFetchUserJoinedLotteries} from '../../redux/Lotteries/FetchUserJoinedLotteries';
 import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
 import ListItemCommon from '../Home/ListItem';
+import {showLotteryResult} from '../../redux/LotteryResult/actions';
+import { getLotteryDetailsSelector } from '../Pinger/Selectors';
 
 const Lotteries = props => {
-  const {
-    loggedIn,
-    userJoinedLotteries,
-    user
-  } = props;
-  const [loading, setLoading] = useState(false);
+  const {loggedIn, userJoinedLotteries, user, lotteryDetails} = props;
+  const [loading, setLoading] = useState(true);
   const callback = () => {
     setLoading(false);
   };
@@ -46,14 +44,27 @@ const Lotteries = props => {
       // disableHeaderActions: true,
     });
   };
+  const handleShowLotteryResult = index => {
+    invoke(props, 'showLotteryResult', {
+      ...userJoinedLotteries[index],
+      // disableHeaderActions: true,
+    });
+  };
   const renderListItem = ({item, index}) => (
     <ListItemCommon
       item={item}
       index={index}
       onItemPress={onItemPress}
       listLength={userJoinedLotteries.length}
+      showLotteryResult={handleShowLotteryResult}
     />
   );
+  useEffect(() => {
+    if (loggedIn && user) {
+      fetchLotteries();
+    }
+  }, [lotteryDetails]);
+
   useEffect(() => {
     if (loggedIn && user) {
       fetchLotteries();
@@ -81,7 +92,7 @@ const Lotteries = props => {
             {lottteries.emptyLotteries}
           </Text>
         ) : null}
-        {!loading && userJoinedLotteries && userJoinedLotteries.length > 0 ? (
+        {!loading && userJoinedLotteries && userJoinedLotteries.length ? (
           <VirtualizedList
             removeClippedSubviews={true}
             windowSize={2}
@@ -105,6 +116,8 @@ Lotteries.propTypes = {
   loggedIn: PropTypes.bool,
   user: PropTypes.any,
   userJoinedLotteries: PropTypes.any,
+  showLotteryResult: PropTypes.func,
+  lotteryDetails: PropTypes.object,
 };
 
 const mapStateToProps = state => {
@@ -112,6 +125,7 @@ const mapStateToProps = state => {
     loggedIn: getLoggedInSelector(state),
     user: getUserSelector(state),
     userJoinedLotteries: getUserJoinedLotteriesSelector(state),
+    lotteryDetails: getLotteryDetailsSelector(state),
   };
 };
 
@@ -119,7 +133,8 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchUserJoinedLotteries: payload =>
       dispatch(handleFetchUserJoinedLotteries(payload)),
-      showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
+    showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
+    showLotteryResult: payload => dispatch(showLotteryResult(payload)),
   };
 };
 

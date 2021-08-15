@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, View, VirtualizedList} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
@@ -8,20 +8,23 @@ import {loadingPopup} from '../Loading';
 import {lottteries, profile} from '../../Constants/Texts';
 import {connect} from 'react-redux';
 import ListItemCommon from '../Home/ListItem';
-import {getUserCreatedLotteriesSelector} from '../UserJoinedLotteries/Selectors';
+import {getUserLikedLotteriesSelector} from '../UserJoinedLotteries/Selectors';
 import {getUserSelector} from '../Profile/Selectors';
-import {handleFetchUserCreatedLotteries} from '../../redux/Lotteries/FetchUserCreatedLotteries';
 import {Text} from 'react-native';
+import {handleFetchUserLikedLotteries} from '../../redux/Lotteries/FetchUserLikedLotteries';
+import {getLotteryDetailsSelector} from '../Pinger/Selectors';
+import {showLotteryDetails as handleShowLotteryDetails} from '../../redux/LotteryDetails/actions';
 
 let LotteryDetails = null;
 
-const UserCreatedLotteries = props => {
-  const {user, userCreatedLotteries} = props;
+const UserLikedLotteries = props => {
+  const {user, userLikedLotteries, lotteryDetails} = props;
   const [loading, setLoading] = useState(true);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
-  const [selectedLottery, setSelectedLottery] = useState();
+  const [selectedLottery, setSelectedLottery] = useState(null);
 
   const handleCloseModal = () => {
+    invoke(props, 'handleShowLotteryDetails', undefined);
     invoke(props, 'onClose');
   };
   const callback = () => {
@@ -30,9 +33,9 @@ const UserCreatedLotteries = props => {
   const updateLotteryDetails = item => {
     setSelectedLottery(item);
   };
-  const fetchMyLotteries = () => {
+  const fetchUserLikedLotteries = () => {
     setLoading(true);
-    invoke(props, 'fetchUserCreatedLotteries', {
+    invoke(props, 'fetchUserLikedLotteries', {
       onSuccess: callback,
       onError: callback,
       userId: user.id,
@@ -43,20 +46,20 @@ const UserCreatedLotteries = props => {
       LotteryDetails = require('../LotteryDetails').default;
     }
     setShowLotteryDetails(true);
-    setSelectedLottery(userCreatedLotteries[index]);
+    setSelectedLottery(userLikedLotteries[index]);
   };
   const onLotteryDetailsClose = () => {
     setShowLotteryDetails(false);
   };
   const getItem = (data, index) => data[index];
-  const getItemCount = () => userCreatedLotteries.length;
+  const getItemCount = () => userLikedLotteries.length;
   const getKeyExtractor = item => item.id;
   const renderItem = ({item, index}) => (
     <ListItemCommon
       item={item}
       index={index}
       onItemPress={handleItemPress}
-      listLength={userCreatedLotteries.length}
+      listLength={userLikedLotteries.length}
     />
   );
   const lotteryDetailsModal = showLotteryDetails && (
@@ -66,12 +69,13 @@ const UserCreatedLotteries = props => {
       item={selectedLottery}
     />
   );
+  useEffect(() => {
+    console.log('use effect');
+    fetchUserLikedLotteries();
+  }, [lotteryDetails]);
 
   return (
-    <Modal
-      animationType="slide"
-      onShow={fetchMyLotteries}
-      onRequestClose={handleCloseModal}>
+    <Modal animationType="slide" onRequestClose={handleCloseModal}>
       {lotteryDetailsModal}
       <SafeAreaView
         style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
@@ -79,26 +83,25 @@ const UserCreatedLotteries = props => {
           <Toolbar
             style={{container: sharedStyles.toolbarContainer}}
             leftElement="arrow-back"
-            centerElement={profile.myCreatedLotteries}
+            centerElement={profile.myLikedLotteries}
             onLeftElementPress={handleCloseModal}
           />
           <View style={sharedStyles.lotteriesContainer}>
             {loading ? loadingPopup : null}
-            {(!userCreatedLotteries || !userCreatedLotteries.length) &&
-            !loading ? (
+            {(!userLikedLotteries || !userLikedLotteries.length) && !loading ? (
               <Text style={sharedStyles.uploadProgressModalText}>
                 {lottteries.emptyLotteries}
               </Text>
             ) : null}
-            {!loading && userCreatedLotteries && userCreatedLotteries.length ? (
+            {!loading && userLikedLotteries && userLikedLotteries.length ? (
               <VirtualizedList
                 initialNumToRender={10}
                 windowSize={1}
                 removeClippedSubviews={true}
                 refreshing={loading}
-                onRefresh={fetchMyLotteries}
+                onRefresh={fetchUserLikedLotteries}
                 showsVerticalScrollIndicator={false}
-                data={userCreatedLotteries}
+                data={userLikedLotteries}
                 getItem={getItem}
                 getItemCount={getItemCount}
                 keyExtractor={getKeyExtractor}
@@ -112,27 +115,31 @@ const UserCreatedLotteries = props => {
   );
 };
 
-UserCreatedLotteries.propTypes = {
+UserLikedLotteries.propTypes = {
   user: PropTypes.object,
-  userCreatedLotteries: PropTypes.oneOfType([PropTypes.any, PropTypes.array]),
+  userLikedLotteries: PropTypes.oneOfType([PropTypes.any, PropTypes.array]),
   onClose: PropTypes.func,
+  lotteryDetails: PropTypes.oneOfType([PropTypes.any, PropTypes.object]),
 };
 
 const mapStateToProps = state => {
   return {
     user: getUserSelector(state),
-    userCreatedLotteries: getUserCreatedLotteriesSelector(state),
+    lotteryDetails: getLotteryDetailsSelector(state),
+    userLikedLotteries: getUserLikedLotteriesSelector(state),
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchUserCreatedLotteries: payload =>
-      dispatch(handleFetchUserCreatedLotteries(payload)),
+    fetchUserLikedLotteries: payload =>
+      dispatch(handleFetchUserLikedLotteries(payload)),
+    handleShowLotteryDetails: payload =>
+      dispatch(handleShowLotteryDetails(payload)),
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(UserCreatedLotteries);
+)(UserLikedLotteries);

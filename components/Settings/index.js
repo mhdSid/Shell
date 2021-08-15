@@ -10,10 +10,11 @@ import {Flag} from 'react-native-svg-flagkit';
 import {settings} from '../../Constants/Texts';
 import pkg from '../../package.json';
 import {getLangSelector} from './Selectors';
-import FaqMofal from './FaqModal';
-import ChangePassword from './ChangePassword';
-import ContactUsModal from './ContactUsModal';
-import TermsAndPrivacyPolicyModal from './TermsAndPrivacyPolicyModal';
+
+let FaqMofal = null;
+let ChangePassword = null;
+let ContactUsModal = null;
+let TermsAndPrivacyPolicyModal = null;
 
 const Settings = props => {
   const {lang} = props;
@@ -36,17 +37,36 @@ const Settings = props => {
     setSettingsModal(null);
   };
   const settingsModals = {
-    faq: <FaqMofal onClose={handleSettingsModalClose} />,
-    contactUs: <ContactUsModal onClose={handleSettingsModalClose} />,
-    privacyAndTerms: (
-      <TermsAndPrivacyPolicyModal onClose={handleSettingsModalClose} />
-    ),
-    changePassword: <ChangePassword onClose={handleSettingsModalClose} />,
+    faq: () => {
+      if (!FaqMofal) {
+        FaqMofal = require('./FaqModal').default;
+      }
+      return <FaqMofal onClose={handleSettingsModalClose} />;
+    },
+    contactUs: () => {
+      if (!ContactUsModal) {
+        ContactUsModal = require('./ContactUsModal').default;
+      }
+      return <ContactUsModal onClose={handleSettingsModalClose} />;
+    },
+    privacyAndTerms: () => {
+      if (!TermsAndPrivacyPolicyModal) {
+        TermsAndPrivacyPolicyModal = require('./TermsAndPrivacyPolicyModal')
+          .default;
+      }
+      return <TermsAndPrivacyPolicyModal onClose={handleSettingsModalClose} />;
+    },
+    changePassword: () => {
+      if (!ChangePassword) {
+        ChangePassword = require('./ChangePassword').default;
+      }
+      return <ChangePassword onClose={handleSettingsModalClose} />;
+    },
   };
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      {settingsModal && settingsModals[settingsModal]}
+      {settingsModal && settingsModals[settingsModal]()}
       <SafeAreaView
         style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
         <View style={sharedStyles.innerSafeAreaView}>

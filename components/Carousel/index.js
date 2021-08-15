@@ -1,5 +1,5 @@
 import React, {PureComponent, useState} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Image} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import Carousel from 'react-native-snap-carousel';
 import {
@@ -9,7 +9,6 @@ import {
 } from '../../assets/styles/sliderEntry';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
-import FastImage from 'react-native-fast-image';
 class CarouselItem extends PureComponent {
   static propTypes = {
     item: PropTypes.object,
@@ -19,8 +18,6 @@ class CarouselItem extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.numLines1 = 1;
-    this.numLines2 = 2;
   }
 
   handleItemPress = () => {
@@ -51,7 +48,7 @@ class CarouselItem extends PureComponent {
       sliderStyles.radiusMaskEven,
     ];
     const uppercaseTitle = name ? (
-      <Text style={textStyles} numberOfLines={this.numLines2}>
+      <Text style={textStyles} numberOfLines={2}>
         {name.toUpperCase()}
       </Text>
     ) : (
@@ -66,14 +63,13 @@ class CarouselItem extends PureComponent {
         <View style={sliderStyles.shadow} />
         <View style={imageContainerStyles}>
           {(imageOnly && item) || (images && images[0]) ? (
-            <FastImage
+            <Image
               style={sliderStyles.image}
               source={{
                 uri: imageOnly ? item : images[0],
-                priority: FastImage.priority.high,
-                cache: FastImage.cacheControl.immutable,
+                cache: 'default',
               }}
-              resizeMode={FastImage.resizeMode.contain}
+              resizeMode="contain"
             />
           ) : null}
           {!imageOnly && <View style={radiusMaskStyles} />}
@@ -81,10 +77,10 @@ class CarouselItem extends PureComponent {
         {!imageOnly && (
           <View style={textContainerStyles}>
             {uppercaseTitle}
-            <Text style={subtitleStyles} numberOfLines={this.numLines1}>
+            <Text style={subtitleStyles} numberOfLines={1}>
               {category}
             </Text>
-            <Text style={subtitleStyles} numberOfLines={this.numLines1}>
+            <Text style={subtitleStyles} numberOfLines={1}>
               {`${currency} ${price}`}
             </Text>
           </View>
