@@ -11,7 +11,12 @@ const LotteryDetailsUserListItem = props => {
   if (user) {
     return (
       <TouchableBounce
-        style={sharedStyles.lotteryDetailsUsersListItemContainer}>
+        style={[
+          sharedStyles.lotteryDetailsUsersListItemContainer,
+          largeImage
+            ? sharedStyles.lotteryDetailsUsersListItemLargeContainer
+            : null,
+        ]}>
         {withNotificationNum && user.userJoinedLotteryCount > 1 && (
           <View
             style={[

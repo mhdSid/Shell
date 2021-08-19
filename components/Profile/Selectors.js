@@ -13,6 +13,11 @@ const getUserSelector = createSelector(
   user => user,
 );
 
+const getUserIdSelector = createSelector(
+  [getUser],
+  user => user && user.id,
+);
+
 const getLoggedInSelector = createSelector(
   [getLoggedIn],
   loggedIn => loggedIn,
@@ -51,4 +56,5 @@ export {
   getVerificationIdSelector,
   getCountrySelector,
   getShowSignUpSelector,
+  getUserIdSelector,
 };

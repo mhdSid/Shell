@@ -20,7 +20,7 @@ const UploadLotteryProgressModal = props => {
   };
 
   const getItem = (data, index) => data[index];
-  const getItemCount = () => progressItems.length;
+  const getItemCount = () => (progressItems || []).length;
   const getKeyExtractor = item => item.id;
   const renderItem = ({item, index}) => (
     <ListItemCommon
@@ -42,27 +42,23 @@ const UploadLotteryProgressModal = props => {
             centerElement={uploadAdProgress.uploading}
             onLeftElementPress={handleCloseModal}
           />
-          {!progressItems || !progressItems.length ? (
-            <View style={sharedStyles.uploadProgressModalView}>
+          <VirtualizedList
+            ListEmptyComponent={
               <Text style={sharedStyles.uploadProgressModalText}>
                 {uploadAdProgress.noItems}
               </Text>
-            </View>
-          ) : null}
-          {progressItems && progressItems.length ? (
-            <VirtualizedList
-              initialNumToRender={10}
-              windowSize={1}
-              removeClippedSubviews={true}
-              refreshing={loading}
-              showsVerticalScrollIndicator={false}
-              data={progressItems}
-              getItem={getItem}
-              getItemCount={getItemCount}
-              keyExtractor={getKeyExtractor}
-              renderItem={renderItem}
-            />
-          ) : null}
+            }
+            initialNumToRender={10}
+            windowSize={1}
+            removeClippedSubviews={true}
+            refreshing={loading}
+            showsVerticalScrollIndicator={false}
+            data={progressItems || []}
+            getItem={getItem}
+            getItemCount={getItemCount}
+            keyExtractor={getKeyExtractor}
+            renderItem={renderItem}
+          />
         </View>
       </SafeAreaView>
     </Modal>

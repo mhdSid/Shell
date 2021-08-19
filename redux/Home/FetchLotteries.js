@@ -4,7 +4,7 @@ import invoke from 'lodash/invoke';
 
 const handleFetchLotteries = payload => {
   return dispatch => {
-    const {onError} = payload;
+    const {onError, userId} = payload;
     const onGetAdsSuccess = data => {
       invoke(payload, 'onSuccess');
       const {error, ads: serverLotteries} = data;
@@ -16,7 +16,7 @@ const handleFetchLotteries = payload => {
         payload: serverLotteries,
       });
     };
-    return getAds().then(onGetAdsSuccess, error => {
+    return getAds({userId}).then(onGetAdsSuccess, error => {
       return handleError({error, onError});
     });
   };

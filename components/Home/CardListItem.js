@@ -4,12 +4,16 @@ import invoke from 'lodash/invoke';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {View, Text, Image} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
+import {IconToggle} from 'react-native-material-ui';
 export default class CardListItem extends Component {
   static propTypes = {
     item: PropTypes.object,
+    authUserId: PropTypes.string,
     onItemPress: PropTypes.func,
     smallImage: PropTypes.bool,
     horizontal: PropTypes.bool,
+    handleDislikeLottery: PropTypes.func,
+    handleLikeLottery: PropTypes.func,
   };
 
   constructor() {
@@ -38,8 +42,15 @@ export default class CardListItem extends Component {
     return `${item.currency} ${item.price}`;
   };
 
+  handleDislikeLottery = () => {
+    invoke(this.props, 'handleDislikeLottery', this.props.item.id);
+  };
+  handleLikeLottery = () => {
+    invoke(this.props, 'handleLikeLottery', this.props.item.id);
+  };
+
   render() {
-    const {item, smallImage, horizontal} = this.props;
+    const {item, smallImage, horizontal, authUserId} = this.props;
     const viewStyle = horizontal
       ? sharedStyles.homeCardItemHorizontal
       : sharedStyles.homeCardItem;
@@ -65,6 +76,28 @@ export default class CardListItem extends Component {
         <View>
           {image}
           {emptyImage}
+          {item.userId !== authUserId ? (
+            <View style={sharedStyles.homeCardItemIcon}>
+              {Array.isArray(item.likedBy) &&
+              item.likedBy.length &&
+              item.likedBy.includes(authUserId) ? (
+                <IconToggle
+                  name="favorite"
+                  color="white"
+                  onPress={this.handleDislikeLottery}
+                />
+              ) : null}
+              {!Array.isArray(item.likedBy) ||
+              !item.likedBy.length ||
+              !item.likedBy.includes(authUserId) ? (
+                <IconToggle
+                  name="favorite-border"
+                  color="white"
+                  onPress={this.handleLikeLottery}
+                />
+              ) : null}
+            </View>
+          ) : null}
           <View style={sharedStyles.homeCardItemTextContainer}>
             <Text
               numberOfLines={this.numOfLines}

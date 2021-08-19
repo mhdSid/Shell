@@ -33,10 +33,12 @@ import {handleFetchUsersData} from '../../redux/LotteryDetails/FetchUsersData';
 import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
 import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
 import {getLotteryDetailsSelector} from '../Pinger/Selectors';
-import Snackbar from '../Snackbar';
 
 let ImagesViewer = null;
 let Payment = null;
+let LotteryResultModal = null;
+let ChatModal = null;
+let ReceiveLotteryModal = null;
 
 const LotteryDetails = props => {
   const {
@@ -71,10 +73,8 @@ const LotteryDetails = props => {
   } = lotteryDetails || item;
   const [usersDataLoading, setUsersDataLoading] = useState(true);
   const [userAdsLoading, setUserAdsLoading] = useState(true);
-  const [showImagesViewer, setShowImagesViewer] = useState(false);
-  const [showPayment, setShowPayment] = useState(false);
+  const [showModal, setShowModal] = useState(null);
   const [viewImageUri, setViewImageUri] = useState(images[0]);
-
   const isVisitor = !authUser || userId !== authUser.id;
   const isLotteryPoster = userId === authUser.id;
   const isWinner = winnerUserId === authUser.id;
@@ -97,10 +97,10 @@ const LotteryDetails = props => {
     if (!Payment) {
       Payment = require('../Payment').default;
     }
-    setShowPayment(true);
+    setShowModal('paymentModal');
   };
   const onPaymentClose = () => {
-    setShowPayment(false);
+    setShowModal(null);
   };
   const fetchUsersDataCallback = () => {
     setUsersDataLoading(false);
@@ -156,34 +156,87 @@ const LotteryDetails = props => {
       ImagesViewer = require('../ImageViewer').default;
     }
     setViewImageUri(url);
-    setShowImagesViewer(true);
+    setShowModal('imagesViewerModal');
   };
   const onImagesViewerClose = () => {
-    setShowImagesViewer(false);
+    setShowModal(null);
+  };
+  const handleLotteryResultModalClose = () => {
+    setShowModal(null);
+  };
+  const handleChatModalClose = () => {
+    setShowModal(null);
+  };
+  const handleReceiveLotteryModalClose = () => {
+    setShowModal(null);
   };
   const handleActionPress = {
     [lotteryDetailsTexts.actionOptions.share]: () => {
       console.log('share');
     },
+    [lotteryDetailsTexts.actionOptions.chat]: () => {
+      if (!ChatModal) {
+        ChatModal = require('../Chat').default;
+      }
+      setShowModal('chatModal');
+    },
     [lotteryDetailsTexts.actionOptions.receive]: () => {
-      console.log('receive');
+      if (!ReceiveLotteryModal) {
+        ReceiveLotteryModal = require('../ReceiveLottery').default;
+      }
+      setShowModal('receiveLotteryModal');
     },
     [lotteryDetailsTexts.actionOptions.remove]: () => {
       console.log('delete');
+    },
+    [lotteryDetailsTexts.actionOptions.result]: () => {
+      if (!LotteryResultModal) {
+        LotteryResultModal = require('../LotteryResult').default;
+      }
+      setShowModal('lotteryResultModal');
     },
     [lotteryDetailsTexts.actionOptions.like]: () => {
       invoke(props, 'handleLikeLottery', {
         userId: authUser.id,
         lotteryId: (lotteryDetails || item).id,
+        showLotteryDetails: true,
       });
     },
     [lotteryDetailsTexts.actionOptions.dislike]: () => {
       invoke(props, 'handleDislikeLottery', {
         userId: authUser.id,
         lotteryId: (lotteryDetails || item).id,
+        showLotteryDetails: true,
       });
     },
     [lotteryDetailsTexts.actionOptions.win]: handleEnterDraw,
+  };
+  const modals = {
+    lotteryResultModal: (
+      <LotteryResultModal item={item} onClose={handleLotteryResultModalClose} />
+    ),
+    imagesViewerModal: (
+      <ImagesViewer
+        imageText={name}
+        uri={viewImageUri}
+        onClose={onImagesViewerClose}
+      />
+    ),
+    chatModal: (
+      <ChatModal
+        onClose={handleChatModalClose}
+        isWinner={isWinner}
+        isLotteryPoster={isLotteryPoster}
+      />
+    ),
+    receiveLotteryModal: (
+      <ReceiveLotteryModal
+        isWinner={isWinner}
+        isLotteryPoster={isLotteryPoster}
+        onClose={handleReceiveLotteryModalClose}
+      />
+    ),
+    paymentModal: <Payment onClose={onPaymentClose} />,
   };
   useEffect(() => {
     onShow();
@@ -191,14 +244,8 @@ const LotteryDetails = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      {showImagesViewer && (
-        <ImagesViewer
-          imageText={name}
-          uri={viewImageUri}
-          onClose={onImagesViewerClose}
-        />
-      )}
-      {showPayment && <Payment onClose={onPaymentClose} />}
+      {showModal && modals[showModal]}
+
       <SafeAreaView
         style={[sharedStyles.container, sharedStyles.rootSafeAreaView]}>
         <View style={sharedStyles.innerSafeAreaView}>
@@ -364,12 +411,14 @@ const LotteryDetails = props => {
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
                 {usersDataLoading && SimpleLoader}
-                {!usersDataLoading && winnerUserData && (
+                {!usersDataLoading && winnerUserData && winnerUserId ? (
                   <LotteryDetailsUserListItem user={winnerUserData} />
+                ) : (
+                  <Text style={sharedStyles.aboutFirstSectionText}>
+                    {lotteryDetailsTexts.inProgress}
+                  </Text>
                 )}
-                {!usersDataLoading && !winnerUserData && empty}
               </View>
-
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="today" />
                 <Text style={sharedStyles.userDetailsText}>
@@ -532,9 +581,9 @@ LotteryDetails.propTypes = {
   handleDislikeLottery: PropTypes.func,
   lotteries: PropTypes.oneOfType([PropTypes.array, PropTypes.any]),
   user: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
-  // adPosterData: ,
-  // lotteryUsersData: ,
-  // winnerUserData: ,
+  adPosterData: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
+  lotteryUsersData: PropTypes.oneOfType([PropTypes.array, PropTypes.any]),
+  winnerUserData: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
   userAds: PropTypes.oneOfType([PropTypes.array, PropTypes.any]),
   lotteryDetails: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
 };

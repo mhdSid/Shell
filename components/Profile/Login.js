@@ -8,6 +8,7 @@ import {
   signUp,
   orLogin,
   orSignUp,
+  validationMessages,
 } from '../../Constants/Texts';
 import {TextField} from 'react-native-material-textfield';
 import {Button, Icon, Toolbar} from 'react-native-material-ui';
@@ -21,7 +22,6 @@ import {handleLogin} from '../../redux/Auth/Login';
 import {Text} from 'react-native';
 
 const Login = props => {
-  const [isSignup, setIsSignup] = useState(false);
   const [loading, setLoading] = useState(false);
   const [emailPassChanged, setEmailPassChanged] = useState(false);
   const [emailChanged, setEmailChanged] = useState(false);
@@ -34,9 +34,6 @@ const Login = props => {
     password: false,
   });
   const setDefaultsDataChanged = () => {
-    // setEmailChanged(false);
-    // setPasswordChanged(false);
-    // setEmailPassChanged(true);
     setErrors({
       email: false,
       password: false,
@@ -81,7 +78,7 @@ const Login = props => {
           setEmailChanged(false);
           setErrors({
             ...errors,
-            email: 'Please enter a valid email.',
+            email: validationMessages.loginSignup.email,
           });
         }
       };
@@ -98,7 +95,7 @@ const Login = props => {
           setPasswordChanged(false);
           setErrors({
             ...errors,
-            password: 'Length should be between 6 and 50 characters.',
+            password: validationMessages.loginSignup.password,
           });
         }
       };

@@ -11,116 +11,122 @@ const About = props => {
     invoke(props, 'onClose');
   };
   return (
-    <Modal animationType="fade" onRequestClose={handleCloseModal}>
+    <Modal animationType="slide" onRequestClose={handleCloseModal}>
       <SafeAreaView
         style={[
           sharedStyles.container,
           sharedStyles.aboutSafeViewContainer,
           sharedStyles.rootSafeAreaView,
         ]}>
-        <Toolbar
-          style={{container: sharedStyles.toolbarContainer}}
-          leftElement={
-            <IconToggle onPress={handleCloseModal} name="arrow-back" />
-          }
-          centerElement={about.howTo}
-        />
-        <ScrollView
-          style={sharedStyles.aboutContainer}
-          showsVerticalScrollIndicator={false}>
-          <View style={sharedStyles.aboutIconTextContainer}>
-            <Icon color="white" name="store" />
-            <Text style={sharedStyles.aboutIconText}>{about.sell}</Text>
-          </View>
-          <View style={sharedStyles.aboutFirstSectionTextContainer}>
-            <Text
-              style={[
-                sharedStyles.aboutFirstSectionText,
-                sharedStyles.aboutFirstSectionTextMargin,
-              ]}>
-              {about.howToUseFirst}
-            </Text>
-            <Text
-              style={[
-                sharedStyles.aboutFirstSectionText,
-                sharedStyles.aboutFirstSectionTextMargin,
-              ]}>
-              {about.howToUseSecond}
-            </Text>
-            <Text
-              style={[
-                sharedStyles.aboutFirstSectionText,
-                sharedStyles.aboutFirstSectionTextMargin,
-              ]}>
-              {about.howToUseThird}
-            </Text>
-            <Text
-              style={[
-                sharedStyles.aboutFirstSectionText,
-                sharedStyles.aboutFirstSectionTextMargin,
-              ]}>
-              {about.howToUseFourth}
-            </Text>
-            <Text
-              style={[
-                sharedStyles.aboutFirstSectionText,
-                sharedStyles.aboutFirstSectionTextMargin,
-              ]}>
-              {about.howToUseFifth}
-            </Text>
-            <Text
-              style={[
-                sharedStyles.aboutFirstSectionText,
-                sharedStyles.aboutFirstSectionTextMargin,
-              ]}>
-              {about.howToUseSixth}
-            </Text>
-            <Text style={sharedStyles.aboutFirstSectionText}>
-              {about.howToUseSeventh}
-            </Text>
-          </View>
-          <View style={sharedStyles.aboutSeparatorSection}>
-            <Text style={sharedStyles.aboutSeparatorSectionText}>
-              {about.or}
-            </Text>
-          </View>
-          <View style={sharedStyles.aboutIconTextContainer}>
-            <Icon color="white" name="explore" />
-            <Text style={sharedStyles.aboutIconText}>{about.browse}</Text>
-          </View>
-          <View style={sharedStyles.aboutFirstSectionTextContainer}>
-            <Text style={sharedStyles.aboutFirstSectionText}>
-              {about.howtoUseEigtth}
-            </Text>
-          </View>
-          <View style={sharedStyles.aboutIconTextContainer}>
-            <Icon color="white" name="remove-red-eye" />
-            <Text style={sharedStyles.aboutIconText}>{about.choose}</Text>
-          </View>
-          <View style={sharedStyles.aboutFirstSectionTextContainer}>
-            <Text style={sharedStyles.aboutFirstSectionText}>
-              {about.howToUseNineth}
-            </Text>
-          </View>
-          <View style={sharedStyles.aboutIconTextContainer}>
-            <Icon color="white" name="receipt" />
-            <Text style={sharedStyles.aboutIconText}>{about.enterLottery}</Text>
-          </View>
-          <View style={sharedStyles.aboutFirstSectionTextContainer}>
-            <Text style={sharedStyles.aboutFirstSectionText}>
-              {about.howToUseTenth}
-            </Text>
-          </View>
-          <View style={sharedStyles.aboutIconTextContainer}>
-            <Icon color="white" name="star" />
-            <Text style={sharedStyles.aboutIconText}>{about.joinLottery}</Text>
-          </View>
-          <View style={sharedStyles.aboutFirstSectionTextContainer}>
-            <Text style={sharedStyles.aboutFirstSectionText}>
-              {about.howToUseEleventh}
-            </Text>
-          </View>
-        </ScrollView>
+        <View style={sharedStyles.innerSafeAreaView}>
+          <Toolbar
+            style={{container: sharedStyles.toolbarContainer}}
+            leftElement={'arrow-back'}
+            onLeftElementPress={handleCloseModal}
+            centerElement={about.howTo}
+          />
+          <ScrollView
+            style={sharedStyles.aboutContainer}
+            contentContainerStyle={sharedStyles.aboutScrollViewContainer}
+            showsVerticalScrollIndicator={false}>
+            <View style={sharedStyles.aboutIconTextContainer}>
+              <Icon color="rgba(0,0,0,.55)" name="store" />
+              <Text style={sharedStyles.aboutIconText}>{about.sell}</Text>
+            </View>
+            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              <Text
+                style={[
+                  sharedStyles.aboutFirstSectionText,
+                  sharedStyles.aboutFirstSectionTextMargin,
+                ]}>
+                {about.howToUseFirst}
+              </Text>
+              <Text
+                style={[
+                  sharedStyles.aboutFirstSectionText,
+                  sharedStyles.aboutFirstSectionTextMargin,
+                ]}>
+                {about.howToUseSecond}
+              </Text>
+              <Text
+                style={[
+                  sharedStyles.aboutFirstSectionText,
+                  sharedStyles.aboutFirstSectionTextMargin,
+                ]}>
+                {about.howToUseThird}
+              </Text>
+              <Text
+                style={[
+                  sharedStyles.aboutFirstSectionText,
+                  sharedStyles.aboutFirstSectionTextMargin,
+                ]}>
+                {about.howToUseFourth}
+              </Text>
+              <Text
+                style={[
+                  sharedStyles.aboutFirstSectionText,
+                  sharedStyles.aboutFirstSectionTextMargin,
+                ]}>
+                {about.howToUseFifth}
+              </Text>
+              <Text
+                style={[
+                  sharedStyles.aboutFirstSectionText,
+                  sharedStyles.aboutFirstSectionTextMargin,
+                ]}>
+                {about.howToUseSixth}
+              </Text>
+              <Text style={sharedStyles.aboutFirstSectionText}>
+                {about.howToUseSeventh}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutSeparatorSection}>
+              <Text style={sharedStyles.aboutSeparatorSectionText}>
+                {about.or}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutIconTextContainer}>
+              <Icon color="rgba(0,0,0,.55)" name="explore" />
+              <Text style={sharedStyles.aboutIconText}>{about.browse}</Text>
+            </View>
+            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              <Text style={sharedStyles.aboutFirstSectionText}>
+                {about.howtoUseEigtth}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutIconTextContainer}>
+              <Icon color="rgba(0,0,0,.55)" name="remove-red-eye" />
+              <Text style={sharedStyles.aboutIconText}>{about.choose}</Text>
+            </View>
+            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              <Text style={sharedStyles.aboutFirstSectionText}>
+                {about.howToUseNineth}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutIconTextContainer}>
+              <Icon color="rgba(0,0,0,.55)" name="receipt" />
+              <Text style={sharedStyles.aboutIconText}>
+                {about.enterLottery}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              <Text style={sharedStyles.aboutFirstSectionText}>
+                {about.howToUseTenth}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutIconTextContainer}>
+              <Icon color="rgba(0,0,0,.55)" name="star" />
+              <Text style={sharedStyles.aboutIconText}>
+                {about.joinLottery}
+              </Text>
+            </View>
+            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+              <Text style={sharedStyles.aboutFirstSectionText}>
+                {about.howToUseEleventh}
+              </Text>
+            </View>
+          </ScrollView>
+        </View>
       </SafeAreaView>
     </Modal>
   );

@@ -6,7 +6,11 @@ import PropTypes from 'prop-types';
 import {Animated} from 'react-native';
 import {Dropdown} from 'react-native-material-dropdown';
 import {prefectures, cities} from '../../Constants/Countries';
-import {importLottery, profile} from '../../Constants/Texts';
+import {
+  importLottery,
+  profile,
+  validationMessages,
+} from '../../Constants/Texts';
 import {TextField} from 'react-native-material-textfield';
 import {Button} from 'react-native-material-ui';
 import {handleSearch} from '../../redux/Search/Search';
@@ -24,6 +28,7 @@ import {
   lotteryItemCategories,
 } from '../../Constants/Lotteries';
 import {handleFetchLotteries} from '../../redux/Home/FetchLotteries';
+import {getUserIdSelector} from '../Profile/Selectors';
 
 const SearchBox = props => {
   const {searchFilters, style, searchEventFired} = props;
@@ -88,7 +93,7 @@ const SearchBox = props => {
           } else {
             setErrors({
               ...errors,
-              fromDate: 'From date should be formatted like yyyy/mm/dd',
+              fromDate: validationMessages.search.fromDate,
             });
           }
         }
@@ -111,7 +116,7 @@ const SearchBox = props => {
           } else {
             setErrors({
               ...errors,
-              toDate: 'To date should be formatted like yyyy/mm/dd',
+              toDate: validationMessages.search.toDate,
             });
           }
         }
@@ -128,7 +133,7 @@ const SearchBox = props => {
           } else {
             setErrors({
               ...errors,
-              searchQuery: 'Length should be between 2 and 100 characters.',
+              searchQuery: validationMessages.search.searchQuery,
             });
           }
         }
@@ -191,6 +196,7 @@ const SearchBox = props => {
     invoke(props, 'fetchLotteries', {
       onError: props.onSearchError,
       onSuccess: props.onSearchSuccess,
+      userId: props.authUserId,
     });
   };
   const {current: searchQueryField} = searchQueryRef;
@@ -238,6 +244,7 @@ const SearchBox = props => {
             <TextField
               blurOnSubmit={true}
               outlined
+              activeLineWidth={1}
               placeholder={'yyyy/mm/dd'}
               label={'From'}
               value={searchFilters.fromDate}
@@ -259,6 +266,7 @@ const SearchBox = props => {
               outlined
               placeholder={'yyyy/mm/dd'}
               label={'To'}
+              activeLineWidth={1}
               keyboardType="numbers-and-punctuation"
               value={searchFilters.toDate}
               blurOnSubmit={true}
@@ -307,6 +315,7 @@ const SearchBox = props => {
               outlined
               blurOnSubmit={true}
               label={'Search'}
+              activeLineWidth={1}
               placeholder={'What are you looking for?'}
               onBlur={handleBlur('searchQuery')}
               onChangeText={handleChange.searchQuery()}
@@ -379,6 +388,7 @@ const mapStateToProps = state => {
   return {
     searchFilters: getSearchFiltersSelector(state),
     searchEventFired: getSearchEventFiredSelector(state),
+    authUserId: getUserIdSelector(state),
   };
 };
 

@@ -32,12 +32,7 @@ export default class ListItemCommon extends Component {
   handleRightElementPress = () => {
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: [
-          'Cancel',
-          this.props.item && this.props.item.winnerUserId
-            ? 'Show lottery result'
-            : null,
-        ].filter(Boolean),
+        options: ['Cancel', 'Show lottery result'].filter(Boolean),
         // destructiveButtonIndex: 1,
         cancelButtonIndex: 0,
         userInterfaceStyle: 'dark',

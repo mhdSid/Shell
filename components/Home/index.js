@@ -1,6 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, {createRef, PureComponent} from 'react';
 import {Toolbar} from 'react-native-material-ui';
-import {Animated, View, VirtualizedList} from 'react-native';
+import {Animated, Text, View, VirtualizedList} from 'react-native';
 import {connect} from 'react-redux';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
@@ -18,6 +18,10 @@ import {
 } from './Selectors';
 import {emitSocketEvents} from '../../services/Socket';
 import {chunk, uniqBy} from 'lodash';
+import {getLoggedInSelector, getUserIdSelector} from '../Profile/Selectors';
+import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
+import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
+import {lottteries as lotteriesTexts} from '../../Constants/Texts';
 
 let SearchBox = null;
 let UploadLotteryProgressModal = null;
@@ -26,21 +30,24 @@ let ListItemCommon = null;
 
 class HomeComponent extends PureComponent {
   state = {
-    loading: false,
+    loading: true,
     showLotteryProgressModal: false,
     adList: null,
     searchBoxAnimatedOpacity: new Animated.Value(0),
     searchable: false,
   };
-  callback = () => {
+  fetchedLotteries = false;
+  virtualizedListRef = createRef();
+  fetchLotteriesCallback = () => {
     this.setState({loading: false});
   };
 
   fetchLotteries = () => {
     this.setState({loading: true}, () => {
       invoke(this.props, 'fetchLotteries', {
-        onError: this.callback,
-        onSuccess: this.callback,
+        onError: this.fetchLotteriesCallback,
+        onSuccess: this.fetchLotteriesCallback,
+        userId: this.props.authUserId,
       });
     });
   };
@@ -135,9 +142,23 @@ class HomeComponent extends PureComponent {
       }
     }
     // emitSocketEvents();
-    this.fetchLotteries();
+    if (
+      !this.fetchedLotteries &&
+      (this.props.authUserId || this.props.isLoggedIn === null)
+    ) {
+      this.fetchedLotteries = true;
+      this.fetchLotteries();
+    }
+  }
+  componentDidMount() {
+    const scrollViewRef = this.virtualizedListRef.current.getScrollRef();
+    scrollViewRef.scrollTo({x: 0, y: 0, animated: true});
   }
   componentWillReceiveProps(nextProps) {
+    if (!this.fetchedLotteries) {
+      this.fetchedLotteries = true;
+      this.fetchLotteries();
+    }
     const {isCard, isList} = nextProps;
     if (isCard) {
       if (!CardListItemRow) {
@@ -151,8 +172,7 @@ class HomeComponent extends PureComponent {
     }
     let adList = null;
     if (Array.isArray(nextProps.lotteries) && nextProps.lotteries.length) {
-      adList = uniqBy(nextProps.lotteries, 'id');
-      adList = chunk(adList, 3).map(list => ({
+      adList = chunk(nextProps.lotteries, 3).map(list => ({
         data: list,
         key: `_${Math.random()
           .toString(36)
@@ -169,8 +189,30 @@ class HomeComponent extends PureComponent {
     });
   };
 
+  handleLikeLottery = lotteryId => {
+    invoke(this.props, 'likeLottery', {
+      userId: this.props.authUserId,
+      lotteryId,
+      showLotteryDetails: false,
+    });
+  };
+
+  handleDislikeLottery = lotteryId => {
+    invoke(this.props, 'dislikeLottery', {
+      userId: this.props.authUserId,
+      lotteryId,
+      showLotteryDetails: false,
+    });
+  };
+
   renderCardListItemRow = ({item}) => (
-    <CardListItemRow data={item} onItemPress={this.handleCardItemPress} />
+    <CardListItemRow
+      authUserId={this.props.authUserId}
+      handleLikeLottery={this.handleLikeLottery}
+      handleDislikeLottery={this.handleDislikeLottery}
+      data={item}
+      onItemPress={this.handleCardItemPress}
+    />
   );
 
   renderListItem = ({item, index}) => (
@@ -182,8 +224,8 @@ class HomeComponent extends PureComponent {
     />
   );
   getItem = (data, index) => data[index];
-  getItemCount = () => this.state.adList.length;
-  getListItemCount = () => this.props.lotteries.length;
+  getItemCount = () => (this.state.adList || []).length;
+  getListItemCount = () => (this.props.lotteries || []).length || 0;
   getItemKey = (item, index) => `${item.key}`;
   getListItemKey = item => `${item.id}`;
 
@@ -198,7 +240,7 @@ class HomeComponent extends PureComponent {
     const {isList, isCard, lotteries} = this.props;
 
     return (
-      <View style={sharedStyles.fullheightView} shouldRasterizeIOS={true}>
+      <View style={sharedStyles.fullheightView}>
         {showLotteryProgressModal && (
           <UploadLotteryProgressModal
             onClose={this.handleCloseUploadLotteryProgressModal}
@@ -211,7 +253,7 @@ class HomeComponent extends PureComponent {
             'search',
             'cloud-upload',
             isCard ? 'view-list' : 'view-comfy',
-          ].filter(Boolean)}
+          ]}
           onRightElementPress={this.changeViewStyle}
         />
         {searchable ? (
@@ -229,53 +271,52 @@ class HomeComponent extends PureComponent {
           adUnitID="ca-app-pub-5703846930890914/6105801245"
           style={sharedStyles.adMobBanner}
         /> */}
-        {/* <UploadAdProgress /> */}
-        {loading && <View style={sharedStyles.homeLoading}>{Loading}</View>}
-        {isCard && adList && adList.length ? (
+        {/* {loading && <View style={sharedStyles.homeLoading}>{Loading}</View>} */}
+        {isCard ? (
           <VirtualizedList
             initialNumToRender={10}
             windowSize={10}
             removeClippedSubviews={true}
             refreshing={loading}
             onRefresh={this.fetchLotteries}
+            ListEmptyComponent={
+              <Text style={sharedStyles.uploadProgressModalText}>
+                {lotteriesTexts.emptyLotteries}
+              </Text>
+            }
+            progressViewOffset={-100}
             horizontal={false}
-            // listKey={adListKey}
-            // maxToRenderPerBatch={10}
-            // updateCellsBatchingPeriod={1}
-            // onEndReachedThreshold={0.5}
-            // contentContainerStyle={{
-            //   display: 'flex',
-            //   justifyContent: 'flex-start',
-            //   alignItems: 'flex-start',
-            // }}
-            // style={{
-            //   display: 'flex',
-            //   justifyContent: 'flex-start',
-            //   alignItems: 'flex-start',
-            // }}
             showsVerticalScrollIndicator={false}
-            data={adList}
+            data={adList || []}
             getItem={this.getItem}
             getItemCount={this.getItemCount}
             contentContainerStyle={sharedStyles.homeLotteriesContainer}
             keyExtractor={this.getItemKey}
             renderItem={this.renderCardListItemRow}
+            ref={this.virtualizedListRef}
           />
         ) : null}
-        {isList && lotteries && lotteries.length ? (
+        {isList ? (
           <VirtualizedList
             removeClippedSubviews={true}
             windowSize={10}
             initialNumToRender={10}
             refreshing={loading}
+            progressViewOffset={-100}
+            ListEmptyComponent={
+              <Text style={sharedStyles.uploadProgressModalText}>
+                {lotteriesTexts.emptyLotteries}
+              </Text>
+            }
             onRefresh={this.fetchLotteries}
             showsVerticalScrollIndicator={false}
-            data={lotteries}
+            data={lotteries || []}
             contentContainerStyle={sharedStyles.listViewContainer}
             getItem={this.getItem}
             getItemCount={this.getListItemCount}
             keyExtractor={this.getListItemKey}
             renderItem={this.renderListItem}
+            ref={this.virtualizedListRef}
           />
         ) : null}
       </View>
@@ -288,6 +329,8 @@ HomeComponent.propTypes = {
   isList: PropTypes.bool,
   isCard: PropTypes.bool,
   isCarousel: PropTypes.bool,
+  isLoggedIn: PropTypes.bool,
+  authUserId: PropTypes.string,
 };
 
 const mapStateToProps = state => {
@@ -296,6 +339,8 @@ const mapStateToProps = state => {
     isList: getIsListSelector(state),
     isCard: getIsCardSelector(state),
     isCarousel: getIsCarouselSelector(state),
+    authUserId: getUserIdSelector(state),
+    isLoggedIn: getLoggedInSelector(state),
   };
 };
 
@@ -304,6 +349,8 @@ const mapDispatchToProps = dispatch => {
     fetchLotteries: payload => dispatch(handleFetchLotteries(payload)),
     showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
     setHomeViewStyle: payload => dispatch(setHomeViewStyle(payload)),
+    likeLottery: payload => dispatch(handleLikeLottery(payload)),
+    dislikeLottery: payload => dispatch(handleDislikeLottery(payload)),
   };
 };
 

@@ -5,12 +5,14 @@ import {decrypt, encrypt} from './Encrypt';
 import sha256 from 'crypto-js/sha256';
 import {password as hashkey} from './Encrypt';
 
-const getAds = async () => {
+const getAds = async props => {
+  const {userId} = props;
   const data = await request({
     endpoint: 'ads/get',
     method: 'POST',
     body: {
-      hash: sha256(hashkey).toString(),
+      userId,
+      hash: sha256(`${userId}` + hashkey).toString(),
     },
   });
   return data;

@@ -27,12 +27,16 @@ import {LoadingComponent} from '../Loading';
 import {
   importLottery as importLotteryTexts,
   profile,
+  validationMessages,
 } from '../../Constants/Texts';
 import invoke from 'lodash/invoke';
 import {handleImportLottery} from '../../redux/ImportLottery/ImportLottery';
 import {getLoggedInSelector, getUserSelector} from './Selectors';
 import {Dropdown} from 'react-native-material-dropdown';
+import {navigate} from '../MainContainer';
+import {successConfirmationModal as successConfirmationModalTexts} from '../../Constants/Texts';
 
+let SuccessConfirmationModal = null;
 let UploadLotteryProgressModal = null;
 
 const ImportLottery = props => {
@@ -47,6 +51,10 @@ const ImportLottery = props => {
   const [showLotteryProgressModal, setShowLotteryProgressModal] = useState(
     false,
   );
+  const [
+    showSuccessConfirmationModal,
+    setShowSuccessConfirmationModal,
+  ] = useState(false);
   const [itemCategory, setItemCategory] = useState('');
   const [itemCondition, setItemCondition] = useState('');
   const [images, setImages] = useState([]);
@@ -102,7 +110,7 @@ const ImportLottery = props => {
         } else {
           setErrors({
             ...errors,
-            adName: 'Length should be between 5 and 30 characters.',
+            adName: validationMessages.importLottery.adName,
           });
           setLotteryNameChanged(false);
         }
@@ -119,7 +127,7 @@ const ImportLottery = props => {
         } else {
           setErrors({
             ...errors,
-            description: 'Length should be between 20 and 100 characters.',
+            description: validationMessages.importLottery.description,
           });
           setDescriptionChanged(false);
         }
@@ -141,7 +149,7 @@ const ImportLottery = props => {
         } else {
           setErrors({
             ...errors,
-            price: 'Price should be be divisble by 100',
+            price: validationMessages.importLottery.price,
           });
           setPriceChanged(false);
         }
@@ -246,6 +254,11 @@ const ImportLottery = props => {
         imageFiles: filteredImages,
       });
       setDefault(nameField, descriptionField, priceField);
+      if (!SuccessConfirmationModal) {
+        SuccessConfirmationModal = require('../SuccessConfirmationModal')
+          .default;
+      }
+      setShowSuccessConfirmationModal(true);
     }
   };
   const updateItemCategory = value => {
@@ -320,6 +333,34 @@ const ImportLottery = props => {
     }
     setShowLotteryProgressModal(true);
   };
+  const handleSuccessConfirmationModalClose = () => {
+    setShowSuccessConfirmationModal(false);
+    navigate('home')();
+  };
+  const handleSuccessConfirmationModalCreateAnotherLottery = () => {
+    setShowSuccessConfirmationModal(false);
+  };
+  const successModalActions = [
+    {
+      text:
+        successConfirmationModalTexts.importLottery.actions.createAnotherLottery
+          .text,
+      icon:
+        successConfirmationModalTexts.importLottery.actions.createAnotherLottery
+          .icon,
+      onPress: handleSuccessConfirmationModalCreateAnotherLottery,
+    },
+    {
+      text:
+        successConfirmationModalTexts.importLottery.actions.continueBrowsing
+          .text,
+      icon:
+        successConfirmationModalTexts.importLottery.actions.continueBrowsing
+          .icon,
+      onPress: handleSuccessConfirmationModalClose,
+    },
+  ];
+
   useEffect(() => {
     setLotteryDataChanged(
       imagesChanged &&
@@ -349,6 +390,14 @@ const ImportLottery = props => {
   if (loggedIn === true && user) {
     return (
       <View style={sharedStyles.fullheightView}>
+        {showSuccessConfirmationModal ? (
+          <SuccessConfirmationModal
+            title={successConfirmationModalTexts.importLottery.title}
+            subtitle={successConfirmationModalTexts.importLottery.subtitle}
+            onClose={handleSuccessConfirmationModalCreateAnotherLottery}
+            actions={successModalActions}
+          />
+        ) : null}
         {showLotteryProgressModal ? (
           <UploadLotteryProgressModal
             onClose={handleCloseUploadLotteryProgressModal}
@@ -412,6 +461,26 @@ const ImportLottery = props => {
               />
             </View>
             <View style={sharedStyles.mobileContainer}>
+              <Text style={sharedStyles.label}>{importLotteryTexts.price}</Text>
+              <View style={sharedStyles.priceContainer}>
+                <Text style={sharedStyles.currencyLabel}>{userCurrency}</Text>
+                <View style={sharedStyles.adPriceTextfieldContainer}>
+                  <TextField
+                    placeholder={importLotteryTexts.enterPrice}
+                    placeholderTextColor={'rgba(0,0,0,0.3)'}
+                    keyboardType="phone-pad"
+                    maxLength={9}
+                    minLength={4}
+                    tintColor={'#b69cf6'}
+                    onBlur={handleBlur('price')}
+                    error={errors.price}
+                    onChangeText={handleChange.price()}
+                    ref={priceRef}
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={sharedStyles.mobileContainer}>
               <Text style={sharedStyles.label}>
                 {importLotteryTexts.images}
               </Text>
@@ -422,6 +491,7 @@ const ImportLottery = props => {
                     onPress={handleChoosePhoto(index)}
                     style={[
                       sharedStyles.imageBtn,
+                      index === 4 && sharedStyles.imageBtnLast,
                       index === 0 && errors.images
                         ? sharedStyles.imageBtnError
                         : '',
@@ -441,26 +511,6 @@ const ImportLottery = props => {
                     )}
                   </TouchableBounce>
                 ))}
-              </View>
-            </View>
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>{importLotteryTexts.price}</Text>
-              <View style={sharedStyles.priceContainer}>
-                <Text style={sharedStyles.currencyLabel}>{userCurrency}</Text>
-                <View style={sharedStyles.adPriceTextfieldContainer}>
-                  <TextField
-                    placeholder={importLotteryTexts.enterPrice}
-                    placeholderTextColor={'rgba(0,0,0,0.3)'}
-                    keyboardType="phone-pad"
-                    maxLength={9}
-                    minLength={4}
-                    tintColor={'#b69cf6'}
-                    onBlur={handleBlur('price')}
-                    error={errors.price}
-                    onChangeText={handleChange.price()}
-                    ref={priceRef}
-                  />
-                </View>
               </View>
             </View>
             <Text style={sharedStyles.label}>{profile.prefecture}</Text>

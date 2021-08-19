@@ -244,6 +244,7 @@ const sharedStyles = StyleSheet.create({
   imageBtnContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    marginBottom: 10,
   },
   profileImage: {
     width: 55,
@@ -280,17 +281,20 @@ const sharedStyles = StyleSheet.create({
     bottom: 10,
   },
   imageBtn: {
-    marginTop: 10,
+    marginTop: 15,
     marginRight: 10,
     borderColor: '#b69cf6',
     borderWidth: 4,
-    width: 65,
-    height: 65,
+    width: (windowWidth - 20 - 20 - 40 - 20) / 5,
+    height: (windowWidth - 20 - 20 - 40 - 20) / 5,
     justifyContent: 'center',
     alignItems: 'center',
     display: 'flex',
     borderRadius: 4,
     backgroundColor: '#c4aff7',
+  },
+  imageBtnLast: {
+    marginRight: 0,
   },
   imageBtnError: {
     borderColor: 'red',
@@ -392,9 +396,13 @@ const sharedStyles = StyleSheet.create({
     zIndex: 0,
   },
   aboutContainer: {
-    paddingBottom: 20,
     paddingHorizontal: 20,
     ...flex,
+    backgroundColor: 'rgba(0,0,0,.1)',
+  },
+  aboutScrollViewContainer: {
+    marginVertical: 20,
+    paddingBottom: 50,
   },
   innerContainer: {
     ...flex,
@@ -407,6 +415,16 @@ const sharedStyles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingTop: 10,
     paddingBottom: 20,
+  },
+  homeLotteriesContainer: {
+    paddingTop: 10,
+    paddingHorizontal: 10,
+    paddingBottom: 20,
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   importAdContainerNoAuth: {
     paddingTop: 40,
@@ -473,11 +491,13 @@ const sharedStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
+    width: 68,
+    height: 68,
   },
   lotteryDetailsUsersListItemImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 60 / 2,
+    width: 68,
+    height: 68,
+    borderRadius: 68 / 2,
     backgroundColor: '#f7f5fe',
   },
   lotteryDetailsUsersListItemLargeImage: {
@@ -495,6 +515,10 @@ const sharedStyles = StyleSheet.create({
     width: 128,
     height: 128,
     borderRadius: 128 / 2,
+  },
+  lotteryDetailsUsersListItemLargeContainer: {
+    width: 128,
+    height: 128,
   },
   lotteryDetailsUsersListItemWinnerContainer: {
     borderColor: 'green',
@@ -572,6 +596,11 @@ const sharedStyles = StyleSheet.create({
   homeCardItemText: {
     color: 'white',
   },
+  homeCardItemIcon: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+  },
   homeCardListItemRow: {
     display: 'flex',
     flexDirection: 'row',
@@ -601,7 +630,7 @@ const sharedStyles = StyleSheet.create({
     borderRadius: 50 / 2,
   },
   aboutSafeViewContainer: {
-    backgroundColor: '#b69cf6',
+    backgroundColor: 'rgba(0,0,0,0.1)',
     justifyContent: 'center',
   },
   paymentSafeViewContentContainer: {
@@ -664,7 +693,7 @@ const sharedStyles = StyleSheet.create({
     alignItems: 'center',
   },
   aboutIconText: {
-    color: 'white',
+    color: 'rgba(0,0,0,.55)',
     fontWeight: 'bold',
     fontSize: 20,
     marginHorizontal: 10,
@@ -914,6 +943,48 @@ const sharedStyles = StyleSheet.create({
     color: 'green',
     fontSize: 26,
     fontWeight: 'bold',
+  },
+  lotteryResultNoWinnerText: {
+    fontSize: 24,
+    fontWeight: '300',
+  },
+  lotteryResultNoWinnerContainer: {
+    marginBottom: 20,
+  },
+  successConfirmationContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'white',
+  },
+  successConfirmationContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: -100,
+  },
+  successConfirmationToolbar: {
+    backgroundColor: 'white',
+  },
+  successConfirmationIcon: {
+    marginBottom: 20,
+  },
+  successConfirmationTitle: {
+    marginBottom: 10,
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  successConfirmationSubtitle: {
+    marginBottom: 40,
+    marginHorizontal: 20,
+    fontSize: 16,
+  },
+  successConfirmationActionContainer: {
+    marginBottom: 20,
   },
 });
 

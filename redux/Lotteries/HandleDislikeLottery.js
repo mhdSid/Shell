@@ -7,27 +7,27 @@ import {lotteryDetailsActions} from '../LotteryDetails/actions';
 
 const handleDislikeLottery = payload => {
   return dispatch => {
-    const {userId, lotteryId, onError} = payload;
+    const {userId, lotteryId, onError, showLotteryDetails} = payload;
     const onGetMyLotteriesSuccess = data => {
       const {dislikedLottery, error} = data;
-      console.log('handleDislikeLottery: ', dislikedLottery);
-
       if (error) {
         return handleError({error, onError});
       }
       invoke(payload, 'onSuccess');
       if (dislikedLottery) {
         dispatch({
-          type: homeActions.setLotteries,
+          type: homeActions.updateLottery,
           payload: dislikedLottery,
         });
-        dispatch({
-          type: lotteryDetailsActions.showLotteryDetails,
-          payload: {
-            ...dislikedLottery,
-            resetState: false,
-          },
-        });
+        if (showLotteryDetails) {
+          dispatch({
+            type: lotteryDetailsActions.showLotteryDetails,
+            payload: {
+              ...dislikedLottery,
+              resetState: false,
+            },
+          });
+        }
         return dispatch({
           type: lotteriesActions.setUserLikedLotteries,
           payload: dislikedLottery,

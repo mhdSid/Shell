@@ -1,5 +1,5 @@
 const about = {
-  howTo: 'How-to Guide',
+  howTo: 'How to use the App',
   sell: 'Sell',
   howToUseFirst:
     'Make a lottery about the item you want to sell - it could be anything you can think about!',
@@ -31,6 +31,39 @@ const errors = {
   error: 'A error has occured. Please try again.',
 };
 
+const successConfirmationModal = {
+  importLottery: {
+    title: 'YOUR LOTTERY HAS BEEN CREATED!',
+    subtitle:
+      'Now, you can wait until users join your lottery. Meanwhile, keep browsing the app.',
+    actions: {
+      continueBrowsing: {
+        text: 'Continue Browsing',
+        icon: 'home',
+      },
+      createAnotherLottery: {
+        text: 'Create Another Lottery',
+        icon: 'add',
+      },
+    },
+  },
+  payment: {
+    title: 'YOU HAVE SUCCESSFULLY JOINED THIS LOTTERY!',
+    subtitle:
+      'Now, you can be patient for the results after other users join this lottery and the lottery price is collected. Meanwhile, please note that you can join the same lottery as much as you wish.',
+    actions: {
+      joinAgain: {
+        text: 'Join lottery again',
+        icon: 'repeat',
+      },
+      goBack: {
+        text: 'Return to lottery details',
+        icon: 'chevron-left',
+      },
+    },
+  },
+};
+
 const lotteryResult = {
   lotteryResult: 'Lottery Result',
   actionOptions: {
@@ -47,7 +80,33 @@ const lotteryResult = {
   congratulations: 'Congratulations!',
 };
 
+const validationMessages = {
+  search: {
+    searchQuery: 'Length should be between 2 and 100 characters.',
+    toDate: 'To date should be formatted like yyyy/mm/dd',
+    fromDate: 'From date should be formatted like yyyy/mm/dd',
+  },
+  importLottery: {
+    adName: 'Length should be between 5 and 30 characters.',
+    description: 'Length should be between 20 and 100 characters.',
+    price: 'Price should be be divisble by 100',
+  },
+  loginSignup: {
+    email: 'Please enter a valid email.',
+    password: 'Length should be between 6 and 50 characters.',
+  },
+  changePassword: {
+    currentPassword: 'The entered password does not match your current one.',
+    newPassword:
+      'New password should be diferent than your current one and length should be between 6 and 50 characters.',
+  },
+};
+
 const lotteryDetails = {
+  inProgress: 'This lottery is still in progress.',
+  winnerAccouncementSoon: 'Kindly be patient for the winner announcement.',
+  youAreTheWinner: 'YOU ARE THE WINNER OF THIS LOTTERY!',
+  lotteryPosterWinner: 'THE LOTTERY PRIZE GOES TO THE WINNER',
   actionOptions: {
     share: 'share',
     like: 'like',
@@ -55,18 +114,25 @@ const lotteryDetails = {
     win: 'win',
     receive: 'receive',
     remove: 'remove',
+    result: 'result',
+    chat: 'chat',
   },
   like: {icon: 'favorite-border', text: 'like', action: 'like'},
   dislike: {icon: 'favorite', text: 'dislike', action: 'dislike'},
   visitorActions: [
     {icon: 'shop', text: 'win', action: 'win'},
     {icon: 'share', text: 'share', action: 'share'},
+    {icon: 'track-changes', text: 'result', action: 'result'},
   ],
   lotteryPosterActions: [
+    {icon: 'track-changes', text: 'result', action: 'result'},
     {icon: 'share', text: 'share', action: 'share'},
     {icon: 'delete', text: 'remove', action: 'remove'},
+    {icon: 'chat', text: 'chat', action: 'chat'},
+    {icon: 'done-all', text: 'check', action: 'receive'},
   ],
   lotteryWinnerActions: [
+    {icon: 'track-changes', text: 'result', action: 'result'},
     {icon: 'share', text: 'share', action: 'share'},
     {icon: 'chat', text: 'chat', action: 'chat'},
     {icon: 'done-all', text: 'check', action: 'receive'},
@@ -133,8 +199,8 @@ const lottteries = {
   emptyLotteries: 'No Lotteries available.',
 };
 
-const chat = {
-  chat: 'Chat',
+const receiveLottery = {
+  receiveLottery: 'Receive Lottery',
 };
 
 const myyAds = {
@@ -157,6 +223,12 @@ const orSignUp = 'Or Signup';
 
 const notifications = {
   notifications: 'Notifications',
+};
+
+const chat = {
+  chat: 'Chat',
+  chatWithOwner: 'Chat with lottery owner',
+  chatWithWinner: 'Chat with lottery winner',
 };
 
 const uploadAdProgress = {
@@ -308,6 +380,9 @@ export {
   signUp,
   orLogin,
   orSignUp,
-  chat,
   lotteryResult,
+  successConfirmationModal,
+  receiveLottery,
+  chat,
+  validationMessages,
 };

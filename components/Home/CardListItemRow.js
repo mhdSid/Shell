@@ -7,7 +7,10 @@ import CardListItem from './CardListItem';
 export default class CardListItemRow extends Component {
   static propTypes = {
     data: PropTypes.object,
+    authUserId: PropTypes.string,
     onItemPress: PropTypes.func,
+    handleDislikeLottery: PropTypes.func,
+    handleLikeLottery: PropTypes.func,
   };
   constructor() {
     super();
@@ -33,6 +36,9 @@ export default class CardListItemRow extends Component {
                 sharedStyles.homeCardListItemContainerNoMargin,
             ]}>
             <CardListItem
+              handleDislikeLottery={this.props.handleDislikeLottery}
+              handleLikeLottery={this.props.handleLikeLottery}
+              authUserId={this.props.authUserId}
               item={listItem}
               onItemPress={this.props.onItemPress}
             />

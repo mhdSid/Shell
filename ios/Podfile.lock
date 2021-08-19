@@ -269,7 +269,7 @@ PODS:
     - ReactCommon/jscallinvoker (= 0.61.5)
   - RNCAsyncStorage (1.12.1):
     - React-Core
-  - RNFastImage (8.3.6):
+  - RNFastImage (8.3.7):
     - React-Core
     - SDWebImage (~> 5.8)
     - SDWebImageWebPCoder (~> 0.6.1)
@@ -443,7 +443,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   RNCAsyncStorage: cb9a623793918c6699586281f0b51cbc38f046f9
-  RNFastImage: 044259b52d726b183fa401f3521b2e5a864afc0a
+  RNFastImage: a7384db75df352500261e8e8f1ac2026def26102
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
   SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84

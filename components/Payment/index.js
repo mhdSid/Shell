@@ -12,10 +12,17 @@ import {getUserSelector, getLoggedInSelector} from './Selectors';
 import NoAuth from '../NoAuth';
 import {handleEnterLottery} from '../../redux/Payment/EnterLottery';
 import {getLotteryDetailsSelector} from '../Pinger/Selectors';
+import {successConfirmationModal as successConfirmationModalTexts} from '../../Constants/Texts';
+
+let SuccessConfirmationModal = null;
 
 const Payment = props => {
   const {user, loggedIn, lottery} = props;
   const [loading, setLoading] = useState(false);
+  const [
+    showSuccessConfirmationModal,
+    setShowSuccessConfirmationModal,
+  ] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [creditCardCVC, setCreditCardCVC] = useState(false);
   const [creditCardExpiryDate, setCreditCardExpiryDate] = useState(false);
@@ -56,15 +63,23 @@ const Payment = props => {
   };
   const setDefaultsDataChanged = () => {
     setLoading(false);
-    setIsValid(false);
+    setIsValid(true);
   };
   const onError = () => {
     setDefaultsDataChanged();
   };
+  const handlePaymentSuccess = () => {
+    setDefaultsDataChanged();
+    // invoke(props, 'onClose');
+    if (!SuccessConfirmationModal) {
+      SuccessConfirmationModal = require('../SuccessConfirmationModal').default;
+    }
+    setShowSuccessConfirmationModal(true);
+  };
   const handlePayment = () => {
     setLoading(true);
     invoke(props, 'handleEnterLottery', {
-      onSuccess: handleCloseModal,
+      onSuccess: handlePaymentSuccess,
       onError: onError,
       adId: lottery.id,
       userId: user.id,
@@ -76,6 +91,25 @@ const Payment = props => {
       creditCardType,
     });
   };
+  const handleSuccessConfirmationModalJoinAgain = () => {
+    setShowSuccessConfirmationModal(false);
+  };
+  const handleSuccessConfirmationModalGoBack = () => {
+    setShowSuccessConfirmationModal(false);
+    invoke(props, 'onClose');
+  };
+  const successModalActions = [
+    {
+      text: successConfirmationModalTexts.payment.actions.joinAgain.text,
+      icon: successConfirmationModalTexts.payment.actions.joinAgain.icon,
+      onPress: handleSuccessConfirmationModalJoinAgain,
+    },
+    {
+      text: successConfirmationModalTexts.payment.actions.goBack.text,
+      icon: successConfirmationModalTexts.payment.actions.goBack.icon,
+      onPress: handleSuccessConfirmationModalGoBack,
+    },
+  ];
 
   if (!loggedIn || !user) {
     return <NoAuth />;
@@ -85,10 +119,18 @@ const Payment = props => {
       animationType="slide"
       onShow={onShowModal}
       onRequestClose={handleCloseModal}>
-      {loading && loadingPopup}
       <SafeAreaView
         style={[sharedStyles.rootSafeAreaView, sharedStyles.fullheightView]}>
         <View style={sharedStyles.innerSafeAreaView}>
+          {showSuccessConfirmationModal ? (
+            <SuccessConfirmationModal
+              title={successConfirmationModalTexts.payment.title}
+              subtitle={successConfirmationModalTexts.payment.subtitle}
+              onClose={handleCloseModal}
+              actions={successModalActions}
+            />
+          ) : null}
+          {loading ? loadingPopup : null}
           <ScrollView
             showsVerticalScrollIndicator={false}
             style={[
@@ -121,9 +163,7 @@ const Payment = props => {
                   onPress={handlePayment}
                 />
               </View>
-              <View style={sharedStyles.paymentBtn}>
-                <Button text={payment.cancel} onPress={handleCloseModal} />
-              </View>
+              <Button text={payment.cancel} onPress={handleCloseModal} />
             </View>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="black" name="receipt" />

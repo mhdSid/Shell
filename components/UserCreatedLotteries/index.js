@@ -1,25 +1,58 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, View, VirtualizedList} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
-import {loadingPopup} from '../Loading';
-import {lottteries, profile} from '../../Constants/Texts';
+import {profile} from '../../Constants/Texts';
 import {connect} from 'react-redux';
-import ListItemCommon from '../Home/ListItem';
 import {getUserCreatedLotteriesSelector} from '../UserJoinedLotteries/Selectors';
-import {getUserSelector} from '../Profile/Selectors';
+import {getUserIdSelector, getUserSelector} from '../Profile/Selectors';
 import {handleFetchUserCreatedLotteries} from '../../redux/Lotteries/FetchUserCreatedLotteries';
 import {Text} from 'react-native';
+import {lottteries as lotteriesTexts} from '../../Constants/Texts';
+import Filter from '../Filter';
+import ListItemCommon from '../Home/ListItem';
+import CardListItemRow from '../Home/CardListItemRow';
+import {chunk} from 'lodash';
+import {getIsCardSelector, getIsListSelector} from '../Home/Selectors';
+import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
+import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
+import {setHomeViewStyle} from '../../redux/Settings/actions';
 
 let LotteryDetails = null;
 
 const UserCreatedLotteries = props => {
-  const {user, userCreatedLotteries} = props;
+  const {user, userCreatedLotteries, isCard, isList, authUserId} = props;
   const [loading, setLoading] = useState(true);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
   const [selectedLottery, setSelectedLottery] = useState();
+  const [filteredLotteries, setFilteredLotteries] = useState(null);
+  const [lotteryCardList, setLotteryCardList] = useState([]);
+
+  useEffect(() => {
+    if (isCard) {
+      let lotteryRowCardList = null;
+      if (
+        Array.isArray(filteredLotteries || userCreatedLotteries) &&
+        (filteredLotteries || userCreatedLotteries).length
+      ) {
+        lotteryRowCardList = chunk(
+          filteredLotteries || userCreatedLotteries,
+          3,
+        ).map(list => ({
+          data: list,
+          key: `_${Math.random()
+            .toString(36)
+            .substr(2, 9)}`,
+        }));
+      }
+      setLotteryCardList(lotteryRowCardList);
+    }
+  }, [filteredLotteries, isCard, userCreatedLotteries]);
+
+  const getRowItemKey = item => `${item.key}`;
+  const getRowItemCount = () => (lotteryCardList || []).length;
 
   const handleCloseModal = () => {
     invoke(props, 'onClose');
@@ -43,20 +76,21 @@ const UserCreatedLotteries = props => {
       LotteryDetails = require('../LotteryDetails').default;
     }
     setShowLotteryDetails(true);
-    setSelectedLottery(userCreatedLotteries[index]);
+    setSelectedLottery((filteredLotteries || userCreatedLotteries)[index]);
   };
   const onLotteryDetailsClose = () => {
     setShowLotteryDetails(false);
   };
   const getItem = (data, index) => data[index];
-  const getItemCount = () => userCreatedLotteries.length;
+  const getItemCount = () =>
+    (filteredLotteries || userCreatedLotteries || []).length;
   const getKeyExtractor = item => item.id;
   const renderItem = ({item, index}) => (
     <ListItemCommon
       item={item}
       index={index}
       onItemPress={handleItemPress}
-      listLength={userCreatedLotteries.length}
+      listLength={(filteredLotteries || userCreatedLotteries).length}
     />
   );
   const lotteryDetailsModal = showLotteryDetails && (
@@ -64,6 +98,74 @@ const UserCreatedLotteries = props => {
       updateLotteryDetails={updateLotteryDetails}
       onClose={onLotteryDetailsClose}
       item={selectedLottery}
+    />
+  );
+  const handleFilterChange = filterValue => {
+    if (
+      !filterValue ||
+      !userCreatedLotteries ||
+      userCreatedLotteries.length === 0
+    ) {
+      setFilteredLotteries(null);
+      return;
+    }
+    if (
+      filterValue &&
+      Array.isArray(userCreatedLotteries) &&
+      userCreatedLotteries.length
+    ) {
+      const filteredData = userCreatedLotteries.filter(
+        item =>
+          item.name.toLowerCase().includes(filterValue.toLowerCase()) ||
+          item.description.toLowerCase().includes(filterValue.toLowerCase()),
+      );
+      setFilteredLotteries(
+        filteredData && filteredData.length
+          ? filteredData
+          : filteredLotteries && filteredLotteries.length
+          ? filteredLotteries
+          : null,
+      );
+    }
+  };
+  const changeViewStyle = () => {
+    if (isCard) {
+      invoke(props, 'setHomeViewStyle', {
+        isHomeCardStyle: false,
+        isHomeListStyle: true,
+      });
+    }
+    if (isList) {
+      invoke(props, 'setHomeViewStyle', {
+        isHomeCardStyle: true,
+        isHomeListStyle: false,
+      });
+    }
+  };
+  const likeLottery = lotteryId => {
+    invoke(props, 'likeLottery', {
+      userId: authUserId,
+      lotteryId,
+      showLotteryDetails: false,
+    });
+  };
+  const dislikeLottery = lotteryId => {
+    invoke(props, 'dislikeLottery', {
+      userId: authUserId,
+      lotteryId,
+      showLotteryDetails: false,
+    });
+  };
+  const handleCardItemPress = item => {
+    invoke(props, 'showLotteryDetails', item);
+  };
+  const renderCardListItemRow = ({item}) => (
+    <CardListItemRow
+      authUserId={authUserId}
+      handleLikeLottery={likeLottery}
+      handleDislikeLottery={dislikeLottery}
+      data={item}
+      onItemPress={handleCardItemPress}
     />
   );
 
@@ -81,24 +183,48 @@ const UserCreatedLotteries = props => {
             leftElement="arrow-back"
             centerElement={profile.myCreatedLotteries}
             onLeftElementPress={handleCloseModal}
+            rightElement={isCard ? 'view-list' : 'view-comfy'}
+            onRightElementPress={changeViewStyle}
           />
           <View style={sharedStyles.lotteriesContainer}>
-            {loading ? loadingPopup : null}
-            {(!userCreatedLotteries || !userCreatedLotteries.length) &&
-            !loading ? (
-              <Text style={sharedStyles.uploadProgressModalText}>
-                {lottteries.emptyLotteries}
-              </Text>
-            ) : null}
-            {!loading && userCreatedLotteries && userCreatedLotteries.length ? (
+            <Filter onFilterChange={handleFilterChange} />
+            {isCard ? (
               <VirtualizedList
+                initialNumToRender={10}
+                windowSize={10}
+                removeClippedSubviews={true}
+                refreshing={loading}
+                onRefresh={fetchMyLotteries}
+                ListEmptyComponent={
+                  <Text style={sharedStyles.uploadProgressModalText}>
+                    {lotteriesTexts.emptyLotteries}
+                  </Text>
+                }
+                progressViewOffset={-100}
+                horizontal={false}
+                showsVerticalScrollIndicator={false}
+                data={lotteryCardList || []}
+                getItem={getItem}
+                getItemCount={getRowItemCount}
+                contentContainerStyle={sharedStyles.homeLotteriesContainer}
+                keyExtractor={getRowItemKey}
+                renderItem={renderCardListItemRow}
+              />
+            ) : null}
+            {isList ? (
+              <VirtualizedList
+                ListEmptyComponent={
+                  <Text style={sharedStyles.uploadProgressModalText}>
+                    {lotteriesTexts.emptyLotteries}
+                  </Text>
+                }
                 initialNumToRender={10}
                 windowSize={1}
                 removeClippedSubviews={true}
                 refreshing={loading}
                 onRefresh={fetchMyLotteries}
                 showsVerticalScrollIndicator={false}
-                data={userCreatedLotteries}
+                data={filteredLotteries || userCreatedLotteries || []}
                 getItem={getItem}
                 getItemCount={getItemCount}
                 keyExtractor={getKeyExtractor}
@@ -122,6 +248,9 @@ const mapStateToProps = state => {
   return {
     user: getUserSelector(state),
     userCreatedLotteries: getUserCreatedLotteriesSelector(state),
+    isList: getIsListSelector(state),
+    isCard: getIsCardSelector(state),
+    authUserId: getUserIdSelector(state),
   };
 };
 
@@ -129,6 +258,9 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchUserCreatedLotteries: payload =>
       dispatch(handleFetchUserCreatedLotteries(payload)),
+    likeLottery: payload => dispatch(handleLikeLottery(payload)),
+    dislikeLottery: payload => dispatch(handleDislikeLottery(payload)),
+    setHomeViewStyle: payload => dispatch(setHomeViewStyle(payload)),
   };
 };
 

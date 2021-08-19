@@ -29,6 +29,9 @@ import LotteryDetailsUserListItem from '../LotteryDetails/LotteryDetailsUserList
 import {Text} from 'react-native';
 import formatDate from '../../lib/formatDate';
 
+let ChatModal = null;
+let ReceiveLotteryModal = null;
+
 const LotteryResult = props => {
   const {
     lotteryResult,
@@ -36,6 +39,7 @@ const LotteryResult = props => {
     lotteryUsersData,
     adPosterData,
     winnerUserData,
+    item: lotteryDetails,
   } = props;
   const {
     name,
@@ -55,14 +59,16 @@ const LotteryResult = props => {
     currentCollectedPrice,
     // images,
     // disableHeaderActions,
-  } = lotteryResult;
+  } = lotteryDetails || lotteryResult;
 
   const isWinner = winnerUserId === authUser.id;
   const isLotteryPoster = userId === authUser.id;
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showModal, setShowModal] = useState(null);
 
   const handleCloseModal = () => {
     invoke(props, 'showLotteryResult', undefined);
+    invoke(props, 'onClose', undefined);
   };
   const fetchUsersDataCallback = () => {
     setIsLoading(false);
@@ -95,14 +101,24 @@ const LotteryResult = props => {
   );
   const handleActionPress = {
     [lotteryResultTexts.actionOptions.receive]: () => {
-      console.log('receive');
-    },
-    [lotteryResultTexts.actionOptions.details]: () => {
-      console.log('details');
+      if (!ReceiveLotteryModal) {
+        ReceiveLotteryModal = require('../ReceiveLottery').default;
+      }
+      setShowModal('receiveLotteryModal');
     },
     [lotteryResultTexts.actionOptions.chat]: () => {
-      console.log('chat');
+      if (!ChatModal) {
+        ChatModal = require('../Chat').default;
+      }
+      setShowModal('chatModal');
     },
+  };
+  const handleModalClose = () => {
+    setShowModal(null);
+  };
+  const modals = {
+    chatModal: <ChatModal onClose={handleModalClose} />,
+    receiveLotteryModal: <ReceiveLotteryModal onClose={handleModalClose} />,
   };
 
   return (
@@ -110,6 +126,7 @@ const LotteryResult = props => {
       animationType="slide"
       onShow={onShow}
       onRequestClose={handleCloseModal}>
+      {showModal && modals[showModal]}
       <SafeAreaView
         style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
         <View style={sharedStyles.innerSafeAreaView}>
@@ -120,50 +137,55 @@ const LotteryResult = props => {
             onLeftElementPress={handleCloseModal}
           />
           {isLoading ? loadingPopup : null}
-          {!isLoading && lotteryUsersData && lotteryUsersData.length ? (
+          {!isLoading ? (
             <>
-              {/* <ScrollView showsVerticalScrollIndicator={false}> */}
-              <View style={sharedStyles.lotteryResultVirtualizedListTop}>
-                <VirtualizedList
-                  initialNumToRender={2}
-                  windowSize={2}
-                  horizontal={true}
-                  removeClippedSubviews={true}
-                  showsHorizontalScrollIndicator={false}
-                  data={lotteryUsersData}
-                  getItem={getItem}
-                  getItemCount={getItemCount}
-                  keyExtractor={getVirtualKey}
-                  renderItem={renderLotteryUserItem}
-                />
-              </View>
+              {lotteryUsersData && lotteryUsersData.length ? (
+                <View style={sharedStyles.lotteryResultVirtualizedListTop}>
+                  <VirtualizedList
+                    initialNumToRender={2}
+                    windowSize={2}
+                    horizontal={true}
+                    removeClippedSubviews={true}
+                    showsHorizontalScrollIndicator={false}
+                    data={lotteryUsersData}
+                    getItem={getItem}
+                    getItemCount={getItemCount}
+                    keyExtractor={getVirtualKey}
+                    renderItem={renderLotteryUserItem}
+                  />
+                </View>
+              ) : null}
               <ScrollView showsVerticalScrollIndicator={false}>
                 <View
                   style={[
                     sharedStyles.lotteryDetailsContainer,
-                    sharedStyles.lotteryResultDetailsContainer,
+                    lotteryUsersData &&
+                      lotteryUsersData.length &&
+                      sharedStyles.lotteryResultDetailsContainer,
                   ]}>
-                  {isWinner || isLotteryPoster ? (
+                  {!winnerUserId ? (
+                    <View style={sharedStyles.lotteryResultNoWinnerContainer}>
+                      <Icon name="notifications-active" color="black" />
+                      <Text style={sharedStyles.lotteryResultNoWinnerText}>
+                        {lotteryDetailsTexts.winnerAccouncementSoon}
+                      </Text>
+                      <Text style={sharedStyles.lotteryResultNoWinnerText}>
+                        {lotteryDetailsTexts.inProgress}
+                      </Text>
+                    </View>
+                  ) : null}
+                  {(isWinner || isLotteryPoster) && winnerUserId ? (
                     <View style={sharedStyles.congratulationsContainer}>
                       <Text style={sharedStyles.congratulationsText}>
                         {lotteryResultTexts.congratulations}
                       </Text>
                       <Text style={sharedStyles.congratulationsWinnerText}>
                         {isWinner
-                          ? 'YOU WON THE LOTTERY!'
-                          : 'THE LOTTERY PRIZE GOES TO THE WINNER'}
+                          ? lotteryDetailsTexts.youAreTheWinner
+                          : lotteryDetailsTexts.lotteryPosterWinner}
                       </Text>
                     </View>
                   ) : null}
-                  <View style={sharedStyles.userDetailsIconTextContainer}>
-                    <Icon color="green" name="star" />
-                    <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.winner}
-                    </Text>
-                  </View>
-                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                    <LotteryDetailsUserListItem user={winnerUserData} />
-                  </View>
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="dns" />
                     <Text style={sharedStyles.userDetailsText}>
@@ -277,37 +299,41 @@ const LotteryResult = props => {
                   </View>
                 </View>
               </ScrollView>
-              <View style={sharedStyles.lotteryDetailsBottomToolbar}>
-                {isLotteryPoster
-                  ? lotteryResultTexts.lotteryPosterActions.map(action => (
-                      <Button
-                        primary
-                        raised
-                        style={{
-                          container:
-                            sharedStyles.bottomToolbarActionButtonContainer,
-                        }}
-                        icon={action.icon}
-                        text={action.text}
-                        onPress={handleActionPress[action.action]}
-                      />
-                    ))
-                  : isWinner
-                  ? lotteryResultTexts.lotteryWinnerActions.map(action => (
-                      <Button
-                        primary
-                        raised
-                        style={{
-                          container:
-                            sharedStyles.bottomToolbarActionButtonContainer,
-                        }}
-                        icon={action.icon}
-                        text={action.text}
-                        onPress={handleActionPress[action.action]}
-                      />
-                    ))
-                  : null}
-              </View>
+              {isLotteryPoster ||
+                (isWinner && (
+                  <View style={sharedStyles.lotteryDetailsBottomToolbar}>
+                    {isLotteryPoster
+                      ? lotteryResultTexts.lotteryPosterActions.map(action => (
+                          <Button
+                            primary
+                            raised
+                            disabled={action.action === 'chat' && !winnerUserId}
+                            style={{
+                              container:
+                                sharedStyles.bottomToolbarActionButtonContainer,
+                            }}
+                            icon={action.icon}
+                            text={action.text}
+                            onPress={handleActionPress[action.action]}
+                          />
+                        ))
+                      : isWinner
+                      ? lotteryResultTexts.lotteryWinnerActions.map(action => (
+                          <Button
+                            primary
+                            raised
+                            style={{
+                              container:
+                                sharedStyles.bottomToolbarActionButtonContainer,
+                            }}
+                            icon={action.icon}
+                            text={action.text}
+                            onPress={handleActionPress[action.action]}
+                          />
+                        ))
+                      : null}
+                  </View>
+                ))}
             </>
           ) : null}
         </View>
@@ -318,6 +344,8 @@ const LotteryResult = props => {
 
 LotteryResult.propTypes = {
   lotteryResult: PropTypes.object,
+  item: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
+  onClose: PropTypes.func,
 };
 
 const mapStateToProps = state => {

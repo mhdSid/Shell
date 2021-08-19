@@ -28,13 +28,6 @@ let UserProfile = null;
 let Login = null;
 
 const AuthComponent = props => {
-  // console.log('AuthComponent: ');
-  // console.log('AuthComponent: ');
-  // console.log('AuthComponent: ');
-  // console.log('AuthComponent: ');
-  // console.log('AuthComponent: ');
-
-  // console.log('AuthComponent: ', props);
   const {loggedIn, user, showSignup, verificationId} = props;
   // useEffect(() => {
   //   if (loggedIn && user) {

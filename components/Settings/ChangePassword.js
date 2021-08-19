@@ -13,7 +13,7 @@ import {Toolbar, Button} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {TextField} from 'react-native-material-textfield';
 import {loadingPopup} from '../Loading';
-import {settings, updateUserr} from '../../Constants/Texts';
+import {settings, updateUserr, validationMessages} from '../../Constants/Texts';
 import {handlerUpdateUserData} from '../../redux/Auth/UpdateUser';
 import {connect} from 'react-redux';
 import {getUserSelector} from '../UpdateUser/Selectors';
@@ -56,8 +56,7 @@ const ChangePassword = props => {
       setCurrentPasswordChanged(false);
       setErrors({
         ...errors,
-        currentPassword:
-          'The entered password does not match your current one.',
+        currentPassword: validationMessages.changePassword.currentPassword,
       });
     }
   };
@@ -80,8 +79,7 @@ const ChangePassword = props => {
       setNewPasswordChanged(false);
       setErrors({
         ...errors,
-        newPassword:
-          'New password should be diferent than your current one and length should be between 6 and 50 characters.',
+        newPassword: validationMessages.changePassword.newPassword,
       });
     }
   };
