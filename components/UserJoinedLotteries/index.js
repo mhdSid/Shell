@@ -21,9 +21,6 @@ import {getLotteryDetailsSelector} from '../Pinger/Selectors';
 import Filter from '../Filter';
 import {getIsCardSelector, getIsListSelector} from '../Home/Selectors';
 import {setHomeViewStyle} from '../../redux/Settings/actions';
-import {getUserIdSelector} from '../Profile/Selectors';
-import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
-import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
 import {chunk} from 'lodash';
 import ListItemCommon from '../Home/ListItem';
 import CardListItemRow from '../Home/CardListItemRow';
@@ -36,7 +33,6 @@ const Lotteries = props => {
     lotteryDetails,
     isList,
     isCard,
-    authUserId,
   } = props;
   const [loading, setLoading] = useState(true);
   const [filteredLotteries, setFilteredLotteries] = useState(null);
@@ -150,31 +146,11 @@ const Lotteries = props => {
       });
     }
   };
-  const likeLottery = lotteryId => {
-    invoke(props, 'likeLottery', {
-      userId: authUserId,
-      lotteryId,
-      showLotteryDetails: false,
-    });
-  };
-  const dislikeLottery = lotteryId => {
-    invoke(props, 'dislikeLottery', {
-      userId: authUserId,
-      lotteryId,
-      showLotteryDetails: false,
-    });
-  };
   const handleCardItemPress = item => {
     invoke(props, 'showLotteryDetails', item);
   };
   const renderCardListItemRow = ({item}) => (
-    <CardListItemRow
-      authUserId={authUserId}
-      handleLikeLottery={likeLottery}
-      handleDislikeLottery={dislikeLottery}
-      data={item}
-      onItemPress={handleCardItemPress}
-    />
+    <CardListItemRow data={item} onItemPress={handleCardItemPress} />
   );
 
   if (isUndefined(loggedIn) && isUndefined(user)) {
@@ -259,7 +235,6 @@ const mapStateToProps = state => {
     lotteryDetails: getLotteryDetailsSelector(state),
     isList: getIsListSelector(state),
     isCard: getIsCardSelector(state),
-    authUserId: getUserIdSelector(state),
   };
 };
 
@@ -269,8 +244,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(handleFetchUserJoinedLotteries(payload)),
     showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
     showLotteryResult: payload => dispatch(showLotteryResult(payload)),
-    likeLottery: payload => dispatch(handleLikeLottery(payload)),
-    dislikeLottery: payload => dispatch(handleDislikeLottery(payload)),
     setHomeViewStyle: payload => dispatch(setHomeViewStyle(payload)),
   };
 };

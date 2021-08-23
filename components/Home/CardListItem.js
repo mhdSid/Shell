@@ -5,7 +5,12 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {View, Text, Image} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import {IconToggle} from 'react-native-material-ui';
-export default class CardListItem extends Component {
+import {connect} from 'react-redux';
+import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
+import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
+import {getUserIdSelector} from '../Profile/Selectors';
+
+class CardListItem extends Component {
   static propTypes = {
     item: PropTypes.object,
     authUserId: PropTypes.string,
@@ -25,7 +30,9 @@ export default class CardListItem extends Component {
   shouldComponentUpdate(nextProps) {
     if (
       JSON.stringify(nextProps.item).toString() !==
-      JSON.stringify(this.props.item).toString()
+        JSON.stringify(this.props.item).toString() ||
+      JSON.stringify(nextProps.authUserId).toString() !==
+        JSON.stringify(this.props.authUserId).toString()
     ) {
       return true;
     }
@@ -42,11 +49,20 @@ export default class CardListItem extends Component {
     return `${item.currency} ${item.price}`;
   };
 
-  handleDislikeLottery = () => {
-    invoke(this.props, 'handleDislikeLottery', this.props.item.id);
-  };
   handleLikeLottery = () => {
-    invoke(this.props, 'handleLikeLottery', this.props.item.id);
+    invoke(this.props, 'handleLikeLottery', {
+      userId: this.props.authUserId,
+      lotteryId: this.props.item.id,
+      showLotteryDetails: false,
+    });
+  };
+
+  handleDislikeLottery = () => {
+    invoke(this.props, 'handleDislikeLottery', {
+      userId: this.props.authUserId,
+      lotteryId: this.props.item.id,
+      showLotteryDetails: false,
+    });
   };
 
   render() {
@@ -129,3 +145,21 @@ export default class CardListItem extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    authUserId: getUserIdSelector(state),
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleLikeLottery: payload => dispatch(handleLikeLottery(payload)),
+    handleDislikeLottery: payload => dispatch(handleDislikeLottery(payload)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CardListItem);

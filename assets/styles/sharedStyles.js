@@ -414,7 +414,7 @@ const sharedStyles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 10,
     paddingTop: 10,
-    paddingBottom: 20,
+    // paddingBottom: 20,
   },
   homeLotteriesContainer: {
     paddingTop: 10,

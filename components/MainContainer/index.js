@@ -101,13 +101,15 @@ const MainContainer = () => {
             container: sharedStyles.bottomNavigationMiddleActionContainer,
             icon: {
               color: activeView === 'importLottery' ? 'white' : '#dacdfa',
+              // position: 'absolute',
+              // bottom: 10,
             },
             label: {
               color: activeView === 'importLottery' ? 'white' : '#dacdfa',
             },
           }}
           key="importLottery"
-          icon={<Icon name="cloud-upload" size={30} />}
+          icon={<Icon name="add-circle" size={40} />}
           active={activeView === 'importLottery'}
           onPress={handleSetActiveView('importLottery')}
         />

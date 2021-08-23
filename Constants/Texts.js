@@ -85,6 +85,8 @@ const validationMessages = {
     searchQuery: 'Length should be between 2 and 100 characters.',
     toDate: 'To date should be formatted like yyyy/mm/dd',
     fromDate: 'From date should be formatted like yyyy/mm/dd',
+    fromDateLessThanToDate: 'From date should be less than To date',
+    toDateGreaterThanFromDate: 'To date should be greater than From date',
   },
   importLottery: {
     adName: 'Length should be between 5 and 30 characters.',

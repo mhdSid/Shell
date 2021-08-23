@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import {profile} from '../../Constants/Texts';
 import {connect} from 'react-redux';
 import {getUserLikedLotteriesSelector} from '../UserJoinedLotteries/Selectors';
-import {getUserIdSelector, getUserSelector} from '../Profile/Selectors';
+import {getUserSelector} from '../Profile/Selectors';
 import {Text} from 'react-native';
 import {handleFetchUserLikedLotteries} from '../../redux/Lotteries/FetchUserLikedLotteries';
 import {getLotteryDetailsSelector} from '../Pinger/Selectors';
@@ -18,21 +18,12 @@ import ListItemCommon from '../Home/ListItem';
 import CardListItemRow from '../Home/CardListItemRow';
 import {chunk} from 'lodash';
 import {getIsCardSelector, getIsListSelector} from '../Home/Selectors';
-import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
-import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
 import {setHomeViewStyle} from '../../redux/Settings/actions';
 
 let LotteryDetails = null;
 
 const UserLikedLotteries = props => {
-  const {
-    user,
-    userLikedLotteries,
-    lotteryDetails,
-    isCard,
-    isList,
-    authUserId,
-  } = props;
+  const {user, userLikedLotteries, lotteryDetails, isCard, isList} = props;
   const [loading, setLoading] = useState(true);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
   const [selectedLottery, setSelectedLottery] = useState(null);
@@ -53,7 +44,7 @@ const UserLikedLotteries = props => {
 
   useEffect(() => {
     fetchUserLikedLotteries();
-  }, [lotteryDetails, loggedIn, user]);
+  }, [lotteryDetails, user]);
 
   useEffect(() => {
     if (isCard) {
@@ -157,31 +148,15 @@ const UserLikedLotteries = props => {
       });
     }
   };
-  const likeLottery = lotteryId => {
-    invoke(props, 'likeLottery', {
-      userId: authUserId,
-      lotteryId,
-      showLotteryDetails: false,
-    });
-  };
-  const dislikeLottery = lotteryId => {
-    invoke(props, 'dislikeLottery', {
-      userId: authUserId,
-      lotteryId,
-      showLotteryDetails: false,
-    });
-  };
   const handleCardItemPress = item => {
-    invoke(props, 'showLotteryDetails', item);
+    if (!LotteryDetails) {
+      LotteryDetails = require('../LotteryDetails').default;
+    }
+    setShowLotteryDetails(true);
+    setSelectedLottery(item);
   };
   const renderCardListItemRow = ({item}) => (
-    <CardListItemRow
-      authUserId={authUserId}
-      handleLikeLottery={likeLottery}
-      handleDislikeLottery={dislikeLottery}
-      data={item}
-      onItemPress={handleCardItemPress}
-    />
+    <CardListItemRow data={item} onItemPress={handleCardItemPress} />
   );
 
   return (
@@ -264,7 +239,6 @@ const mapStateToProps = state => {
     userLikedLotteries: getUserLikedLotteriesSelector(state),
     isList: getIsListSelector(state),
     isCard: getIsCardSelector(state),
-    authUserId: getUserIdSelector(state),
   };
 };
 
@@ -274,8 +248,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(handleFetchUserLikedLotteries(payload)),
     handleShowLotteryDetails: payload =>
       dispatch(handleShowLotteryDetails(payload)),
-    likeLottery: payload => dispatch(handleLikeLottery(payload)),
-    dislikeLottery: payload => dispatch(handleDislikeLottery(payload)),
     setHomeViewStyle: payload => dispatch(setHomeViewStyle(payload)),
   };
 };

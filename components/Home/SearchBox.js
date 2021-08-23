@@ -80,16 +80,24 @@ const SearchBox = props => {
       return value => {
         if (value) {
           if (Date.parse(value) > 0) {
-            // let fromDate = `${value}`;
-            // console.log('fromDate: ', fromDate);
-            // if (fromDate.length === 4 || fromDate.length === 7) {
-            //   fromDate = `${fromDate}/`;
-            // }
-            invoke(props, 'handleSetSearchFilters', {fromDate: value});
-            setErrors({
-              ...errors,
-              fromDate: false,
-            });
+            const {current: toDateField} = toDateRef;
+            const fromDate = new Date(value).getTime();
+            const toDate = toDateField.value()
+              ? new Date(toDateField.value()).getTime()
+              : null;
+            if (toDate && toDate <= fromDate) {
+              setErrors({
+                ...errors,
+                fromDate: validationMessages.search.fromDateLessThanToDate,
+              });
+            } else {
+              invoke(props, 'handleSetSearchFilters', {fromDate: value});
+              setErrors({
+                ...errors,
+                fromDate: false,
+                toDate: toDate ? false : errors.toDate,
+              });
+            }
           } else {
             setErrors({
               ...errors,
@@ -103,16 +111,24 @@ const SearchBox = props => {
       return value => {
         if (value) {
           if (Date.parse(value) > 0) {
-            // let toDate = `${value}`;
-            // console.log('toDate: ', toDate);
-            // if (toDate.length === 4 || toDate.length === 7) {
-            //   toDate = `${toDate}/`;
-            // }
-            invoke(props, 'handleSetSearchFilters', {toDate: value});
-            setErrors({
-              ...errors,
-              toDate: false,
-            });
+            const {current: fromDateField} = fromDateRef;
+            const toDate = new Date(value).getTime();
+            const fromDate = fromDateField.value()
+              ? new Date(fromDateField.value()).getTime()
+              : null;
+            if (fromDate && fromDate >= toDate) {
+              setErrors({
+                ...errors,
+                toDate: validationMessages.search.toDateGreaterThanFromDate,
+              });
+            } else {
+              invoke(props, 'handleSetSearchFilters', {toDate: value});
+              setErrors({
+                ...errors,
+                toDate: false,
+                fromDate: fromDate ? false : errors.fromDate,
+              });
+            }
           } else {
             setErrors({
               ...errors,

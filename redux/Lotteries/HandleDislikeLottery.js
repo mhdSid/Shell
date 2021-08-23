@@ -7,7 +7,13 @@ import {lotteryDetailsActions} from '../LotteryDetails/actions';
 
 const handleDislikeLottery = payload => {
   return dispatch => {
-    const {userId, lotteryId, onError, showLotteryDetails} = payload;
+    const {
+      userId,
+      lotteryId,
+      onError,
+      showLotteryDetails,
+      isFromLikedLotteriesView,
+    } = payload;
     const onGetMyLotteriesSuccess = data => {
       const {dislikedLottery, error} = data;
       if (error) {
@@ -28,10 +34,20 @@ const handleDislikeLottery = payload => {
             },
           });
         }
-        return dispatch({
-          type: lotteriesActions.setUserLikedLotteries,
+        dispatch({
+          type: lotteriesActions.setUserJoinedLotteries,
           payload: dislikedLottery,
         });
+        if (isFromLikedLotteriesView) {
+          dispatch({
+            type: lotteriesActions.setUserLikedLotteries,
+            payload: {
+              ...dislikedLottery,
+              remove: true,
+            },
+          });
+        }
+        return;
       }
       return;
     };

@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {Loading} from '../Loading';
 import {home} from '../../Constants/Texts';
 import {handleFetchLotteries} from '../../redux/Home/FetchLotteries';
 import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
@@ -19,9 +18,8 @@ import {
 import {emitSocketEvents} from '../../services/Socket';
 import {chunk, uniqBy} from 'lodash';
 import {getLoggedInSelector, getUserIdSelector} from '../Profile/Selectors';
-import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
-import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
 import {lottteries as lotteriesTexts} from '../../Constants/Texts';
+// import {AdMobBanner} from 'react-native-admob';
 
 let SearchBox = null;
 let UploadLotteryProgressModal = null;
@@ -189,30 +187,8 @@ class HomeComponent extends PureComponent {
     });
   };
 
-  handleLikeLottery = lotteryId => {
-    invoke(this.props, 'likeLottery', {
-      userId: this.props.authUserId,
-      lotteryId,
-      showLotteryDetails: false,
-    });
-  };
-
-  handleDislikeLottery = lotteryId => {
-    invoke(this.props, 'dislikeLottery', {
-      userId: this.props.authUserId,
-      lotteryId,
-      showLotteryDetails: false,
-    });
-  };
-
   renderCardListItemRow = ({item}) => (
-    <CardListItemRow
-      authUserId={this.props.authUserId}
-      handleLikeLottery={this.handleLikeLottery}
-      handleDislikeLottery={this.handleDislikeLottery}
-      data={item}
-      onItemPress={this.handleCardItemPress}
-    />
+    <CardListItemRow data={item} onItemPress={this.handleCardItemPress} />
   );
 
   renderListItem = ({item, index}) => (
@@ -349,8 +325,6 @@ const mapDispatchToProps = dispatch => {
     fetchLotteries: payload => dispatch(handleFetchLotteries(payload)),
     showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
     setHomeViewStyle: payload => dispatch(setHomeViewStyle(payload)),
-    likeLottery: payload => dispatch(handleLikeLottery(payload)),
-    dislikeLottery: payload => dispatch(handleDislikeLottery(payload)),
   };
 };
 

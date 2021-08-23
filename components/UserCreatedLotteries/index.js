@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import {profile} from '../../Constants/Texts';
 import {connect} from 'react-redux';
 import {getUserCreatedLotteriesSelector} from '../UserJoinedLotteries/Selectors';
-import {getUserIdSelector, getUserSelector} from '../Profile/Selectors';
+import {getUserSelector} from '../Profile/Selectors';
 import {handleFetchUserCreatedLotteries} from '../../redux/Lotteries/FetchUserCreatedLotteries';
 import {Text} from 'react-native';
 import {lottteries as lotteriesTexts} from '../../Constants/Texts';
@@ -16,14 +16,12 @@ import ListItemCommon from '../Home/ListItem';
 import CardListItemRow from '../Home/CardListItemRow';
 import {chunk} from 'lodash';
 import {getIsCardSelector, getIsListSelector} from '../Home/Selectors';
-import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
-import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
 import {setHomeViewStyle} from '../../redux/Settings/actions';
 
 let LotteryDetails = null;
 
 const UserCreatedLotteries = props => {
-  const {user, userCreatedLotteries, isCard, isList, authUserId} = props;
+  const {user, userCreatedLotteries, isCard, isList} = props;
   const [loading, setLoading] = useState(true);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
   const [selectedLottery, setSelectedLottery] = useState();
@@ -142,31 +140,15 @@ const UserCreatedLotteries = props => {
       });
     }
   };
-  const likeLottery = lotteryId => {
-    invoke(props, 'likeLottery', {
-      userId: authUserId,
-      lotteryId,
-      showLotteryDetails: false,
-    });
-  };
-  const dislikeLottery = lotteryId => {
-    invoke(props, 'dislikeLottery', {
-      userId: authUserId,
-      lotteryId,
-      showLotteryDetails: false,
-    });
-  };
   const handleCardItemPress = item => {
-    invoke(props, 'showLotteryDetails', item);
+    if (!LotteryDetails) {
+      LotteryDetails = require('../LotteryDetails').default;
+    }
+    setShowLotteryDetails(true);
+    setSelectedLottery(item);
   };
   const renderCardListItemRow = ({item}) => (
-    <CardListItemRow
-      authUserId={authUserId}
-      handleLikeLottery={likeLottery}
-      handleDislikeLottery={dislikeLottery}
-      data={item}
-      onItemPress={handleCardItemPress}
-    />
+    <CardListItemRow data={item} onItemPress={handleCardItemPress} />
   );
 
   return (
@@ -250,7 +232,6 @@ const mapStateToProps = state => {
     userCreatedLotteries: getUserCreatedLotteriesSelector(state),
     isList: getIsListSelector(state),
     isCard: getIsCardSelector(state),
-    authUserId: getUserIdSelector(state),
   };
 };
 
@@ -258,8 +239,6 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchUserCreatedLotteries: payload =>
       dispatch(handleFetchUserCreatedLotteries(payload)),
-    likeLottery: payload => dispatch(handleLikeLottery(payload)),
-    dislikeLottery: payload => dispatch(handleDislikeLottery(payload)),
     setHomeViewStyle: payload => dispatch(setHomeViewStyle(payload)),
   };
 };
