@@ -27,6 +27,7 @@ const UploadLotteryProgressModal = props => {
       item={item}
       index={index}
       listLength={progressItems.length}
+      showLotteryResult={false}
       showUploadProgress={true}
     />
   );

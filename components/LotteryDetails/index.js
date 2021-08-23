@@ -75,9 +75,9 @@ const LotteryDetails = props => {
   const [userAdsLoading, setUserAdsLoading] = useState(true);
   const [showModal, setShowModal] = useState(null);
   const [viewImageUri, setViewImageUri] = useState(images[0]);
-  const isVisitor = !authUser || userId !== authUser.id;
-  const isLotteryPoster = userId === authUser.id;
-  const isWinner = winnerUserId === authUser.id;
+  const isVisitor = authUser && authUser.id && userId !== authUser.id;
+  const isLotteryPoster = authUser && authUser.id && userId === authUser.id;
+  const isWinner = authUser && authUser.id && winnerUserId === authUser.id;
 
   const scrollViewRef = createRef();
   const handleUserAdPress = ad => {
@@ -413,11 +413,12 @@ const LotteryDetails = props => {
                 {usersDataLoading && SimpleLoader}
                 {!usersDataLoading && winnerUserData && winnerUserId ? (
                   <LotteryDetailsUserListItem user={winnerUserData} />
-                ) : (
+                ) : null}
+                {!usersDataLoading && (!winnerUserData || !winnerUserId) ? (
                   <Text style={sharedStyles.aboutFirstSectionText}>
                     {lotteryDetailsTexts.inProgress}
                   </Text>
-                )}
+                ) : null}
               </View>
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="today" />
@@ -486,86 +487,90 @@ const LotteryDetails = props => {
               <Text>{cancelDate}</Text>
             </View>
           </ScrollView>
-          <View style={sharedStyles.lotteryDetailsBottomToolbar}>
-            {isLotteryPoster
-              ? lotteryDetailsTexts.lotteryPosterActions.map(userAction => (
-                  <Button
-                    primary
-                    raised
-                    style={{
-                      container:
-                        sharedStyles.bottomToolbarActionButtonContainer,
-                    }}
-                    icon={userAction.icon}
-                    text={''}
-                    onPress={handleActionPress[userAction.action]}
-                  />
-                ))
-              : isWinner
-              ? lotteryDetailsTexts.lotteryWinnerActions.map(winnerAction => (
-                  <Button
-                    primary
-                    raised
-                    style={{
-                      container:
-                        sharedStyles.bottomToolbarActionButtonContainer,
-                    }}
-                    icon={winnerAction.icon}
-                    text={''}
-                    onPress={handleActionPress[winnerAction.action]}
-                  />
-                ))
-              : isVisitor
-              ? lotteryDetailsTexts.visitorActions.map(visitorAction => (
-                  <Button
-                    primary
-                    raised
-                    style={{
-                      container:
-                        sharedStyles.bottomToolbarActionButtonContainer,
-                    }}
-                    disabled={
-                      visitorAction.action ===
-                        lotteryDetailsTexts.actionOptions.win &&
-                      `${currentCollectedPrice}` === `${price}`
-                    }
-                    icon={visitorAction.icon}
-                    text={''}
-                    onPress={handleActionPress[visitorAction.action]}
-                  />
-                ))
-              : null}
-            {isVisitor &&
-            Array.isArray(likedBy) &&
-            likedBy.length &&
-            likedBy.includes(authUser.id) ? (
-              <Button
-                primary
-                raised
-                style={{
-                  container: sharedStyles.bottomToolbarActionButtonContainer,
-                }}
-                icon={lotteryDetailsTexts.dislike.icon}
-                text={''}
-                onPress={handleActionPress[lotteryDetailsTexts.dislike.action]}
-              />
-            ) : null}
-            {isVisitor &&
-            (!Array.isArray(likedBy) ||
-              !likedBy.length ||
-              !likedBy.includes(authUser.id)) ? (
-              <Button
-                primary
-                raised
-                style={{
-                  container: sharedStyles.bottomToolbarActionButtonContainer,
-                }}
-                icon={lotteryDetailsTexts.like.icon}
-                text={''}
-                onPress={handleActionPress[lotteryDetailsTexts.like.action]}
-              />
-            ) : null}
-          </View>
+          {authUser && authUser.id ? (
+            <View style={sharedStyles.lotteryDetailsBottomToolbar}>
+              {isLotteryPoster
+                ? lotteryDetailsTexts.lotteryPosterActions.map(userAction => (
+                    <Button
+                      primary
+                      raised
+                      style={{
+                        container:
+                          sharedStyles.bottomToolbarActionButtonContainer,
+                      }}
+                      icon={userAction.icon}
+                      text={''}
+                      onPress={handleActionPress[userAction.action]}
+                    />
+                  ))
+                : isWinner
+                ? lotteryDetailsTexts.lotteryWinnerActions.map(winnerAction => (
+                    <Button
+                      primary
+                      raised
+                      style={{
+                        container:
+                          sharedStyles.bottomToolbarActionButtonContainer,
+                      }}
+                      icon={winnerAction.icon}
+                      text={''}
+                      onPress={handleActionPress[winnerAction.action]}
+                    />
+                  ))
+                : isVisitor
+                ? lotteryDetailsTexts.visitorActions.map(visitorAction => (
+                    <Button
+                      primary
+                      raised
+                      style={{
+                        container:
+                          sharedStyles.bottomToolbarActionButtonContainer,
+                      }}
+                      disabled={
+                        visitorAction.action ===
+                          lotteryDetailsTexts.actionOptions.win &&
+                        `${currentCollectedPrice}` === `${price}`
+                      }
+                      icon={visitorAction.icon}
+                      text={''}
+                      onPress={handleActionPress[visitorAction.action]}
+                    />
+                  ))
+                : null}
+              {isVisitor &&
+              Array.isArray(likedBy) &&
+              likedBy.length &&
+              likedBy.includes(authUser.id) ? (
+                <Button
+                  primary
+                  raised
+                  style={{
+                    container: sharedStyles.bottomToolbarActionButtonContainer,
+                  }}
+                  icon={lotteryDetailsTexts.dislike.icon}
+                  text={''}
+                  onPress={
+                    handleActionPress[lotteryDetailsTexts.dislike.action]
+                  }
+                />
+              ) : null}
+              {isVisitor &&
+              (!Array.isArray(likedBy) ||
+                !likedBy.length ||
+                !likedBy.includes(authUser.id)) ? (
+                <Button
+                  primary
+                  raised
+                  style={{
+                    container: sharedStyles.bottomToolbarActionButtonContainer,
+                  }}
+                  icon={lotteryDetailsTexts.like.icon}
+                  text={''}
+                  onPress={handleActionPress[lotteryDetailsTexts.like.action]}
+                />
+              ) : null}
+            </View>
+          ) : null}
         </View>
       </SafeAreaView>
     </Modal>

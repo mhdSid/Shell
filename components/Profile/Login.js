@@ -139,6 +139,7 @@ const Login = props => {
             tintColor={'#b69cf6'}
             disabled={loading}
             maxLength={50}
+            returnKeyType="done"
             minLength={1}
             onBlur={handleBlur('email')}
             error={errors.email}
@@ -153,6 +154,7 @@ const Login = props => {
             ref={passwordRef}
             secureTextEntry={true}
             disabled={loading}
+            returnKeyType="done"
             tintColor={'#b69cf6'}
             maxLength={50}
             minLength={8}

@@ -3,10 +3,14 @@ import {ActionSheetIOS, Image, View} from 'react-native';
 import PropTypes from 'prop-types';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {invoke} from 'lodash';
-import {ListItem} from 'react-native-material-ui';
+import {IconToggle, ListItem} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';
+import {getUserIdSelector} from '../Profile/Selectors';
+import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
+import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
+import {connect} from 'react-redux';
 
-export default class ListItemCommon extends Component {
+class ListItemCommon extends Component {
   static propTypes = {
     item: PropTypes.object,
     listLength: PropTypes.number,
@@ -20,7 +24,9 @@ export default class ListItemCommon extends Component {
   shouldComponentUpdate(nextProps) {
     if (
       JSON.stringify(nextProps.item).toString() !==
-      JSON.stringify(this.props.item).toString()
+        JSON.stringify(this.props.item).toString() ||
+      JSON.stringify(nextProps.authUserId).toString() !==
+        JSON.stringify(this.props.authUserId).toString()
     ) {
       return true;
     }
@@ -29,10 +35,32 @@ export default class ListItemCommon extends Component {
   handleItemPress = () => {
     invoke(this.props, 'onItemPress', this.props.index);
   };
-  handleRightElementPress = () => {
+  handleLikeLottery = () => {
+    invoke(this.props, 'handleLikeLottery', {
+      userId: this.props.authUserId,
+      lotteryId: this.props.item.id,
+      showLotteryDetails: false,
+    });
+  };
+
+  handleDislikeLottery = () => {
+    invoke(this.props, 'handleDislikeLottery', {
+      userId: this.props.authUserId,
+      lotteryId: this.props.item.id,
+      showLotteryDetails: false,
+    });
+  };
+  handleMoreButtonPress = () => {
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: ['Cancel', 'Show lottery result'].filter(Boolean),
+        options: [
+          'Cancel',
+          'Go to lottery details',
+          this.props.showLotteryResult === true ||
+          typeof this.props.showLotteryResult === 'function'
+            ? 'Go to lotery results'
+            : null,
+        ].filter(Boolean),
         // destructiveButtonIndex: 1,
         cancelButtonIndex: 0,
         userInterfaceStyle: 'dark',
@@ -43,6 +71,10 @@ export default class ListItemCommon extends Component {
             return;
           }
           case 1: {
+            this.handleItemPress();
+            return;
+          }
+          case 2: {
             invoke(this.props, 'showLotteryResult', this.props.index);
             return;
           }
@@ -61,7 +93,6 @@ export default class ListItemCommon extends Component {
           this.props.index === this.props.listLength - 1 &&
             sharedStyles.homeListItemMargin,
         ]}>
-        {/* {loadingPopup} */}
         {this.props.showUploadProgress ? loadingPopup : null}
         <ListItem
           divider
@@ -84,7 +115,35 @@ export default class ListItemCommon extends Component {
               this.props.item.price
             }`,
           }}
-          rightElement={'more-vert'}
+          rightElement={
+            <>
+              {this.props.authUserId &&
+              this.props.item.userId !== this.props.authUserId ? (
+                <>
+                  {Array.isArray(this.props.item.likedBy) &&
+                  this.props.item.likedBy.length &&
+                  this.props.item.likedBy.includes(this.props.authUserId) ? (
+                    <IconToggle
+                      name="favorite"
+                      onPress={this.handleDislikeLottery}
+                    />
+                  ) : null}
+                  {!Array.isArray(this.props.item.likedBy) ||
+                  !this.props.item.likedBy.length ||
+                  !this.props.item.likedBy.includes(this.props.authUserId) ? (
+                    <IconToggle
+                      name="favorite-border"
+                      onPress={this.handleLikeLottery}
+                    />
+                  ) : null}
+                </>
+              ) : null}
+              <IconToggle
+                name="more-vert"
+                onPress={this.handleMoreButtonPress}
+              />
+            </>
+          }
           onRightElementPress={this.handleRightElementPress}
           onPress={this.handleItemPress}
         />
@@ -92,3 +151,21 @@ export default class ListItemCommon extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    authUserId: getUserIdSelector(state),
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleLikeLottery: payload => dispatch(handleLikeLottery(payload)),
+    handleDislikeLottery: payload => dispatch(handleDislikeLottery(payload)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ListItemCommon);

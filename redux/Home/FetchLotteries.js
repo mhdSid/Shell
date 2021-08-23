@@ -12,7 +12,7 @@ const handleFetchLotteries = payload => {
         return handleError({error, onError});
       }
       return dispatch({
-        type: homeActions.setLotteries,
+        type: homeActions.setHomeLotteries,
         payload: serverLotteries,
       });
     };

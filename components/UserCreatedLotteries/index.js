@@ -87,6 +87,7 @@ const UserCreatedLotteries = props => {
     <ListItemCommon
       item={item}
       index={index}
+      showLotteryResult={true}
       onItemPress={handleItemPress}
       listLength={(filteredLotteries || userCreatedLotteries).length}
     />

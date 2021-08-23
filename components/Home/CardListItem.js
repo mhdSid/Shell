@@ -65,8 +65,35 @@ class CardListItem extends Component {
     });
   };
 
+  cardIcon = () => {
+    const {item, authUserId} = this.props;
+
+    return !authUserId ? null : item.userId !== authUserId ? (
+      <View style={sharedStyles.homeCardItemIcon}>
+        {Array.isArray(item.likedBy) &&
+        item.likedBy.length &&
+        item.likedBy.includes(authUserId) ? (
+          <IconToggle
+            name="favorite"
+            color="white"
+            onPress={this.handleDislikeLottery}
+          />
+        ) : null}
+        {!Array.isArray(item.likedBy) ||
+        !item.likedBy.length ||
+        !item.likedBy.includes(authUserId) ? (
+          <IconToggle
+            name="favorite-border"
+            color="white"
+            onPress={this.handleLikeLottery}
+          />
+        ) : null}
+      </View>
+    ) : null;
+  };
+
   render() {
-    const {item, smallImage, horizontal, authUserId} = this.props;
+    const {item, smallImage, horizontal} = this.props;
     const viewStyle = horizontal
       ? sharedStyles.homeCardItemHorizontal
       : sharedStyles.homeCardItem;
@@ -92,28 +119,7 @@ class CardListItem extends Component {
         <View>
           {image}
           {emptyImage}
-          {item.userId !== authUserId ? (
-            <View style={sharedStyles.homeCardItemIcon}>
-              {Array.isArray(item.likedBy) &&
-              item.likedBy.length &&
-              item.likedBy.includes(authUserId) ? (
-                <IconToggle
-                  name="favorite"
-                  color="white"
-                  onPress={this.handleDislikeLottery}
-                />
-              ) : null}
-              {!Array.isArray(item.likedBy) ||
-              !item.likedBy.length ||
-              !item.likedBy.includes(authUserId) ? (
-                <IconToggle
-                  name="favorite-border"
-                  color="white"
-                  onPress={this.handleLikeLottery}
-                />
-              ) : null}
-            </View>
-          ) : null}
+          {this.cardIcon()}
           <View style={sharedStyles.homeCardItemTextContainer}>
             <Text
               numberOfLines={this.numOfLines}

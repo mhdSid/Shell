@@ -439,6 +439,7 @@ const ImportLottery = props => {
                 onChangeText={handleChange.adName()}
                 tintColor={'#b69cf6'}
                 maxLength={30}
+                returnKeyType="done"
                 minLength={5}
                 error={errors.adName}
                 ref={adNameRef}
@@ -453,6 +454,7 @@ const ImportLottery = props => {
                 placeholderTextColor={'rgba(0,0,0,0.3)'}
                 onChangeText={handleChange.description()}
                 maxLength={100}
+                returnKeyType="done"
                 minLength={20}
                 tintColor={'#b69cf6'}
                 error={errors.description}
@@ -470,6 +472,7 @@ const ImportLottery = props => {
                     placeholderTextColor={'rgba(0,0,0,0.3)'}
                     keyboardType="phone-pad"
                     maxLength={9}
+                    returnKeyType="done"
                     minLength={4}
                     tintColor={'#b69cf6'}
                     onBlur={handleBlur('price')}

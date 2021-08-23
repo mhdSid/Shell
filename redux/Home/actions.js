@@ -5,6 +5,7 @@ import invoke from 'lodash/invoke';
 const homeActions = {
   resetLotteries: 'HOME_RESET_LOTTERIES',
   setLotteries: 'HOME_SET_LOTTERIES',
+  setHomeLotteries: 'SET_HOME_VIEW_LOTTERIES',
   updateLottery: 'HOME_UPDATE_LOTTERy',
 };
 

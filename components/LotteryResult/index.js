@@ -61,8 +61,8 @@ const LotteryResult = props => {
     // disableHeaderActions,
   } = lotteryDetails || lotteryResult;
 
-  const isWinner = winnerUserId === authUser.id;
-  const isLotteryPoster = userId === authUser.id;
+  const isWinner = authUser && authUser.id && winnerUserId === authUser.id;
+  const isLotteryPoster = authUser && userId === authUser.id;
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(null);
 

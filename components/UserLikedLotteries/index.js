@@ -97,6 +97,7 @@ const UserLikedLotteries = props => {
       index={index}
       onItemPress={handleItemPress}
       listLength={(filteredLotteries || userLikedLotteries).length}
+      showLotteryResult={true}
     />
   );
   const lotteryDetailsModal = showLotteryDetails && (

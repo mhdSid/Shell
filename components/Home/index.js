@@ -34,31 +34,34 @@ class HomeComponent extends PureComponent {
     searchBoxAnimatedOpacity: new Animated.Value(0),
     searchable: false,
   };
-  fetchedLotteries = false;
-  virtualizedListRef = createRef();
+
   fetchLotteriesCallback = () => {
     this.setState({loading: false});
   };
 
-  fetchLotteries = () => {
+  fetchLotteries = authUserId => {
     this.setState({loading: true}, () => {
       invoke(this.props, 'fetchLotteries', {
         onError: this.fetchLotteriesCallback,
         onSuccess: this.fetchLotteriesCallback,
-        userId: this.props.authUserId,
+        userId: authUserId || this.props.authUserId,
       });
     });
   };
+
   handleOnSearch = () => {
     this.changeViewStyle({action: 'search'});
     this.setState({loading: true});
   };
+
   onSearchSuccess = () => {
     this.setState({loading: false});
   };
+
   onSearchError = () => {
     this.setState({loading: false});
   };
+
   changeViewStyle = ({action}) => {
     if (action === 'search') {
       if (!SearchBox) {
@@ -121,12 +124,15 @@ class HomeComponent extends PureComponent {
       });
     }
   };
+
   handleCardItemPress = item => {
     invoke(this.props, 'showLotteryDetails', item);
   };
+
   handleListItemPress = index => {
     invoke(this.props, 'showLotteryDetails', this.props.lotteries[index]);
   };
+
   componentWillMount() {
     const {isCard, isList} = this.props;
     if (isCard) {
@@ -140,22 +146,12 @@ class HomeComponent extends PureComponent {
       }
     }
     // emitSocketEvents();
-    if (
-      !this.fetchedLotteries &&
-      (this.props.authUserId || this.props.isLoggedIn === null)
-    ) {
-      this.fetchedLotteries = true;
-      this.fetchLotteries();
-    }
+    this.fetchLotteries();
   }
-  componentDidMount() {
-    const scrollViewRef = this.virtualizedListRef.current.getScrollRef();
-    scrollViewRef.scrollTo({x: 0, y: 0, animated: true});
-  }
+
   componentWillReceiveProps(nextProps) {
-    if (!this.fetchedLotteries) {
-      this.fetchedLotteries = true;
-      this.fetchLotteries();
+    if (nextProps.authUserId !== this.props.authUserId) {
+      this.fetchLotteries(nextProps.authUserId);
     }
     const {isCard, isList} = nextProps;
     if (isCard) {
@@ -176,11 +172,13 @@ class HomeComponent extends PureComponent {
           .toString(36)
           .substr(2, 9)}`,
       }));
+      adList = [...adList];
     }
     this.setState({
       adList,
     });
   }
+
   handleCloseUploadLotteryProgressModal = () => {
     this.setState({
       showLotteryProgressModal: false,
@@ -196,13 +194,19 @@ class HomeComponent extends PureComponent {
       item={item}
       index={index}
       onItemPress={this.handleListItemPress}
+      showLotteryResult={!!this.props.authUserId}
       listLength={this.props.lotteries.length}
     />
   );
+
   getItem = (data, index) => data[index];
+
   getItemCount = () => (this.state.adList || []).length;
+
   getListItemCount = () => (this.props.lotteries || []).length || 0;
-  getItemKey = (item, index) => `${item.key}`;
+
+  getItemKey = item => `${item.key}`;
+
   getListItemKey = item => `${item.id}`;
 
   render() {
@@ -247,7 +251,6 @@ class HomeComponent extends PureComponent {
           adUnitID="ca-app-pub-5703846930890914/6105801245"
           style={sharedStyles.adMobBanner}
         /> */}
-        {/* {loading && <View style={sharedStyles.homeLoading}>{Loading}</View>} */}
         {isCard ? (
           <VirtualizedList
             initialNumToRender={10}
@@ -269,7 +272,6 @@ class HomeComponent extends PureComponent {
             contentContainerStyle={sharedStyles.homeLotteriesContainer}
             keyExtractor={this.getItemKey}
             renderItem={this.renderCardListItemRow}
-            ref={this.virtualizedListRef}
           />
         ) : null}
         {isList ? (
@@ -292,7 +294,6 @@ class HomeComponent extends PureComponent {
             getItemCount={this.getListItemCount}
             keyExtractor={this.getListItemKey}
             renderItem={this.renderListItem}
-            ref={this.virtualizedListRef}
           />
         ) : null}
       </View>

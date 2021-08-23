@@ -260,6 +260,7 @@ const SearchBox = props => {
             <TextField
               blurOnSubmit={true}
               outlined
+              returnKeyType="done"
               activeLineWidth={1}
               placeholder={'yyyy/mm/dd'}
               label={'From'}
@@ -282,6 +283,7 @@ const SearchBox = props => {
               outlined
               placeholder={'yyyy/mm/dd'}
               label={'To'}
+              returnKeyType="done"
               activeLineWidth={1}
               keyboardType="numbers-and-punctuation"
               value={searchFilters.toDate}
@@ -331,6 +333,7 @@ const SearchBox = props => {
               outlined
               blurOnSubmit={true}
               label={'Search'}
+              returnKeyType="done"
               activeLineWidth={1}
               placeholder={'What are you looking for?'}
               onBlur={handleBlur('searchQuery')}
