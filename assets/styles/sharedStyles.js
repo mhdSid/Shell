@@ -613,6 +613,9 @@ const sharedStyles = StyleSheet.create({
     flexDirection: 'column',
     marginRight: 10,
   },
+  homeCardListItemContainerSingle: {
+    marginLeft: -5,
+  },
   homeCardListItemContainerNoMargin: {
     marginRight: 0,
   },

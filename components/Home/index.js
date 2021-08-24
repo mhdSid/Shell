@@ -251,51 +251,31 @@ class HomeComponent extends PureComponent {
           adUnitID="ca-app-pub-5703846930890914/6105801245"
           style={sharedStyles.adMobBanner}
         /> */}
-        {isCard ? (
-          <VirtualizedList
-            initialNumToRender={10}
-            windowSize={10}
-            removeClippedSubviews={true}
-            refreshing={loading}
-            onRefresh={this.fetchLotteries}
-            ListEmptyComponent={
-              <Text style={sharedStyles.uploadProgressModalText}>
-                {lotteriesTexts.emptyLotteries}
-              </Text>
-            }
-            progressViewOffset={-100}
-            horizontal={false}
-            showsVerticalScrollIndicator={false}
-            data={adList || []}
-            getItem={this.getItem}
-            getItemCount={this.getItemCount}
-            contentContainerStyle={sharedStyles.homeLotteriesContainer}
-            keyExtractor={this.getItemKey}
-            renderItem={this.renderCardListItemRow}
-          />
-        ) : null}
-        {isList ? (
-          <VirtualizedList
-            removeClippedSubviews={true}
-            windowSize={10}
-            initialNumToRender={10}
-            refreshing={loading}
-            progressViewOffset={-100}
-            ListEmptyComponent={
-              <Text style={sharedStyles.uploadProgressModalText}>
-                {lotteriesTexts.emptyLotteries}
-              </Text>
-            }
-            onRefresh={this.fetchLotteries}
-            showsVerticalScrollIndicator={false}
-            data={lotteries || []}
-            contentContainerStyle={sharedStyles.listViewContainer}
-            getItem={this.getItem}
-            getItemCount={this.getListItemCount}
-            keyExtractor={this.getListItemKey}
-            renderItem={this.renderListItem}
-          />
-        ) : null}
+        <VirtualizedList
+          initialNumToRender={10}
+          windowSize={10}
+          removeClippedSubviews={true}
+          refreshing={loading}
+          onRefresh={this.fetchLotteries}
+          ListEmptyComponent={
+            <Text style={sharedStyles.uploadProgressModalText}>
+              {lotteriesTexts.emptyLotteries}
+            </Text>
+          }
+          progressViewOffset={-100}
+          horizontal={false}
+          showsVerticalScrollIndicator={false}
+          data={isCard ? adList || [] : lotteries || []}
+          getItem={this.getItem}
+          getItemCount={isCard ? this.getItemCount : this.getListItemCount}
+          contentContainerStyle={
+            isCard
+              ? sharedStyles.homeLotteriesContainer
+              : sharedStyles.listViewContainer
+          }
+          keyExtractor={isCard ? this.getItemKey : this.getListItemKey}
+          renderItem={isCard ? this.renderCardListItemRow : this.renderListItem}
+        />
       </View>
     );
   }

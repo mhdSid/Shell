@@ -171,49 +171,31 @@ const Lotteries = props => {
       />
       <View style={sharedStyles.lotteriesContainer}>
         <Filter onFilterChange={handleFilterChange} />
-        {isCard ? (
-          <VirtualizedList
-            initialNumToRender={10}
-            windowSize={10}
-            removeClippedSubviews={true}
-            refreshing={loading}
-            onRefresh={fetchLotteries}
-            ListEmptyComponent={
-              <Text style={sharedStyles.uploadProgressModalText}>
-                {lotteriesTexts.emptyLotteries}
-              </Text>
-            }
-            progressViewOffset={-100}
-            horizontal={false}
-            showsVerticalScrollIndicator={false}
-            data={lotteryCardList || []}
-            getItem={getItem}
-            getItemCount={getRowItemCount}
-            contentContainerStyle={sharedStyles.homeLotteriesContainer}
-            keyExtractor={getRowItemKey}
-            renderItem={renderCardListItemRow}
-          />
-        ) : null}
-        {isList ? (
-          <VirtualizedList
-            removeClippedSubviews={true}
-            windowSize={2}
-            initialNumToRender={2}
-            ListEmptyComponent={
-              <Text style={sharedStyles.uploadProgressModalText}>
-                {lotteriesTexts.emptyLotteries}
-              </Text>
-            }
-            refreshing={loading}
-            onRefresh={fetchLotteries}
-            showsVerticalScrollIndicator={false}
-            data={filteredLotteries || userJoinedLotteries}
-            getItem={getItem}
-            getItemCount={getItemCount}
-            keyExtractor={getItemKey}
-            renderItem={renderListItem}
-          />
-        ) : null}
+        <VirtualizedList
+          initialNumToRender={isCard ? 10 : 2}
+          windowSize={isCard ? 10 : 2}
+          removeClippedSubviews={true}
+          refreshing={loading}
+          onRefresh={fetchLotteries}
+          ListEmptyComponent={
+            <Text style={sharedStyles.uploadProgressModalText}>
+              {lotteriesTexts.emptyLotteries}
+            </Text>
+          }
+          progressViewOffset={-100}
+          horizontal={false}
+          showsVerticalScrollIndicator={false}
+          data={
+            isCard
+              ? lotteryCardList || []
+              : filteredLotteries || userJoinedLotteries
+          }
+          getItem={getItem}
+          getItemCount={isCard ? getRowItemCount : getItemCount}
+          contentContainerStyle={isCard && sharedStyles.homeLotteriesContainer}
+          keyExtractor={isCard ? getRowItemKey : getItemKey}
+          renderItem={isCard ? renderCardListItemRow : renderListItem}
+        />
       </View>
     </View>
   );
