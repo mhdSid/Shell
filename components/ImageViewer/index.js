@@ -2,7 +2,7 @@ import React from 'react';
 import {Dimensions, Image, View} from 'react-native';
 import ImageZoom from 'react-native-image-pan-zoom';
 import {Modal, SafeAreaView} from 'react-native';
-import {Button, Toolbar} from 'react-native-material-ui';
+import {Toolbar} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import PropTypes from 'prop-types';
 import invoke from 'lodash/invoke';
@@ -20,14 +20,6 @@ const ImagesViewer = props => {
       <SafeAreaView
         style={[sharedStyles.fullheightView, sharedStyles.rootSafeAreaView]}>
         <View style={[sharedStyles.fullheightView, sharedStyles.imageViewer]}>
-          {/* <Button
-            icon="arrow-back"
-            onPress={handleCloseModal}
-            raised={false}
-            primary
-            text={''}
-            style={sharedStyles.imageViewButton}
-          /> */}
           <Toolbar
             style={{container: sharedStyles.lotteryDetailsToolbarContainer}}
             leftElement="arrow-back"

@@ -9,6 +9,7 @@ import {getUserIdSelector} from '../Profile/Selectors';
 import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
 import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
 import {connect} from 'react-redux';
+import {listItemActions} from '../../Constants/Texts';
 
 class ListItemCommon extends Component {
   static propTypes = {
@@ -54,11 +55,11 @@ class ListItemCommon extends Component {
     ActionSheetIOS.showActionSheetWithOptions(
       {
         options: [
-          'Cancel',
-          'Go to lottery details',
+          listItemActions.cancel,
+          listItemActions.goToLotteryDetails,
           this.props.showLotteryResult === true ||
           typeof this.props.showLotteryResult === 'function'
-            ? 'Go to lotery results'
+            ? listItemActions.goToLotteryResults
             : null,
         ].filter(Boolean),
         // destructiveButtonIndex: 1,

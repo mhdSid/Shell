@@ -81,28 +81,11 @@ const MainContainer = () => {
           active={activeView === 'home'}
           onPress={handleSetActiveView('home')}
         />
-        {/* <BottomNavigation.Action
-          style={{
-            container: sharedStyles.bottomNavigationMiddleActionContainer,
-            icon: {
-              color: activeView === 'search' ? 'white' : '#dacdfa',
-            },
-            label: {
-              color: activeView === 'search' ? 'white' : '#dacdfa',
-            },
-          }}
-          key="search"
-          icon={<Icon name="search" size={30} />}
-          active={activeView === 'search'}
-          onPress={handleSetActiveView('search')}
-        /> */}
         <BottomNavigation.Action
           style={{
             container: sharedStyles.bottomNavigationMiddleActionContainer,
             icon: {
               color: activeView === 'importLottery' ? 'white' : '#dacdfa',
-              // position: 'absolute',
-              // bottom: 10,
             },
             label: {
               color: activeView === 'importLottery' ? 'white' : '#dacdfa',
@@ -143,11 +126,7 @@ const MainContainer = () => {
             userImage ? (
               <>
                 <Image
-                  style={[
-                    sharedStyles.bottomBarUserImage,
-                    // activeView === 'profile' &&
-                    //   sharedStyles.bottomBarUserImageSelected,
-                  ]}
+                  style={sharedStyles.bottomBarUserImage}
                   source={{
                     uri: userImage,
                     cache: 'default',

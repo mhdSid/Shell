@@ -1,15 +1,7 @@
 import React, {useState, useEffect, createRef} from 'react';
 import {View} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {
-  profile,
-  loginSingup,
-  login,
-  signUp,
-  orLogin,
-  orSignUp,
-  validationMessages,
-} from '../../Constants/Texts';
+import {profile, loginSingup, validationMessages} from '../../Constants/Texts';
 import {TextField} from 'react-native-material-textfield';
 import {Button, Icon, Toolbar} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';

@@ -2,7 +2,7 @@ import {updateUserBackground} from '../../services/Auth';
 import {handleError, authActions} from './actions';
 import invoke from 'lodash/invoke';
 
-const handlerUpdateUserDataBackground = payload => {
+const handleUpdateUserDataBackground = payload => {
   return dispatch => {
     const {onError, updatedUserData} = payload;
     const onUpdateUserSuccess = data => {
@@ -25,4 +25,4 @@ const handlerUpdateUserDataBackground = payload => {
   };
 };
 
-export {handlerUpdateUserDataBackground};
+export {handleUpdateUserDataBackground};

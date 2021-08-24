@@ -10,6 +10,7 @@ import {
   importLottery,
   profile,
   validationMessages,
+  searchBox as searchBoxTexts,
 } from '../../Constants/Texts';
 import {TextField} from 'react-native-material-textfield';
 import {Button} from 'react-native-material-ui';
@@ -262,8 +263,8 @@ const SearchBox = props => {
               outlined
               returnKeyType="done"
               activeLineWidth={1}
-              placeholder={'yyyy/mm/dd'}
-              label={'From'}
+              placeholder={searchBoxTexts.fromDatePlaceholder}
+              label={searchBoxTexts.fromDateLabel}
               value={searchFilters.fromDate}
               keyboardType="numbers-and-punctuation"
               onBlur={handleBlur('fromDate')}
@@ -281,8 +282,8 @@ const SearchBox = props => {
             ]}>
             <TextField
               outlined
-              placeholder={'yyyy/mm/dd'}
-              label={'To'}
+              placeholder={searchBoxTexts.toDatePlaceholder}
+              label={searchBoxTexts.toDateLabel}
               returnKeyType="done"
               activeLineWidth={1}
               keyboardType="numbers-and-punctuation"
@@ -332,10 +333,10 @@ const SearchBox = props => {
             <TextField
               outlined
               blurOnSubmit={true}
-              label={'Search'}
+              label={searchBoxTexts.searchQueryLabel}
               returnKeyType="done"
               activeLineWidth={1}
-              placeholder={'What are you looking for?'}
+              placeholder={searchBoxTexts.searchQueryPlaceholder}
               onBlur={handleBlur('searchQuery')}
               onChangeText={handleChange.searchQuery()}
               tintColor={'rgba(0,0,0,0.38)'}

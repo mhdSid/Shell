@@ -2,6 +2,7 @@ import React, {createRef} from 'react';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {OutlinedTextField} from 'react-native-material-textfield';
+import {filter as filterTexts} from '../../Constants/Texts';
 
 const Filter = props => {
   const filterTextfieldRef = createRef();
@@ -15,8 +16,7 @@ const Filter = props => {
   return (
     <OutlinedTextField
       blurOnSubmit={true}
-      // outlined
-      label={'Search'}
+      label={filterTexts.filterLabel}
       tintColor={'rgba(0,0,0,0.3)'}
       baseColor="rgba(0, 0, 0, 0.3)"
       onChangeText={handleChange}

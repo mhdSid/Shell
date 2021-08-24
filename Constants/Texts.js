@@ -297,6 +297,30 @@ const searchh = {
   search: 'Search',
 };
 
+const listItemActions = {
+  cancel: 'Cancel',
+  goToLotteryDetails: 'Go to lottery details',
+  goToLotteryResults: 'Go to lotery results',
+};
+
+const userProfileLogoutActions = {
+  logout: 'Logout',
+  cancel: 'Cancel',
+};
+
+const searchBox = {
+  searchQueryPlaceholder: 'What are you looking for?',
+  searchQueryLabel: 'Search',
+  toDatePlaceholder: 'yyyy/mm/dd',
+  toDateLabel: 'To',
+  fromDatePlaceholder: 'yyyy/mm/dd',
+  fromDateLabel: 'From',
+};
+
+const filter = {
+  filterLabel: 'Search',
+};
+
 const settings = {
   settings: 'Settings',
   changePassword: 'Change Password',
@@ -387,4 +411,8 @@ export {
   receiveLottery,
   chat,
   validationMessages,
+  searchBox,
+  listItemActions,
+  filter,
+  userProfileLogoutActions,
 };

@@ -4,7 +4,7 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {View, Text, ActionSheetIOS, Image} from 'react-native';
 import {Button, Drawer, Avatar, Icon} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';
-import {profile} from '../../Constants/Texts';
+import {profile, userProfileLogoutActions} from '../../Constants/Texts';
 import PropTypes from 'prop-types';
 import invoke from 'lodash/invoke';
 import {connect} from 'react-redux';
@@ -33,7 +33,10 @@ const UserProfile = props => {
   const handleLogoutPress = () => {
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: ['Cancel', 'Logout'],
+        options: [
+          userProfileLogoutActions.cancel,
+          userProfileLogoutActions.logout,
+        ],
         destructiveButtonIndex: 1,
         cancelButtonIndex: 0,
         userInterfaceStyle: 'dark',

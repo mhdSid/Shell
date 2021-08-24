@@ -18,11 +18,10 @@ import TouchableBounce from 'react-native/Libraries/Components/Touchable/Touchab
 import {prefectures, cities} from '../../Constants/Countries';
 import {loadingPopup} from '../Loading';
 import {profile, updateUserr} from '../../Constants/Texts';
-import {handlerUpdateUserData} from '../../redux/Auth/UpdateUser';
 import {connect} from 'react-redux';
 import {getUserSelector} from './Selectors';
 import {Dropdown} from 'react-native-material-dropdown';
-import {handlerUpdateUserDataBackground} from '../../redux/Auth/UpdateUserBackground';
+import {handleUpdateUserDataBackground} from '../../redux/Auth/UpdateUserBackground';
 
 const UpdateUser = props => {
   const {user} = props;
@@ -68,10 +67,6 @@ const UpdateUser = props => {
     setPrefectureChanged(false);
     setCityChanged(false);
   };
-  // const onSuccessCallback = () => {
-  //   setDefaultsDataChanged();
-  //   handleCloseModal();
-  // };
   const handleUpdateUser = () => {
     if (userDataChanged) {
       setLoading(true);
@@ -241,7 +236,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     handleUpdateUserData: payload =>
-      dispatch(handlerUpdateUserDataBackground(payload)),
+      dispatch(handleUpdateUserDataBackground(payload)),
   };
 };
 

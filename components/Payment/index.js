@@ -114,6 +114,7 @@ const Payment = props => {
   if (!loggedIn || !user) {
     return <NoAuth />;
   }
+
   return (
     <Modal
       animationType="slide"

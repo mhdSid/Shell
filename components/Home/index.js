@@ -1,4 +1,4 @@
-import React, {createRef, PureComponent} from 'react';
+import React, {PureComponent} from 'react';
 import {Toolbar} from 'react-native-material-ui';
 import {Animated, Text, View, VirtualizedList} from 'react-native';
 import {connect} from 'react-redux';
@@ -16,7 +16,7 @@ import {
   getIsCarouselSelector,
 } from './Selectors';
 import {emitSocketEvents} from '../../services/Socket';
-import {chunk, uniqBy} from 'lodash';
+import {chunk} from 'lodash';
 import {getLoggedInSelector, getUserIdSelector} from '../Profile/Selectors';
 import {lottteries as lotteriesTexts} from '../../Constants/Texts';
 // import {AdMobBanner} from 'react-native-admob';
@@ -217,7 +217,7 @@ class HomeComponent extends PureComponent {
       searchable,
       searchBoxAnimatedOpacity,
     } = this.state;
-    const {isList, isCard, lotteries} = this.props;
+    const {isList, isCard, lotteries, authUserId} = this.props;
 
     return (
       <View style={sharedStyles.fullheightView}>
@@ -230,10 +230,10 @@ class HomeComponent extends PureComponent {
           style={{container: sharedStyles.toolbarContainer}}
           centerElement={home.appName}
           rightElement={[
-            'search',
-            'cloud-upload',
+            authUserId && 'search',
+            authUserId && 'cloud-upload',
             isCard ? 'view-list' : 'view-comfy',
-          ]}
+          ].filter(Boolean)}
           onRightElementPress={this.changeViewStyle}
         />
         {searchable ? (
