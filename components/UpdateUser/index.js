@@ -7,13 +7,11 @@ import {
   View,
   Text,
   KeyboardAvoidingView,
-  Image,
 } from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, Icon, Button} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import ImagePicker from 'react-native-image-picker';
-import {mimeTypes} from '../../Constants/Lotteries';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import {prefectures, cities} from '../../Constants/Countries';
 import {loadingPopup} from '../Loading';
@@ -21,7 +19,10 @@ import {profile, updateUserr} from '../../Constants/Texts';
 import {connect} from 'react-redux';
 import {getUserSelector} from './Selectors';
 import {Dropdown} from 'react-native-material-dropdown';
-import {handleUpdateUserDataBackground} from '../../redux/Auth/UpdateUserBackground';
+// import {handleUpdateUserDataBackground} from '../../redux/Auth/UpdateUserBackground';
+import FastImage from 'react-native-fast-image';
+import {handleUpdateUserData} from '../../redux/Auth/UpdateUser';
+import ImageResizer from 'react-native-image-resizer';
 
 const UpdateUser = props => {
   const {user} = props;
@@ -48,7 +49,7 @@ const UpdateUser = props => {
     value: item.kanji,
   }));
   const prefectureOnChangeText = (value, index) => {
-    setPrefectureChanged(value !== prefecture);
+    setPrefectureChanged(value !== userPrefecture);
     setCityDropdownData(
       cities[prefecturesDropdownData[index].name].map(item => ({
         value: item,
@@ -57,16 +58,16 @@ const UpdateUser = props => {
     setPrefecture(prefecturesDropdownData[index].kanji);
   };
   const cityOnChangeText = value => {
-    setCityChanged(value !== city);
+    setCityChanged(value !== user.city);
     setCity(value);
   };
-  const setDefaultsDataChanged = () => {
-    setLoading(false);
-    setUserDataChanged(false);
-    setImageChanged(false);
-    setPrefectureChanged(false);
-    setCityChanged(false);
-  };
+  // const setDefaultsDataChanged = () => {
+  //   setLoading(false);
+  //   setUserDataChanged(false);
+  //   setImageChanged(false);
+  //   setPrefectureChanged(false);
+  //   setCityChanged(false);
+  // };
   const handleUpdateUser = () => {
     if (userDataChanged) {
       setLoading(true);
@@ -79,35 +80,50 @@ const UpdateUser = props => {
       };
       invoke(props, 'handleUpdateUserData', {
         onError: () => {},
-        onSuccess: () => {},
+        onSuccess: () => {
+          setLoading(false);
+          handleCloseModal();
+        },
         updatedUserData,
       });
-      setDefaultsDataChanged();
-      handleCloseModal();
+      // setDefaultsDataChanged();
+      // handleCloseModal();
     }
   };
   const handleChoosePhoto = () => {
-    const options = {
-      noData: true,
-    };
-    ImagePicker.launchImageLibrary(options, response => {
-      if (response.uri) {
-        const imagePath = response.uri;
-        setImage(imagePath);
-        const imageName = imagePath.slice(
-          imagePath.lastIndexOf('/') + 1,
-          imagePath.length,
-        );
-        const typeRegex = imageName.match(/\.jpg|png|jpeg/);
-        setImageFile({
-          uri: response.uri,
-          type: mimeTypes[typeRegex[0]],
-          name: imageName,
-        });
-        setImageChanged(true);
-      }
-    });
+    ImagePicker.launchImageLibrary(
+      {
+        noData: true,
+      },
+      response => {
+        if (response.uri) {
+          ImageResizer.createResizedImage(
+            response.uri,
+            200,
+            200,
+            'JPEG',
+            50,
+            0,
+            null,
+            true,
+            {
+              mode: 'cover',
+              onlyScaleDown: true,
+            },
+          ).then(data => {
+            setImageChanged(true);
+            setImage(data.uri);
+            setImageFile({
+              uri: data.uri,
+              type: 'jpeg',
+              name: data.name,
+            });
+          });
+        }
+      },
+    );
   };
+
   const handleCloseModal = () => {
     invoke(props, 'onClose');
   };
@@ -168,13 +184,14 @@ const UpdateUser = props => {
                         <Icon name="image" size={35} color="white" />
                       ) : null}
                       {image || user.image ? (
-                        <Image
+                        <FastImage
                           style={[sharedStyles.adImage, sharedStyles.userImage]}
                           source={{
                             uri: image || user.image,
-                            cache: 'default',
+                            priority: FastImage.priority.high,
+                            cache: FastImage.cacheControl.immutable,
                           }}
-                          resizeMode="cover"
+                          resizeMode={FastImage.resizeMode.cover}
                         />
                       ) : null}
                     </TouchableBounce>
@@ -235,8 +252,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleUpdateUserData: payload =>
-      dispatch(handleUpdateUserDataBackground(payload)),
+    handleUpdateUserData: payload => dispatch(handleUpdateUserData(payload)),
   };
 };
 

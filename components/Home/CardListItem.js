@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
 import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
 import {getUserIdSelector} from '../Profile/Selectors';
+import FastImage from 'react-native-fast-image';
 
 class CardListItem extends Component {
   static propTypes = {
@@ -27,7 +28,7 @@ class CardListItem extends Component {
     this.numOfLines = 1;
   }
 
-  shouldComponentUpdate(nextProps) {
+  UNSAFE_shouldComponentUpdate(nextProps) {
     if (
       JSON.stringify(nextProps.item).toString() !==
         JSON.stringify(this.props.item).toString() ||
@@ -101,13 +102,14 @@ class CardListItem extends Component {
       ? sharedStyles.homeCardItemImageSmall
       : sharedStyles.homeCardItemImage;
     const image = item.images[0] ? (
-      <Image
+      <FastImage
         style={imageStyle}
         source={{
           uri: item.images[0],
-          cache: 'default',
+          priority: FastImage.priority.high,
+          cache: FastImage.cacheControl.immutable,
         }}
-        resizeMode={'cover'}
+        resizeMode={FastImage.resizeMode.cover}
       />
     ) : null;
     const emptyImage = !item.images[0] ? (

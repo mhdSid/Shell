@@ -20,9 +20,9 @@ const handlePing = payload => {
       if (error) {
         return onPingError({error, country});
       }
+      invoke(payload, 'onPingSuccess', authUser ? authUser.id : null);
       // initSocket();
       // addSocketEventListeners();
-      invoke(payload, 'onSuccess');
       return dispatch({
         type: authActions.login,
         payload: {

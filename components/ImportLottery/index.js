@@ -3,7 +3,6 @@ import {
   View,
   ScrollView,
   Text,
-  Image,
   Animated,
   Easing,
   Dimensions,
@@ -19,7 +18,6 @@ import {prefectures, cities, currencies} from '../../Constants/Countries';
 import {
   lotteryItemConditions,
   lotteryItemCategories,
-  mimeTypes,
 } from '../../Constants/Lotteries';
 import isUndefined from 'lodash/isUndefined';
 import NoAuth from '../NoAuth';
@@ -35,6 +33,8 @@ import {getLoggedInSelector, getUserSelector} from './Selectors';
 import {Dropdown} from 'react-native-material-dropdown';
 import {navigate} from '../MainContainer';
 import {successConfirmationModal as successConfirmationModalTexts} from '../../Constants/Texts';
+import FastImage from 'react-native-fast-image';
+import ImageResizer from 'react-native-image-resizer';
 
 let SuccessConfirmationModal = null;
 let UploadLotteryProgressModal = null;
@@ -284,21 +284,32 @@ const ImportLottery = props => {
             return;
           }
           if (response.uri) {
-            const imagePath = response.uri;
-            images[index] = imagePath;
-            setImages([...images]);
-            const imageName = imagePath.slice(
-              imagePath.lastIndexOf('/') + 1,
-              imagePath.length,
-            );
-            const typeRegex = imageName.match(/\.jpg|png|jpeg/);
-            imageFiles[index] = {
-              uri: response.uri,
-              type: mimeTypes[typeRegex[0]],
-              name: imageName,
-            };
-            setImagesChanged(true);
-            setImageFiles([...imageFiles]);
+            ImageResizer.createResizedImage(
+              response.uri,
+              400,
+              400,
+              'JPEG',
+              50,
+              0,
+              null,
+              true,
+              {
+                mode: 'cover',
+                onlyScaleDown: true,
+              },
+            ).then(data => {
+              const imagesArray = [...images];
+              const imagesFilesArray = [...imageFiles];
+              imagesArray[index] = data.uri;
+              imagesFilesArray[index] = {
+                uri: data.uri,
+                type: 'jpeg',
+                name: data.name,
+              };
+              setImagesChanged(true);
+              setImages([...imagesArray]);
+              setImageFiles([...imagesFilesArray]);
+            });
           }
           if (imageFiles.length) {
             setErrors({
@@ -503,13 +514,14 @@ const ImportLottery = props => {
                       <Icon name="image" size={35} color="white" />
                     )}
                     {images[index] && (
-                      <Image
+                      <FastImage
                         style={sharedStyles.adImage}
                         source={{
                           uri: images[index],
-                          cache: 'default',
+                          priority: FastImage.priority.high,
+                          cache: FastImage.cacheControl.immutable,
                         }}
-                        resizeMode="cover"
+                        resizeMode={FastImage.resizeMode.cover}
                       />
                     )}
                   </TouchableBounce>

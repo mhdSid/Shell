@@ -19,48 +19,55 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - Google-Mobile-Ads-SDK (8.0.0):
-    - GoogleAppMeasurement (~> 7.0)
-    - GoogleUserMessagingPlatform (~> 1.1)
-  - GoogleAppMeasurement (7.6.0):
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
-    - GoogleUtilities/MethodSwizzler (~> 7.0)
-    - GoogleUtilities/Network (~> 7.0)
-    - "GoogleUtilities/NSData+zlib (~> 7.0)"
-    - nanopb (~> 2.30907.0)
-  - GoogleUserMessagingPlatform (1.4.0)
-  - GoogleUtilities/AppDelegateSwizzler (7.2.2):
+  - Google-Mobile-Ads-SDK (8.10.0):
+    - GoogleAppMeasurement (< 9.0, >= 7.0)
+    - GoogleUserMessagingPlatform (>= 1.1)
+  - GoogleAppMeasurement (8.6.0):
+    - GoogleAppMeasurement/AdIdSupport (= 8.6.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
+    - GoogleUtilities/MethodSwizzler (~> 7.4)
+    - GoogleUtilities/Network (~> 7.4)
+    - "GoogleUtilities/NSData+zlib (~> 7.4)"
+    - nanopb (~> 2.30908.0)
+  - GoogleAppMeasurement/AdIdSupport (8.6.0):
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
+    - GoogleUtilities/MethodSwizzler (~> 7.4)
+    - GoogleUtilities/Network (~> 7.4)
+    - "GoogleUtilities/NSData+zlib (~> 7.4)"
+    - nanopb (~> 2.30908.0)
+  - GoogleUserMessagingPlatform (2.0.0)
+  - GoogleUtilities/AppDelegateSwizzler (7.5.2):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (7.2.2):
-    - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Logger (7.2.2):
+  - GoogleUtilities/Environment (7.5.2):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Logger (7.5.2):
     - GoogleUtilities/Environment
-  - GoogleUtilities/MethodSwizzler (7.2.2):
+  - GoogleUtilities/MethodSwizzler (7.5.2):
     - GoogleUtilities/Logger
-  - GoogleUtilities/Network (7.2.2):
+  - GoogleUtilities/Network (7.5.2):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (7.2.2)"
-  - GoogleUtilities/Reachability (7.2.2):
+  - "GoogleUtilities/NSData+zlib (7.5.2)"
+  - GoogleUtilities/Reachability (7.5.2):
     - GoogleUtilities/Logger
-  - libwebp (1.1.0):
-    - libwebp/demux (= 1.1.0)
-    - libwebp/mux (= 1.1.0)
-    - libwebp/webp (= 1.1.0)
-  - libwebp/demux (1.1.0):
+  - libwebp (1.2.0):
+    - libwebp/demux (= 1.2.0)
+    - libwebp/mux (= 1.2.0)
+    - libwebp/webp (= 1.2.0)
+  - libwebp/demux (1.2.0):
     - libwebp/webp
-  - libwebp/mux (1.1.0):
+  - libwebp/mux (1.2.0):
     - libwebp/demux
-  - libwebp/webp (1.1.0)
-  - nanopb (2.30907.0):
-    - nanopb/decode (= 2.30907.0)
-    - nanopb/encode (= 2.30907.0)
-  - nanopb/decode (2.30907.0)
-  - nanopb/encode (2.30907.0)
-  - PromisesObjC (1.2.12)
+  - libwebp/webp (1.2.0)
+  - nanopb (2.30908.0):
+    - nanopb/decode (= 2.30908.0)
+    - nanopb/encode (= 2.30908.0)
+  - nanopb/decode (2.30908.0)
+  - nanopb/encode (2.30908.0)
+  - PromisesObjC (2.0.0)
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
     - FBLazyVector (= 0.61.5)
@@ -230,6 +237,8 @@ PODS:
     - React-Core
   - react-native-image-picker (2.3.4):
     - React-Core
+  - react-native-image-resizer (1.4.5):
+    - React-Core
   - react-native-netinfo (5.9.10):
     - React-Core
   - React-RCTActionSheet (0.61.5):
@@ -277,9 +286,9 @@ PODS:
     - React
   - RNVectorIcons (6.7.0):
     - React
-  - SDWebImage (5.10.4):
-    - SDWebImage/Core (= 5.10.4)
-  - SDWebImage/Core (5.10.4)
+  - SDWebImage (5.11.1):
+    - SDWebImage/Core (= 5.11.1)
+  - SDWebImage/Core (5.11.1)
   - SDWebImageWebPCoder (0.6.1):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.7)
@@ -306,6 +315,7 @@ DEPENDENCIES:
   - react-native-background-upload (from `../node_modules/react-native-background-upload/react-native-background-upload.podspec`)
   - react-native-fetch-blob (from `../lib/CachedImage//react-native-fetch-blob/react-native-fetch-blob.podspec`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker/react-native-image-picker.podspec`)
+  - react-native-image-resizer (from `../node_modules/react-native-image-resizer/react-native-image-resizer.podspec`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo/react-native-netinfo.podspec`)"
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -372,6 +382,8 @@ EXTERNAL SOURCES:
     :path: "../lib/CachedImage//react-native-fetch-blob/react-native-fetch-blob.podspec"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker/react-native-image-picker.podspec"
+  react-native-image-resizer:
+    :path: "../node_modules/react-native-image-resizer/react-native-image-resizer.podspec"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo/react-native-netinfo.podspec"
   React-RCTActionSheet:
@@ -412,13 +424,13 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  Google-Mobile-Ads-SDK: 9509c62617e8d77e2524833eed0b73dd028f0bc6
-  GoogleAppMeasurement: c542a2feaac9ab98fd074e8f1a02c3585bbfbd47
-  GoogleUserMessagingPlatform: b168e8c46cd8f92aa3e34b584c4ca78a411ce367
-  GoogleUtilities: 31c5b01f978a70c6cff2afc6272b3f1921614b43
-  libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
-  nanopb: 59221d7f958fb711001e6a449489542d92ae113e
-  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+  Google-Mobile-Ads-SDK: 9c78323a7069cd42ddf1ad2fddbaec889b085091
+  GoogleAppMeasurement: 2c0c6e2a7ab3fe730ade6379f732bdefb46f50b0
+  GoogleUserMessagingPlatform: ab890ce5f6620f293a21b6bdd82e416a2c73aeca
+  GoogleUtilities: 8de2a97a17e15b6b98e38e8770e2d129a57c0040
+  libwebp: e90b9c01d99205d03b6bb8f2c8c415e5a4ef66f0
+  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
@@ -431,6 +443,7 @@ SPEC CHECKSUMS:
   react-native-background-upload: 4f82b6b9b2538a9f6d25dc275f4259d038065849
   react-native-fetch-blob: 0cbdf9764c75d9438c162427395f4bc35a857d5a
   react-native-image-picker: 32d1ad2c0024ca36161ae0d5c2117e2d6c441f11
+  react-native-image-resizer: 506412a2bdd70dde64a61e13505ce10f61a04369
   react-native-netinfo: 52cf0ee8342548a485e28f4b09e56b477567244d
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
@@ -446,10 +459,10 @@ SPEC CHECKSUMS:
   RNFastImage: a7384db75df352500261e8e8f1ac2026def26102
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
-  SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84
+  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 48911ac8cb4122e3d4b7f631dea090e9ae915110
+PODFILE CHECKSUM: 0f0bd035b46d565728003ee0a9e204246ebac3d0
 
 COCOAPODS: 1.10.1

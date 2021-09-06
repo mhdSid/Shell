@@ -12,7 +12,7 @@ export default class CardListItemRow extends Component {
   constructor() {
     super();
   }
-  shouldComponentUpdate(nextProps) {
+  UNSAFE_shouldComponentUpdate(nextProps) {
     if (
       JSON.stringify(nextProps.data).toString() !==
       JSON.stringify(this.props.data).toString()
@@ -35,6 +35,7 @@ export default class CardListItemRow extends Component {
                 sharedStyles.homeCardListItemContainerSingle,
             ]}>
             <CardListItem
+              key={`${listItem.id + index}`}
               item={listItem}
               onItemPress={this.props.onItemPress}
             />

@@ -98,6 +98,48 @@ const getUserJoinedLotteries = async props => {
   return data;
 };
 
+const updateLotteryWithoutImage = async props => {
+  const {
+    prefecture,
+    city,
+    id,
+    userId,
+    price,
+    condition,
+    category,
+    description,
+    name,
+  } = props;
+  const data = await request({
+    endpoint: 'ads/update/noImage',
+    method: 'POST',
+    body: {
+      prefecture,
+      city,
+      price,
+      condition,
+      category,
+      description,
+      name,
+      id,
+      userId,
+      hash: sha256(
+        prefecture,
+        city,
+        id,
+        userId,
+        price,
+        name,
+        condition,
+        category,
+        description,
+        hashkey,
+      ).toString(),
+    },
+  });
+  return data;
+};
+
 const addBackgroundUpload = async props => {
   const {
     name,
@@ -305,4 +347,5 @@ export {
   getUserLikedLotteries,
   likeLottery,
   dislikeLottery,
+  updateLotteryWithoutImage,
 };

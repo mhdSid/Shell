@@ -142,10 +142,12 @@ const LotteryResult = props => {
               {lotteryUsersData && lotteryUsersData.length ? (
                 <View style={sharedStyles.lotteryResultVirtualizedListTop}>
                   <VirtualizedList
-                    initialNumToRender={2}
-                    windowSize={2}
-                    horizontal={true}
+                    initialNumToRender={5}
+                    windowSize={1}
+                    maxToRenderPerBatch={4}
+                    updateCellsBatchingPeriod={0.0}
                     removeClippedSubviews={true}
+                    horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     data={lotteryUsersData}
                     getItem={getItem}

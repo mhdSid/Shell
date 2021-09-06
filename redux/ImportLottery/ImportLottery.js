@@ -83,6 +83,7 @@ const handleImportLottery = payload => {
         });
         return Promise.all(updatePromises).then(
           response => {
+            console.log('Promise complete: ', updatePromises);
             if (Array.isArray(response) && response.length) {
               dispatch({
                 type: uploadProgressActions.removeProgressItem,

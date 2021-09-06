@@ -10,6 +10,7 @@ import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
 import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
 import {connect} from 'react-redux';
 import {listItemActions} from '../../Constants/Texts';
+import FastImage from 'react-native-fast-image/dist/index.cjs';
 
 class ListItemCommon extends Component {
   static propTypes = {
@@ -22,7 +23,7 @@ class ListItemCommon extends Component {
   constructor() {
     super();
   }
-  shouldComponentUpdate(nextProps) {
+  UNSAFE_shouldComponentUpdate(nextProps) {
     if (
       JSON.stringify(nextProps.item).toString() !==
         JSON.stringify(this.props.item).toString() ||
@@ -99,13 +100,14 @@ class ListItemCommon extends Component {
           divider
           leftElement={
             this.props.item.images && this.props.item.images[0] ? (
-              <Image
+              <FastImage
                 style={sharedStyles.homeListItemImage}
                 source={{
                   uri: this.props.item.images[0],
-                  cache: 'default',
+                  priority: FastImage.priority.high,
+                  cache: FastImage.cacheControl.immutable,
                 }}
-                resizeMode="cover"
+                resizeMode={FastImage.resizeMode.cover}
               />
             ) : null
           }

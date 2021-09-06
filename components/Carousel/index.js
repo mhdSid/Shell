@@ -1,5 +1,5 @@
-import React, {PureComponent, useState} from 'react';
-import {View, Text, Image} from 'react-native';
+import React, {PureComponent} from 'react';
+import {View, Text} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import Carousel from 'react-native-snap-carousel';
 import {
@@ -9,6 +9,8 @@ import {
 } from '../../assets/styles/sliderEntry';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
+import FastImage from 'react-native-fast-image';
+
 class CarouselItem extends PureComponent {
   static propTypes = {
     item: PropTypes.object,
@@ -63,13 +65,14 @@ class CarouselItem extends PureComponent {
         <View style={sliderStyles.shadow} />
         <View style={imageContainerStyles}>
           {(imageOnly && item) || (images && images[0]) ? (
-            <Image
+            <FastImage
               style={sliderStyles.image}
               source={{
                 uri: imageOnly ? item : images[0],
-                cache: 'default',
+                priority: FastImage.priority.high,
+                cache: FastImage.cacheControl.immutable,
               }}
-              resizeMode="contain"
+              resizeMode={FastImage.resizeMode.contain}
             />
           ) : null}
           {!imageOnly && <View style={radiusMaskStyles} />}
@@ -89,46 +92,6 @@ class CarouselItem extends PureComponent {
     );
   }
 }
-
-const CarouselComponentWithSlice = props => {
-  const {items, onItemPress, imageOnly} = props;
-  const sliceValue = items.length > 5 ? 5 : items.length > 2 ? 2 : items.length;
-  const [sliceIndex, setSliceIndex] = useState(sliceValue);
-  const slicedItems = items.slice(0, sliceIndex);
-  const renderCarouselItem = ({item}) => (
-    <CarouselItem onItemPress={onItemPress} item={item} imageOnly={imageOnly} />
-  );
-  const onEndReached = index => {
-    if (index < items.length - 1 && index === sliceIndex - 2) {
-      setSliceIndex(sliceIndex + sliceValue);
-    }
-  };
-  const onSnapToItem = imageOnly ? null : onEndReached;
-  const data = imageOnly ? items : slicedItems;
-
-  return (
-    <Carousel
-      shouldOptimizeUpdates={true}
-      onSnapToItem={onSnapToItem}
-      data={data}
-      renderItem={renderCarouselItem}
-      sliderWidth={sliderWidth}
-      itemWidth={itemWidth}
-      hasParallaxImages={false}
-      firstItem={0}
-      inactiveSlideScale={0.94}
-      inactiveSlideOpacity={0.7}
-      containerCustomStyle={sliderStyles.slider}
-      contentContainerCustomStyle={sliderStyles.sliderContentContainer}
-    />
-  );
-};
-
-CarouselComponentWithSlice.propTypes = {
-  item: PropTypes.object,
-  onItemPress: PropTypes.func,
-  imageOnly: PropTypes.bool,
-};
 
 const CarouselComponent = props => {
   const {items, onItemPress, imageOnly} = props;
@@ -158,4 +121,4 @@ CarouselComponent.propTypes = {
   imageOnly: PropTypes.bool,
 };
 
-export {CarouselItem, CarouselComponent, CarouselComponentWithSlice};
+export {CarouselItem, CarouselComponent};

@@ -11,6 +11,7 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		1E62542F2E97DE28FD95FA75 /* libPods-winadd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9997DD85625932E83F20FE67 /* libPods-winadd.a */; };
 		341C269E25D621C300922A54 /* RCTCalendarModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 341C269D25D621C300922A54 /* RCTCalendarModule.m */; };
 		346C997023DD7EBB0096659C /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 346C996323DD7EBB0096659C /* Roboto-Medium.ttf */; };
 		346C997123DD7EBB0096659C /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 346C996423DD7EBB0096659C /* Roboto-Light.ttf */; };
@@ -25,7 +26,6 @@
 		346C997A23DD7EBB0096659C /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 346C996D23DD7EBB0096659C /* Roboto-Bold.ttf */; };
 		346C997B23DD7EBB0096659C /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 346C996E23DD7EBB0096659C /* Roboto-Thin.ttf */; };
 		346C997C23DD7EBB0096659C /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 346C996F23DD7EBB0096659C /* Roboto-Black.ttf */; };
-		54315D445EC400949F2700ED /* libPods-winadd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C04CAD4B31E19CD8D9D7337 /* libPods-winadd.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,13 +40,9 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = winadd/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = winadd/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = winadd/main.m; sourceTree = "<group>"; };
-		17D650B00C12189C2A002929 /* Pods-winadd-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-winadd-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-winadd-tvOSTests/Pods-winadd-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		1C1D19A314734E30A632FA0B /* Roboto-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Light.ttf"; path = "../assets/fonts/Roboto/Roboto-Light.ttf"; sourceTree = "<group>"; };
-		1DB696541A1F1637218C74C9 /* Pods-winadd-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-winadd-tvOS.release.xcconfig"; path = "Target Support Files/Pods-winadd-tvOS/Pods-winadd-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		1DB987AFD896459CB19FB7EA /* Roboto-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Italic.ttf"; path = "../assets/fonts/Roboto/Roboto-Italic.ttf"; sourceTree = "<group>"; };
-		26898D0FFE2D672CB8729F5E /* libPods-winadd-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-winadd-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2736154C11F741C8897D30C4 /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-LightItalic.ttf"; path = "../assets/fonts/Roboto/Roboto-LightItalic.ttf"; sourceTree = "<group>"; };
-		2793210AEF601E980F5068B5 /* Pods-winaddTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-winaddTests.release.xcconfig"; path = "Target Support Files/Pods-winaddTests/Pods-winaddTests.release.xcconfig"; sourceTree = "<group>"; };
 		341C269C25D6217200922A54 /* RCTCalendarModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTCalendarModule.h; sourceTree = "<group>"; };
 		341C269D25D621C300922A54 /* RCTCalendarModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTCalendarModule.m; sourceTree = "<group>"; };
 		346C996323DD7EBB0096659C /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
@@ -68,26 +64,21 @@
 		50CE22D7ADDA4971AAE3C3A7 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		511C312C7B5041CD9FC4E298 /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-ThinItalic.ttf"; path = "../assets/fonts/Roboto/Roboto-ThinItalic.ttf"; sourceTree = "<group>"; };
 		5A4C7B54DAD247BA8B69A801 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
+		5C2DD77DF4CE6F9A675921EB /* Pods-winadd.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-winadd.debug.xcconfig"; path = "Target Support Files/Pods-winadd/Pods-winadd.debug.xcconfig"; sourceTree = "<group>"; };
 		607CEC2DB34240EDAA037D3F /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		61C74319944C4EF785117638 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
-		6833275622B4665E7EAEA670 /* Pods-winadd-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-winadd-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-winadd-tvOS/Pods-winadd-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		71A2863A996D4AAAAD8DBC96 /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-MediumItalic.ttf"; path = "../assets/fonts/Roboto/Roboto-MediumItalic.ttf"; sourceTree = "<group>"; };
-		7C04CAD4B31E19CD8D9D7337 /* libPods-winadd.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-winadd.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7CE21C361E4BFEB6E184308B /* libPods-winadd-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-winadd-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		887F822A6F454D97AEC5AEB2 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../assets/fonts/Roboto/Roboto-Medium.ttf"; sourceTree = "<group>"; };
-		89B7DF3DE27F8CCE252D3D5A /* Pods-winadd.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-winadd.release.xcconfig"; path = "Target Support Files/Pods-winadd/Pods-winadd.release.xcconfig"; sourceTree = "<group>"; };
 		98FF5DE2EA86491DAC6D8FE1 /* Roboto-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Thin.ttf"; path = "../assets/fonts/Roboto/Roboto-Thin.ttf"; sourceTree = "<group>"; };
-		AA1864A83DCDCFFD153F41C6 /* Pods-winadd.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-winadd.debug.xcconfig"; path = "Target Support Files/Pods-winadd/Pods-winadd.debug.xcconfig"; sourceTree = "<group>"; };
-		ADF371077C30ED2D80BF9305 /* libPods-winaddTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-winaddTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9997DD85625932E83F20FE67 /* libPods-winadd.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-winadd.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9FE4501A2DA4C1C81182FC9 /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BlackItalic.ttf"; path = "../assets/fonts/Roboto/Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
 		BA19A792B5AC4C139D6F3309 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		BFB5910339104A50A9DB3628 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		C26EEDA9CE9B4E93AB94B1A0 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		C2F71662FBAF415C9F25C31B /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
-		C3CAD46729617D2463037253 /* Pods-winaddTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-winaddTests.debug.xcconfig"; path = "Target Support Files/Pods-winaddTests/Pods-winaddTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C5F1B1E3C68D463C9627C387 /* Roboto-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Black.ttf"; path = "../assets/fonts/Roboto/Roboto-Black.ttf"; sourceTree = "<group>"; };
 		D77A28B2B6B44311804EF32C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto/Roboto-Regular.ttf"; sourceTree = "<group>"; };
-		E57C4FAE9378BCAF8F4AE783 /* Pods-winadd-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-winadd-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-winadd-tvOSTests/Pods-winadd-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		D9DA9358268373732065F234 /* Pods-winadd.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-winadd.release.xcconfig"; path = "Target Support Files/Pods-winadd/Pods-winadd.release.xcconfig"; sourceTree = "<group>"; };
 		E624978379A14FC49D37DFDB /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		E6A86FDD39254212A5E9C746 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		EAA4897FF6404B12B37CB00C /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
@@ -104,7 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54315D445EC400949F2700ED /* libPods-winadd.a in Frameworks */,
+				1E62542F2E97DE28FD95FA75 /* libPods-winadd.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,10 +141,7 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				7C04CAD4B31E19CD8D9D7337 /* libPods-winadd.a */,
-				7CE21C361E4BFEB6E184308B /* libPods-winadd-tvOS.a */,
-				26898D0FFE2D672CB8729F5E /* libPods-winadd-tvOSTests.a */,
-				ADF371077C30ED2D80BF9305 /* libPods-winaddTests.a */,
+				9997DD85625932E83F20FE67 /* libPods-winadd.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -249,14 +237,8 @@
 		D22A6EAB78121E8A6B501112 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				AA1864A83DCDCFFD153F41C6 /* Pods-winadd.debug.xcconfig */,
-				89B7DF3DE27F8CCE252D3D5A /* Pods-winadd.release.xcconfig */,
-				6833275622B4665E7EAEA670 /* Pods-winadd-tvOS.debug.xcconfig */,
-				1DB696541A1F1637218C74C9 /* Pods-winadd-tvOS.release.xcconfig */,
-				17D650B00C12189C2A002929 /* Pods-winadd-tvOSTests.debug.xcconfig */,
-				E57C4FAE9378BCAF8F4AE783 /* Pods-winadd-tvOSTests.release.xcconfig */,
-				C3CAD46729617D2463037253 /* Pods-winaddTests.debug.xcconfig */,
-				2793210AEF601E980F5068B5 /* Pods-winaddTests.release.xcconfig */,
+				5C2DD77DF4CE6F9A675921EB /* Pods-winadd.debug.xcconfig */,
+				D9DA9358268373732065F234 /* Pods-winadd.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -268,13 +250,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "winadd" */;
 			buildPhases = (
-				17067CC9A3AD669B86B53C1E /* [CP] Check Pods Manifest.lock */,
+				BD7260059DF53DFF866EA406 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				81995F48581A4856EA06D9A0 /* [CP] Copy Pods Resources */,
+				82FB48D6E0CFA5488FDF2713 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -358,29 +340,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export BUNDLE_COMMAND=\"ram-bundle\"\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n\n if [ \"${CONFIGURATION}\" == \"Debug\" ]; then\n  export SKIP_BUNDLING=true\n fi\n";
 		};
-		17067CC9A3AD669B86B53C1E /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-winadd-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		81995F48581A4856EA06D9A0 /* [CP] Copy Pods Resources */ = {
+		82FB48D6E0CFA5488FDF2713 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -426,6 +386,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-winadd/Pods-winadd-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BD7260059DF53DFF866EA406 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-winadd-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -477,7 +459,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AA1864A83DCDCFFD153F41C6 /* Pods-winadd.debug.xcconfig */;
+			baseConfigurationReference = 5C2DD77DF4CE6F9A675921EB /* Pods-winadd.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -503,7 +485,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89B7DF3DE27F8CCE252D3D5A /* Pods-winadd.release.xcconfig */;
+			baseConfigurationReference = D9DA9358268373732065F234 /* Pods-winadd.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";

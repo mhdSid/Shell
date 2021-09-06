@@ -15,10 +15,11 @@ import {
   getIsCardSelector,
   getIsCarouselSelector,
 } from './Selectors';
-import {emitSocketEvents} from '../../services/Socket';
+// import {emitSocketEvents} from '../../services/Socket';
 import {chunk} from 'lodash';
 import {getLoggedInSelector, getUserIdSelector} from '../Profile/Selectors';
 import {lottteries as lotteriesTexts} from '../../Constants/Texts';
+import {onPingSuccess, setOnPingSuccess} from '../Pinger';
 // import {AdMobBanner} from 'react-native-admob';
 
 let SearchBox = null;
@@ -61,6 +62,10 @@ class HomeComponent extends PureComponent {
   onSearchError = () => {
     this.setState({loading: false});
   };
+
+  // constructor() {
+  //   onPingSuccess = this.fetchLotteries;
+  // }
 
   changeViewStyle = ({action}) => {
     if (action === 'search') {
@@ -133,7 +138,7 @@ class HomeComponent extends PureComponent {
     invoke(this.props, 'showLotteryDetails', this.props.lotteries[index]);
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const {isCard, isList} = this.props;
     if (isCard) {
       if (!CardListItemRow) {
@@ -145,12 +150,17 @@ class HomeComponent extends PureComponent {
         ListItemCommon = require('./ListItem').default;
       }
     }
+    if (!onPingSuccess) {
+      setOnPingSuccess(this.fetchLotteries);
+    } else {
+      this.fetchLotteries();
+    }
     // emitSocketEvents();
-    this.fetchLotteries();
+    // this.fetchLotteries();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.authUserId !== this.props.authUserId) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.authUserId !== this.props.authUserId && onPingSuccess) {
       this.fetchLotteries(nextProps.authUserId);
     }
     const {isCard, isList} = nextProps;
@@ -166,13 +176,17 @@ class HomeComponent extends PureComponent {
     }
     let adList = null;
     if (Array.isArray(nextProps.lotteries) && nextProps.lotteries.length) {
-      adList = chunk(nextProps.lotteries, 3).map(list => ({
+      adList = chunk(nextProps.lotteries, 3).map((list, index) => ({
         data: list,
-        key: `_${Math.random()
-          .toString(36)
-          .substr(2, 9)}`,
+        key:
+          this.state.adList &&
+          this.state.adList[index] &&
+          this.state.adList[index].key
+            ? this.state.adList[index].key
+            : `_${Math.random()
+                .toString(36)
+                .substr(2, 9)}`,
       }));
-      adList = [...adList];
     }
     this.setState({
       adList,
@@ -252,8 +266,10 @@ class HomeComponent extends PureComponent {
           style={sharedStyles.adMobBanner}
         /> */}
         <VirtualizedList
-          initialNumToRender={10}
-          windowSize={10}
+          initialNumToRender={5}
+          windowSize={1}
+          maxToRenderPerBatch={4}
+          updateCellsBatchingPeriod={0.0}
           removeClippedSubviews={true}
           refreshing={loading}
           onRefresh={this.fetchLotteries}
@@ -262,7 +278,7 @@ class HomeComponent extends PureComponent {
               {lotteriesTexts.emptyLotteries}
             </Text>
           }
-          progressViewOffset={-100}
+          onEndReachedThreshold={0.5}
           horizontal={false}
           showsVerticalScrollIndicator={false}
           data={isCard ? adList || [] : lotteries || []}
@@ -287,7 +303,7 @@ HomeComponent.propTypes = {
   isCard: PropTypes.bool,
   isCarousel: PropTypes.bool,
   isLoggedIn: PropTypes.bool,
-  authUserId: PropTypes.string,
+  authUserId: PropTypes.oneOfType([PropTypes.string, PropTypes.any]),
 };
 
 const mapStateToProps = state => {

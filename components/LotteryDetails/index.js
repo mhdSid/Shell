@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {Button, Icon} from 'react-native-material-ui';
+import {Button, Icon, IconToggle} from 'react-native-material-ui';
 import {Toolbar} from 'react-native-material-ui';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
@@ -39,6 +39,7 @@ let Payment = null;
 let LotteryResultModal = null;
 let ChatModal = null;
 let ReceiveLotteryModal = null;
+let EditLotteryModal = null;
 
 const LotteryDetails = props => {
   const {
@@ -91,6 +92,7 @@ const LotteryDetails = props => {
     };
   };
   const handleCloseModal = () => {
+    invoke(props, 'showLotteryDetails', null);
     invoke(props, 'onClose');
   };
   const handleEnterDraw = () => {
@@ -164,6 +166,9 @@ const LotteryDetails = props => {
   const handleLotteryResultModalClose = () => {
     setShowModal(null);
   };
+  const handleEditLotteryModalClose = () => {
+    setShowModal(null);
+  };
   const handleChatModalClose = () => {
     setShowModal(null);
   };
@@ -211,7 +216,16 @@ const LotteryDetails = props => {
     },
     [lotteryDetailsTexts.actionOptions.win]: handleEnterDraw,
   };
+  const handleEditLottery = () => {
+    if (!EditLotteryModal) {
+      EditLotteryModal = require('../EditLottery').default;
+    }
+    setShowModal('editLotteryModal');
+  };
   const modals = {
+    editLotteryModal: (
+      <EditLotteryModal item={item} onClose={handleEditLotteryModalClose} />
+    ),
     lotteryResultModal: (
       <LotteryResultModal item={item} onClose={handleLotteryResultModalClose} />
     ),
@@ -255,21 +269,30 @@ const LotteryDetails = props => {
             onLeftElementPress={handleCloseModal}
             centerElement={name}
             rightElement={
-              authUser &&
-              `${userId}` !== `${authUser.id}` &&
-              !disableHeaderActions ? (
-                <Button
-                  disabled={`${currentCollectedPrice}` === `${price}`}
-                  onPress={handleEnterDraw}
-                  raised
-                  style={{
-                    container: sharedStyles.mainButtonContainer,
-                    text: {color: '#b69cf6'},
-                  }}
-                  text={lotteryDetailsTexts.enterDraw}
-                  icon="shop"
-                />
-              ) : null
+              <>
+                {isLotteryPoster && !disableHeaderActions ? (
+                  <IconToggle
+                    name="edit"
+                    onPress={handleEditLottery}
+                    color="white"
+                  />
+                ) : null}
+                {authUser &&
+                `${userId}` !== `${authUser.id}` &&
+                !disableHeaderActions ? (
+                  <Button
+                    disabled={`${currentCollectedPrice}` === `${price}`}
+                    onPress={handleEnterDraw}
+                    raised
+                    style={{
+                      container: sharedStyles.mainButtonContainer,
+                      text: {color: '#b69cf6'},
+                    }}
+                    text={lotteryDetailsTexts.enterDraw}
+                    icon="shop"
+                  />
+                ) : null}
+              </>
             }
           />
           <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
@@ -387,10 +410,12 @@ const LotteryDetails = props => {
                   lotteryUsersData &&
                   lotteryUsersData.length && (
                     <VirtualizedList
-                      initialNumToRender={2}
-                      windowSize={2}
-                      horizontal={true}
+                      initialNumToRender={5}
+                      windowSize={1}
+                      maxToRenderPerBatch={4}
+                      updateCellsBatchingPeriod={0.0}
                       removeClippedSubviews={true}
+                      horizontal={true}
                       showsHorizontalScrollIndicator={false}
                       data={lotteryUsersData}
                       getItem={getItem}
@@ -465,10 +490,12 @@ const LotteryDetails = props => {
                 {userAdsLoading && SimpleLoader}
                 {!userAdsLoading && userAds && (
                   <VirtualizedList
-                    initialNumToRender={2}
-                    windowSize={2}
-                    horizontal={true}
+                    initialNumToRender={5}
+                    windowSize={1}
+                    maxToRenderPerBatch={4}
+                    updateCellsBatchingPeriod={0.0}
                     removeClippedSubviews={true}
+                    horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     data={userAds}
                     getItem={getItem}

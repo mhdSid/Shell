@@ -53,14 +53,20 @@ const UserLikedLotteries = props => {
         Array.isArray(filteredLotteries || userLikedLotteries) &&
         (filteredLotteries || userLikedLotteries).length
       ) {
+        console.log(lotteryCardList);
         lotteryRowCardList = chunk(
           filteredLotteries || userLikedLotteries,
           3,
-        ).map(list => ({
+        ).map((list, index) => ({
           data: list,
-          key: `_${Math.random()
-            .toString(36)
-            .substr(2, 9)}`,
+          key:
+            lotteryCardList &&
+            lotteryCardList[index] &&
+            lotteryCardList[index].key
+              ? lotteryCardList[index].key
+              : `_${Math.random()
+                  .toString(36)
+                  .substr(2, 9)}`,
         }));
       }
       setLotteryCardList(lotteryRowCardList);
@@ -177,8 +183,10 @@ const UserLikedLotteries = props => {
           <View style={sharedStyles.lotteriesContainer}>
             <Filter onFilterChange={handleFilterChange} />
             <VirtualizedList
-              initialNumToRender={10}
-              windowSize={isCard ? 10 : 2}
+              initialNumToRender={5}
+              windowSize={1}
+              maxToRenderPerBatch={4}
+              updateCellsBatchingPeriod={0.0}
               removeClippedSubviews={true}
               refreshing={loading}
               onRefresh={fetchUserLikedLotteries}
@@ -187,7 +195,6 @@ const UserLikedLotteries = props => {
                   {lotteriesTexts.emptyLotteries}
                 </Text>
               }
-              progressViewOffset={-100}
               horizontal={false}
               showsVerticalScrollIndicator={false}
               data={

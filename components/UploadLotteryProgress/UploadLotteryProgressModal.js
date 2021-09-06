@@ -49,8 +49,10 @@ const UploadLotteryProgressModal = props => {
                 {uploadAdProgress.noItems}
               </Text>
             }
-            initialNumToRender={10}
+            initialNumToRender={5}
             windowSize={1}
+            maxToRenderPerBatch={4}
+            updateCellsBatchingPeriod={0.0}
             removeClippedSubviews={true}
             refreshing={loading}
             showsVerticalScrollIndicator={false}

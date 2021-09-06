@@ -15,7 +15,7 @@ const getUserSelector = createSelector(
 
 const getUserIdSelector = createSelector(
   [getUser],
-  user => user && user.id,
+  user => (user ? user.id : null),
 );
 
 const getLoggedInSelector = createSelector(

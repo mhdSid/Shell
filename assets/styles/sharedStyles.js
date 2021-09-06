@@ -173,7 +173,7 @@ const sharedStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     opacity: 0.9,
-    zIndex: 1000,
+    zIndex: 1111,
   },
   /* End Loading */
 

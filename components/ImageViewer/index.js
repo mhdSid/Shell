@@ -6,6 +6,7 @@ import {Toolbar} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import PropTypes from 'prop-types';
 import invoke from 'lodash/invoke';
+import FastImage from 'react-native-fast-image';
 
 const ImagesViewer = props => {
   const {uri, imageText} = props;
@@ -32,13 +33,14 @@ const ImagesViewer = props => {
             style={sharedStyles.imageViewerZoom}
             imageWidth={300}
             imageHeight={300}>
-            <Image
+            <FastImage
               style={sharedStyles.imageViewerImage}
               source={{
                 uri,
-                cache: 'default',
+                priority: FastImage.priority.high,
+                cache: FastImage.cacheControl.immutable,
               }}
-              resizeMode="cover"
+              resizeMode={FastImage.resizeMode.cover}
             />
           </ImageZoom>
         </View>

@@ -66,11 +66,16 @@ const Lotteries = props => {
         lotteryRowCardList = chunk(
           filteredLotteries || userJoinedLotteries,
           3,
-        ).map(list => ({
+        ).map((list, index) => ({
           data: list,
-          key: `_${Math.random()
-            .toString(36)
-            .substr(2, 9)}`,
+          key:
+            lotteryCardList &&
+            lotteryCardList[index] &&
+            lotteryCardList[index].key
+              ? lotteryCardList[index].key
+              : `_${Math.random()
+                  .toString(36)
+                  .substr(2, 9)}`,
         }));
       }
       setLotteryCardList(lotteryRowCardList);
@@ -172,8 +177,10 @@ const Lotteries = props => {
       <View style={sharedStyles.lotteriesContainer}>
         <Filter onFilterChange={handleFilterChange} />
         <VirtualizedList
-          initialNumToRender={isCard ? 10 : 2}
-          windowSize={isCard ? 10 : 2}
+          initialNumToRender={5}
+          windowSize={1}
+          maxToRenderPerBatch={4}
+          updateCellsBatchingPeriod={0.0}
           removeClippedSubviews={true}
           refreshing={loading}
           onRefresh={fetchLotteries}
