@@ -97,7 +97,7 @@ const ImportLottery = props => {
   const adNameRef = createRef();
   const descriptionRef = createRef();
   const priceRef = createRef();
-  const adImages = [0, 1, 2, 3, 4];
+  const adImages = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   const handleChange = {
     adName: () => {
       return value => {
@@ -170,52 +170,52 @@ const ImportLottery = props => {
     setItemCategoryChanged(false);
     setItemConditionChanged(false);
   };
-  const animatedImages = [
-    {
-      translateX: useRef(new Animated.Value(0)).current,
-      translateY: useRef(new Animated.Value(0)).current,
-    },
-    {
-      translateX: useRef(new Animated.Value(0)).current,
-      translateY: useRef(new Animated.Value(0)).current,
-    },
-    {
-      translateX: useRef(new Animated.Value(0)).current,
-      translateY: useRef(new Animated.Value(0)).current,
-    },
-    {
-      translateX: useRef(new Animated.Value(0)).current,
-      translateY: useRef(new Animated.Value(0)).current,
-    },
-    {
-      translateX: useRef(new Animated.Value(0)).current,
-      translateY: useRef(new Animated.Value(0)).current,
-    },
-  ];
-  const startAnimation = () => {
-    const windowWidth = Dimensions.get('window').width;
-    const windowHeight = Dimensions.get('window').height;
-    const animationDelayGap = 100;
-    let animationDelay = 0;
+  // const animatedImages = [
+  //   {
+  //     translateX: useRef(new Animated.Value(0)).current,
+  //     translateY: useRef(new Animated.Value(0)).current,
+  //   },
+  //   {
+  //     translateX: useRef(new Animated.Value(0)).current,
+  //     translateY: useRef(new Animated.Value(0)).current,
+  //   },
+  //   {
+  //     translateX: useRef(new Animated.Value(0)).current,
+  //     translateY: useRef(new Animated.Value(0)).current,
+  //   },
+  //   {
+  //     translateX: useRef(new Animated.Value(0)).current,
+  //     translateY: useRef(new Animated.Value(0)).current,
+  //   },
+  //   {
+  //     translateX: useRef(new Animated.Value(0)).current,
+  //     translateY: useRef(new Animated.Value(0)).current,
+  //   },
+  // ];
+  // const startAnimation = () => {
+  //   const windowWidth = Dimensions.get('window').width;
+  //   const windowHeight = Dimensions.get('window').height;
+  //   const animationDelayGap = 100;
+  //   let animationDelay = 0;
 
-    animatedImages.forEach(animatedImage => {
-      animationDelay += animationDelayGap;
+  //   animatedImages.forEach(animatedImage => {
+  //     animationDelay += animationDelayGap;
 
-      Animated.parallel([
-        Animated.timing(animatedImage.translateY, {
-          toValue: -windowHeight + 225,
-          duration: 1000,
-          delay: animationDelay,
-          easing: Easing.elastic(1),
-        }),
-        Animated.timing(animatedImage.translateX, {
-          toValue: -windowWidth / 2 + 45,
-          duration: 1000,
-          delay: animationDelay,
-        }),
-      ]).start();
-    });
-  };
+  //     Animated.parallel([
+  //       Animated.timing(animatedImage.translateY, {
+  //         toValue: -windowHeight + 225,
+  //         duration: 1000,
+  //         delay: animationDelay,
+  //         easing: Easing.elastic(1),
+  //       }),
+  //       Animated.timing(animatedImage.translateX, {
+  //         toValue: -windowWidth / 2 + 45,
+  //         duration: 1000,
+  //         delay: animationDelay,
+  //       }),
+  //     ]).start();
+  //   });
+  // };
   const handleUploadLottery = () => {
     // startAnimation();
     const {current: nameField} = adNameRef;
@@ -289,7 +289,7 @@ const ImportLottery = props => {
               400,
               400,
               'JPEG',
-              50,
+              40,
               0,
               null,
               true,
@@ -298,6 +298,7 @@ const ImportLottery = props => {
                 onlyScaleDown: true,
               },
             ).then(data => {
+              console.log(data);
               const imagesArray = [...images];
               const imagesFilesArray = [...imageFiles];
               imagesArray[index] = data.uri;
@@ -422,19 +423,19 @@ const ImportLottery = props => {
             centerElement={importLotteryTexts.createLottery}
             leftElement={'cloud-upload'}
             onLeftElementPress={handleShowUploadLotteryProgressModal}
-            rightElement={
-              <Button
-                onPress={handleUploadLottery}
-                disabled={!lotteryDataChanged}
-                raised
-                text={importLotteryTexts.create}
-                style={{
-                  container: sharedStyles.mainButtonContainer,
-                  text: {color: '#b69cf6'},
-                }}
-                icon="done-all"
-              />
-            }
+            // rightElement={
+            //   <Button
+            //     onPress={handleUploadLottery}
+            //     disabled={!lotteryDataChanged}
+            //     raised
+            //     text={importLotteryTexts.create}
+            //     style={{
+            //       container: sharedStyles.mainButtonContainer,
+            //       text: {color: '#b69cf6'},
+            //     }}
+            //     icon="done-all"
+            //   />
+            // }
           />
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -505,7 +506,7 @@ const ImportLottery = props => {
                     onPress={handleChoosePhoto(index)}
                     style={[
                       sharedStyles.imageBtn,
-                      index === 4 && sharedStyles.imageBtnLast,
+                      (index === 4 || index === 9) && sharedStyles.imageBtnLast,
                       index === 0 && errors.images
                         ? sharedStyles.imageBtnError
                         : '',

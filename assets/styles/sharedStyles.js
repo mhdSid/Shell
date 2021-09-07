@@ -16,7 +16,7 @@ const flex = {
 
 const toolbarStyles = {
   height: 55,
-  zIndex: 1001,
+  zIndex: 1555,
 };
 
 const uploadProgressContainer = {
@@ -596,10 +596,35 @@ const sharedStyles = StyleSheet.create({
   homeCardItemText: {
     color: 'white',
   },
+  homeCardMoreActionsContainer: {
+    position: 'absolute',
+    top: 2,
+    left: 2,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    width: 20,
+    height: 20,
+    borderRadius: 20 / 2,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   homeCardItemIcon: {
     position: 'absolute',
-    top: 0,
-    right: 0,
+    top: 2,
+    right: 2,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    width: 22,
+    height: 22,
+    borderRadius: 22 / 2,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  homeCardItemIconHeart: {
+    padding: 0,
+    margin: 0,
+    // left: 0.2,
+    // top: 1.2,
   },
   homeCardListItemRow: {
     display: 'flex',

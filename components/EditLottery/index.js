@@ -23,6 +23,7 @@ import FastImage from 'react-native-fast-image';
 import {handleUpdateLottery} from '../../redux/EditLottery/EditLottery';
 import {loadingPopup} from '../Loading';
 import ImageResizer from 'react-native-image-resizer';
+import {isNumber} from 'lodash';
 
 const EditLottery = props => {
   const {item: lotteryDetails} = props;
@@ -89,7 +90,12 @@ const EditLottery = props => {
   const adNameRef = createRef();
   const descriptionRef = createRef();
   const priceRef = createRef();
-  const adImages = [0, 1, 2, 3, 4];
+  const viewImages = [...lotteryDetailsImages].concat(
+    new Array(10 - lotteryDetailsImages.length)
+      .fill(1)
+      .map((item, index) => index),
+  );
+  console.log(viewImages);
   const handleChange = {
     adName: () => {
       return value => {
@@ -242,7 +248,7 @@ const EditLottery = props => {
               400,
               400,
               'JPEG',
-              50,
+              40,
               0,
               null,
               true,
@@ -326,19 +332,19 @@ const EditLottery = props => {
               centerElement={importLotteryTexts.updateLottery}
               leftElement="arrow-back"
               onLeftElementPress={handleCloseModal}
-              rightElement={
-                <Button
-                  onPress={updateLottery}
-                  disabled={!lotteryDataChanged}
-                  raised
-                  text={importLotteryTexts.update}
-                  style={{
-                    container: sharedStyles.mainButtonContainer,
-                    text: {color: '#b69cf6'},
-                  }}
-                  icon="done-all"
-                />
-              }
+              // rightElement={
+              //   <Button
+              //     onPress={updateLottery}
+              //     disabled={!lotteryDataChanged}
+              //     raised
+              //     text={importLotteryTexts.update}
+              //     style={{
+              //       container: sharedStyles.mainButtonContainer,
+              //       text: {color: '#b69cf6'},
+              //     }}
+              //     icon="done-all"
+              //   />
+              // }
             />
           </View>
           {loading && loadingPopup}
@@ -410,51 +416,30 @@ const EditLottery = props => {
                 <Text style={sharedStyles.label}>
                   {importLotteryTexts.images}
                 </Text>
-                <View
-                  style={[sharedStyles.imageBtnContainer, {marginBottom: 0}]}>
-                  {lotteryDetailsImages.map((uri, index) => (
-                    <TouchableBounce
-                      key={index}
-                      style={[
-                        sharedStyles.imageBtn,
-                        (index === 4 || index === 8) &&
-                          sharedStyles.imageBtnLast,
-                      ]}>
-                      <FastImage
-                        style={sharedStyles.adImage}
-                        source={{
-                          uri,
-                          priority: FastImage.priority.high,
-                          cache: FastImage.cacheControl.immutable,
-                        }}
-                        resizeMode={FastImage.resizeMode.cover}
-                      />
-                    </TouchableBounce>
-                  ))}
-                </View>
                 <View style={sharedStyles.imageBtnContainer}>
-                  {adImages.map(index => (
+                  {viewImages.map((value, index) => (
                     <TouchableBounce
-                      key={index}
+                      key={value || index}
                       onPress={handleChoosePhoto(index)}
                       style={[
                         sharedStyles.imageBtn,
-                        index === 4 && sharedStyles.imageBtnLast,
+                        (index === 4 || index === 9) &&
+                          sharedStyles.imageBtnLast,
                       ]}>
-                      {!images[index] && (
+                      {isNumber(value) || !value ? (
                         <Icon name="image" size={35} color="white" />
-                      )}
-                      {images[index] && (
+                      ) : null}
+                      {!isNumber(value) && value ? (
                         <FastImage
                           style={sharedStyles.adImage}
                           source={{
-                            uri: images[index],
+                            uri: value,
                             priority: FastImage.priority.high,
                             cache: FastImage.cacheControl.immutable,
                           }}
                           resizeMode={FastImage.resizeMode.cover}
                         />
-                      )}
+                      ) : null}
                     </TouchableBounce>
                   ))}
                 </View>

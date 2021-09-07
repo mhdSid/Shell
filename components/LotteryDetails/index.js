@@ -412,7 +412,7 @@ const LotteryDetails = props => {
                     <VirtualizedList
                       initialNumToRender={5}
                       windowSize={1}
-                      maxToRenderPerBatch={4}
+                      maxToRenderPerBatch={5}
                       updateCellsBatchingPeriod={0.0}
                       removeClippedSubviews={true}
                       horizontal={true}
@@ -492,7 +492,7 @@ const LotteryDetails = props => {
                   <VirtualizedList
                     initialNumToRender={5}
                     windowSize={1}
-                    maxToRenderPerBatch={4}
+                    maxToRenderPerBatch={5}
                     updateCellsBatchingPeriod={0.0}
                     removeClippedSubviews={true}
                     horizontal={true}

@@ -11,6 +11,7 @@ import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
 import {connect} from 'react-redux';
 import {listItemActions} from '../../Constants/Texts';
 import FastImage from 'react-native-fast-image/dist/index.cjs';
+import {showLotteryResult} from '../../redux/LotteryResult/actions';
 
 class ListItemCommon extends Component {
   static propTypes = {
@@ -19,6 +20,7 @@ class ListItemCommon extends Component {
     onItemPress: PropTypes.func,
     index: PropTypes.number,
     showLotteryResult: PropTypes.func,
+    isFromLikedLotteriesView: PropTypes.bool,
   };
   constructor() {
     super();
@@ -42,6 +44,7 @@ class ListItemCommon extends Component {
       userId: this.props.authUserId,
       lotteryId: this.props.item.id,
       showLotteryDetails: false,
+      isFromLikedLotteriesView: this.props.isFromLikedLotteriesView,
     });
   };
 
@@ -50,6 +53,7 @@ class ListItemCommon extends Component {
       userId: this.props.authUserId,
       lotteryId: this.props.item.id,
       showLotteryDetails: false,
+      isFromLikedLotteriesView: this.props.isFromLikedLotteriesView,
     });
   };
   handleMoreButtonPress = () => {
@@ -58,10 +62,7 @@ class ListItemCommon extends Component {
         options: [
           listItemActions.cancel,
           listItemActions.goToLotteryDetails,
-          this.props.showLotteryResult === true ||
-          typeof this.props.showLotteryResult === 'function'
-            ? listItemActions.goToLotteryResults
-            : null,
+          this.props.showLotteryResult && listItemActions.goToLotteryResults,
         ].filter(Boolean),
         // destructiveButtonIndex: 1,
         cancelButtonIndex: 0,
@@ -77,7 +78,7 @@ class ListItemCommon extends Component {
             return;
           }
           case 2: {
-            invoke(this.props, 'showLotteryResult', this.props.index);
+            invoke(this.props, 'displayLotteryResult', this.props.item);
             return;
           }
           default: {
@@ -164,6 +165,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     handleLikeLottery: payload => dispatch(handleLikeLottery(payload)),
+    displayLotteryResult: payload => dispatch(showLotteryResult(payload)),
     handleDislikeLottery: payload => dispatch(handleDislikeLottery(payload)),
   };
 };

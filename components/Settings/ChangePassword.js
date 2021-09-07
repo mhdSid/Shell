@@ -120,22 +120,22 @@ const ChangePassword = props => {
             leftElement="arrow-back"
             centerElement={settings.changePassword}
             onLeftElementPress={handleCloseModal}
-            rightElement={
-              <Button
-                color="white"
-                onPress={handleUpdateUser}
-                disabled={
-                  loading || !(currentPasswordChanged && newPasswordChanged)
-                }
-                style={{
-                  container: sharedStyles.mainButtonContainer,
-                  text: {color: '#b69cf6'},
-                }}
-                raised
-                text={updateUserr.save}
-                icon="done-all"
-              />
-            }
+            // rightElement={
+            //   <Button
+            //     color="white"
+            //     onPress={handleUpdateUser}
+            //     disabled={
+            //       loading || !(currentPasswordChanged && newPasswordChanged)
+            //     }
+            //     style={{
+            //       container: sharedStyles.mainButtonContainer,
+            //       text: {color: '#b69cf6'},
+            //     }}
+            //     raised
+            //     text={updateUserr.save}
+            //     icon="done-all"
+            //   />
+            // }
           />
           {loading && loadingPopup}
           <KeyboardAvoidingView

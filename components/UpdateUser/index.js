@@ -99,8 +99,8 @@ const UpdateUser = props => {
         if (response.uri) {
           ImageResizer.createResizedImage(
             response.uri,
-            200,
-            200,
+            100,
+            100,
             'JPEG',
             50,
             0,
@@ -142,20 +142,20 @@ const UpdateUser = props => {
             leftElement="arrow-back"
             onLeftElementPress={handleCloseModal}
             centerElement={updateUserr.updateProfile}
-            rightElement={
-              <Button
-                color="white"
-                onPress={handleUpdateUser}
-                disabled={loading || !userDataChanged}
-                style={{
-                  container: sharedStyles.mainButtonContainer,
-                  text: {color: '#b69cf6'},
-                }}
-                raised
-                text={updateUserr.update}
-                icon="done-all"
-              />
-            }
+            // rightElement={
+            //   <Button
+            //     color="white"
+            //     onPress={handleUpdateUser}
+            //     disabled={loading || !userDataChanged}
+            //     style={{
+            //       container: sharedStyles.mainButtonContainer,
+            //       text: {color: '#b69cf6'},
+            //     }}
+            //     raised
+            //     text={updateUserr.update}
+            //     icon="done-all"
+            //   />
+            // }
           />
           {loading && loadingPopup}
           <KeyboardAvoidingView

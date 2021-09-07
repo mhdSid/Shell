@@ -50,8 +50,8 @@ const UploadLotteryProgressModal = props => {
               </Text>
             }
             initialNumToRender={5}
-            windowSize={1}
-            maxToRenderPerBatch={4}
+            windowSize={2}
+            maxToRenderPerBatch={5}
             updateCellsBatchingPeriod={0.0}
             removeClippedSubviews={true}
             refreshing={loading}

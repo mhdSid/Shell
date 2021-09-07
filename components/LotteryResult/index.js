@@ -143,8 +143,8 @@ const LotteryResult = props => {
                 <View style={sharedStyles.lotteryResultVirtualizedListTop}>
                   <VirtualizedList
                     initialNumToRender={5}
-                    windowSize={1}
-                    maxToRenderPerBatch={4}
+                    windowSize={2}
+                    maxToRenderPerBatch={5}
                     updateCellsBatchingPeriod={0.0}
                     removeClippedSubviews={true}
                     horizontal={true}

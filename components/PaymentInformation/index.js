@@ -134,19 +134,19 @@ const PaymentInformation = props => {
             leftElement="arrow-back"
             centerElement={paymentInformation.creditCard}
             onLeftElementPress={handleCloseModal}
-            rightElement={
-              <Button
-                onPress={handleUpdateUserPaymentInfo}
-                disabled={loading || !userDataChanged || !isValid}
-                raised
-                text={paymentInformation.submit}
-                style={{
-                  container: sharedStyles.mainButtonContainer,
-                  text: {color: '#b69cf6'},
-                }}
-                icon="done-all"
-              />
-            }
+            // rightElement={
+            //   <Button
+            //     onPress={handleUpdateUserPaymentInfo}
+            //     disabled={loading || !userDataChanged || !isValid}
+            //     raised
+            //     text={paymentInformation.submit}
+            //     style={{
+            //       container: sharedStyles.mainButtonContainer,
+            //       text: {color: '#b69cf6'},
+            //     }}
+            //     icon="done-all"
+            //   />
+            // }
           />
           {loading && loadingPopup}
           <ScrollView showsVerticalScrollIndicator={false}>

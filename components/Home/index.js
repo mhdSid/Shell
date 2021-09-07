@@ -19,7 +19,6 @@ import {
 import {chunk} from 'lodash';
 import {getLoggedInSelector, getUserIdSelector} from '../Profile/Selectors';
 import {lottteries as lotteriesTexts} from '../../Constants/Texts';
-import {onPingSuccess, setOnPingSuccess} from '../Pinger';
 // import {AdMobBanner} from 'react-native-admob';
 
 let SearchBox = null;
@@ -62,10 +61,6 @@ class HomeComponent extends PureComponent {
   onSearchError = () => {
     this.setState({loading: false});
   };
-
-  // constructor() {
-  //   onPingSuccess = this.fetchLotteries;
-  // }
 
   changeViewStyle = ({action}) => {
     if (action === 'search') {
@@ -139,6 +134,7 @@ class HomeComponent extends PureComponent {
   };
 
   UNSAFE_componentWillMount() {
+    console.log(this.props.authUserId);
     const {isCard, isList} = this.props;
     if (isCard) {
       if (!CardListItemRow) {
@@ -150,17 +146,19 @@ class HomeComponent extends PureComponent {
         ListItemCommon = require('./ListItem').default;
       }
     }
-    if (!onPingSuccess) {
-      setOnPingSuccess(this.fetchLotteries);
-    } else {
-      this.fetchLotteries();
-    }
+    // if (!onPingSuccess) {
+    //   setOnPingSuccess(this.fetchLotteries);
+    // } else {
+    //   this.fetchLotteries();
+    // }
     // emitSocketEvents();
+    this.fetchedLotteries = true;
+    this.fetchLotteries();
     // this.fetchLotteries();
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.authUserId !== this.props.authUserId && onPingSuccess) {
+    if (nextProps.authUserId !== this.props.authUserId && !this.fetchedLotteries) {
       this.fetchLotteries(nextProps.authUserId);
     }
     const {isCard, isList} = nextProps;
@@ -267,8 +265,8 @@ class HomeComponent extends PureComponent {
         /> */}
         <VirtualizedList
           initialNumToRender={5}
-          windowSize={1}
-          maxToRenderPerBatch={4}
+          windowSize={2}
+          maxToRenderPerBatch={5}
           updateCellsBatchingPeriod={0.0}
           removeClippedSubviews={true}
           refreshing={loading}

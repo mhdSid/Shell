@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, View, VirtualizedList} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
@@ -19,16 +19,17 @@ import CardListItemRow from '../Home/CardListItemRow';
 import {chunk} from 'lodash';
 import {getIsCardSelector, getIsListSelector} from '../Home/Selectors';
 import {setHomeViewStyle} from '../../redux/Settings/actions';
+import { getLotteryResultSelector } from '../LotteryResult/Selectors';
+import LotteryResultModal from '../LotteryResult';
 
 let LotteryDetails = null;
 
 const UserLikedLotteries = props => {
-  const {user, userLikedLotteries, lotteryDetails, isCard, isList} = props;
+  const {user, userLikedLotteries, lotteryDetails, isCard, isList, lotteryResult} = props;
   const [loading, setLoading] = useState(true);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
   const [selectedLottery, setSelectedLottery] = useState(null);
   const [filteredLotteries, setFilteredLotteries] = useState(null);
-  const [lotteryCardList, setLotteryCardList] = useState([]);
 
   const callback = () => {
     setLoading(false);
@@ -46,32 +47,21 @@ const UserLikedLotteries = props => {
     fetchUserLikedLotteries();
   }, [lotteryDetails, user]);
 
-  useEffect(() => {
-    if (isCard) {
-      let lotteryRowCardList = null;
-      if (
-        Array.isArray(filteredLotteries || userLikedLotteries) &&
-        (filteredLotteries || userLikedLotteries).length
-      ) {
-        console.log(lotteryCardList);
-        lotteryRowCardList = chunk(
-          filteredLotteries || userLikedLotteries,
-          3,
-        ).map((list, index) => ({
-          data: list,
-          key:
-            lotteryCardList &&
-            lotteryCardList[index] &&
-            lotteryCardList[index].key
-              ? lotteryCardList[index].key
-              : `_${Math.random()
-                  .toString(36)
-                  .substr(2, 9)}`,
-        }));
-      }
-      setLotteryCardList(lotteryRowCardList);
+  const lotteryCardList = useMemo(() => {
+    if (
+      isCard &&
+      Array.isArray(filteredLotteries || userLikedLotteries) &&
+      (filteredLotteries || userLikedLotteries).length
+    ) {
+      return chunk(filteredLotteries || userLikedLotteries, 3).map(list => ({
+        data: list,
+        key: `_${Math.random()
+          .toString(36)
+          .substr(2, 9)}`,
+      }));
     }
-  }, [filteredLotteries, isCard, userLikedLotteries]);
+    return [];
+  }, [isCard, filteredLotteries, userLikedLotteries]);
 
   const getRowItemKey = item => `${item.key}`;
   const getRowItemCount = () => (lotteryCardList || []).length;
@@ -102,6 +92,7 @@ const UserLikedLotteries = props => {
       item={item}
       index={index}
       onItemPress={handleItemPress}
+      isFromLikedLotteriesView={true}
       listLength={(filteredLotteries || userLikedLotteries).length}
       showLotteryResult={true}
     />
@@ -163,7 +154,7 @@ const UserLikedLotteries = props => {
     setSelectedLottery(item);
   };
   const renderCardListItemRow = ({item}) => (
-    <CardListItemRow data={item} onItemPress={handleCardItemPress} />
+    <CardListItemRow data={item} onItemPress={handleCardItemPress} isFromLikedLotteriesView={true}/>
   );
 
   return (
@@ -180,12 +171,13 @@ const UserLikedLotteries = props => {
             rightElement={isCard ? 'view-list' : 'view-comfy'}
             onRightElementPress={changeViewStyle}
           />
+          {lotteryResult && <LotteryResultModal />}
           <View style={sharedStyles.lotteriesContainer}>
             <Filter onFilterChange={handleFilterChange} />
             <VirtualizedList
               initialNumToRender={5}
-              windowSize={1}
-              maxToRenderPerBatch={4}
+              windowSize={2}
+              maxToRenderPerBatch={5}
               updateCellsBatchingPeriod={0.0}
               removeClippedSubviews={true}
               refreshing={loading}
@@ -222,6 +214,7 @@ UserLikedLotteries.propTypes = {
   userLikedLotteries: PropTypes.oneOfType([PropTypes.any, PropTypes.array]),
   onClose: PropTypes.func,
   lotteryDetails: PropTypes.oneOfType([PropTypes.any, PropTypes.object]),
+  lotteryResult: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
 };
 
 const mapStateToProps = state => {
@@ -231,6 +224,7 @@ const mapStateToProps = state => {
     userLikedLotteries: getUserLikedLotteriesSelector(state),
     isList: getIsListSelector(state),
     isCard: getIsCardSelector(state),
+    lotteryResult: getLotteryResultSelector(state),
   };
 };
 

@@ -72,10 +72,10 @@ const handleImportLottery = payload => {
                   reject(errorObj);
                   return handleError(errorObj);
                 }
-                dispatch({
-                  type: homeActions.setLotteries,
-                  payload: updatedAd,
-                });
+                // dispatch({
+                //   type: homeActions.setLotteries,
+                //   payload: updatedAd,
+                // });
                 resolve(updatedAd);
               });
             }),
@@ -100,10 +100,10 @@ const handleImportLottery = payload => {
                     .split(','),
                 ),
               };
-              dispatch({
-                type: homeActions.setLotteries,
-                payload: importedLottery,
-              });
+              // dispatch({
+              //   type: homeActions.setLotteries,
+              //   payload: importedLottery,
+              // });
               dispatch({
                 type: lotteryDetailsActions.showLotteryDetails,
                 payload: null,

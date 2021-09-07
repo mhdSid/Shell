@@ -46,7 +46,10 @@ const handleUpdateLottery = payload => {
         });
         dispatch({
           type: lotteryDetailsActions.showLotteryDetails,
-          payload: updatedLottery,
+          payload: {
+            ...updatedLottery,
+            resetState: false,
+          },
         });
         if (imageFiles && imageFiles.length) {
           const updatePromises = [];
@@ -90,7 +93,10 @@ const handleUpdateLottery = payload => {
                 });
                 return dispatch({
                   type: lotteryDetailsActions.showLotteryDetails,
-                  payload: updatedLottery,
+                  payload: {
+                    ...updatedLottery,
+                    resetState: false,
+                  }
                 });
               }
             },
@@ -155,13 +161,12 @@ const handleUpdateLottery = payload => {
               type: homeActions.setLotteries,
               payload: updatedLottery,
             });
-            dispatch({
-              type: lotteryDetailsActions.showLotteryDetails,
-              payload: null,
-            });
             return dispatch({
               type: lotteryDetailsActions.showLotteryDetails,
-              payload: updatedLottery,
+              payload: {
+                ...updatedLottery,
+                resetState: false,
+              }
             });
           }
         },

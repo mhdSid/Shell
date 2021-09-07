@@ -10,21 +10,14 @@ import {getLotteryResultSelector} from '../LotteryResult/Selectors';
 
 let LotteryDetails = null;
 let LotteryResult = null;
-export let setOnPingSuccess = null;
-export let onPingSuccess = null;
 
 const Pinger = props => {
   const {lotteryDetails, lotteryResult} = props;
-  setOnPingSuccess = callback => {
-    onPingSuccess = callback;
-  };
   const onAdsDetailsClose = () => {
     invoke(props, 'showLotteryDetails', undefined);
   };
   useEffect(() => {
-    invoke(props, 'handlePing', {
-      onPingSuccess,
-    });
+    invoke(props, 'handlePing');
   }, []);
 
   if (lotteryResult) {
