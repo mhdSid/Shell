@@ -13,6 +13,7 @@ const handleDislikeLottery = payload => {
       onError,
       showLotteryDetails,
       isFromLikedLotteriesView,
+      cancelTag,
     } = payload;
     const onGetMyLotteriesSuccess = data => {
       const {dislikedLottery, error} = data;
@@ -51,7 +52,7 @@ const handleDislikeLottery = payload => {
       }
       return;
     };
-    return dislikeLottery({userId, lotteryId}).then(
+    return dislikeLottery({userId, lotteryId, cancelTag}).then(
       onGetMyLotteriesSuccess,
       error => {
         return handleError({error, onError});

@@ -90,27 +90,32 @@ const signup = async props => {
 };
 
 const search = async props => {
-  const {filters} = props;
-  const searchQuery = props.searchQuery ? props.searchQuery : '';
-  const fromDate = filters.fromDate ? `${new Date(filters.fromDate)}` : '';
-  const toDate = filters.toDate ? `${new Date(filters.toDate)}` : '';
-  const city = filters.city || '';
-  const prefecture = filters.prefecture || '';
-  const category = filters.category || '';
-  const condition = filters.condition || '';
+  const {searchFilters, pageToken} = props;
+  const searchText = searchFilters.searchText ? searchFilters.searchText : '';
+  const fromDate = searchFilters.fromDate
+    ? `${new Date(searchFilters.fromDate)}`
+    : '';
+  const toDate = searchFilters.toDate
+    ? `${new Date(searchFilters.toDate)}`
+    : '';
+  const city = searchFilters.city || '';
+  const prefecture = searchFilters.prefecture || '';
+  const category = searchFilters.category || '';
+  const condition = searchFilters.condition || '';
   const data = await request({
-    endpoint: 'users/authenticate/search',
+    endpoint: 'ads/search',
     method: 'POST',
     body: {
-      query: searchQuery,
+      searchText,
       fromDate,
       toDate,
       city,
       prefecture,
       category,
       condition,
+      pageToken,
       hash: sha256(
-        searchQuery +
+        searchText +
           fromDate +
           toDate +
           prefecture +
@@ -125,10 +130,11 @@ const search = async props => {
 };
 
 const getUsersData = async props => {
-  const {users} = props;
+  const {users, cancelTag} = props;
   const data = await request({
-    endpoint: '/api/users/userData',
+    endpoint: 'api/users/userData', // '/api/users/userData',
     method: 'POST',
+    cancelTag,
     body: {
       users,
       hash: sha256(JSON.stringify(users).toString() + hashkey).toString(),
@@ -248,7 +254,7 @@ const updateUserBackground = async props => {
             // data includes responseCode: number and responseBody: Object
             let response = {};
             if (data.responseBody) {
-              response = decrypt(JSON.parse(data.responseBody).data, true);
+              response = JSON.parse(data.responseBody).data;
             }
             resolve(response);
             errorSubscriber.remove();

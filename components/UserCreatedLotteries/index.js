@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, View, VirtualizedList} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
@@ -17,9 +17,11 @@ import CardListItemRow from '../Home/CardListItemRow';
 import {chunk} from 'lodash';
 import {getIsCardSelector, getIsListSelector} from '../Home/Selectors';
 import {setHomeViewStyle} from '../../redux/Settings/actions';
-import { showLotteryResult } from '../../redux/LotteryResult/actions';
-import { getLotteryResultSelector } from '../LotteryResult/Selectors';
+import {showLotteryResult} from '../../redux/LotteryResult/actions';
+import {getLotteryResultSelector} from '../LotteryResult/Selectors';
 import LotteryResultModal from '../LotteryResult';
+import {loadingPopup} from '../Loading';
+import cancellableFetch from 'react-native-cancelable-fetch';
 
 let LotteryDetails = null;
 
@@ -29,6 +31,7 @@ const UserCreatedLotteries = props => {
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
   const [selectedLottery, setSelectedLottery] = useState();
   const [filteredLotteries, setFilteredLotteries] = useState(null);
+  const [cancelHttpTag] = useState(14);
 
   const lotteryCardList = useMemo(() => {
     if (
@@ -47,7 +50,7 @@ const UserCreatedLotteries = props => {
   }, [isCard, filteredLotteries, userCreatedLotteries]);
 
   const getRowItemKey = item => `${item.key}`;
-  const getRowItemCount = () => (lotteryCardList || []).length;
+  const getRowItemCount = () => lotteryCardList.length;
 
   const handleCloseModal = () => {
     invoke(props, 'onClose');
@@ -64,6 +67,7 @@ const UserCreatedLotteries = props => {
       onSuccess: callback,
       onError: callback,
       userId: user.id,
+      cancelTag: cancelHttpTag,
     });
   };
   const handleItemPress = index => {
@@ -77,8 +81,7 @@ const UserCreatedLotteries = props => {
     setShowLotteryDetails(false);
   };
   const getItem = (data, index) => data[index];
-  const getItemCount = () =>
-    (filteredLotteries || userCreatedLotteries || []).length;
+  const getItemCount = () => (filteredLotteries || userCreatedLotteries).length;
   const getKeyExtractor = item => item.id;
   const renderItem = ({item, index}) => (
     <ListItemCommon
@@ -148,6 +151,11 @@ const UserCreatedLotteries = props => {
   const renderCardListItemRow = ({item}) => (
     <CardListItemRow data={item} onItemPress={handleCardItemPress} />
   );
+  useEffect(() => {
+    return () => {
+      cancellableFetch.abort(cancelHttpTag);
+    };
+  }, []);
 
   return (
     <Modal
@@ -168,36 +176,46 @@ const UserCreatedLotteries = props => {
           />
           {lotteryResult && <LotteryResultModal />}
           <View style={sharedStyles.lotteriesContainer}>
-            <Filter onFilterChange={handleFilterChange} />
-            <VirtualizedList
-              initialNumToRender={5}
-              windowSize={2}
-              maxToRenderPerBatch={5}
-              updateCellsBatchingPeriod={0.0}
-              removeClippedSubviews={true}
-              refreshing={loading}
-              onRefresh={fetchMyLotteries}
-              ListEmptyComponent={
-                <Text style={sharedStyles.uploadProgressModalText}>
+            {(Array.isArray(lotteryCardList) && lotteryCardList.length) ||
+            (Array.isArray(filteredLotteries || userCreatedLotteries) &&
+              (filteredLotteries || userCreatedLotteries).length) ? (
+              <>
+                <Filter onFilterChange={handleFilterChange} />
+                <VirtualizedList
+                  initialNumToRender={10}
+                  windowSize={2}
+                  maxToRenderPerBatch={10}
+                  updateCellsBatchingPeriod={0.0}
+                  removeClippedSubviews={true}
+                  refreshing={loading}
+                  onRefresh={fetchMyLotteries}
+                  onEndReachedThreshold={0.0}
+                  onEndReached={fetchMyLotteries}
+                  horizontal={false}
+                  showsVerticalScrollIndicator={false}
+                  data={
+                    isCard
+                      ? lotteryCardList
+                      : filteredLotteries || userCreatedLotteries
+                  }
+                  getItem={getItem}
+                  getItemCount={isCard ? getRowItemCount : getItemCount}
+                  contentContainerStyle={
+                    isCard && sharedStyles.homeLotteriesContainer
+                  }
+                  keyExtractor={isCard ? getRowItemKey : getKeyExtractor}
+                  renderItem={isCard ? renderCardListItemRow : renderItem}
+                />
+              </>
+            ) : !loading ? (
+              <View style={sharedStyles.emptySearchResultsView}>
+                <Text style={sharedStyles.emptySearchResultsText}>
                   {lotteriesTexts.emptyLotteries}
                 </Text>
-              }
-              progressViewOffset={-100}
-              horizontal={false}
-              showsVerticalScrollIndicator={false}
-              data={
-                isCard
-                  ? lotteryCardList || []
-                  : filteredLotteries || userCreatedLotteries || []
-              }
-              getItem={getItem}
-              getItemCount={isCard ? getRowItemCount : getItemCount}
-              contentContainerStyle={
-                isCard && sharedStyles.homeLotteriesContainer
-              }
-              keyExtractor={isCard ? getRowItemKey : getKeyExtractor}
-              renderItem={isCard ? renderCardListItemRow : renderItem}
-            />
+              </View>
+            ) : (
+              loadingPopup
+            )}
           </View>
         </View>
       </SafeAreaView>

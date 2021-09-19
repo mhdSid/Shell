@@ -99,8 +99,8 @@ const UpdateUser = props => {
         if (response.uri) {
           ImageResizer.createResizedImage(
             response.uri,
-            100,
-            100,
+            150,
+            150,
             'JPEG',
             50,
             0,

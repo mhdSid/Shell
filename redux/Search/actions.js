@@ -1,6 +1,7 @@
 const searchActions = {
   setSearchFilters: 'SET_SEARCH_FILTERS',
   setSearchEventFired: 'SET_SEARCH_EVENT_FIRED',
+  resetState: 'SEARCH_RESET_STATE',
 };
 
 const setSearchFilters = payload => {

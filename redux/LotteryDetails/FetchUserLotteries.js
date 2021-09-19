@@ -5,7 +5,7 @@ import {lotteryDetailsActions} from './actions';
 
 const handleFetchUserLotteries = payload => {
   return dispatch => {
-    const {userId, onError} = payload;
+    const {userId, onError, cancelTag} = payload;
     const onGetMyAdsSuccess = data => {
       const {myAds: userAds, error} = data;
       if (error) {
@@ -17,7 +17,7 @@ const handleFetchUserLotteries = payload => {
         payload: userAds || [],
       });
     };
-    return getMyAds({userId}).then(onGetMyAdsSuccess, error => {
+    return getMyAds({userId, cancelTag}).then(onGetMyAdsSuccess, error => {
       return handleError({error, onError});
     });
   };

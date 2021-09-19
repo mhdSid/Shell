@@ -73,6 +73,15 @@ const lotteryDetailsReducer = (state = initialState, action) => {
         lotteryDetails: undefined,
       };
     }
+    case lotteryDetailsActions.resetState: {
+      return {
+        lotteryUsersData: undefined,
+        adPosterData: undefined,
+        winnerUserData: undefined,
+        lotteryDetails: undefined,
+        userAds: undefined,
+      };
+    }
     default: {
       return {
         ...state,

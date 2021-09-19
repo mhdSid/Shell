@@ -79,6 +79,7 @@ const SearchBox = props => {
   const handleChange = {
     fromDate: () => {
       return value => {
+        invoke(props, 'handleSetSearchFilters', {fromDate: value});
         if (value) {
           if (Date.parse(value) > 0) {
             const {current: toDateField} = toDateRef;
@@ -92,7 +93,6 @@ const SearchBox = props => {
                 fromDate: validationMessages.search.fromDateLessThanToDate,
               });
             } else {
-              invoke(props, 'handleSetSearchFilters', {fromDate: value});
               setErrors({
                 ...errors,
                 fromDate: false,
@@ -110,6 +110,7 @@ const SearchBox = props => {
     },
     toDate: () => {
       return value => {
+        invoke(props, 'handleSetSearchFilters', {toDate: value});
         if (value) {
           if (Date.parse(value) > 0) {
             const {current: fromDateField} = fromDateRef;
@@ -123,7 +124,6 @@ const SearchBox = props => {
                 toDate: validationMessages.search.toDateGreaterThanFromDate,
               });
             } else {
-              invoke(props, 'handleSetSearchFilters', {toDate: value});
               setErrors({
                 ...errors,
                 toDate: false,
@@ -141,6 +141,7 @@ const SearchBox = props => {
     },
     searchQuery: () => {
       return value => {
+        invoke(props, 'handleSetSearchFilters', {searchText: value});
         if (value) {
           if (value.length >= 2 && value.length <= 100) {
             setErrors({
@@ -174,31 +175,16 @@ const SearchBox = props => {
     fromDateRef.current.blur();
     toDateRef.current.blur();
     searchQueryRef.current.blur();
-    const {current: searchQueryField} = searchQueryRef;
-    const searchQuery = searchQueryField && searchQueryField.value();
-    // if (
-    //   searchQuery ||
-    //   searchFilters.fromDate ||
-    //   searchFilters.toDate ||
-    //   searchFilters.prefecture ||
-    //   searchFilters.city ||
-    //   searchFilters.category ||
-    //   searchFilters.condition
-    // ) {
     invoke(props, 'handleSearch', {
-      searchQuery,
-      filters: {
-        ...searchFilters,
-      },
       onError: props.onSearchError,
       onSuccess: props.onSearchSuccess,
     });
     invoke(props, 'handleSetSearchEventFired', true);
-    // }
     invoke(props, 'onSearchPress');
   };
   const handleResetSearchFilters = () => {
     invoke(props, 'handleSetSearchFilters', {
+      searchText: '',
       city: '',
       prefecture: '',
       category: '',
@@ -216,8 +202,6 @@ const SearchBox = props => {
       userId: props.authUserId,
     });
   };
-  const {current: searchQueryField} = searchQueryRef;
-  const searchQuery = searchQueryField && searchQueryField.value();
   return (
     <Animated.View style={[sharedStyles.searchBox, {...style}]}>
       <View style={sharedStyles.searchBoxOverlay} />
@@ -343,6 +327,7 @@ const SearchBox = props => {
               placeholderTextColor={'rgba(0,0,0,0.3)'}
               maxLength={100}
               minLength={2}
+              value={searchFilters.searchText}
               error={errors.searchQuery}
               ref={searchQueryRef}
             />
@@ -352,7 +337,7 @@ const SearchBox = props => {
           <View style={sharedStyles.searchBoxDivision}>
             <Button
               disabled={
-                !searchQuery &&
+                !searchFilters.searchText &&
                 !searchFilters.prefecture &&
                 !searchFilters.city &&
                 !searchFilters.fromDate &&
@@ -370,16 +355,7 @@ const SearchBox = props => {
           </View>
           <View style={sharedStyles.resetButtonView}>
             <Button
-              disabled={
-                // !searchQuery &&
-                // !searchFilters.prefecture &&
-                // !searchFilters.city &&
-                // !searchFilters.fromDate &&
-                // !searchFilters.toDate &&
-                // !searchFilters.category &&
-                // !searchFilters.condition
-                !searchEventFired
-              }
+              disabled={!searchEventFired}
               raised={true}
               primary
               text={'Reset'}

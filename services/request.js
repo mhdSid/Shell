@@ -1,8 +1,9 @@
 import {decrypt} from './Encrypt';
 import {apiRequest} from '../Constants/Api';
+import cancellableFetch from 'react-native-cancelable-fetch';
 
 const request = async options => {
-  const {method, body, endpoint} = options;
+  const {method, body, endpoint, cancelTag} = options;
   let reqData = {
     method,
     headers: {
@@ -19,13 +20,16 @@ const request = async options => {
       body: body instanceof FormData ? body : JSON.stringify(body),
     };
   }
-  const response = await fetch(`${apiRequest.apiUri}${endpoint}`, reqData);
+  const response = await cancellableFetch(
+    `${apiRequest.apiUri}${endpoint}`,
+    reqData,
+    cancelTag,
+  );
   if (response) {
     let data = await response.json();
     if (data.data || data.error || data.user) {
-      data = decrypt(data.data || data.error || data.user, true);
+      data = data.data || data.error || data.user;
       if (data && Object.keys(data).length) {
-        data = {...data};
         return data;
       }
     }

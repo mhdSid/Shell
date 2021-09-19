@@ -33,12 +33,16 @@ import {handleFetchUsersData} from '../../redux/LotteryDetails/FetchUsersData';
 import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
 import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
 import {getLotteryDetailsSelector} from '../Pinger/Selectors';
+import cancellableFetch from 'react-native-cancelable-fetch';
+import {showReceiveLotteryModal} from '../../redux/ReceiveLottery/actions';
+import {showShipLotteryModal} from '../../redux/ShipLottery/actions';
 
 let ImagesViewer = null;
 let Payment = null;
 let LotteryResultModal = null;
 let ChatModal = null;
 let ReceiveLotteryModal = null;
+let ShipLotteryModal = null;
 let EditLotteryModal = null;
 
 const LotteryDetails = props => {
@@ -59,6 +63,7 @@ const LotteryDetails = props => {
     price,
     country,
     prefecture,
+    city,
     publishDate,
     cancelDate,
     condition,
@@ -74,6 +79,7 @@ const LotteryDetails = props => {
   } = lotteryDetails || item;
   const [usersDataLoading, setUsersDataLoading] = useState(true);
   const [userAdsLoading, setUserAdsLoading] = useState(true);
+  const [cancelHttpTag] = useState(10);
   const [showModal, setShowModal] = useState(null);
   const [viewImageUri, setViewImageUri] = useState(images[0]);
   const isVisitor = authUser && authUser.id && userId !== authUser.id;
@@ -94,6 +100,7 @@ const LotteryDetails = props => {
   const handleCloseModal = () => {
     invoke(props, 'showLotteryDetails', null);
     invoke(props, 'onClose');
+    cancellableFetch.abort(cancelHttpTag);
   };
   const handleEnterDraw = () => {
     if (!Payment) {
@@ -122,6 +129,7 @@ const LotteryDetails = props => {
         winnerUserId,
         userId,
         users,
+        cancelTag: cancelHttpTag,
         lotteryUserIds,
         onError: fetchUsersDataCallback,
         onSuccess: fetchUsersDataCallback,
@@ -133,6 +141,7 @@ const LotteryDetails = props => {
     fetchUsersData();
     invoke(props, 'handleFetchUserLotteries', {
       userId,
+      cancelTag: cancelHttpTag,
       onError: fetchUsersAdsCallback,
       onSuccess: fetchUsersAdsCallback,
     });
@@ -173,6 +182,11 @@ const LotteryDetails = props => {
     setShowModal(null);
   };
   const handleReceiveLotteryModalClose = () => {
+    invoke(props, 'handleShowReceiveLotteryModal', undefined);
+    setShowModal(null);
+  };
+  const handleShipLotteryModalClose = () => {
+    invoke(props, 'handleShowShipLotteryModal', undefined);
     setShowModal(null);
   };
   const handleActionPress = {
@@ -187,9 +201,19 @@ const LotteryDetails = props => {
     },
     [lotteryDetailsTexts.actionOptions.receive]: () => {
       if (!ReceiveLotteryModal) {
-        ReceiveLotteryModal = require('../ReceiveLottery').default;
+        ReceiveLotteryModal = require('../ReceiveLottery/ReceiveLotteryInfoModal')
+          .default;
       }
+      invoke(props, 'handleShowReceiveLotteryModal', lotteryDetails || item);
       setShowModal('receiveLotteryModal');
+    },
+    [lotteryDetailsTexts.actionOptions.ship]: () => {
+      if (!ShipLotteryModal) {
+        ShipLotteryModal = require('../ShipLotteries/ShipLotteryInfoModal')
+          .default;
+      }
+      invoke(props, 'handleShowShipLotteryModal', lotteryDetails || item);
+      setShowModal('shipLotteryModal');
     },
     [lotteryDetailsTexts.actionOptions.remove]: () => {
       console.log('delete');
@@ -203,6 +227,7 @@ const LotteryDetails = props => {
     [lotteryDetailsTexts.actionOptions.like]: () => {
       invoke(props, 'handleLikeLottery', {
         userId: authUser.id,
+        cancelTag: cancelHttpTag,
         lotteryId: (lotteryDetails || item).id,
         showLotteryDetails: true,
       });
@@ -210,6 +235,7 @@ const LotteryDetails = props => {
     [lotteryDetailsTexts.actionOptions.dislike]: () => {
       invoke(props, 'handleDislikeLottery', {
         userId: authUser.id,
+        cancelTag: cancelHttpTag,
         lotteryId: (lotteryDetails || item).id,
         showLotteryDetails: true,
       });
@@ -241,23 +267,30 @@ const LotteryDetails = props => {
         onClose={handleChatModalClose}
         isWinner={isWinner}
         isLotteryPoster={isLotteryPoster}
+        lotteryPoster={adPosterData}
+        lotteryWinner={winnerUserData}
       />
     ),
     receiveLotteryModal: (
-      <ReceiveLotteryModal
-        isWinner={isWinner}
-        isLotteryPoster={isLotteryPoster}
-        onClose={handleReceiveLotteryModalClose}
-      />
+      <ReceiveLotteryModal onClose={handleReceiveLotteryModalClose} />
+    ),
+    shipLotteryModal: (
+      <ShipLotteryModal onClose={handleShipLotteryModalClose} />
     ),
     paymentModal: <Payment onClose={onPaymentClose} />,
+  };
+  const handleOnDismiss = () => {
+    cancellableFetch.abort(cancelHttpTag);
   };
   useEffect(() => {
     onShow();
   }, [item, lotteryDetails]);
 
   return (
-    <Modal animationType="slide" onRequestClose={handleCloseModal}>
+    <Modal
+      animationType="slide"
+      onRequestClose={handleCloseModal}
+      onDismiss={handleOnDismiss}>
       {showModal && modals[showModal]}
 
       <SafeAreaView
@@ -464,7 +497,7 @@ const LotteryDetails = props => {
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
                 <Text style={sharedStyles.aboutFirstSectionText}>
-                  {`${prefecture}, ${country}`}
+                  {`${country}, ${prefecture}, ${city}`}
                 </Text>
               </View>
               <View style={sharedStyles.userDetailsIconTextContainer}>
@@ -516,8 +549,9 @@ const LotteryDetails = props => {
           </ScrollView>
           {authUser && authUser.id ? (
             <View style={sharedStyles.lotteryDetailsBottomToolbar}>
-              {isLotteryPoster
-                ? lotteryDetailsTexts.lotteryPosterActions.map(userAction => (
+              {isLotteryPoster ? (
+                <>
+                  {lotteryDetailsTexts.lotteryPosterActions.map(userAction => (
                     <Button
                       primary
                       raised
@@ -529,41 +563,57 @@ const LotteryDetails = props => {
                       text={''}
                       onPress={handleActionPress[userAction.action]}
                     />
-                  ))
-                : isWinner
-                ? lotteryDetailsTexts.lotteryWinnerActions.map(winnerAction => (
-                    <Button
-                      primary
-                      raised
-                      style={{
-                        container:
-                          sharedStyles.bottomToolbarActionButtonContainer,
-                      }}
-                      icon={winnerAction.icon}
-                      text={''}
-                      onPress={handleActionPress[winnerAction.action]}
-                    />
-                  ))
-                : isVisitor
-                ? lotteryDetailsTexts.visitorActions.map(visitorAction => (
-                    <Button
-                      primary
-                      raised
-                      style={{
-                        container:
-                          sharedStyles.bottomToolbarActionButtonContainer,
-                      }}
-                      disabled={
-                        visitorAction.action ===
-                          lotteryDetailsTexts.actionOptions.win &&
-                        `${currentCollectedPrice}` === `${price}`
-                      }
-                      icon={visitorAction.icon}
-                      text={''}
-                      onPress={handleActionPress[visitorAction.action]}
-                    />
-                  ))
-                : null}
+                  ))}
+                  {winnerUserId
+                    ? lotteryDetailsTexts.shipActions.map(shipAction => (
+                        <Button
+                          primary
+                          raised
+                          style={{
+                            container:
+                              sharedStyles.bottomToolbarActionButtonContainer,
+                          }}
+                          icon={shipAction.icon}
+                          text={''}
+                          onPress={handleActionPress[shipAction.action]}
+                        />
+                      ))
+                    : null}
+                </>
+              ) : isWinner ? (
+                lotteryDetailsTexts.lotteryWinnerActions.map(winnerAction => (
+                  <Button
+                    primary
+                    raised
+                    style={{
+                      container:
+                        sharedStyles.bottomToolbarActionButtonContainer,
+                    }}
+                    icon={winnerAction.icon}
+                    text={''}
+                    onPress={handleActionPress[winnerAction.action]}
+                  />
+                ))
+              ) : isVisitor ? (
+                lotteryDetailsTexts.visitorActions.map(visitorAction => (
+                  <Button
+                    primary
+                    raised
+                    style={{
+                      container:
+                        sharedStyles.bottomToolbarActionButtonContainer,
+                    }}
+                    disabled={
+                      visitorAction.action ===
+                        lotteryDetailsTexts.actionOptions.win &&
+                      `${currentCollectedPrice}` === `${price}`
+                    }
+                    icon={visitorAction.icon}
+                    text={''}
+                    onPress={handleActionPress[visitorAction.action]}
+                  />
+                ))
+              ) : null}
               {isVisitor &&
               Array.isArray(likedBy) &&
               likedBy.length &&
@@ -640,6 +690,10 @@ const mapDispatchToProps = dispatch => {
     showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
     handleLikeLottery: payload => dispatch(handleLikeLottery(payload)),
     handleDislikeLottery: payload => dispatch(handleDislikeLottery(payload)),
+    handleShowReceiveLotteryModal: payload =>
+      dispatch(showReceiveLotteryModal(payload)),
+    handleShowShipLotteryModal: payload =>
+      dispatch(showShipLotteryModal(payload)),
   };
 };
 

@@ -6,25 +6,28 @@ import sha256 from 'crypto-js/sha256';
 import {password as hashkey} from './Encrypt';
 
 const getAds = async props => {
-  const {userId} = props;
+  const {pageToken, cancelTag} = props;
   const data = await request({
     endpoint: 'ads/get',
     method: 'POST',
+    cancelTag,
     body: {
-      userId,
-      hash: sha256(`${userId}` + hashkey).toString(),
+      pageToken,
+      hash: sha256(`${pageToken}` + hashkey).toString(),
     },
   });
   return data;
 };
 
 const getMyAds = async props => {
-  const {userId} = props;
+  const {userId, pageToken, cancelTag} = props;
   const data = await request({
     endpoint: 'ads/myAds',
     method: 'POST',
+    cancelTag,
     body: {
       userId,
+      pageToken,
       hash: sha256(userId + hashkey).toString(),
     },
   });
@@ -32,12 +35,14 @@ const getMyAds = async props => {
 };
 
 const getUserCreatedLotteries = async props => {
-  const {userId} = props;
+  const {userId, pageToken, cancelTag} = props;
   const data = await request({
     endpoint: 'ads/myCreatedLotteries',
     method: 'POST',
+    cancelTag,
     body: {
       userId,
+      pageToken,
       hash: sha256(userId + hashkey).toString(),
     },
   });
@@ -45,12 +50,14 @@ const getUserCreatedLotteries = async props => {
 };
 
 const getUserLikedLotteries = async props => {
-  const {userId} = props;
+  const {userId, pageToken, cancelTag} = props;
   const data = await request({
     endpoint: 'ads/myLikedLotteries',
     method: 'POST',
+    cancelTag,
     body: {
       userId,
+      pageToken,
       hash: sha256(userId + hashkey).toString(),
     },
   });
@@ -58,10 +65,11 @@ const getUserLikedLotteries = async props => {
 };
 
 const likeLottery = async props => {
-  const {userId, lotteryId} = props;
+  const {userId, lotteryId, cancelTag} = props;
   const data = await request({
     endpoint: 'ads/likeLottery',
     method: 'POST',
+    cancelTag,
     body: {
       userId: `${userId}`,
       lotteryId: `${lotteryId}`,
@@ -72,9 +80,10 @@ const likeLottery = async props => {
 };
 
 const dislikeLottery = async props => {
-  const {userId, lotteryId} = props;
+  const {userId, lotteryId, cancelTag} = props;
   const data = await request({
     endpoint: 'ads/dislikeLottery',
+    cancelTag,
     method: 'POST',
     body: {
       userId: `${userId}`,
@@ -86,10 +95,68 @@ const dislikeLottery = async props => {
 };
 
 const getUserJoinedLotteries = async props => {
-  const {userId} = props;
+  const {userId, pageToken, cancelTag} = props;
   const data = await request({
     endpoint: 'ads/myJoinedLotteries',
     method: 'POST',
+    cancelTag,
+    body: {
+      userId,
+      pageToken,
+      hash: sha256(userId + hashkey).toString(),
+    },
+  });
+  return data;
+};
+
+const getUserWonLotteries = async props => {
+  const {userId, cancelTag} = props;
+  const data = await request({
+    endpoint: 'ads/myWonLotteries',
+    method: 'POST',
+    cancelTag,
+    body: {
+      userId,
+      hash: sha256(userId + hashkey).toString(),
+    },
+  });
+  return data;
+};
+
+const markLotteryAsReceived = async props => {
+  const {lotteryId, cancelTag} = props;
+  const data = await request({
+    endpoint: 'ads/markLotteryAsReceived',
+    method: 'POST',
+    cancelTag,
+    body: {
+      lotteryId,
+      hash: sha256(lotteryId + hashkey).toString(),
+    },
+  });
+  return data;
+};
+
+const markLotteryAsShipped = async props => {
+  const {lotteryId, cancelTag} = props;
+  const data = await request({
+    endpoint: 'ads/markLotteryAsShipped',
+    method: 'POST',
+    cancelTag,
+    body: {
+      lotteryId,
+      hash: sha256(lotteryId + hashkey).toString(),
+    },
+  });
+  return data;
+};
+
+const getUserCreatedWonLotteries = async props => {
+  const {userId, cancelTag} = props;
+  const data = await request({
+    endpoint: 'ads/myCreatedWonLotteries',
+    method: 'POST',
+    cancelTag,
     body: {
       userId,
       hash: sha256(userId + hashkey).toString(),
@@ -201,7 +268,7 @@ const addBackgroundUpload = async props => {
             // data includes responseCode: number and responseBody: Object
             let response = {};
             if (data.responseBody) {
-              response = decrypt(JSON.parse(data.responseBody).data, true);
+              response = JSON.parse(data.responseBody).data;
             }
             resolve(response);
             errorSubscriber.remove();
@@ -261,7 +328,7 @@ const updateAdBackground = async props => {
             // data includes responseCode: number and responseBody: Object
             let response = {};
             if (data.responseBody) {
-              response = decrypt(JSON.parse(data.responseBody).data, true);
+              response = JSON.parse(data.responseBody).data;
             }
             resolve(response);
             errorSubscriber.remove();
@@ -348,4 +415,8 @@ export {
   likeLottery,
   dislikeLottery,
   updateLotteryWithoutImage,
+  getUserWonLotteries,
+  getUserCreatedWonLotteries,
+  markLotteryAsReceived,
+  markLotteryAsShipped,
 };

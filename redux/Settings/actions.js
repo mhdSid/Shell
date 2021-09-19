@@ -1,6 +1,7 @@
 const settingsActions = {
   setLanguage: 'SETTINGS_SET_LANG',
   setHomeViewStyle: 'SETTINGS_SET_HOME_VIEW_STYLE',
+  resetState: 'SETTINGS_RESET_STATE',
 };
 
 const setLang = payload => {

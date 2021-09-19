@@ -19,17 +19,27 @@ import CardListItemRow from '../Home/CardListItemRow';
 import {chunk} from 'lodash';
 import {getIsCardSelector, getIsListSelector} from '../Home/Selectors';
 import {setHomeViewStyle} from '../../redux/Settings/actions';
-import { getLotteryResultSelector } from '../LotteryResult/Selectors';
+import {getLotteryResultSelector} from '../LotteryResult/Selectors';
 import LotteryResultModal from '../LotteryResult';
+import {loadingPopup} from '../Loading';
+import cancellableFetch from 'react-native-cancelable-fetch';
 
 let LotteryDetails = null;
 
 const UserLikedLotteries = props => {
-  const {user, userLikedLotteries, lotteryDetails, isCard, isList, lotteryResult} = props;
+  const {
+    user,
+    userLikedLotteries,
+    lotteryDetails,
+    isCard,
+    isList,
+    lotteryResult,
+  } = props;
   const [loading, setLoading] = useState(true);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
   const [selectedLottery, setSelectedLottery] = useState(null);
   const [filteredLotteries, setFilteredLotteries] = useState(null);
+  const [cancelHttpTag] = useState(12);
 
   const callback = () => {
     setLoading(false);
@@ -39,12 +49,16 @@ const UserLikedLotteries = props => {
     invoke(props, 'fetchUserLikedLotteries', {
       onSuccess: callback,
       onError: callback,
+      cancelTag: cancelHttpTag,
       userId: user.id,
     });
   };
 
   useEffect(() => {
     fetchUserLikedLotteries();
+    return () => {
+      cancellableFetch.abort(cancelHttpTag);
+    };
   }, [lotteryDetails, user]);
 
   const lotteryCardList = useMemo(() => {
@@ -64,7 +78,7 @@ const UserLikedLotteries = props => {
   }, [isCard, filteredLotteries, userLikedLotteries]);
 
   const getRowItemKey = item => `${item.key}`;
-  const getRowItemCount = () => (lotteryCardList || []).length;
+  const getRowItemCount = () => lotteryCardList.length;
 
   const handleCloseModal = () => {
     invoke(props, 'handleShowLotteryDetails', undefined);
@@ -84,8 +98,7 @@ const UserLikedLotteries = props => {
     setShowLotteryDetails(false);
   };
   const getItem = (data, index) => data[index];
-  const getItemCount = () =>
-    (filteredLotteries || userLikedLotteries || []).length;
+  const getItemCount = () => (filteredLotteries || userLikedLotteries).length;
   const getKeyExtractor = item => item.id;
   const renderItem = ({item, index}) => (
     <ListItemCommon
@@ -154,7 +167,11 @@ const UserLikedLotteries = props => {
     setSelectedLottery(item);
   };
   const renderCardListItemRow = ({item}) => (
-    <CardListItemRow data={item} onItemPress={handleCardItemPress} isFromLikedLotteriesView={true}/>
+    <CardListItemRow
+      data={item}
+      onItemPress={handleCardItemPress}
+      isFromLikedLotteriesView={true}
+    />
   );
 
   return (
@@ -173,35 +190,46 @@ const UserLikedLotteries = props => {
           />
           {lotteryResult && <LotteryResultModal />}
           <View style={sharedStyles.lotteriesContainer}>
-            <Filter onFilterChange={handleFilterChange} />
-            <VirtualizedList
-              initialNumToRender={5}
-              windowSize={2}
-              maxToRenderPerBatch={5}
-              updateCellsBatchingPeriod={0.0}
-              removeClippedSubviews={true}
-              refreshing={loading}
-              onRefresh={fetchUserLikedLotteries}
-              ListEmptyComponent={
-                <Text style={sharedStyles.uploadProgressModalText}>
+            {(Array.isArray(lotteryCardList) && lotteryCardList.length) ||
+            (Array.isArray(filteredLotteries || userLikedLotteries) &&
+              (filteredLotteries || userLikedLotteries).length) ? (
+              <>
+                <Filter onFilterChange={handleFilterChange} />
+                <VirtualizedList
+                  initialNumToRender={10}
+                  windowSize={2}
+                  // onEndReachedThreshold={0.3}
+                  // onEndReached={fetchUserLikedLotteries}
+                  maxToRenderPerBatch={10}
+                  updateCellsBatchingPeriod={0.0}
+                  removeClippedSubviews={true}
+                  refreshing={loading}
+                  onRefresh={fetchUserLikedLotteries}
+                  horizontal={false}
+                  showsVerticalScrollIndicator={false}
+                  data={
+                    isCard
+                      ? lotteryCardList
+                      : filteredLotteries || userLikedLotteries
+                  }
+                  getItem={getItem}
+                  getItemCount={isCard ? getRowItemCount : getItemCount}
+                  contentContainerStyle={
+                    isCard && sharedStyles.homeLotteriesContainer
+                  }
+                  keyExtractor={isCard ? getRowItemKey : getKeyExtractor}
+                  renderItem={isCard ? renderCardListItemRow : renderItem}
+                />
+              </>
+            ) : !loading ? (
+              <View style={sharedStyles.emptySearchResultsView}>
+                <Text style={sharedStyles.emptySearchResultsText}>
                   {lotteriesTexts.emptyLotteries}
                 </Text>
-              }
-              horizontal={false}
-              showsVerticalScrollIndicator={false}
-              data={
-                isCard
-                  ? lotteryCardList || []
-                  : filteredLotteries || userLikedLotteries || []
-              }
-              getItem={getItem}
-              getItemCount={isCard ? getRowItemCount : getItemCount}
-              contentContainerStyle={
-                isCard && sharedStyles.homeLotteriesContainer
-              }
-              keyExtractor={isCard ? getRowItemKey : getKeyExtractor}
-              renderItem={isCard ? renderCardListItemRow : renderItem}
-            />
+              </View>
+            ) : (
+              loadingPopup
+            )}
           </View>
         </View>
       </SafeAreaView>

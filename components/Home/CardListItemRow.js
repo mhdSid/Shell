@@ -32,8 +32,8 @@ export default class CardListItemRow extends Component {
               sharedStyles.homeCardListItemContainer,
               index === this.props.data.data.length - 1 &&
                 sharedStyles.homeCardListItemContainerNoMargin,
-              this.props.data.data.length === 1 &&
-                sharedStyles.homeCardListItemContainerSingle,
+              // this.props.data.data.length === 1 &&
+              //   sharedStyles.homeCardListItemContainerSingle,
             ]}>
             <CardListItem
               key={`${listItem.id + index}`}

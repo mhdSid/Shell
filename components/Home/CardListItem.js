@@ -13,42 +13,16 @@ import FastImage from 'react-native-fast-image';
 import {showLotteryResult} from '../../redux/LotteryResult/actions';
 
 const randomLocalImagesForTesting = [
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/BB56E967-2989-4D24-9DDD-F1D38AAEEE2A.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/A1B64088-75F0-4A59-9B90-036D1402D963.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/C3DA4D3A-6671-4D68-8219-418CAC60B592.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/2379C3A0-B672-433E-927F-BBB698B40CB6.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/735AFC18-B8B9-4306-AD8A-06B5A67EC992.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/E5299125-0924-4909-B3B3-3F777F1BCB4D.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/4C682A20-D096-41FA-B1C9-0B889B9A905D.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/4D093DE1-30C9-4D46-B056-FAE29B2B0F08.jpg',
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/0BA9F9FA-61E5-4A09-B334-670F690911C4.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/9921E7FA-7A04-46AF-A881-659718FA59D3.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/971A7756-DAD6-4816-A6B7-B3F36F111C5A.jpg',
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/D91A9480-1142-4757-B4F6-A810EFD886AE.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/7415462C-C8F6-4F11-B237-006E64122455.jpg',
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/96F211A2-C034-42A4-94B8-2C3EAE037320.jpg',
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/0CEE9CE4-5918-42AF-A235-CA0C76BED4E6.jpg',
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/235CD88A-A4AB-4FA4-95C3-75F55F4A87A1.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/69169920-A936-4A58-BA69-FFF422CBE9C1.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/54B61F94-D60E-428E-B097-3FD8C3F0A570.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/C0FA3EB9-BDF2-4267-885D-5CEAE6AD666D.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/7E96206D-F338-4957-ADEF-CC8DD2CF60F7.jpg',
-
-  'file:///var/mobile/Containers/Data/Application/14D9DA6E-E770-430D-8012-14CD5F02C0D1/Library/Caches/A06665B6-E1E1-4CF6-8B6C-3B4EAA22FE88.jpg',
+  'file:///var/mobile/Containers/Data/Application/3E72FC00-E9BE-4E58-B9FD-07D4EF984D41/Library/Caches/EE8EC5C1-9722-4166-A797-D51D3462A245.jpg',
+  'file:///var/mobile/Containers/Data/Application/3E72FC00-E9BE-4E58-B9FD-07D4EF984D41/Library/Caches/E36A92AB-EC1E-4893-8827-B04EE0FAB3F6.jpg',
+  'file:///var/mobile/Containers/Data/Application/3E72FC00-E9BE-4E58-B9FD-07D4EF984D41/Library/Caches/A6341203-EA46-477D-9FCE-037F6FADD1D4.jpg',
+  'file:///var/mobile/Containers/Data/Application/3E72FC00-E9BE-4E58-B9FD-07D4EF984D41/Library/Caches/90DB1C71-5309-4D42-8602-FFC9951F9A22.jpg',
+  'file:///var/mobile/Containers/Data/Application/3E72FC00-E9BE-4E58-B9FD-07D4EF984D41/Library/Caches/09458A8E-E2F5-4FFE-9998-8CF1E4B48E14.jpg',
+  'file:///var/mobile/Containers/Data/Application/3E72FC00-E9BE-4E58-B9FD-07D4EF984D41/Library/Caches/ECFD0CB7-9661-4842-B640-42B8A675A824.jpg',
+  'file:///var/mobile/Containers/Data/Application/3E72FC00-E9BE-4E58-B9FD-07D4EF984D41/Library/Caches/6B25778C-3EA7-4F8B-8900-CB5C10D1C6DD.jpg',
+  'file:///var/mobile/Containers/Data/Application/3E72FC00-E9BE-4E58-B9FD-07D4EF984D41/Library/Caches/FB76D520-8B12-4412-8212-51B42966A8BD.jpg',
+  'file:///var/mobile/Containers/Data/Application/3E72FC00-E9BE-4E58-B9FD-07D4EF984D41/Library/Caches/10726D2F-0F35-4447-B4AA-1D6DE052DC9B.jpg',
+  'file:///var/mobile/Containers/Data/Application/3E72FC00-E9BE-4E58-B9FD-07D4EF984D41/Library/Caches/99155442-0EFB-4CDB-875A-061776511CA6.jpg',
 ];
 class CardListItem extends Component {
   static propTypes = {
@@ -173,10 +147,7 @@ class CardListItem extends Component {
       <FastImage
         style={imageStyle}
         source={{
-          uri: item.images[0],
-          // randomLocalImagesForTesting[
-          //   Math.floor(Math.random() * randomLocalImagesForTesting.length)
-          // ], //,
+          uri: item.images[0], //randomLocalImagesForTesting[1], //,item.images[0],
           priority: FastImage.priority.high,
           cache: FastImage.cacheControl.immutable,
         }}

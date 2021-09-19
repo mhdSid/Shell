@@ -3,6 +3,7 @@ const lotteryResultActions = {
   setWinnerUserData: 'SET_LOTTERY_RESULT_WINNER_USER_DATA',
   setAdPosterData: 'SET_LOTTREY_RESULT_AD_POSTER_DATA',
   setLotteryUsersData: 'SET_LOTTERY_RESULT_LOTTERY_USERS_DATA',
+  resetState: 'LOTTERY_RESULT_RESET_STATE',
 };
 
 const showLotteryResult = payload => {

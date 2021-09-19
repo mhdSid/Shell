@@ -20,6 +20,9 @@ const persistConfig = {
     'searchReducer',
     'uploadProgressReducer',
     'lotteryResultReducer',
+    'receiveLotteryReducer',
+    'shipLotteryReducer',
+    'chatReducer',
   ],
   // Blacklist (Don't Save Specific Reducers)
 };

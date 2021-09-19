@@ -21,6 +21,7 @@ class ListItemCommon extends Component {
     index: PropTypes.number,
     showLotteryResult: PropTypes.func,
     isFromLikedLotteriesView: PropTypes.bool,
+    hideMoreActions: PropTypes.bool,
   };
   constructor() {
     super();
@@ -142,10 +143,12 @@ class ListItemCommon extends Component {
                   ) : null}
                 </>
               ) : null}
-              <IconToggle
-                name="more-vert"
-                onPress={this.handleMoreButtonPress}
-              />
+              {!this.props.hideMoreActions ? (
+                <IconToggle
+                  name="more-vert"
+                  onPress={this.handleMoreButtonPress}
+                />
+              ) : null}
             </>
           }
           onRightElementPress={this.handleRightElementPress}

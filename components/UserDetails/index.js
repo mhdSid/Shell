@@ -17,6 +17,7 @@ const UserDetails = props => {
     // mobile,
     country,
     prefecture,
+    city,
     // postalCode,
     // fullAddress,
   } = item;
@@ -85,7 +86,7 @@ const UserDetails = props => {
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {`${prefecture}, ${country}`}
+                {`${country}, ${prefecture}, ${city}`}
               </Text>
             </View>
             {/* <View style={sharedStyles.userDetailsIconTextContainer}>

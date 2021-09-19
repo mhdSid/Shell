@@ -1,7 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
-
+const stepImageWidth = windowWidth / 3 - 30;
 const fullWidthHeight = {
   width: '100%',
   height: '100%',
@@ -140,6 +140,11 @@ const sharedStyles = StyleSheet.create({
   mainButtonContainer: {
     borderRadius: 20,
   },
+  homeResetSearchBtn: {
+    width: '50%',
+    alignSelf: 'center',
+    marginVertical: 10,
+  },
   imageViewerToolbarContainer: {
     ...toolbarStyles,
     textAlign: 'center',
@@ -198,6 +203,16 @@ const sharedStyles = StyleSheet.create({
     paddingTop: 5,
     // paddingLeft: 0,
     // paddingRight: 0,
+  },
+  receiveLotteryTabNavigationContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'flex',
+    paddingBottom: 12,
+    paddingTop: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+    height: 56,
   },
   bottomNavigationRightActionContainer: {
     // paddingBottom: 12,
@@ -425,6 +440,7 @@ const sharedStyles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'flex-start',
+    // height: '100%',
   },
   importAdContainerNoAuth: {
     paddingTop: 40,
@@ -464,16 +480,16 @@ const sharedStyles = StyleSheet.create({
   relativeConatainer: {
     position: 'relative',
   },
-  homeLotteriesContainer: {
-    paddingTop: 10,
-    paddingHorizontal: 10,
-    paddingBottom: 20,
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-  },
+  // homeLotteriesContainer: {
+  //   paddingTop: 10,
+  //   paddingHorizontal: 10,
+  //   paddingBottom: 20,
+  //   display: 'flex',
+  //   flexDirection: 'column',
+  //   width: '100%',
+  //   justifyContent: 'center',
+  //   alignItems: 'flex-start',
+  // },
   listViewContainer: {
     paddingTop: 10,
     paddingHorizontal: 10,
@@ -537,6 +553,10 @@ const sharedStyles = StyleSheet.create({
   updateUserContainer: {
     paddingTop: 10,
     marginBottom: 50,
+  },
+  receiveLotteryContainer: {
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   updatePasswordContainer: {
     marginTop: 50,
@@ -611,7 +631,7 @@ const sharedStyles = StyleSheet.create({
   homeCardItemIcon: {
     position: 'absolute',
     top: 2,
-    right: 2,
+    right: 5,
     backgroundColor: 'rgba(0,0,0,0.5)',
     width: 22,
     height: 22,
@@ -818,8 +838,33 @@ const sharedStyles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 16,
     color: 'rgba(0,0,0,.5)',
-    marginTop: -55,
+    marginTop: -100,
     textAlign: 'center',
+  },
+  uploadProgressViewContainer: {
+    width: '100%',
+    height: '100%',
+  },
+  emptySearchResultsText: {
+    fontWeight: '500',
+    fontSize: 16,
+    color: 'rgba(0,0,0,.5)',
+    marginTop: -111,
+    textAlign: 'center',
+  },
+  homeEmptySearchResultsView: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptySearchResultsView: {
+    width: '100%',
+    height: '89%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   uploadProgressModalView: {
     width: '100%',
@@ -979,6 +1024,11 @@ const sharedStyles = StyleSheet.create({
   lotteryResultNoWinnerContainer: {
     marginBottom: 20,
   },
+  receiveLotteryAnnouncement: {
+    fontSize: 20,
+    fontWeight: '300',
+    marginBottom: 30,
+  },
   successConfirmationContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -1013,6 +1063,101 @@ const sharedStyles = StyleSheet.create({
   },
   successConfirmationActionContainer: {
     marginBottom: 20,
+  },
+  lotteryShipReceiveStepsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  lotteryShipReceiveStep: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    width: windowWidth / 3,
+    padding: 10,
+    textAlignVertical: 'top',
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepImage: {
+    textAlignVertical: 'top',
+    width: stepImageWidth,
+    height: stepImageWidth,
+    borderRadius: stepImageWidth / 2,
+  },
+  stepButton: {
+    marginTop: 10,
+    borderRadius: 20,
+    position: 'absolute',
+    top: '110%',
+  },
+  shipReceiveLotteryInfoContainer: {
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    marginTop: 60,
+    backgroundColor: 'rgba(0,0,0,.1)',
+    ...flex,
+  },
+  chatListContainer: {
+    ...flex,
+    justifyContent: 'center',
+    textAlign: 'center',
+    paddingHorizontal: 10,
+  },
+  chatListItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignSelf: 'flex-start',
+    padding: 10,
+    backgroundColor: 'rgba(0,0,0,.1)',
+    marginBottom: 20,
+    maxWidth: '80%',
+    borderRadius: 10,
+  },
+  chatListItemPullRight: {
+    backgroundColor: '#b69cf6',
+    alignSelf: 'flex-end',
+  },
+  chatMessageInput: {
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,.4)',
+    backgroundColor: 'white',
+    height: 40,
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    width: '80%',
+  },
+  chatBottomToolbar: {
+    ...toolbarStyles,
+    textAlign: 'center',
+    paddingHorizontal: 5,
+    backgroundColor: '#b69cf6',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  chatListView: {
+    // paddingTop: 40,
+    paddingBottom: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    ...flex,
+    justifyContent: 'flex-start',
+  },
+  chatListAnimatedView: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  chatVirtualizedListContainer: {
+    paddingTop: 20,
   },
 });
 

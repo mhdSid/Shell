@@ -3,7 +3,8 @@ const lotteryDetailsActions = {
   setAdPosterData: 'LOTTERY_DETAILS_SET_AD_POSTER_DATA',
   setLotteryUsersData: 'LOTTERY_DETAILS_SET_LOTTERY_USERS_DATA',
   showLotteryDetails: 'LOTTERY_DETAILS_SHOW',
-  fetchUserAds: 'LOTTERY_FETCH_USER_ADS',
+  fetchUserAds: 'LOTTERY_DETAILS_FETCH_USER_ADS',
+  resetState: 'LOTTERY_DETAILS_RESET_STATE',
 };
 
 const showLotteryDetails = payload => {

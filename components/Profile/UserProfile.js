@@ -20,6 +20,8 @@ let PaymentInformation = null;
 let Notifications = null;
 let Settings = null;
 let UpdateUser = null;
+let UserReceivedLotteries = null;
+let UserShippedLotteries = null;
 
 const UserProfile = props => {
   const {user} = props;
@@ -97,6 +99,18 @@ const UserProfile = props => {
         UserLikedLotteries = require('../UserLikedLotteries').default;
       }
       return <UserLikedLotteries onClose={onModalClose} />;
+    },
+    userReceivedLotteries: () => {
+      if (!UserReceivedLotteries) {
+        UserReceivedLotteries = require('../ReceiveLottery').default;
+      }
+      return <UserReceivedLotteries onClose={onModalClose} />;
+    },
+    userShippedLotteries: () => {
+      if (!UserShippedLotteries) {
+        UserShippedLotteries = require('../ShipLotteries').default;
+      }
+      return <UserShippedLotteries onClose={onModalClose} />;
     },
     paymentInformation: () => {
       if (!PaymentInformation) {
@@ -198,6 +212,16 @@ const UserProfile = props => {
                   icon: 'favorite',
                   value: profile.myLikedLotteries,
                   onPress: handleShowModal('userLikedLotteries'),
+                },
+                {
+                  icon: 'markunread-mailbox',
+                  value: profile.myReceivedLotteries,
+                  onPress: handleShowModal('userReceivedLotteries'),
+                },
+                {
+                  icon: 'local-shipping',
+                  value: profile.myShippedLotteries,
+                  onPress: handleShowModal('userShippedLotteries'),
                 },
               ]}
             />

@@ -4,25 +4,36 @@ import invoke from 'lodash/invoke';
 import {lotteriesActions} from './actions';
 
 const handleFetchUserCreatedLotteries = payload => {
-  return dispatch => {
-    const {userId, onError} = payload;
+  return (dispatch, getState) => {
+    const {userId, onError, cancelTag} = payload;
+    const pageToken = getState().lotteriesReducer.userCreatedLotteriesPageToken;
     const onGetMyLotteriesSuccess = data => {
-      const {myLotteries: userCreatedLotteries, error} = data;
+      const {myLotteries: userCreatedLotteries, error, nextPageToken} = data;
       if (error) {
         return handleError({error, onError});
       }
-      invoke(payload, 'onSuccess');
-      return dispatch({
-        type: lotteriesActions.setUserCreatedLotteries,
-        payload: userCreatedLotteries || [],
+      dispatch({
+        type: lotteriesActions.setUserCreatedLotteriesPageToken,
+        payload: nextPageToken,
       });
+      invoke(payload, 'onSuccess');
+      if (pageToken !== nextPageToken) {
+        return dispatch({
+          type: lotteriesActions.setUserCreatedLotteries,
+          payload: userCreatedLotteries || [],
+        });
+      }
     };
-    return getUserCreatedLotteries({userId}).then(
-      onGetMyLotteriesSuccess,
-      error => {
-        return handleError({error, onError});
-      },
-    );
+    if (pageToken !== false) {
+      return getUserCreatedLotteries({userId, pageToken, cancelTag}).then(
+        onGetMyLotteriesSuccess,
+        error => {
+          return handleError({error, onError});
+        },
+      );
+    }
+    invoke(payload, 'onSuccess');
+    return;
   };
 };
 export {handleFetchUserCreatedLotteries};

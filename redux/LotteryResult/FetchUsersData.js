@@ -2,7 +2,6 @@ import {getUsersData} from '../../services/Auth';
 import {handleError} from '../Home/actions';
 import invoke from 'lodash/invoke';
 import {lotteryResultActions} from './actions';
-import {uniq} from 'lodash';
 
 const handleFetchUsersData = payload => {
   return dispatch => {
@@ -13,6 +12,7 @@ const handleFetchUsersData = payload => {
       onEror,
       lotteryUserIds,
       currentCollectedPrice,
+      cancelTag,
     } = payload;
     const onGetUsersDataSuccess = data => {
       let {error, users} = data;
@@ -49,9 +49,12 @@ const handleFetchUsersData = payload => {
       }
       return invoke(payload, 'onSuccess');
     };
-    return getUsersData({users: adUsers}).then(onGetUsersDataSuccess, error => {
-      return handleError({error, onEror});
-    });
+    return getUsersData({users: adUsers, cancelTag}).then(
+      onGetUsersDataSuccess,
+      error => {
+        return handleError({error, onEror});
+      },
+    );
   };
 };
 

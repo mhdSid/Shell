@@ -42,6 +42,9 @@ const Payment = props => {
         expiry: user.creditCardExpiryDate,
         cvc: user.creditCardCVC,
       });
+      setTimeout(() => {
+        creditCardInputRef.current.focus('number');
+      }, 50);
       setIsValid(true);
     }
   };
@@ -141,7 +144,7 @@ const Payment = props => {
             <View style={sharedStyles.creditContainer}>
               <CreditCardInput
                 allowScroll={true}
-                autoFocus={true}
+                // autoFocus={true}
                 inputStyle={sharedStyles.creditInput}
                 onChange={onCreditChange}
                 ref={creditCardInputRef}

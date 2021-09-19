@@ -1,5 +1,5 @@
-import React, {PureComponent} from 'react';
-import {Toolbar} from 'react-native-material-ui';
+import React, {useEffect, useMemo, useState} from 'react';
+import {Button, Toolbar} from 'react-native-material-ui';
 import {Animated, Text, View, VirtualizedList} from 'react-native';
 import {connect} from 'react-redux';
 import invoke from 'lodash/invoke';
@@ -14,286 +14,276 @@ import {
   getIsListSelector,
   getIsCardSelector,
   getIsCarouselSelector,
+  getSearchEventFiredSelector,
+  getEmptySearchResultsSelector,
 } from './Selectors';
 // import {emitSocketEvents} from '../../services/Socket';
 import {chunk} from 'lodash';
 import {getLoggedInSelector, getUserIdSelector} from '../Profile/Selectors';
 import {lottteries as lotteriesTexts} from '../../Constants/Texts';
 // import {AdMobBanner} from 'react-native-admob';
+import SearchBox from './SearchBox';
+import UploadLotteryProgressModal from '../UploadLotteryProgress/UploadLotteryProgressModal';
+import CardListItemRow from './CardListItemRow';
+import ListItemCommon from './ListItem';
+import {handleSearch} from '../../redux/Search/Search';
+import {
+  setSearchEventFired,
+  setSearchFilters,
+} from '../../redux/Search/actions';
+import {loadingPopup} from '../Loading';
+import cancellableFetch from 'react-native-cancelable-fetch';
 
-let SearchBox = null;
-let UploadLotteryProgressModal = null;
-let CardListItemRow = null;
-let ListItemCommon = null;
+const HomeComponent = props => {
+  const {isList, isCard, lotteries, authUserId, searchEventFired} = props;
+  const [loading, setLoading] = useState(true);
+  const [showLotteryProgressModal, setShowLotteryProgressModal] = useState(
+    false,
+  );
+  const [searchBoxAnimatedOpacity] = useState(new Animated.Value(0));
+  const [searchable, setSearchable] = useState(false);
+  const [cancelHttpTag] = useState(15);
 
-class HomeComponent extends PureComponent {
-  state = {
-    loading: true,
-    showLotteryProgressModal: false,
-    adList: null,
-    searchBoxAnimatedOpacity: new Animated.Value(0),
-    searchable: false,
+  const lotteryCardList = useMemo(() => {
+    if (isCard && Array.isArray(lotteries) && lotteries.length) {
+      return chunk(lotteries, 3).map(list => ({
+        data: list,
+        key: `_${Math.random()
+          .toString(36)
+          .substr(2, 9)}`,
+      }));
+    }
+    return [];
+  }, [isCard, lotteries]);
+
+  const fetchLotteriesCallback = () => {
+    setLoading(false);
   };
 
-  fetchLotteriesCallback = () => {
-    this.setState({loading: false});
-  };
-
-  fetchLotteries = authUserId => {
-    this.setState({loading: true}, () => {
-      invoke(this.props, 'fetchLotteries', {
-        onError: this.fetchLotteriesCallback,
-        onSuccess: this.fetchLotteriesCallback,
-        userId: authUserId || this.props.authUserId,
-      });
+  const fetchLotteries = () => {
+    setLoading(true);
+    invoke(props, 'fetchLotteries', {
+      onError: fetchLotteriesCallback,
+      onSuccess: fetchLotteriesCallback,
+      cancelTag: cancelHttpTag,
     });
   };
 
-  handleOnSearch = () => {
-    this.changeViewStyle({action: 'search'});
-    this.setState({loading: true});
-  };
-
-  onSearchSuccess = () => {
-    this.setState({loading: false});
-  };
-
-  onSearchError = () => {
-    this.setState({loading: false});
-  };
-
-  changeViewStyle = ({action}) => {
+  const changeViewStyle = ({action}) => {
     if (action === 'search') {
-      if (!SearchBox) {
-        SearchBox = require('./SearchBox').default;
-      }
-      const {searchable} = this.state;
       if (searchable) {
-        Animated.timing(this.state.searchBoxAnimatedOpacity, {
+        Animated.timing(searchBoxAnimatedOpacity, {
           toValue: 0,
           useNativeDriver: true,
           duration: 300,
         }).start(() => {
-          this.setState({
-            searchable: !searchable,
-          });
+          setSearchable(!searchable);
         });
       } else {
-        this.setState(
-          {
-            searchable: !searchable,
-          },
-          () => {
-            Animated.timing(this.state.searchBoxAnimatedOpacity, {
-              toValue: 1,
-              duration: 300,
-              useNativeDriver: true,
-            }).start();
-          },
-        );
+        setSearchable(!searchable);
+        Animated.timing(searchBoxAnimatedOpacity, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }).start();
       }
       return;
     }
     if (action === 'cloud-upload') {
-      if (!UploadLotteryProgressModal) {
-        UploadLotteryProgressModal = require('../UploadLotteryProgress/UploadLotteryProgressModal')
-          .default;
-      }
-      this.setState({
-        showLotteryProgressModal: true,
-      });
+      setShowLotteryProgressModal(true);
       return;
     }
-    const {isCard, isList} = this.props;
     if (isCard) {
-      if (!ListItemCommon) {
-        ListItemCommon = require('./ListItem').default;
-      }
-      invoke(this.props, 'setHomeViewStyle', {
+      invoke(props, 'setHomeViewStyle', {
         isHomeCardStyle: false,
         isHomeListStyle: true,
       });
     }
     if (isList) {
-      if (!CardListItemRow) {
-        CardListItemRow = require('./CardListItemRow').default;
-      }
-      invoke(this.props, 'setHomeViewStyle', {
+      invoke(props, 'setHomeViewStyle', {
         isHomeCardStyle: true,
         isHomeListStyle: false,
       });
     }
   };
 
-  handleCardItemPress = item => {
-    invoke(this.props, 'showLotteryDetails', item);
+  const handleOnSearch = () => {
+    changeViewStyle({action: 'search'});
+    setLoading(false);
   };
 
-  handleListItemPress = index => {
-    invoke(this.props, 'showLotteryDetails', this.props.lotteries[index]);
+  const onSearchSuccess = () => {
+    setLoading(false);
   };
 
-  UNSAFE_componentWillMount() {
-    console.log(this.props.authUserId);
-    const {isCard, isList} = this.props;
-    if (isCard) {
-      if (!CardListItemRow) {
-        CardListItemRow = require('./CardListItemRow').default;
-      }
-    }
-    if (isList) {
-      if (!ListItemCommon) {
-        ListItemCommon = require('./ListItem').default;
-      }
-    }
-    // if (!onPingSuccess) {
-    //   setOnPingSuccess(this.fetchLotteries);
-    // } else {
-    //   this.fetchLotteries();
-    // }
-    // emitSocketEvents();
-    this.fetchedLotteries = true;
-    this.fetchLotteries();
-    // this.fetchLotteries();
-  }
+  const onSearchError = () => {
+    setLoading(false);
+  };
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.authUserId !== this.props.authUserId && !this.fetchedLotteries) {
-      this.fetchLotteries(nextProps.authUserId);
-    }
-    const {isCard, isList} = nextProps;
-    if (isCard) {
-      if (!CardListItemRow) {
-        CardListItemRow = require('./CardListItemRow').default;
-      }
-    }
-    if (isList) {
-      if (!ListItemCommon) {
-        ListItemCommon = require('./ListItem').default;
-      }
-    }
-    let adList = null;
-    if (Array.isArray(nextProps.lotteries) && nextProps.lotteries.length) {
-      adList = chunk(nextProps.lotteries, 3).map((list, index) => ({
-        data: list,
-        key:
-          this.state.adList &&
-          this.state.adList[index] &&
-          this.state.adList[index].key
-            ? this.state.adList[index].key
-            : `_${Math.random()
-                .toString(36)
-                .substr(2, 9)}`,
-      }));
-    }
-    this.setState({
-      adList,
+  const handleCardItemPress = item => {
+    invoke(props, 'showLotteryDetails', item);
+  };
+
+  const handleListItemPress = index => {
+    invoke(props, 'showLotteryDetails', lotteries[index]);
+  };
+
+  const handleCloseUploadLotteryProgressModal = () => {
+    setShowLotteryProgressModal(false);
+  };
+
+  const handleResetSearchFilters = () => {
+    invoke(props, 'handleSetSearchEventFired', false);
+    invoke(props, 'handleSetSearchFilters', {
+      searchText: '',
+      city: '',
+      prefecture: '',
+      category: '',
+      condition: '',
+      fromDate: '',
+      toDate: '',
     });
-  }
-
-  handleCloseUploadLotteryProgressModal = () => {
-    this.setState({
-      showLotteryProgressModal: false,
-    });
+    fetchLotteries();
   };
 
-  renderCardListItemRow = ({item}) => (
-    <CardListItemRow data={item} onItemPress={this.handleCardItemPress} />
+  const renderCardListItemRow = ({item}) => (
+    <CardListItemRow data={item} onItemPress={handleCardItemPress} />
   );
 
-  renderListItem = ({item, index}) => (
+  const renderListItem = ({item, index}) => (
     <ListItemCommon
       item={item}
       index={index}
-      onItemPress={this.handleListItemPress}
-      showLotteryResult={!!this.props.authUserId}
-      listLength={this.props.lotteries.length}
+      onItemPress={handleListItemPress}
+      showLotteryResult={!!authUserId}
+      listLength={lotteries.length}
     />
   );
 
-  getItem = (data, index) => data[index];
+  const getItem = (data, index) => data[index];
 
-  getItemCount = () => (this.state.adList || []).length;
+  const getItemCount = () => lotteryCardList.length || 0;
 
-  getListItemCount = () => (this.props.lotteries || []).length || 0;
+  const getListItemCount = () => lotteries.length || 0;
 
-  getItemKey = item => `${item.key}`;
+  const getItemKey = item => `${item.key}`;
 
-  getListItemKey = item => `${item.id}`;
+  const getListItemKey = item => `${item.id}`;
 
-  render() {
-    const {
-      loading,
-      showLotteryProgressModal,
-      adList,
-      searchable,
-      searchBoxAnimatedOpacity,
-    } = this.state;
-    const {isList, isCard, lotteries, authUserId} = this.props;
+  const handleOnEndReached = () => {
+    console.log('handleOnEndReached: ');
+    if (searchEventFired) {
+      invoke(props, 'handleSearch', {
+        onError: onSearchError,
+        onSuccess: onSearchSuccess,
+        cancelTag: cancelHttpTag,
+      });
+    } else {
+      fetchLotteries();
+    }
+  };
 
-    return (
-      <View style={sharedStyles.fullheightView}>
-        {showLotteryProgressModal && (
-          <UploadLotteryProgressModal
-            onClose={this.handleCloseUploadLotteryProgressModal}
-          />
-        )}
-        <Toolbar
-          style={{container: sharedStyles.toolbarContainer}}
-          centerElement={home.appName}
-          rightElement={[
-            authUserId && 'search',
-            authUserId && 'cloud-upload',
-            isCard ? 'view-list' : 'view-comfy',
-          ].filter(Boolean)}
-          onRightElementPress={this.changeViewStyle}
+  useEffect(() => {
+    fetchLotteries();
+    return () => {
+      cancellableFetch.abort(cancelHttpTag);
+      invoke(props, 'handleSetSearchEventFired', false);
+      invoke(props, 'handleSetSearchFilters', {
+        searchText: '',
+        city: '',
+        prefecture: '',
+        category: '',
+        condition: '',
+        fromDate: '',
+        toDate: '',
+      });
+    };
+  }, []);
+
+  return (
+    <View style={sharedStyles.fullheightView}>
+      {showLotteryProgressModal && (
+        <UploadLotteryProgressModal
+          onClose={handleCloseUploadLotteryProgressModal}
         />
-        {searchable ? (
-          <SearchBox
-            onSearchPress={this.handleOnSearch}
-            onSearchSuccess={this.onSearchSuccess}
-            onSearchError={this.onSearchError}
-            style={{
-              opacity: searchBoxAnimatedOpacity,
-            }}
-          />
-        ) : null}
-        {/* <AdMobBanner
+      )}
+      <Toolbar
+        style={{container: sharedStyles.toolbarContainer}}
+        centerElement={home.appName}
+        rightElement={[
+          authUserId && 'search',
+          authUserId && 'cloud-upload',
+          isCard ? 'view-list' : 'view-comfy',
+        ].filter(Boolean)}
+        onRightElementPress={changeViewStyle}
+      />
+      {searchable ? (
+        <SearchBox
+          onSearchPress={handleOnSearch}
+          onSearchSuccess={onSearchSuccess}
+          onSearchError={onSearchError}
+          style={{
+            opacity: searchBoxAnimatedOpacity,
+          }}
+        />
+      ) : null}
+      {/* <AdMobBanner
           adSize="fullBanner"
           adUnitID="ca-app-pub-5703846930890914/6105801245"
           style={sharedStyles.adMobBanner}
         /> */}
+      {searchEventFired ? (
+        <Button
+          raised={true}
+          primary
+          text={'Reset Search'}
+          style={{
+            container: [
+              sharedStyles.mainButtonContainer,
+              sharedStyles.homeResetSearchBtn,
+            ],
+          }}
+          icon="youtube-searched-for"
+          onPress={handleResetSearchFilters}
+        />
+      ) : null}
+      {(Array.isArray(lotteries) && lotteries.length) ||
+      (Array.isArray(lotteryCardList) && lotteryCardList.length) ? (
         <VirtualizedList
-          initialNumToRender={5}
+          initialNumToRender={10}
           windowSize={2}
-          maxToRenderPerBatch={5}
+          maxToRenderPerBatch={10}
           updateCellsBatchingPeriod={0.0}
           removeClippedSubviews={true}
           refreshing={loading}
-          onRefresh={this.fetchLotteries}
-          ListEmptyComponent={
-            <Text style={sharedStyles.uploadProgressModalText}>
-              {lotteriesTexts.emptyLotteries}
-            </Text>
-          }
-          onEndReachedThreshold={0.5}
+          onRefresh={fetchLotteries}
+          onEndReachedThreshold={0.0}
+          onEndReached={handleOnEndReached}
           horizontal={false}
           showsVerticalScrollIndicator={false}
-          data={isCard ? adList || [] : lotteries || []}
-          getItem={this.getItem}
-          getItemCount={isCard ? this.getItemCount : this.getListItemCount}
+          data={isCard ? lotteryCardList : lotteries}
+          getItem={getItem}
+          getItemCount={isCard ? getItemCount : getListItemCount}
           contentContainerStyle={
             isCard
               ? sharedStyles.homeLotteriesContainer
               : sharedStyles.listViewContainer
           }
-          keyExtractor={isCard ? this.getItemKey : this.getListItemKey}
-          renderItem={isCard ? this.renderCardListItemRow : this.renderListItem}
+          keyExtractor={isCard ? getItemKey : getListItemKey}
+          renderItem={isCard ? renderCardListItemRow : renderListItem}
         />
-      </View>
-    );
-  }
-}
+      ) : !loading ? (
+        <View style={sharedStyles.homeEmptySearchResultsView}>
+          <Text style={sharedStyles.emptySearchResultsText}>
+            {lotteriesTexts.emptyLotteries}
+          </Text>
+        </View>
+      ) : (
+        loadingPopup
+      )}
+    </View>
+  );
+};
 
 HomeComponent.propTypes = {
   lotteries: PropTypes.array,
@@ -301,6 +291,7 @@ HomeComponent.propTypes = {
   isCard: PropTypes.bool,
   isCarousel: PropTypes.bool,
   isLoggedIn: PropTypes.bool,
+  searchEventFired: PropTypes.bool,
   authUserId: PropTypes.oneOfType([PropTypes.string, PropTypes.any]),
 };
 
@@ -312,14 +303,20 @@ const mapStateToProps = state => {
     isCarousel: getIsCarouselSelector(state),
     authUserId: getUserIdSelector(state),
     isLoggedIn: getLoggedInSelector(state),
+    searchEventFired: getSearchEventFiredSelector(state),
+    emptySearchResults: getEmptySearchResultsSelector(state),
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     fetchLotteries: payload => dispatch(handleFetchLotteries(payload)),
+    handleSearch: payload => dispatch(handleSearch(payload)),
     showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
     setHomeViewStyle: payload => dispatch(setHomeViewStyle(payload)),
+    handleSetSearchEventFired: payload =>
+      dispatch(setSearchEventFired(payload)),
+    handleSetSearchFilters: payload => dispatch(setSearchFilters(payload)),
   };
 };
 

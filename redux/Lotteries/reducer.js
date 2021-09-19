@@ -1,18 +1,42 @@
 import {lotteriesActions} from './actions';
 
 const initialState = {
-  userJoinedLotteries: undefined,
-  userCreatedLotteries: undefined,
-  userLikedLotteries: undefined,
+  userJoinedLotteries: [],
+  userCreatedLotteries: [],
+  userLikedLotteries: [],
+  userJoinedLotteriesPageToken: null,
+  userCreatedLotteriesPageToken: null,
+  userLikedLotteriesPageToken: null,
 };
 
 const lotteriesReducer = (state = initialState, action) => {
   switch (action.type) {
+    case lotteriesActions.setUserJoinedLotteriesPageToken: {
+      return {
+        ...state,
+        userJoinedLotteriesPageToken: action.payload,
+      };
+    }
+    case lotteriesActions.setUserCreatedLotteriesPageToken: {
+      return {
+        ...state,
+        userCreatedLotteriesPageToken: action.payload,
+      };
+    }
+    case lotteriesActions.setUserLikedLotteriesPageToken: {
+      return {
+        ...state,
+        userLikedLotteriesPageToken: action.payload,
+      };
+    }
     case lotteriesActions.setUserCreatedLotteries: {
       if (Array.isArray(action.payload) && action.payload.length) {
         return {
           ...state,
-          userCreatedLotteries: action.payload,
+          userCreatedLotteries: [
+            ...state.userCreatedLotteries,
+            ...action.payload,
+          ],
         };
       } else if (
         typeof action.payload === 'object' &&
@@ -44,7 +68,7 @@ const lotteriesReducer = (state = initialState, action) => {
       }
       return {
         ...state,
-        userCreatedLotteries: action.payload,
+        userCreatedLotteries: [...action.payload],
       };
     }
     case lotteriesActions.setUserJoinedLotteries: {
@@ -125,6 +149,16 @@ const lotteriesReducer = (state = initialState, action) => {
       return {
         ...state,
         userLikedLotteries: action.payload,
+      };
+    }
+    case lotteriesActions.resetState: {
+      return {
+        userJoinedLotteries: [],
+        userCreatedLotteries: [],
+        userLikedLotteries: [],
+        userJoinedLotteriesPageToken: null,
+        userCreatedLotteriesPageToken: null,
+        userLikedLotteriesPageToken: null,
       };
     }
     default: {

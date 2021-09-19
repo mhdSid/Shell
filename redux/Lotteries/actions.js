@@ -2,6 +2,10 @@ const lotteriesActions = {
   setUserJoinedLotteries: 'SET_USER_JOINED_LOTTERIES',
   setUserCreatedLotteries: 'SET_USER_CREATED_LOTTERIES',
   setUserLikedLotteries: 'SET_USER_LIKED_LOTTERIES',
+  setUserJoinedLotteriesPageToken: 'SET_USER_JOINED_LOTTERIES_PAGE_TOKEN',
+  setUserCreatedLotteriesPageToken: 'SET_USER_CREATED_LOTTERIES_PAGE_TOKEN',
+  setUserLikedLotteriesPageToken: 'SET_USER_LIKED_LOTTERIES_PAGE_TOKEN',
+  resetState: 'LOTTERIES_REDUCER_RESET_STATE',
 };
 
 export {lotteriesActions};

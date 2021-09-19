@@ -4,29 +4,20 @@ import {uniq} from 'lodash';
 
 const initialState = {
   lotteries: [],
+  pageToken: null,
+  searchPageToken: null,
 };
 
 const homeReducer = (state = initialState, action) => {
   switch (action.type) {
     case homeActions.setHomeLotteries: {
-      const {payload} = action;
       let newLotteries = [];
-      if (Array.isArray(payload) && payload.length) {
-        newLotteries = [...payload];
-      } else if (typeof payload === 'object' && Object.keys(payload).length) {
-        newLotteries = [payload];
+      if (Array.isArray(action.payload) && action.payload.length) {
+        newLotteries = [...action.payload];
       }
-      newLotteries = [...(newLotteries || [])].map(item => ({
-        ...item,
-        id: `${item.id}`,
-      }));
-      newLotteries = uniqBy(newLotteries, 'id').sort(
-        (ad1, ad2) =>
-          new Date(ad2.publishDate).getTime() -
-          new Date(ad1.publishDate).getTime(),
-      );
       return {
-        lotteries: newLotteries,
+        ...state,
+        lotteries: [...state.lotteries, ...newLotteries],
       };
     }
     case homeActions.setLotteries: {
@@ -49,6 +40,7 @@ const homeReducer = (state = initialState, action) => {
           new Date(ad1.publishDate).getTime(),
       );
       return {
+        ...state,
         lotteries: newLotteries,
       };
     }
@@ -68,6 +60,7 @@ const homeReducer = (state = initialState, action) => {
           return item;
         });
         return {
+          ...state,
           lotteries: updatedLotteries,
         };
       }
@@ -78,7 +71,27 @@ const homeReducer = (state = initialState, action) => {
     case homeActions.resetLotteries: {
       const {payload} = action;
       return {
+        ...state,
         lotteries: payload,
+      };
+    }
+    case homeActions.resetState: {
+      return {
+        lotteries: [],
+        pageToken: null,
+        searchPageToken: null,
+      };
+    }
+    case homeActions.setPageToken: {
+      return {
+        ...state,
+        pageToken: action.payload,
+      };
+    }
+    case homeActions.setSearchPageToken: {
+      return {
+        ...state,
+        searchPageToken: action.payload,
       };
     }
     default: {

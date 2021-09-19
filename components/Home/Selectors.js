@@ -6,6 +6,7 @@ const getIsCard = state => state.settingsReducer.isHomeCardStyle;
 const getIsCarousel = state => state.settingsReducer.isHomeCarouselStyle;
 const getSearchFilters = state => state.searchReducer.searchFilters;
 const getSearchEventFired = state => state.searchReducer.searchEventFired;
+const getEmptySearchResults = state => state.searchReducer.emptySearchResults;
 
 const getLotteriesSelector = createSelector(
   [getLotteries],
@@ -20,6 +21,11 @@ const getIsListSelector = createSelector(
 const getSearchEventFiredSelector = createSelector(
   [getSearchEventFired],
   searchEventFired => searchEventFired,
+);
+
+const getEmptySearchResultsSelector = createSelector(
+  [getEmptySearchResults],
+  emptySearchResults => emptySearchResults,
 );
 
 const getIsCardSelector = createSelector(
@@ -44,4 +50,5 @@ export {
   getIsCarouselSelector,
   getSearchFiltersSelector,
   getSearchEventFiredSelector,
+  getEmptySearchResultsSelector,
 };

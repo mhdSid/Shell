@@ -69,13 +69,15 @@ const lotteryResult = {
   actionOptions: {
     chat: 'chat',
     receive: 'receive',
+    ship: 'ship',
   },
   lotteryWinnerActions: [
     {icon: 'chat', text: 'Chat with owner', action: 'chat'},
-    {icon: 'done-all', text: 'Received', action: 'receive'},
+    {icon: 'markunread-mailbox', text: 'Receive', action: 'receive'},
   ],
   lotteryPosterActions: [
     {icon: 'chat', text: 'Chat with winner', action: 'chat'},
+    {icon: 'local-shipping', text: 'Ship', action: 'ship'},
   ],
   congratulations: 'Congratulations!',
 };
@@ -115,6 +117,7 @@ const lotteryDetails = {
     dislike: 'dislike',
     win: 'win',
     receive: 'receive',
+    ship: 'ship',
     remove: 'remove',
     result: 'result',
     chat: 'chat',
@@ -126,18 +129,26 @@ const lotteryDetails = {
     {icon: 'share', text: 'share', action: 'share'},
     {icon: 'track-changes', text: 'result', action: 'result'},
   ],
+  shipActions: [
+    {icon: 'local-shipping', text: 'check', action: 'ship'},
+    {icon: 'chat', text: 'chat', action: 'chat'},
+  ],
+  receiveActions: [
+    {icon: 'markunread-mailbox', text: 'check', action: 'receive'},
+    {icon: 'chat', text: 'chat', action: 'chat'},
+  ],
   lotteryPosterActions: [
     {icon: 'track-changes', text: 'result', action: 'result'},
     {icon: 'share', text: 'share', action: 'share'},
     {icon: 'delete', text: 'remove', action: 'remove'},
-    {icon: 'chat', text: 'chat', action: 'chat'},
-    {icon: 'done-all', text: 'check', action: 'receive'},
+    // {icon: 'chat', text: 'chat', action: 'chat'},
+    // {icon: 'local-shipping', text: 'check', action: 'ship'},
   ],
   lotteryWinnerActions: [
     {icon: 'track-changes', text: 'result', action: 'result'},
     {icon: 'share', text: 'share', action: 'share'},
     {icon: 'chat', text: 'chat', action: 'chat'},
-    {icon: 'done-all', text: 'check', action: 'receive'},
+    {icon: 'markunread-mailbox', text: 'check', action: 'receive'},
   ],
   userActions: [{icon: 'share', text: 'share', action: 'share'}],
   enterDraw: 'Win',
@@ -205,6 +216,20 @@ const lottteries = {
 
 const receiveLottery = {
   receiveLottery: 'Receive Lottery',
+  receivedLotteries: 'Received',
+  notReceivedLotteries: 'Not Received',
+  noReceivedLotteries: "You haven't received any lotteries yet.",
+  announcement:
+    "You are the winner of this lottery, but you haven't received it yet.\nPlease contact the owner and make sure that they ship the item.\nIf you have already received it, please mark it as received.",
+};
+
+const shipLottery = {
+  shipLottery: 'Ship Lottery',
+  shippedLotteries: 'Shipped',
+  notShippedLotteries: 'Not Shipped',
+  noShippedLotteries: "You haven't shipped any lotteries yet.",
+  announcement:
+    "You haven't shipped this lottery yet.\nThe winner of this lottery hasn't received the item yet.\nPlease contact the winner and make sure that they receive the item.\nAfter you ship the item, please mark the lottery as shipped.",
 };
 
 const myyAds = {
@@ -233,11 +258,12 @@ const chat = {
   chat: 'Chat',
   chatWithOwner: 'Chat with lottery owner',
   chatWithWinner: 'Chat with lottery winner',
+  emptyChat: "You haven't sent any messages yet.",
 };
 
 const uploadAdProgress = {
   uploading: 'Currently Uploading',
-  noItems: 'No items are being uploaded.',
+  noItems: 'No lotteries are currently being uploaded.',
 };
 
 const paymentInformation = {
@@ -287,6 +313,8 @@ const profile = {
   myLotteries: 'My lotteries',
   myCreatedLotteries: 'My created lotteries',
   myLikedLotteries: 'My liked lotteries',
+  myReceivedLotteries: 'My received lotteries',
+  myShippedLotteries: 'My shipped lotteries',
   personal: 'Personal',
   settings: 'Settings',
   logout: 'Logout',
@@ -417,4 +445,5 @@ export {
   listItemActions,
   filter,
   userProfileLogoutActions,
+  shipLottery,
 };

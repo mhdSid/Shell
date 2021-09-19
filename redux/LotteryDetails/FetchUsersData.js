@@ -13,6 +13,7 @@ const handleFetchUsersData = payload => {
       onEror,
       lotteryUserIds,
       currentCollectedPrice,
+      cancelTag,
     } = payload;
     const onGetUsersDataSuccess = data => {
       let {error, users} = data;
@@ -49,7 +50,7 @@ const handleFetchUsersData = payload => {
       }
       return invoke(payload, 'onSuccess');
     };
-    return getUsersData({users: adUsers}).then(onGetUsersDataSuccess, error => {
+    return getUsersData({users: adUsers, cancelTag}).then(onGetUsersDataSuccess, error => {
       return handleError({error, onEror});
     });
   };

@@ -4,25 +4,36 @@ import invoke from 'lodash/invoke';
 import {homeActions} from '../Home/actions';
 
 const handleSearch = payload => {
-  return dispatch => {
-    const {searchQuery, onError, filters} = payload;
+  return (dispatch, getState) => {
+    const {onError, cancelTag} = payload;
+    const pageToken = getState().homeReducer.searchPageToken;
+    const searchFilters = getState().searchReducer.searchFilters;
     const onSeachSuccess = data => {
-      const {error, searchData: searchResults} = data;
+      const {error, lotteries, nextPageToken} = data;
+      console.log(lotteries, pageToken, nextPageToken);
       if (error) {
         return handleError({error, onError});
       }
-      invoke(payload, 'onSuccess');
-      return dispatch({
-        type: homeActions.resetLotteries,
-        payload:
-          searchResults.ads && searchResults.ads.length
-            ? searchResults.ads
-            : [],
+      dispatch({
+        type: homeActions.setSearchPageToken,
+        payload: nextPageToken,
       });
+      invoke(payload, 'onSuccess');
+      if (pageToken !== nextPageToken) {
+        dispatch({
+          type: homeActions.resetLotteries,
+          payload:
+            Array.isArray(lotteries) && lotteries.length ? lotteries : [],
+        });
+      }
     };
-    return search({searchQuery, filters}).then(onSeachSuccess, error => {
-      return handleError({error, onError});
-    });
+    if (pageToken !== false) {
+      return search({searchFilters, pageToken, cancelTag}).then(onSeachSuccess, error => {
+        return handleError({error, onError});
+      });
+    }
+    invoke(payload, 'onSuccess');
+    return;
   };
 };
 

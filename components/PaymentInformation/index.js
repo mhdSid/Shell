@@ -91,10 +91,13 @@ const PaymentInformation = props => {
   const onShowModal = () => {
     if (creditCardInputRef && creditCardInputRef.current && user) {
       creditCardInputRef.current.setValues({
-        ...(user.creditCardNumber && {number: user.creditCardNumber}),
         ...(user.creditCardCVC && {cvc: user.creditCardCVC}),
         ...(user.creditCardExpiryDate && {expiry: user.creditCardExpiryDate}),
+        ...(user.creditCardNumber && {number: user.creditCardNumber}),
       });
+      setTimeout(() => {
+        creditCardInputRef.current.focus('number');
+      }, 50);
     }
   };
   useEffect(() => {
@@ -134,19 +137,6 @@ const PaymentInformation = props => {
             leftElement="arrow-back"
             centerElement={paymentInformation.creditCard}
             onLeftElementPress={handleCloseModal}
-            // rightElement={
-            //   <Button
-            //     onPress={handleUpdateUserPaymentInfo}
-            //     disabled={loading || !userDataChanged || !isValid}
-            //     raised
-            //     text={paymentInformation.submit}
-            //     style={{
-            //       container: sharedStyles.mainButtonContainer,
-            //       text: {color: '#b69cf6'},
-            //     }}
-            //     icon="done-all"
-            //   />
-            // }
           />
           {loading && loadingPopup}
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -158,7 +148,7 @@ const PaymentInformation = props => {
               ]}>
               <View style={sharedStyles.creditContainer}>
                 <CreditCardInput
-                  autoFocus={true}
+                  // autoFocus={true}
                   ref={creditCardInputRef}
                   allowScroll={true}
                   inputStyle={sharedStyles.creditInput}

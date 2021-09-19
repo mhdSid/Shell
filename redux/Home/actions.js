@@ -7,6 +7,9 @@ const homeActions = {
   setLotteries: 'HOME_SET_LOTTERIES',
   setHomeLotteries: 'SET_HOME_VIEW_LOTTERIES',
   updateLottery: 'HOME_UPDATE_LOTTERy',
+  setPageToken: 'HOME_SET_PAGE_TOKEN',
+  setSearchPageToken: 'HOME_SET_SEARCH_PAGE_TOKEN',
+  resetState: 'HOME_RESET_STATE',
 };
 
 const updateLottery = payload => {

@@ -4,6 +4,7 @@ const initialState = {
   searchResults: undefined,
   searchEventFired: null,
   searchFilters: {
+    searchText: '',
     city: '',
     prefecture: '',
     fromDate: '',
@@ -27,6 +28,21 @@ const searchReducer = (state = initialState, action) => {
         searchFilters: {
           ...state.searchFilters,
           ...action.payload,
+        },
+      };
+    }
+    case searchActions.resetState: {
+      return {
+        searchResults: undefined,
+        searchEventFired: null,
+        searchFilters: {
+          searchText: '',
+          city: '',
+          prefecture: '',
+          fromDate: '',
+          toDate: '',
+          category: '',
+          condition: '',
         },
       };
     }
