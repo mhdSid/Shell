@@ -7,6 +7,7 @@ import {
   View,
   Text,
   KeyboardAvoidingView,
+  Image,
 } from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, Icon, Button} from 'react-native-material-ui';
@@ -20,7 +21,6 @@ import {connect} from 'react-redux';
 import {getUserSelector} from './Selectors';
 import {Dropdown} from 'react-native-material-dropdown';
 // import {handleUpdateUserDataBackground} from '../../redux/Auth/UpdateUserBackground';
-import FastImage from 'react-native-fast-image';
 import {handleUpdateUserData} from '../../redux/Auth/UpdateUser';
 import ImageResizer from 'react-native-image-resizer';
 
@@ -184,14 +184,14 @@ const UpdateUser = props => {
                         <Icon name="image" size={35} color="white" />
                       ) : null}
                       {image || user.image ? (
-                        <FastImage
+                        <Image
                           style={[sharedStyles.adImage, sharedStyles.userImage]}
                           source={{
                             uri: image || user.image,
-                            priority: FastImage.priority.high,
-                            cache: FastImage.cacheControl.immutable,
+                            // priority: FastImage.priority.high,
+                            cache: 'force-cache',
                           }}
-                          resizeMode={FastImage.resizeMode.cover}
+                          resizeMode={'cover'}
                         />
                       ) : null}
                     </TouchableBounce>

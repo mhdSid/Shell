@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {View, Text, ActionSheetIOS} from 'react-native';
+import {View, Text, ActionSheetIOS, Image} from 'react-native';
 import {Button, Drawer, Avatar, Icon} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';
 import {profile, userProfileLogoutActions} from '../../Constants/Texts';
@@ -11,8 +11,7 @@ import {connect} from 'react-redux';
 import {logoutAction} from '../../redux/Auth/actions';
 import {handleLogout} from '../../redux/Auth/Logout';
 import {getUserSelector} from './Selectors';
-import FastImage from 'react-native-fast-image';
-import { handleDisconnectChatSocketCommunication } from '../../redux/Chat/actions';
+import {handleDisconnectChatSocketCommunication} from '../../redux/Chat/actions';
 
 let UserLikedLotteries = null;
 let UserCreatedLotteries = null;
@@ -152,14 +151,14 @@ const UserProfile = props => {
                   <Avatar
                     image={
                       user.image ? (
-                        <FastImage
+                        <Image
                           style={sharedStyles.profileImage}
                           source={{
                             uri: user.image,
-                            priority: FastImage.priority.high,
-                            cache: FastImage.cacheControl.immutable,
+                            // priority: FastImage.priority.high,
+                            cache: 'force-cache',
                           }}
-                          resizeMode={FastImage.resizeMode.cover}
+                          resizeMode={'cover'}
                         />
                       ) : (
                         <Icon name="account-circle" />

@@ -9,7 +9,6 @@ import {connect} from 'react-redux';
 import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
 import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
 import {getUserIdSelector} from '../Profile/Selectors';
-import FastImage from 'react-native-fast-image';
 import {showLotteryResult} from '../../redux/LotteryResult/actions';
 class CardListItem extends Component {
   static propTypes = {
@@ -128,14 +127,13 @@ class CardListItem extends Component {
       ? sharedStyles.homeCardItemImageSmall
       : sharedStyles.homeCardItemImage;
     const image = item.images[0] ? (
-      <FastImage
+      <Image
         style={imageStyle}
         source={{
           uri: item.images[0], //randomLocalImagesForTesting[1], //,item.images[0],
-          priority: FastImage.priority.low,
-          cache: FastImage.cacheControl.immutable,
+          cache: 'force-cache',
         }}
-        resizeMode={FastImage.resizeMode.cover}
+        resizeMode={'cover'}
       />
     ) : null;
     const emptyImage = !item.images[0] ? (

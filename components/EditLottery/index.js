@@ -1,5 +1,5 @@
 import React, {useState, useEffect, createRef} from 'react';
-import {View, ScrollView, Text, SafeAreaView, Modal} from 'react-native';
+import {View, ScrollView, Text, SafeAreaView, Modal, Image} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
@@ -19,7 +19,6 @@ import {
 } from '../../Constants/Texts';
 import invoke from 'lodash/invoke';
 import {Dropdown} from 'react-native-material-dropdown';
-import FastImage from 'react-native-fast-image';
 import {handleUpdateLottery} from '../../redux/EditLottery/EditLottery';
 import {loadingPopup} from '../Loading';
 import ImageResizer from 'react-native-image-resizer';
@@ -430,14 +429,14 @@ const EditLottery = props => {
                         <Icon name="image" size={35} color="white" />
                       ) : null}
                       {!isNumber(value) && value ? (
-                        <FastImage
+                        <Image
                           style={sharedStyles.adImage}
                           source={{
                             uri: value,
-                            priority: FastImage.priority.high,
-                            cache: FastImage.cacheControl.immutable,
+                            // priority: FastImage.priority.high,
+                            cache: 'force-cache',
                           }}
-                          resizeMode={FastImage.resizeMode.cover}
+                          resizeMode={'cover'}
                         />
                       ) : null}
                     </TouchableBounce>

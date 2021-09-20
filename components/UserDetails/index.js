@@ -1,11 +1,10 @@
 import React from 'react';
-import {Text, View, Modal, SafeAreaView, ScrollView} from 'react-native';
+import {Text, View, Modal, SafeAreaView, ScrollView, Image} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, Icon} from 'react-native-material-ui';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {userDetails} from '../../Constants/Texts';
-import FastImage from 'react-native-fast-image';
 
 const UserDetails = props => {
   const {item} = props;
@@ -38,14 +37,14 @@ const UserDetails = props => {
         />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={sharedStyles.flexRow}>
-            <FastImage
+            <Image
               style={sharedStyles.lotteryDetailsImage}
               source={{
                 uri: image,
-                priority: FastImage.priority.high,
-                cache: FastImage.cacheControl.immutable,
+                // priority: FastImage.priority.high,
+                cache: 'force-cache',
               }}
-              resizeMode={FastImage.resizeMode.cover}
+              resizeMode={'cover'}
             />
           </View>
           <View style={sharedStyles.lotteryDetailsContainer}>

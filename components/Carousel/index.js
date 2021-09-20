@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Image} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import Carousel from 'react-native-snap-carousel';
 import {
@@ -9,7 +9,6 @@ import {
 } from '../../assets/styles/sliderEntry';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
-import FastImage from 'react-native-fast-image';
 
 class CarouselItem extends PureComponent {
   static propTypes = {
@@ -65,14 +64,13 @@ class CarouselItem extends PureComponent {
         <View style={sliderStyles.shadow} />
         <View style={imageContainerStyles}>
           {(imageOnly && item) || (images && images[0]) ? (
-            <FastImage
+            <Image
               style={sliderStyles.image}
               source={{
                 uri: imageOnly ? item : images[0],
-                priority: FastImage.priority.high,
-                cache: FastImage.cacheControl.immutable,
+                cache: 'force-cache',
               }}
-              resizeMode={FastImage.resizeMode.contain}
+              resizeMode={'contain'}
             />
           ) : null}
           {!imageOnly && <View style={radiusMaskStyles} />}

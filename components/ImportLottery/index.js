@@ -6,6 +6,7 @@ import {
   Animated,
   Easing,
   Dimensions,
+  Image,
 } from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import PropTypes from 'prop-types';
@@ -33,7 +34,6 @@ import {getLoggedInSelector, getUserSelector} from './Selectors';
 import {Dropdown} from 'react-native-material-dropdown';
 import {navigate} from '../MainContainer';
 import {successConfirmationModal as successConfirmationModalTexts} from '../../Constants/Texts';
-import FastImage from 'react-native-fast-image';
 import ImageResizer from 'react-native-image-resizer';
 
 let SuccessConfirmationModal = null;
@@ -515,14 +515,14 @@ const ImportLottery = props => {
                       <Icon name="image" size={35} color="white" />
                     )}
                     {images[index] && (
-                      <FastImage
+                      <Image
                         style={sharedStyles.adImage}
                         source={{
                           uri: images[index],
-                          priority: FastImage.priority.high,
-                          cache: FastImage.cacheControl.immutable,
+                          // priority: FastImage.priority.high,
+                          cache: 'force-cache',
                         }}
-                        resizeMode={FastImage.resizeMode.cover}
+                        resizeMode={'cover'}
                       />
                     )}
                   </TouchableBounce>

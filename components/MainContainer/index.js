@@ -5,7 +5,6 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getLoggedInSelector, getUserSelector} from './Selectors';
-import FastImage from 'react-native-fast-image';
 
 export let navigate;
 export let setUserBottomBarImage;
@@ -126,14 +125,14 @@ const MainContainer = () => {
           icon={
             userImage ? (
               <>
-                <FastImage
+                <Image
                   style={sharedStyles.bottomBarUserImage}
                   source={{
                     uri: userImage,
-                    priority: FastImage.priority.high,
-                    cache: FastImage.cacheControl.immutable,
+                    // priority: FastImage.priority.high,
+                    cache: 'force-cache',
                   }}
-                  resizeMode={FastImage.resizeMode.cover}
+                  resizeMode={'cover'}
                 />
               </>
             ) : (
