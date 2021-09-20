@@ -22,10 +22,6 @@ const handleLikeLottery = payload => {
       }
       invoke(payload, 'onSuccess');
       if (likedLottery) {
-        dispatch({
-          type: homeActions.updateLottery,
-          payload: likedLottery,
-        });
         if (showLotteryDetails) {
           dispatch({
             type: lotteryDetailsActions.showLotteryDetails,
@@ -36,15 +32,13 @@ const handleLikeLottery = payload => {
           });
         }
         dispatch({
-          type: lotteriesActions.setUserJoinedLotteries,
+          type: homeActions.likeLottery,
           payload: likedLottery,
         });
-        if (isFromLikedLotteriesView) {
-          dispatch({
-            type: lotteriesActions.setUserLikedLotteries,
-            payload: likedLottery,
-          });
-        }
+        dispatch({
+          type: lotteriesActions.likeLottery,
+          payload: likedLottery,
+        });
         return;
       }
       return;

@@ -7,6 +7,7 @@ import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
 import {getLotteryDetailsSelector} from './Selectors';
 import {showLotteryResult} from '../../redux/LotteryResult/actions';
 import {getLotteryResultSelector} from '../LotteryResult/Selectors';
+import {handleInitChatSocketCommunication} from '../../redux/Chat/actions';
 
 let LotteryDetails = null;
 let LotteryResult = null;
@@ -17,7 +18,15 @@ const Pinger = props => {
     invoke(props, 'showLotteryDetails', undefined);
   };
   useEffect(() => {
-    invoke(props, 'handlePing');
+    invoke(props, 'handlePing', {
+      onPingSuccess: userId => {
+        if (userId) {
+          invoke(props, 'initChatSocketCommunication', {
+            userId,
+          });
+        }
+      },
+    });
   }, []);
 
   if (lotteryResult) {
@@ -47,6 +56,8 @@ const mapDispatchToProps = dispatch => {
     showLotteryDetails: payload => dispatch(showLotteryDetails(payload)),
     handlePing: payload => dispatch(handlePing(payload)),
     showLotteryResult: payload => dispatch(showLotteryResult(payload)),
+    initChatSocketCommunication: payload =>
+      dispatch(handleInitChatSocketCommunication(payload)),
   };
 };
 

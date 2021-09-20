@@ -10,6 +10,8 @@ const homeActions = {
   setPageToken: 'HOME_SET_PAGE_TOKEN',
   setSearchPageToken: 'HOME_SET_SEARCH_PAGE_TOKEN',
   resetState: 'HOME_RESET_STATE',
+  likeLottery: 'HOME_REDUCER_LIKE_LOTTERY',
+  dislikeLottery: 'HOME_REDUCER_DISLIKE_LOTTERY',
 };
 
 const updateLottery = payload => {

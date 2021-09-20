@@ -12,6 +12,7 @@ import {logoutAction} from '../../redux/Auth/actions';
 import {handleLogout} from '../../redux/Auth/Logout';
 import {getUserSelector} from './Selectors';
 import FastImage from 'react-native-fast-image';
+import { handleDisconnectChatSocketCommunication } from '../../redux/Chat/actions';
 
 let UserLikedLotteries = null;
 let UserCreatedLotteries = null;
@@ -47,6 +48,7 @@ const UserProfile = props => {
       buttonIndex => {
         if (buttonIndex === 1) {
           setLoading(true);
+          invoke('props', 'disconnectChatSocketCommunication');
           invoke(props, 'handleLogout', {
             onError: afterLogoutCallback,
             onSuccess: afterLogoutCallback,
@@ -267,6 +269,8 @@ const mapDispatchToProps = dispatch => {
   return {
     logout: payload => dispatch(logoutAction(payload)),
     handleLogout: payload => dispatch(handleLogout(payload)),
+    disconnectChatSocketCommunication: payload =>
+      dispatch(handleDisconnectChatSocketCommunication(payload)),
   };
 };
 

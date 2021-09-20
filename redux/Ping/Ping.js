@@ -2,7 +2,6 @@ import {Alert} from 'react-native';
 import {authActions} from '../Auth/actions';
 import {ping} from '../../services/Auth';
 import invoke from 'lodash/invoke';
-// import {initSocket, addSocketEventListeners} from '../../services/Socket';
 
 const handlePing = payload => {
   return dispatch => {
@@ -21,8 +20,6 @@ const handlePing = payload => {
         return onPingError({error, country});
       }
       invoke(payload, 'onPingSuccess', authUser ? authUser.id : null);
-      // initSocket();
-      // addSocketEventListeners();
       return dispatch({
         type: authActions.login,
         payload: {

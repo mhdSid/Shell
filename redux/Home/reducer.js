@@ -68,6 +68,48 @@ const homeReducer = (state = initialState, action) => {
         ...state,
       };
     }
+    case homeActions.likeLottery: {
+      let {lotteries} = state;
+      const lottery = action.payload;
+      if (lottery && lottery.id && lotteries && lotteries.length) {
+        return {
+          ...state,
+          lotteries: lotteries.map(item => {
+            if (`${item.id}` === `${lottery.id}`) {
+              return {
+                ...lottery,
+                id: `${lottery.id}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case homeActions.dislikeLottery: {
+      let {lotteries} = state;
+      const lottery = action.payload;
+      if (lottery && lottery.id && lotteries && lotteries.length) {
+        return {
+          ...state,
+          lotteries: lotteries.map(item => {
+            if (`${item.id}` === `${lottery.id}`) {
+              return {
+                ...lottery,
+                id: `${lottery.id}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+    }
     case homeActions.resetLotteries: {
       const {payload} = action;
       return {

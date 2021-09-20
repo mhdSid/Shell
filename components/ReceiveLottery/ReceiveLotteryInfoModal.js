@@ -118,6 +118,8 @@ const ReceiveLotteryInfoModal = props => {
               isLotteryPoster={isLotteryPoster}
               lotteryWinner={user}
               lotteryPoster={lotteryPosterData}
+              authUserId={user.id}
+              lottery={receiveLotteryDetails}
             />
           ) : null}
           {loading && loadingPopup}

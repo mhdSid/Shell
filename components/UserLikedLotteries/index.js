@@ -105,7 +105,6 @@ const UserLikedLotteries = props => {
       item={item}
       index={index}
       onItemPress={handleItemPress}
-      isFromLikedLotteriesView={true}
       listLength={(filteredLotteries || userLikedLotteries).length}
       showLotteryResult={true}
     />
@@ -167,11 +166,7 @@ const UserLikedLotteries = props => {
     setSelectedLottery(item);
   };
   const renderCardListItemRow = ({item}) => (
-    <CardListItemRow
-      data={item}
-      onItemPress={handleCardItemPress}
-      isFromLikedLotteriesView={true}
-    />
+    <CardListItemRow data={item} onItemPress={handleCardItemPress} />
   );
 
   return (

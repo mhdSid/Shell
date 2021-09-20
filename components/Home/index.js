@@ -171,7 +171,6 @@ const HomeComponent = props => {
   const getListItemKey = item => `${item.id}`;
 
   const handleOnEndReached = () => {
-    console.log('handleOnEndReached: ');
     if (searchEventFired) {
       invoke(props, 'handleSearch', {
         onError: onSearchError,
@@ -257,7 +256,7 @@ const HomeComponent = props => {
           removeClippedSubviews={true}
           refreshing={loading}
           onRefresh={fetchLotteries}
-          onEndReachedThreshold={0.0}
+          onEndReachedThreshold={0.1}
           onEndReached={handleOnEndReached}
           horizontal={false}
           showsVerticalScrollIndicator={false}

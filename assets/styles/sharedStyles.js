@@ -849,7 +849,7 @@ const sharedStyles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 16,
     color: 'rgba(0,0,0,.5)',
-    marginTop: -111,
+    // marginTop: -111,
     textAlign: 'center',
   },
   homeEmptySearchResultsView: {
@@ -1111,15 +1111,29 @@ const sharedStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignSelf: 'flex-start',
-    padding: 10,
-    backgroundColor: 'rgba(0,0,0,.1)',
     marginBottom: 20,
     maxWidth: '80%',
+  },
+  chatTextMessageContainer: {
     borderRadius: 10,
+    backgroundColor: 'rgba(0,0,0,.1)',
+    padding: 10,
+    width: '100%',
   },
   chatListItemPullRight: {
+    alignSelf: 'flex-end',
+  },
+  chatTextMessagePullRight: {
     backgroundColor: '#b69cf6',
     alignSelf: 'flex-end',
+  },
+  chatTextMessage: {
+    width: '100%',
+    fontSize: 18,
+  },
+  chatTextMessageDate: {
+    display: 'flex',
+    fontSize: 12,
   },
   chatMessageInput: {
     borderWidth: 1,

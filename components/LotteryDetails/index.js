@@ -266,9 +266,11 @@ const LotteryDetails = props => {
       <ChatModal
         onClose={handleChatModalClose}
         isWinner={isWinner}
+        lottery={lotteryDetails || item}
         isLotteryPoster={isLotteryPoster}
         lotteryPoster={adPosterData}
         lotteryWinner={winnerUserData}
+        authUserId={authUser.id}
       />
     ),
     receiveLotteryModal: (

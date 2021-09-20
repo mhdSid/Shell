@@ -151,6 +151,87 @@ const lotteriesReducer = (state = initialState, action) => {
         userLikedLotteries: action.payload,
       };
     }
+    case lotteriesActions.likeLottery: {
+      let {userJoinedLotteries, userLikedLotteries} = state;
+      const lottery = action.payload;
+      if (lottery && lottery.id) {
+        let updatedState = {};
+        if (userJoinedLotteries && userJoinedLotteries.length) {
+          updatedState = {
+            ...updatedState,
+            userJoinedLotteries: userJoinedLotteries.map(item => {
+              if (`${item.id}` === `${lottery.id}`) {
+                return {
+                  ...lottery,
+                  id: `${lottery.id}`,
+                };
+              }
+              return item;
+            }),
+          };
+        }
+        if (userLikedLotteries && userLikedLotteries.length) {
+          updatedState = {
+            ...updatedState,
+            userLikedLotteries: userLikedLotteries.map(item => {
+              if (`${item.id}` === `${lottery.id}`) {
+                return {
+                  ...lottery,
+                  id: `${lottery.id}`,
+                };
+              }
+              return item;
+            }),
+          };
+        }
+        return {
+          ...state,
+          ...updatedState,
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case lotteriesActions.dislikeLottery: {
+      let {userJoinedLotteries, userLikedLotteries} = state;
+      const lottery = action.payload;
+      if (lottery && lottery.id) {
+        let updatedState = {};
+        if (userJoinedLotteries && userJoinedLotteries.length) {
+          updatedState = {
+            ...updatedState,
+            userJoinedLotteries: userJoinedLotteries.map(item => {
+              if (`${item.id}` === `${lottery.id}`) {
+                return {
+                  ...lottery,
+                  id: `${lottery.id}`,
+                };
+              }
+              return item;
+            }),
+          };
+        }
+        if (userLikedLotteries && userLikedLotteries.length) {
+          updatedState = {
+            ...updatedState,
+            userLikedLotteries: userLikedLotteries.filter(item => {
+              if (`${item.id}` === `${lottery.id}`) {
+                return false;
+              }
+              return true;
+            }),
+          };
+        }
+        return {
+          ...state,
+          ...updatedState,
+        };
+      }
+      return {
+        ...state,
+      };
+    }
     case lotteriesActions.resetState: {
       return {
         userJoinedLotteries: [],

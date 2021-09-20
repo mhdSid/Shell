@@ -6,6 +6,8 @@ const lotteriesActions = {
   setUserCreatedLotteriesPageToken: 'SET_USER_CREATED_LOTTERIES_PAGE_TOKEN',
   setUserLikedLotteriesPageToken: 'SET_USER_LIKED_LOTTERIES_PAGE_TOKEN',
   resetState: 'LOTTERIES_REDUCER_RESET_STATE',
+  likeLottery: 'LOTTERIES_REDUCER_LIKE_LOTTERY',
+  dislikeLottery: 'LOTTERIES_REDUCER_DISLIKE_LOTTERY',
 };
 
 export {lotteriesActions};

@@ -14,13 +14,19 @@ const handleFetchConversation = payload => {
     } = payload;
     const onGetSuccess = data => {
       let {error, conversation} = data;
+      console.log('handleFetchConversation: ', conversation)
       if (error) {
         return handleError({error, onEror});
       }
       if (Array.isArray(conversation) && conversation.length) {
         dispatch({
           type: chatActions.setChatConversation,
-          payload: conversation,
+          payload: {
+            conversation,
+            lotteryPosterId,
+            winnerUserId,
+            lotteryId,
+          },
         });
       }
       return invoke(payload, 'onSuccess');

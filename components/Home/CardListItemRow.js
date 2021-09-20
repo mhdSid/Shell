@@ -8,7 +8,6 @@ export default class CardListItemRow extends Component {
   static propTypes = {
     data: PropTypes.object,
     onItemPress: PropTypes.func,
-    isFromLikedLotteriesView: PropTypes.bool,
   };
   constructor() {
     super();
@@ -39,7 +38,6 @@ export default class CardListItemRow extends Component {
               key={`${listItem.id + index}`}
               item={listItem}
               onItemPress={this.props.onItemPress}
-              isFromLikedLotteriesView={this.props.isFromLikedLotteriesView}
             />
           </View>
         ))}

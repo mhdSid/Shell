@@ -114,6 +114,8 @@ const ShipLotteryInfoModal = props => {
               isLotteryPoster={isLotteryPoster}
               lotteryWinner={lotteryWinnerData}
               lotteryPoster={user}
+              authUserId={user.id}
+              lottery={shipLotteryDetails}
             />
           ) : null}
           {!loading && lotteryWinnerData ? (
@@ -312,7 +314,7 @@ const mapDispatchToProps = dispatch => {
   return {
     handleShowShipLotteryModal: payload =>
       dispatch(showShipLotteryModal(payload)),
-    handleFetchLotteryPosterData: payload =>
+    handleFetchLotteryWinnerData: payload =>
       dispatch(handleFetchLotteryWinnerUserData(payload)),
     handleMarkLotteryAsShipped: payload =>
       dispatch(handleMarkLotteryAsShipped(payload)),

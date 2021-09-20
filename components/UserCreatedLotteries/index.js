@@ -189,7 +189,7 @@ const UserCreatedLotteries = props => {
                   removeClippedSubviews={true}
                   refreshing={loading}
                   onRefresh={fetchMyLotteries}
-                  onEndReachedThreshold={0.0}
+                  onEndReachedThreshold={0.1}
                   onEndReached={fetchMyLotteries}
                   horizontal={false}
                   showsVerticalScrollIndicator={false}

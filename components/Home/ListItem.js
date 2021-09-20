@@ -20,7 +20,6 @@ class ListItemCommon extends Component {
     onItemPress: PropTypes.func,
     index: PropTypes.number,
     showLotteryResult: PropTypes.func,
-    isFromLikedLotteriesView: PropTypes.bool,
     hideMoreActions: PropTypes.bool,
   };
   constructor() {
@@ -45,7 +44,6 @@ class ListItemCommon extends Component {
       userId: this.props.authUserId,
       lotteryId: this.props.item.id,
       showLotteryDetails: false,
-      isFromLikedLotteriesView: this.props.isFromLikedLotteriesView,
     });
   };
 
@@ -54,7 +52,6 @@ class ListItemCommon extends Component {
       userId: this.props.authUserId,
       lotteryId: this.props.item.id,
       showLotteryDetails: false,
-      isFromLikedLotteriesView: this.props.isFromLikedLotteriesView,
     });
   };
   handleMoreButtonPress = () => {
