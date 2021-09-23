@@ -245,11 +245,14 @@ const SearchBox = props => {
             <TextField
               blurOnSubmit={true}
               outlined
+              autoCapitalize={false}
+              autoCorrect={false}
               returnKeyType="done"
               activeLineWidth={1}
               placeholder={searchBoxTexts.fromDatePlaceholder}
               label={searchBoxTexts.fromDateLabel}
               value={searchFilters.fromDate}
+              onSubmitEditing={handleSearchPress}
               keyboardType="numbers-and-punctuation"
               onBlur={handleBlur('fromDate')}
               tintColor={'rgba(0,0,0,0.3)'}
@@ -266,9 +269,12 @@ const SearchBox = props => {
             ]}>
             <TextField
               outlined
+              autoCapitalize={false}
+              autoCorrect={false}
               placeholder={searchBoxTexts.toDatePlaceholder}
               label={searchBoxTexts.toDateLabel}
               returnKeyType="done"
+              onSubmitEditing={handleSearchPress}
               activeLineWidth={1}
               keyboardType="numbers-and-punctuation"
               value={searchFilters.toDate}
@@ -316,12 +322,15 @@ const SearchBox = props => {
           <View style={sharedStyles.searchBoxDivision}>
             <TextField
               outlined
+              autoCapitalize={false}
+              autoCorrect={false}
               blurOnSubmit={true}
               label={searchBoxTexts.searchQueryLabel}
               returnKeyType="done"
               activeLineWidth={1}
               placeholder={searchBoxTexts.searchQueryPlaceholder}
               onBlur={handleBlur('searchQuery')}
+              onSubmitEditing={handleSearchPress}
               onChangeText={handleChange.searchQuery()}
               tintColor={'rgba(0,0,0,0.38)'}
               placeholderTextColor={'rgba(0,0,0,0.3)'}

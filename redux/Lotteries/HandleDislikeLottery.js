@@ -4,6 +4,8 @@ import invoke from 'lodash/invoke';
 import {lotteriesActions} from './actions';
 import {homeActions} from '../Home/actions';
 import {lotteryDetailsActions} from '../LotteryDetails/actions';
+import { receiveLotteryActions } from '../ReceiveLottery/actions';
+import { chatActions } from '../Chat/actions';
 
 const handleDislikeLottery = payload => {
   return dispatch => {
@@ -30,6 +32,14 @@ const handleDislikeLottery = payload => {
         });
         dispatch({
           type: lotteriesActions.dislikeLottery,
+          payload: dislikedLottery,
+        });
+        dispatch({
+          type: receiveLotteryActions.dislikeLottery,
+          payload: dislikedLottery,
+        });
+        dispatch({
+          type: chatActions.dislikeLottery,
           payload: dislikedLottery,
         });
         return;

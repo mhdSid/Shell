@@ -2,40 +2,62 @@ import {isNil} from 'lodash';
 import {lotteryDetailsActions} from './actions';
 
 const initialState = {
-  lotteryUsersData: undefined,
+  // lotteryUsersData: undefined,
   adPosterData: undefined,
   winnerUserData: undefined,
   lotteryDetails: undefined,
-  userAds: undefined,
+  userLotteries: undefined,
+  userLotteriesPageToken: null,
 };
 
 const lotteryDetailsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case lotteryDetailsActions.setLotteryUsersData: {
+    case lotteryDetailsActions.setUserLotteriesPageToken: {
       return {
         ...state,
-        lotteryUsersData: action.payload,
+        userLotteriesPageToken: action.payload,
       };
     }
+    // case lotteryDetailsActions.setLotteryUsersData: {
+    //   return {
+    //     ...state,
+    //     lotteryUsersData: action.payload,
+    //   };
+    // }
     case lotteryDetailsActions.setWinnerUserData: {
       return {
         ...state,
         winnerUserData: action.payload,
       };
     }
-    case lotteryDetailsActions.fetchUserAds: {
-      const {payload} = action;
-      if (Array.isArray(payload) && payload.length) {
-        return {
-          ...state,
-          userAds: [...payload],
-        };
+    case lotteryDetailsActions.setUserLotteries: {
+      let userLotteries = [];
+      if (Array.isArray(state.userLotteries) && state.userLotteries.length) {
+        userLotteries = [...userLotteries, ...state.userLotteries];
+      }
+      if (Array.isArray(action.payload) && action.payload.length) {
+        userLotteries = [...userLotteries, ...action.payload];
       }
       return {
         ...state,
-        userAds: undefined,
+        userLotteries,
       };
     }
+    // case lotteryDetailsActions.setUserLotteries: {
+    //   const {payload} = action;
+    //   const currentLotteries = state.userLotteries;
+    //   let updatedLotteries = [];
+    //   if (Array.isArray(currentLotteries) && currentLotteries.length) {
+    //     updatedLotteries = updatedLotteries.concat(currentLotteries);
+    //   }
+    //   if (Array.isArray(payload) && payload.length) {
+    //     updatedLotteries = updatedLotteries.concat(payload);
+    //   }
+    //   return {
+    //     ...state,
+    //     userLotteries: updatedLotteries.length ? updatedLotteries : undefined,
+    //   };
+    // }
     case lotteryDetailsActions.setAdPosterData: {
       return {
         ...state,
@@ -58,28 +80,58 @@ const lotteryDetailsReducer = (state = initialState, action) => {
           };
         }
         return {
-          lotteryUsersData: undefined,
+          // lotteryUsersData: undefined,
+          userLotteriesPageToken: null,
           adPosterData: undefined,
           winnerUserData: undefined,
-          userAds: undefined,
+          userLotteries: undefined,
           lotteryDetails,
         };
       }
       return {
-        lotteryUsersData: undefined,
+        // lotteryUsersData: undefined,
         adPosterData: undefined,
         winnerUserData: undefined,
-        userAds: undefined,
+        userLotteries: undefined,
         lotteryDetails: undefined,
+        userLotteriesPageToken: null,
+      };
+    }
+    case lotteryDetailsActions.cancelLottery: {
+      if (action.payload) {
+        return {
+          ...state,
+          lotteryDetails: {
+            ...state.lotteryDetails,
+            ...action.payload,
+          },
+          userLotteries:
+            Array.isArray(state.userLotteries) && state.userLotteries.length
+              ? state.userLotteries.map(item => {
+                  if (`${item.id}` === `${action.payload.id}`) {
+                    return {
+                      ...action.payload,
+                      id: `${action.payload.id}`,
+                      userId: `${action.payload.userId}`,
+                    };
+                  }
+                  return item;
+                })
+              : state.userLotteries,
+        };
+      }
+      return {
+        ...state,
       };
     }
     case lotteryDetailsActions.resetState: {
       return {
-        lotteryUsersData: undefined,
+        // lotteryUsersData: undefined,
         adPosterData: undefined,
         winnerUserData: undefined,
         lotteryDetails: undefined,
-        userAds: undefined,
+        userLotteries: undefined,
+        userLotteriesPageToken: null,
       };
     }
     default: {

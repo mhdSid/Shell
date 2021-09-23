@@ -4,7 +4,7 @@ import invoke from 'lodash/invoke';
 
 const handleFetchLotteries = payload => {
   return async (dispatch, getState) => {
-    const {onError, userId, cancelTag} = payload;
+    const {onError, userId, cancelTag, resetLotteries} = payload;
     const pageToken = getState().homeReducer.pageToken;
     const onGetAdsSuccess = data => {
       invoke(payload, 'onSuccess');
@@ -18,6 +18,12 @@ const handleFetchLotteries = payload => {
         payload: nextPageToken,
       });
       if (pageToken !== nextPageToken) {
+        if (resetLotteries) {
+          return dispatch({
+            type: homeActions.resetHomeLotteries,
+            payload: lotteries,
+          });
+        }
         return dispatch({
           type: homeActions.setHomeLotteries,
           payload: lotteries,

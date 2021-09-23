@@ -95,9 +95,20 @@ const getConversationSelector = createSelector(
   conversation => conversation,
 );
 
+const getChattableLotteries = state => state.chatReducer.chattableLotteries;
+
+const getChattableLotteriesSelector = createSelector(
+  [getChattableLotteries],
+  chattableLotteries => chattableLotteries,
+);
+
 const getIsSocketInitiatedSelector = createSelector(
   [getIsSocketInitiated],
   isSocketInitiated => isSocketInitiated,
 );
 
-export {getConversationSelector, getIsSocketInitiatedSelector};
+export {
+  getConversationSelector,
+  getIsSocketInitiatedSelector,
+  getChattableLotteriesSelector,
+};

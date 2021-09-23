@@ -5,6 +5,7 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getLoggedInSelector, getUserSelector} from './Selectors';
+import FastImage from 'react-native-fast-image';
 
 export let navigate;
 export let setUserBottomBarImage;
@@ -13,6 +14,7 @@ let HomeComponent = null;
 let AuthComponent = null;
 let Lotteries = null;
 let ImportLottery = null;
+let Chat = null;
 
 const viewLoader = {
   lotteries: () => {
@@ -38,6 +40,12 @@ const viewLoader = {
       ImportLottery = require('../ImportLottery').default;
     }
     return <ImportLottery />;
+  },
+  chat: () => {
+    if (!Chat) {
+      Chat = require('../Chat/ChatList').default;
+    }
+    return <Chat />;
   },
 };
 
@@ -67,7 +75,7 @@ const MainContainer = () => {
         }}>
         <BottomNavigation.Action
           style={{
-            container: sharedStyles.bottomNavigationLeftActionContainer,
+            container: sharedStyles.bottomNavigationRightActionContainer,
             icon: {
               color: activeView === 'home' ? 'white' : '#dacdfa',
             },
@@ -83,27 +91,29 @@ const MainContainer = () => {
         />
         <BottomNavigation.Action
           style={{
-            container: sharedStyles.bottomNavigationMiddleActionContainer,
+            container: sharedStyles.bottomNavigationRightActionContainer,
             icon: {
               color: activeView === 'importLottery' ? 'white' : '#dacdfa',
             },
             label: {
               color: activeView === 'importLottery' ? 'white' : '#dacdfa',
+              display: 'none',
             },
           }}
           key="importLottery"
-          icon={<Icon name="add-circle" size={40} />}
+          icon={<Icon name="add-circle" size={30} />}
           active={activeView === 'importLottery'}
           onPress={handleSetActiveView('importLottery')}
         />
         <BottomNavigation.Action
           style={{
-            container: sharedStyles.bottomNavigationMiddleActionContainer,
+            container: sharedStyles.bottomNavigationRightActionContainer,
             icon: {
               color: activeView === 'lotteries' ? 'white' : '#dacdfa',
             },
             label: {
               color: activeView === 'lotteries' ? 'white' : '#dacdfa',
+              display: 'none',
             },
           }}
           key="lotteries"
@@ -115,24 +125,41 @@ const MainContainer = () => {
           style={{
             container: sharedStyles.bottomNavigationRightActionContainer,
             icon: {
+              color: activeView === 'chat' ? 'white' : '#dacdfa',
+            },
+            label: {
+              color: activeView === 'chat' ? 'white' : '#dacdfa',
+              display: 'none',
+            },
+          }}
+          key="chat"
+          icon={<Icon name="chat" size={30} />}
+          active={activeView === 'chat'}
+          onPress={handleSetActiveView('chat')}
+        />
+        <BottomNavigation.Action
+          style={{
+            container: sharedStyles.bottomNavigationRightActionContainer,
+            icon: {
               color: activeView === 'profile' ? 'white' : '#dacdfa',
             },
             label: {
               color: activeView === 'profile' ? 'white' : '#dacdfa',
+              display: 'none',
             },
           }}
           key="profile"
           icon={
             userImage ? (
               <>
-                <Image
+                <FastImage
                   style={sharedStyles.bottomBarUserImage}
                   source={{
                     uri: userImage,
-                    // priority: FastImage.priority.high,
-                    cache: 'force-cache',
+                    priority: FastImage.priority.high,
+                    cache: FastImage.cacheControl.web,
                   }}
-                  resizeMode={'cover'}
+                  resizeMode={FastImage.resizeMode.cover}
                 />
               </>
             ) : (

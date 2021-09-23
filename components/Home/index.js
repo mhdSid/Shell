@@ -33,6 +33,7 @@ import {
 } from '../../redux/Search/actions';
 import {loadingPopup} from '../Loading';
 import cancellableFetch from 'react-native-cancelable-fetch';
+import { setPageToken } from '../../redux/Home/actions';
 
 const HomeComponent = props => {
   const {isList, isCard, lotteries, authUserId, searchEventFired} = props;
@@ -60,12 +61,13 @@ const HomeComponent = props => {
     setLoading(false);
   };
 
-  const fetchLotteries = () => {
+  const fetchLotteries = resetLotteries => {
     setLoading(true);
     invoke(props, 'fetchLotteries', {
       onError: fetchLotteriesCallback,
       onSuccess: fetchLotteriesCallback,
       cancelTag: cancelHttpTag,
+      resetLotteries,
     });
   };
 
@@ -109,7 +111,8 @@ const HomeComponent = props => {
 
   const handleOnSearch = () => {
     changeViewStyle({action: 'search'});
-    setLoading(false);
+    // setLoading(false);
+    setLoading(true);
   };
 
   const onSearchSuccess = () => {
@@ -133,6 +136,7 @@ const HomeComponent = props => {
   };
 
   const handleResetSearchFilters = () => {
+    invoke(props, 'handleSetPageToken', null);
     invoke(props, 'handleSetSearchEventFired', false);
     invoke(props, 'handleSetSearchFilters', {
       searchText: '',
@@ -143,7 +147,7 @@ const HomeComponent = props => {
       fromDate: '',
       toDate: '',
     });
-    fetchLotteries();
+    fetchLotteries(true);
   };
 
   const renderCardListItemRow = ({item}) => (
@@ -171,12 +175,13 @@ const HomeComponent = props => {
   const getListItemKey = item => `${item.id}`;
 
   const handleOnEndReached = () => {
+    console.log('handleon end reached')
     if (searchEventFired) {
-      invoke(props, 'handleSearch', {
-        onError: onSearchError,
-        onSuccess: onSearchSuccess,
-        cancelTag: cancelHttpTag,
-      });
+      // invoke(props, 'handleSearch', {
+      //   onError: onSearchError,
+      //   onSuccess: onSearchSuccess,
+      //   cancelTag: cancelHttpTag,
+      // });
     } else {
       fetchLotteries();
     }
@@ -186,6 +191,7 @@ const HomeComponent = props => {
     fetchLotteries();
     return () => {
       cancellableFetch.abort(cancelHttpTag);
+      invoke(props, 'handleSetPageToken', null);
       invoke(props, 'handleSetSearchEventFired', false);
       invoke(props, 'handleSetSearchFilters', {
         searchText: '',
@@ -316,6 +322,7 @@ const mapDispatchToProps = dispatch => {
     handleSetSearchEventFired: payload =>
       dispatch(setSearchEventFired(payload)),
     handleSetSearchFilters: payload => dispatch(setSearchFilters(payload)),
+    handleSetPageToken: payload => dispatch(setPageToken(payload)),
   };
 };
 

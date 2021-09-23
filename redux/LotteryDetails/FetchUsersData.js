@@ -2,7 +2,7 @@ import {getUsersData} from '../../services/Auth';
 import {handleError} from '../Home/actions';
 import invoke from 'lodash/invoke';
 import {lotteryDetailsActions} from './actions';
-import {uniq} from 'lodash';
+// import {uniq} from 'lodash';
 
 const handleFetchUsersData = payload => {
   return dispatch => {
@@ -11,7 +11,7 @@ const handleFetchUsersData = payload => {
       winnerUserId,
       userId,
       onEror,
-      lotteryUserIds,
+      // lotteryUserIds,
       currentCollectedPrice,
       cancelTag,
     } = payload;
@@ -35,18 +35,18 @@ const handleFetchUsersData = payload => {
             });
           }
         });
-        if (currentCollectedPrice > 0) {
-          const lotteryUsersData = lotteryUserIds.map(item => {
-            const lotteryUser = users.find(user => `${item}` === `${user.id}`);
-            return {
-              ...lotteryUser,
-            };
-          });
-          dispatch({
-            type: lotteryDetailsActions.setLotteryUsersData,
-            payload: lotteryUsersData,
-          });
-        }
+        // if (currentCollectedPrice > 0) {
+        //   const lotteryUsersData = lotteryUserIds.map(item => {
+        //     const lotteryUser = users.find(user => `${item}` === `${user.id}`);
+        //     return {
+        //       ...lotteryUser,
+        //     };
+        //   });
+        //   dispatch({
+        //     type: lotteryDetailsActions.setLotteryUsersData,
+        //     payload: lotteryUsersData,
+        //   });
+        // }
       }
       return invoke(payload, 'onSuccess');
     };

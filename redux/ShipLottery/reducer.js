@@ -27,7 +27,11 @@ const shipLotteryReducer = (state = initialState, action) => {
         ...state,
         userCreatedWonLotteries: userCreatedWonLotteries.map(lottery => {
           if (`${lottery.id}` === `${action.payload.id}`) {
-            return {...action.payload};
+            return {
+              ...action.payload,
+              id: `${action.payload.id}`,
+              userId: `${action.payload.userId}`,
+            };
           }
           return lottery;
         }),
@@ -37,6 +41,54 @@ const shipLotteryReducer = (state = initialState, action) => {
       return {
         ...state,
         userCreatedWonLotteries: action.payload,
+      };
+    }
+    case shipLotteryActions.editLottery: {
+      if (
+        action.payload &&
+        Array.isArray(state.userCreatedWonLotteries) &&
+        state.userCreatedWonLotteries.length
+      ) {
+        return {
+          ...state,
+          userCreatedWonLotteries: state.userCreatedWonLotteries.map(item => {
+            if (`${item.id}` === `${action.payload.id}`) {
+              return {
+                ...action.payload,
+                id: `${action.payload.id}`,
+                userId: `${action.payload.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case shipLotteryActions.cancelLottery: {
+      if (
+        action.payload &&
+        Array.isArray(state.userCreatedWonLotteries) &&
+        state.userCreatedWonLotteries.length
+      ) {
+        return {
+          ...state,
+          userCreatedWonLotteries: state.userCreatedWonLotteries.map(item => {
+            if (`${item.id}` === `${action.payload.id}`) {
+              return {
+                ...action.payload,
+                id: `${action.payload.id}`,
+                userId: `${action.payload.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
       };
     }
     case shipLotteryActions.resetState: {

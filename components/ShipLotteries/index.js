@@ -44,10 +44,10 @@ const ShipLotteryModal = props => {
     (filteredLotteries || userCreatedWonLotteries).length;
   const getItemKey = item => item.id;
   const onItemPress = index => {
-    setIsShowShipLotteryModal(true);
     invoke(props, 'handleShowShipLotteryModal', {
       ...(filteredLotteries || userCreatedWonLotteries)[index],
     });
+    setIsShowShipLotteryModal(true);
   };
   const renderListItem = ({item, index}) => (
     <ListItemCommon
@@ -57,6 +57,12 @@ const ShipLotteryModal = props => {
       listLength={(filteredLotteries || userCreatedWonLotteries).length}
       hideMoreActions={true}
       showLotteryResult={true}
+      showReceivedTag={true}
+      isReceived={item.isReceived}
+      isShipped={item.isShipped}
+      showShippedTag={true}
+      isWinner={`${authUserId}` === `${item.winnerUserId}`}
+      isLotteryPoster={`${authUserId}` === `${item.userId}`}
     />
   );
   const handleFilterChange = filterValue => {

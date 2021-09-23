@@ -9,6 +9,7 @@ import {
 } from '../../assets/styles/sliderEntry';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
+import FastImage from 'react-native-fast-image';
 
 class CarouselItem extends PureComponent {
   static propTypes = {
@@ -64,13 +65,14 @@ class CarouselItem extends PureComponent {
         <View style={sliderStyles.shadow} />
         <View style={imageContainerStyles}>
           {(imageOnly && item) || (images && images[0]) ? (
-            <Image
+            <FastImage
               style={sliderStyles.image}
               source={{
                 uri: imageOnly ? item : images[0],
-                cache: 'force-cache',
+                cache: FastImage.cacheControl.web,
+                priority: FastImage.priority.high,
               }}
-              resizeMode={'contain'}
+              resizeMode={FastImage.resizeMode.contain}
             />
           ) : null}
           {!imageOnly && <View style={radiusMaskStyles} />}

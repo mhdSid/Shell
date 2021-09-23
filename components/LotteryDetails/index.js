@@ -22,12 +22,11 @@ import {
   getUsersSelector,
   getAdPosterDataSelector,
   getWinnerUserDataSelector,
-  getUserAdsSelector,
-  getLotteryUsersDataSelector,
+  getUserLotteriesSelector,
 } from './Selectors';
 import {handleFetchUserLotteries} from '../../redux/LotteryDetails/FetchUserLotteries';
 import CardListItem from '../Home/CardListItem';
-import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
+import {setUserLotteriesPageToken, showLotteryDetails} from '../../redux/LotteryDetails/actions';
 import {CarouselComponent} from '../Carousel';
 import {handleFetchUsersData} from '../../redux/LotteryDetails/FetchUsersData';
 import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
@@ -36,6 +35,8 @@ import {getLotteryDetailsSelector} from '../Pinger/Selectors';
 import cancellableFetch from 'react-native-cancelable-fetch';
 import {showReceiveLotteryModal} from '../../redux/ReceiveLottery/actions';
 import {showShipLotteryModal} from '../../redux/ShipLottery/actions';
+import {handleCancelLottery} from '../../redux/LotteryDetails/CancelLottery';
+import {Alert} from 'react-native';
 
 let ImagesViewer = null;
 let Payment = null;
@@ -51,8 +52,8 @@ const LotteryDetails = props => {
     user: authUser,
     adPosterData,
     winnerUserData,
-    userAds,
-    lotteryUsersData,
+    userLotteries,
+    // lotteryUsersData,
     lotteryDetails,
   } = props;
   const {
@@ -69,6 +70,7 @@ const LotteryDetails = props => {
     condition,
     userId,
     cancelled,
+    id: lotteryId,
     available,
     lotteryUserIds,
     winnerUserId,
@@ -78,7 +80,7 @@ const LotteryDetails = props => {
     disableHeaderActions,
   } = lotteryDetails || item;
   const [usersDataLoading, setUsersDataLoading] = useState(true);
-  const [userAdsLoading, setUserAdsLoading] = useState(true);
+  const [userLotteriesLoading, setUserLotteriesLoading] = useState(true);
   const [cancelHttpTag] = useState(10);
   const [showModal, setShowModal] = useState(null);
   const [viewImageUri, setViewImageUri] = useState(images[0]);
@@ -87,13 +89,51 @@ const LotteryDetails = props => {
   const isWinner = authUser && authUser.id && winnerUserId === authUser.id;
 
   const scrollViewRef = createRef();
-  const handleUserAdPress = ad => {
+
+  const fetchUsersDataCallback = () => {
+    setUsersDataLoading(false);
+  };
+  const fetchUsersLotteriesCallback = () => {
+    setUserLotteriesLoading(false);
+  };
+  const fetchUsersData = () => {
+    const users = [
+      userId,
+      // ...(lotteryUserIds || []),
+      winnerUserId || false,
+    ].filter(Boolean);
+
+    if (users.length) {
+      invoke(props, 'handleFetchUsersData', {
+        winnerUserId,
+        userId,
+        users,
+        cancelTag: cancelHttpTag,
+        // lotteryUserIds,
+        onError: fetchUsersDataCallback,
+        onSuccess: fetchUsersDataCallback,
+        currentCollectedPrice,
+      });
+    }
+  };
+  const onShow = () => {
+    console.log('showing lottery details');
+    fetchUsersData();
+    invoke(props, 'handleFetchUserLotteries', {
+      userId,
+      cancelTag: cancelHttpTag,
+      onError: fetchUsersLotteriesCallback,
+      onSuccess: fetchUsersLotteriesCallback,
+    });
+  };
+
+  const handleUserLotteryPress = userLottery => {
     return () => {
       scrollViewRef.current.scrollTo({x: 0, y: 0, animated: true});
       if (props.updateLotteryDetails) {
-        invoke(props, 'updateLotteryDetails', ad);
+        invoke(props, 'updateLotteryDetails', userLottery);
       } else {
-        invoke(props, 'showLotteryDetails', ad);
+        invoke(props, 'showLotteryDetails', userLottery);
       }
     };
   };
@@ -111,57 +151,22 @@ const LotteryDetails = props => {
   const onPaymentClose = () => {
     setShowModal(null);
   };
-  const fetchUsersDataCallback = () => {
-    setUsersDataLoading(false);
-  };
-  const fetchUsersAdsCallback = () => {
-    setUserAdsLoading(false);
-  };
-  const fetchUsersData = () => {
-    const users = [
-      userId,
-      ...(lotteryUserIds || []),
-      winnerUserId || false,
-    ].filter(Boolean);
-
-    if (users.length) {
-      invoke(props, 'handleFetchUsersData', {
-        winnerUserId,
-        userId,
-        users,
-        cancelTag: cancelHttpTag,
-        lotteryUserIds,
-        onError: fetchUsersDataCallback,
-        onSuccess: fetchUsersDataCallback,
-        currentCollectedPrice,
-      });
-    }
-  };
-  const onShow = () => {
-    fetchUsersData();
-    invoke(props, 'handleFetchUserLotteries', {
-      userId,
-      cancelTag: cancelHttpTag,
-      onError: fetchUsersAdsCallback,
-      onSuccess: fetchUsersAdsCallback,
-    });
-  };
   const empty = <Icon name="face" size={40} />;
   const getItem = (data, index) => data[index];
-  const getUserAdsCount = () => userAds.length;
-  const getLotteryUsersCount = () => lotteryUsersData.length;
+  const getUserLotteriesCount = () => userLotteries.length;
+  // const getLotteryUsersCount = () => lotteryUsersData.length;
   const getVirtualKey = _item => _item.id;
   const renderUserAdItem = ({item: ad}) => (
     <CardListItem
       item={ad}
       smallImage={true}
       horizontal={true}
-      onItemPress={handleUserAdPress(ad)}
+      onItemPress={handleUserLotteryPress(ad)}
     />
   );
-  const renderLotteryUserItem = ({item: _user}) => (
-    <LotteryDetailsUserListItem user={_user} withNotificationNum={true} />
-  );
+  // const renderLotteryUserItem = ({item: _user}) => (
+  //   <LotteryDetailsUserListItem user={_user} withNotificationNum={true} />
+  // );
   const handleShowImagesViewer = url => {
     if (!ImagesViewer) {
       ImagesViewer = require('../ImageViewer').default;
@@ -191,7 +196,26 @@ const LotteryDetails = props => {
   };
   const handleActionPress = {
     [lotteryDetailsTexts.actionOptions.share]: () => {
-      console.log('share');
+      Alert.alert(
+        lotteryDetailsTexts.shareLottery,
+        lotteryDetailsTexts.areYouSureShare,
+        [
+          {
+            text: lotteryDetailsTexts.areYouSureShare,
+            onPress: () => {
+              // invoke(props, 'handleShareLottery', {
+              //   userId: authUser.id,
+              //   lotteryId,
+              // });
+            },
+            style: 'default',
+          },
+          {
+            text: lotteryDetailsTexts.close,
+            style: 'cancel',
+          },
+        ],
+      );
     },
     [lotteryDetailsTexts.actionOptions.chat]: () => {
       if (!ChatModal) {
@@ -215,8 +239,50 @@ const LotteryDetails = props => {
       invoke(props, 'handleShowShipLotteryModal', lotteryDetails || item);
       setShowModal('shipLotteryModal');
     },
-    [lotteryDetailsTexts.actionOptions.remove]: () => {
-      console.log('delete');
+    [lotteryDetailsTexts.actionOptions.cancel]: () => {
+      Alert.alert(
+        lotteryDetailsTexts.cancelLottery,
+        lotteryDetailsTexts.areYouSureCancel,
+        [
+          {
+            text: lotteryDetailsTexts.cancelThisLottery,
+            onPress: () => {
+              invoke(props, 'handleCancelLottery', {
+                userId: authUser.id,
+                lotteryId,
+              });
+            },
+            style: 'default',
+          },
+          {
+            text: lotteryDetailsTexts.close,
+            style: 'cancel',
+          },
+        ],
+      );
+    },
+    [lotteryDetailsTexts.actionOptions.readd]: () => {
+      Alert.alert(
+        lotteryDetailsTexts.reAddLottery,
+        lotteryDetailsTexts.areYouSureReAdd,
+        [
+          {
+            text: lotteryDetailsTexts.reAddThisLottery,
+            onPress: () => {
+              invoke(props, 'handleCancelLottery', {
+                userId: authUser.id,
+                lotteryId,
+                reAdd: true,
+              });
+            },
+            style: 'default',
+          },
+          {
+            text: lotteryDetailsTexts.close,
+            style: 'cancel',
+          },
+        ],
+      );
     },
     [lotteryDetailsTexts.actionOptions.result]: () => {
       if (!LotteryResultModal) {
@@ -283,6 +349,14 @@ const LotteryDetails = props => {
   };
   const handleOnDismiss = () => {
     cancellableFetch.abort(cancelHttpTag);
+  };
+  const handleOnEndReached = () => {
+    invoke(props, 'handleFetchUserLotteries', {
+      userId,
+      cancelTag: cancelHttpTag,
+      onError: fetchUsersAdsCallback,
+      onSuccess: fetchUsersAdsCallback,
+    });
   };
   useEffect(() => {
     onShow();
@@ -355,6 +429,23 @@ const LotteryDetails = props => {
                     : lotteryDetailsTexts.lotteryNotAvailable}
                 </Text>
               </View>
+              {cancelled ? (
+                <>
+                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                    <Icon color="red" name="cancel" />
+                    <Text style={sharedStyles.userDetailsText}>
+                      {lotteryDetailsTexts.cancelled}
+                    </Text>
+                  </View>
+                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                    <Text style={sharedStyles.aboutFirstSectionText}>
+                      {`${lotteryDetailsTexts.cancelledOn}${formatDate(
+                        cancelDate,
+                      )}`}
+                    </Text>
+                  </View>
+                </>
+              ) : null}
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="dns" />
                 <Text style={sharedStyles.userDetailsText}>
@@ -397,89 +488,76 @@ const LotteryDetails = props => {
                   {category}
                 </Text>
               </View>
-              <View style={sharedStyles.userDetailsIconTextContainer}>
-                <Icon color="rgba(0,0,0,.55)" name="local-atm" />
-                <Text style={sharedStyles.userDetailsText}>
-                  {lotteryDetailsTexts.totalPrice}
-                </Text>
-              </View>
-              <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                <Text
-                  style={
-                    sharedStyles.aboutFirstSectionText
-                  }>{`${currency} ${price}`}</Text>
-              </View>
-              <View style={sharedStyles.userDetailsIconTextContainer}>
-                <Icon color="rgba(0,0,0,.55)" name="credit-card" />
-                <Text style={sharedStyles.userDetailsText}>
-                  {lotteryDetailsTexts.collectedPrice}
-                </Text>
-              </View>
-              <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                <Text
-                  style={
-                    sharedStyles.aboutFirstSectionText
-                  }>{`${currency} ${currentCollectedPrice || 0}`}</Text>
-              </View>
-              <View style={sharedStyles.userDetailsIconTextContainer}>
-                <Icon color="rgba(0,0,0,.55)" name="monetization-on" />
-                <Text style={sharedStyles.userDetailsText}>
-                  {lotteryDetailsTexts.payToWin}
-                </Text>
-              </View>
-              <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                <Text
-                  style={
-                    sharedStyles.aboutFirstSectionText
-                  }>{`${currency} ${'100'}`}</Text>
-              </View>
-              <View style={sharedStyles.userDetailsIconTextContainer}>
-                <Icon color="rgba(0,0,0,.55)" name="group-add" />
-                <Text style={sharedStyles.userDetailsText}>
-                  {lotteryDetailsTexts.currentLotteryUsers}
-                </Text>
-              </View>
-              <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                {usersDataLoading && SimpleLoader}
-                {!usersDataLoading &&
-                  lotteryUsersData &&
-                  lotteryUsersData.length && (
-                    <VirtualizedList
-                      initialNumToRender={5}
-                      windowSize={1}
-                      maxToRenderPerBatch={5}
-                      updateCellsBatchingPeriod={0.0}
-                      removeClippedSubviews={true}
-                      horizontal={true}
-                      showsHorizontalScrollIndicator={false}
-                      data={lotteryUsersData}
-                      getItem={getItem}
-                      getItemCount={getLotteryUsersCount}
-                      keyExtractor={getVirtualKey}
-                      renderItem={renderLotteryUserItem}
-                    />
-                  )}
-                {!usersDataLoading &&
-                  (!lotteryUsersData || lotteryUsersData.length === 0) &&
-                  empty}
-              </View>
-              <View style={sharedStyles.userDetailsIconTextContainer}>
-                <Icon color="green" name="star" />
-                <Text style={sharedStyles.userDetailsText}>
-                  {lotteryDetailsTexts.winner}
-                </Text>
-              </View>
-              <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                {usersDataLoading && SimpleLoader}
-                {!usersDataLoading && winnerUserData && winnerUserId ? (
-                  <LotteryDetailsUserListItem user={winnerUserData} />
-                ) : null}
-                {!usersDataLoading && (!winnerUserData || !winnerUserId) ? (
-                  <Text style={sharedStyles.aboutFirstSectionText}>
-                    {lotteryDetailsTexts.inProgress}
-                  </Text>
-                ) : null}
-              </View>
+              {!cancelled ? (
+                <>
+                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                    <Icon color="rgba(0,0,0,.55)" name="local-atm" />
+                    <Text style={sharedStyles.userDetailsText}>
+                      {lotteryDetailsTexts.totalPrice}
+                    </Text>
+                  </View>
+                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                    <Text
+                      style={
+                        sharedStyles.aboutFirstSectionText
+                      }>{`${currency} ${price}`}</Text>
+                  </View>
+                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                    <Icon color="rgba(0,0,0,.55)" name="credit-card" />
+                    <Text style={sharedStyles.userDetailsText}>
+                      {lotteryDetailsTexts.collectedPrice}
+                    </Text>
+                  </View>
+                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                    <Text
+                      style={
+                        sharedStyles.aboutFirstSectionText
+                      }>{`${currency} ${currentCollectedPrice || 0}`}</Text>
+                  </View>
+                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                    <Icon color="rgba(0,0,0,.55)" name="monetization-on" />
+                    <Text style={sharedStyles.userDetailsText}>
+                      {lotteryDetailsTexts.payToWin}
+                    </Text>
+                  </View>
+                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                    <Text
+                      style={
+                        sharedStyles.aboutFirstSectionText
+                      }>{`${currency} ${'100'}`}</Text>
+                  </View>
+                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                    <Icon color="rgba(0,0,0,.55)" name="group-add" />
+                    <Text style={sharedStyles.userDetailsText}>
+                      {lotteryDetailsTexts.currentLotteryUsers}
+                    </Text>
+                  </View>
+                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                    <Text style={sharedStyles.aboutFirstSectionText}>
+                      {lotteryDetailsTexts.currentLotteryUsersNumber(
+                        lotteryUserIds && lotteryUserIds.length,
+                      )}
+                    </Text>
+                  </View>
+                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                    <Icon color="green" name="star" />
+                    <Text style={sharedStyles.userDetailsText}>
+                      {lotteryDetailsTexts.winner}
+                    </Text>
+                  </View>
+                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                    {usersDataLoading && SimpleLoader}
+                    {!usersDataLoading && winnerUserData && winnerUserId ? (
+                      <LotteryDetailsUserListItem user={winnerUserData} />
+                    ) : null}
+                    {!usersDataLoading && (!winnerUserData || !winnerUserId) ? (
+                      <Text style={sharedStyles.aboutFirstSectionText}>
+                        {lotteryDetailsTexts.inProgress}
+                      </Text>
+                    ) : null}
+                  </View>
+                </>
+              ) : null}
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="today" />
                 <Text style={sharedStyles.userDetailsText}>
@@ -522,8 +600,8 @@ const LotteryDetails = props => {
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainerNoFlex}>
-                {userAdsLoading && SimpleLoader}
-                {!userAdsLoading && userAds && (
+                {userLotteriesLoading && SimpleLoader}
+                {!userLotteriesLoading && userLotteries && (
                   <VirtualizedList
                     initialNumToRender={5}
                     windowSize={1}
@@ -532,21 +610,21 @@ const LotteryDetails = props => {
                     removeClippedSubviews={true}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
-                    data={userAds}
+                    data={userLotteries}
+                    onEndReachedThreshold={0.1}
+                    onEndReached={handleOnEndReached}
                     getItem={getItem}
-                    getItemCount={getUserAdsCount}
+                    getItemCount={getUserLotteriesCount}
                     keyExtractor={getVirtualKey}
                     renderItem={renderUserAdItem}
                   />
                 )}
-                {!userAdsLoading && !userAds && (
+                {!userLotteriesLoading && !userLotteries && (
                   <Text style={sharedStyles.userDetailsText}>
-                    {lotteryDetailsTexts.emptyUserAds}
+                    {lotteryDetailsTexts.emptyUserLotteries}
                   </Text>
                 )}
               </View>
-              <Text>{cancelled}</Text>
-              <Text>{cancelDate}</Text>
             </View>
           </ScrollView>
           {authUser && authUser.id ? (
@@ -581,8 +659,38 @@ const LotteryDetails = props => {
                         />
                       ))
                     : null}
+                  {!cancelled
+                    ? lotteryDetailsTexts.cancelActions.map(cancelAction => (
+                        <Button
+                          primary
+                          raised
+                          style={{
+                            container:
+                              sharedStyles.bottomToolbarActionButtonContainer,
+                          }}
+                          icon={cancelAction.icon}
+                          text={''}
+                          onPress={handleActionPress[cancelAction.action]}
+                        />
+                      ))
+                    : null}
+                  {cancelled
+                    ? lotteryDetailsTexts.reAddActions.map(reAddAction => (
+                        <Button
+                          primary
+                          raised
+                          style={{
+                            container:
+                              sharedStyles.bottomToolbarActionButtonContainer,
+                          }}
+                          icon={reAddAction.icon}
+                          text={''}
+                          onPress={handleActionPress[reAddAction.action]}
+                        />
+                      ))
+                    : null}
                 </>
-              ) : isWinner ? (
+              ) : isWinner && !cancelled && available ? (
                 lotteryDetailsTexts.lotteryWinnerActions.map(winnerAction => (
                   <Button
                     primary
@@ -596,7 +704,7 @@ const LotteryDetails = props => {
                     onPress={handleActionPress[winnerAction.action]}
                   />
                 ))
-              ) : isVisitor ? (
+              ) : isVisitor && !cancelled && available ? (
                 lotteryDetailsTexts.visitorActions.map(visitorAction => (
                   <Button
                     primary
@@ -617,6 +725,8 @@ const LotteryDetails = props => {
                 ))
               ) : null}
               {isVisitor &&
+              !cancelled &&
+              available &&
               Array.isArray(likedBy) &&
               likedBy.length &&
               likedBy.includes(authUser.id) ? (
@@ -666,9 +776,9 @@ LotteryDetails.propTypes = {
   lotteries: PropTypes.oneOfType([PropTypes.array, PropTypes.any]),
   user: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
   adPosterData: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
-  lotteryUsersData: PropTypes.oneOfType([PropTypes.array, PropTypes.any]),
+  // lotteryUsersData: PropTypes.oneOfType([PropTypes.array, PropTypes.any]),
   winnerUserData: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
-  userAds: PropTypes.oneOfType([PropTypes.array, PropTypes.any]),
+  userLotteries: PropTypes.oneOfType([PropTypes.array, PropTypes.any]),
   lotteryDetails: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
 };
 
@@ -677,9 +787,9 @@ const mapStateToProps = state => {
     lotteries: getLotteriesSelector(state),
     user: getUsersSelector(state),
     adPosterData: getAdPosterDataSelector(state),
-    lotteryUsersData: getLotteryUsersDataSelector(state),
+    // lotteryUsersData: getLotteryUsersDataSelector(state),
     winnerUserData: getWinnerUserDataSelector(state),
-    userAds: getUserAdsSelector(state),
+    userLotteries: getUserLotteriesSelector(state),
     lotteryDetails: getLotteryDetailsSelector(state),
   };
 };
@@ -696,6 +806,9 @@ const mapDispatchToProps = dispatch => {
       dispatch(showReceiveLotteryModal(payload)),
     handleShowShipLotteryModal: payload =>
       dispatch(showShipLotteryModal(payload)),
+    handleCancelLottery: payload => dispatch(handleCancelLottery(payload)),
+    handleSetUserLotteriesPageToken: payload =>
+      dispatch(setUserLotteriesPageToken(payload)),
   };
 };
 

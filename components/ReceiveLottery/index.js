@@ -45,10 +45,10 @@ const ReceiveLotteryModal = props => {
   const getItemCount = () => (filteredLotteries || userWonLotteries).length;
   const getItemKey = item => item.id;
   const onItemPress = index => {
-    setIsShowReceiveLotteryModal(true);
     invoke(props, 'handleShowReceiveLotteryModal', {
       ...(filteredLotteries || userWonLotteries)[index],
     });
+    setIsShowReceiveLotteryModal(true);
   };
   const renderListItem = ({item, index}) => (
     <ListItemCommon
@@ -58,6 +58,12 @@ const ReceiveLotteryModal = props => {
       listLength={(filteredLotteries || userWonLotteries).length}
       hideMoreActions={true}
       showLotteryResult={true}
+      showReceivedTag={true}
+      showShippedTag={true}
+      isReceived={item.isReceived}
+      isShipped={item.isShipped}
+      isWinner={`${authUserId}` === `${item.winnerUserId}`}
+      isLotteryPoster={`${authUserId}` === `${item.userId}`}
     />
   );
   const handleFilterChange = filterValue => {
@@ -96,7 +102,7 @@ const ReceiveLotteryModal = props => {
   const handleReceiveLotteryModalClose = () => {
     setIsShowReceiveLotteryModal(false);
     invoke(props, 'handleShowReceiveLotteryModal', undefined);
-    onShowModal();
+    // onShowModal();
   };
   const handleCloseModal = () => {
     invoke(props, 'onClose');

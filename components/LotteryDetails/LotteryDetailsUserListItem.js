@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Image, Text, View} from 'react-native';
 import {Icon} from 'react-native-material-ui';
+import FastImage from 'react-native-fast-image';
 
 const LotteryDetailsUserListItem = props => {
   const {user, withNotificationNum, largeImage, winnerUserId} = props;
@@ -40,7 +41,7 @@ const LotteryDetailsUserListItem = props => {
                 ? sharedStyles.lotteryDetailsUsersListItemLargeImageContainer
                 : sharedStyles.lotteryDetailsUsersListItemImageContainer,
             ]}>
-            <Image
+            <FastImage
               style={
                 largeImage
                   ? sharedStyles.lotteryDetailsUsersListItemLargeImage
@@ -48,10 +49,10 @@ const LotteryDetailsUserListItem = props => {
               }
               source={{
                 uri: user.image,
-                // priority: FastImage.priority.high,
-                cache: 'force-cache',
+                priority: FastImage.priority.high,
+                cache: FastImage.cacheControl.web,
               }}
-              resizeMode={'cover'}
+              resizeMode={FastImage.resizeMode.cover}
             />
           </View>
         ) : (

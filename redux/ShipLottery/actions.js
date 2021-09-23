@@ -8,6 +8,8 @@ const shipLotteryActions = {
   setLotteryWinnerUserData: 'SHIP_LOTTERY_MODAL_SET_LOTTERY_WINNER_USER_DATA',
   markLotteryAsShipped: 'SHIP_LOTTERY_MODAL_MARK_AS_SHIPPED',
   resetState: 'SHIP_LOTTERY_RESET_STATE',
+  editLottery: 'SHIP_LOTTERY_REDUCER_EDIT_LOTTERY',
+  cancelLottery: 'SHIP_LOTTERY_REDUCER_CANCEL_LOTTERY',
 };
 
 const showShipLotteryModal = payload => {

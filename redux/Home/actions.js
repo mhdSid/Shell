@@ -6,17 +6,26 @@ const homeActions = {
   resetLotteries: 'HOME_RESET_LOTTERIES',
   setLotteries: 'HOME_SET_LOTTERIES',
   setHomeLotteries: 'SET_HOME_VIEW_LOTTERIES',
+  resetHomeLotteries: 'RESET_HOME_LOTTERIES',
   updateLottery: 'HOME_UPDATE_LOTTERy',
   setPageToken: 'HOME_SET_PAGE_TOKEN',
   setSearchPageToken: 'HOME_SET_SEARCH_PAGE_TOKEN',
   resetState: 'HOME_RESET_STATE',
   likeLottery: 'HOME_REDUCER_LIKE_LOTTERY',
   dislikeLottery: 'HOME_REDUCER_DISLIKE_LOTTERY',
+  editLottery: 'HOME_REDUCER_EDIT_LOTTERY',
+  cancelLottery: 'HOME_CANCEL_LOTTERY',
 };
 
 const updateLottery = payload => {
   return dispatch => {
     return dispatch({type: homeActions.updateLottery, payload});
+  };
+};
+
+const setPageToken = payload => {
+  return dispatch => {
+    return dispatch({type: homeActions.setPageToken, payload});
   };
 };
 
@@ -30,4 +39,4 @@ const handleError = props => {
   return;
 };
 
-export {homeActions, handleError, updateLottery};
+export {homeActions, handleError, updateLottery, setPageToken};

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, createRef} from 'react';
+import React, {useState, useEffect, createRef, useMemo} from 'react';
 import {View, ScrollView, Text, SafeAreaView, Modal, Image} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import PropTypes from 'prop-types';
@@ -20,9 +20,9 @@ import {
 import invoke from 'lodash/invoke';
 import {Dropdown} from 'react-native-material-dropdown';
 import {handleUpdateLottery} from '../../redux/EditLottery/EditLottery';
-import {loadingPopup} from '../Loading';
 import ImageResizer from 'react-native-image-resizer';
 import {isNumber} from 'lodash';
+import FastImage from 'react-native-fast-image';
 
 const EditLottery = props => {
   const {item: lotteryDetails} = props;
@@ -44,10 +44,15 @@ const EditLottery = props => {
       item.kanji === lotteryDetailsPrefecture ||
       item.name === lotteryDetailsPrefecture,
   ).name;
-  const [loading, setLoading] = useState(false);
   const [itemCategory, setItemCategory] = useState(lotteryDetailsCategory);
   const [itemCondition, setItemCondition] = useState(lotteryDetailsCondition);
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState(
+    [...lotteryDetailsImages].concat(
+      new Array(10 - lotteryDetailsImages.length)
+        .fill(1)
+        .map((item, index) => index),
+    ),
+  );
   const [imageFiles, setImageFiles] = useState([]);
   const [prefecture, setPrefecture] = useState(lotteryDetailsPrefecture);
   const [city, setCity] = useState(lotteryDetailsCity);
@@ -89,12 +94,6 @@ const EditLottery = props => {
   const adNameRef = createRef();
   const descriptionRef = createRef();
   const priceRef = createRef();
-  const viewImages = [...lotteryDetailsImages].concat(
-    new Array(10 - lotteryDetailsImages.length)
-      .fill(1)
-      .map((item, index) => index),
-  );
-  console.log(viewImages);
   const handleChange = {
     adName: () => {
       return value => {
@@ -115,7 +114,7 @@ const EditLottery = props => {
     },
     description: () => {
       return value => {
-        if (value && value.length >= 20 && value.length <= 100) {
+        if (value && value.length >= 20 && value.length <= 500) {
           setDescriptionChanged(value !== lotteryDetailsDescription);
           setErrors({
             ...errors,
@@ -189,7 +188,6 @@ const EditLottery = props => {
       (filteredImages && filteredImages.length) ||
       lotteryDataChanged
     ) {
-      setLoading(true);
       invoke(props, 'updateLottery', {
         name,
         description,
@@ -209,13 +207,14 @@ const EditLottery = props => {
           cityChanged ||
           itemConditionChanged ||
           itemCategoryChanged,
-        onError: () => {},
-        onSuccess: () => {
-          setLoading(false);
-          handleCloseModal();
-        },
+        // onError: () => {},
+        // onSuccess: () => {
+        //   setLoading(false);
+        //   handleCloseModal();
+        // },
         imageFiles: filteredImages,
       });
+      handleCloseModal();
       // setDefault(nameField, descriptionField, priceField);
     }
   };
@@ -244,8 +243,8 @@ const EditLottery = props => {
           if (response.uri) {
             ImageResizer.createResizedImage(
               response.uri,
-              400,
-              400,
+              350,
+              350,
               'JPEG',
               40,
               0,
@@ -266,6 +265,7 @@ const EditLottery = props => {
               };
               setImagesChanged(true);
               setImages([...imagesArray]);
+              console.log([...imagesArray]);
               setImageFiles([...imagesFilesArray]);
             });
           }
@@ -346,7 +346,6 @@ const EditLottery = props => {
               // }
             />
           </View>
-          {loading && loadingPopup}
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={sharedStyles.importAdContainer}>
               <View style={sharedStyles.mobileContainer}>
@@ -354,6 +353,8 @@ const EditLottery = props => {
                   {importLotteryTexts.productName}
                 </Text>
                 <TextField
+                  autoCapitalize={false}
+                  autoCorrect={false}
                   placeholder={importLotteryTexts.enterName}
                   placeholderTextColor={'rgba(0,0,0,0.3)'}
                   onBlur={handleBlur('adName')}
@@ -372,11 +373,14 @@ const EditLottery = props => {
                   {importLotteryTexts.description}
                 </Text>
                 <TextField
+                  autoCapitalize={false}
+                  autoCorrect={false}
                   placeholder={importLotteryTexts.enterDescription}
                   placeholderTextColor={'rgba(0,0,0,0.3)'}
                   onChangeText={handleChange.description()}
-                  maxLength={100}
-                  returnKeyType="done"
+                  maxLength={500}
+                  multiline={true}
+                  numberOfLines={5}
                   minLength={20}
                   tintColor={'#b69cf6'}
                   defaultValue={lotteryDetailsDescription}
@@ -395,6 +399,8 @@ const EditLottery = props => {
                   </Text>
                   <View style={sharedStyles.adPriceTextfieldContainer}>
                     <TextField
+                      autoCapitalize={false}
+                      autoCorrect={false}
                       placeholder={importLotteryTexts.enterPrice}
                       placeholderTextColor={'rgba(0,0,0,0.3)'}
                       keyboardType="phone-pad"
@@ -416,27 +422,27 @@ const EditLottery = props => {
                   {importLotteryTexts.images}
                 </Text>
                 <View style={sharedStyles.imageBtnContainer}>
-                  {viewImages.map((value, index) => (
+                  {images.map((value, index) => (
                     <TouchableBounce
-                      key={value || index}
+                      key={value}
                       onPress={handleChoosePhoto(index)}
                       style={[
                         sharedStyles.imageBtn,
                         (index === 4 || index === 9) &&
                           sharedStyles.imageBtnLast,
                       ]}>
-                      {isNumber(value) || !value ? (
+                      {isNumber(value) ? (
                         <Icon name="image" size={35} color="white" />
                       ) : null}
                       {!isNumber(value) && value ? (
-                        <Image
+                        <FastImage
                           style={sharedStyles.adImage}
                           source={{
                             uri: value,
-                            // priority: FastImage.priority.high,
-                            cache: 'force-cache',
+                            priority: FastImage.priority.high,
+                            cache: FastImage.cacheControl.web,
                           }}
-                          resizeMode={'cover'}
+                          resizeMode={FastImage.resizeMode.cover}
                         />
                       ) : null}
                     </TouchableBounce>
@@ -496,7 +502,7 @@ const EditLottery = props => {
           </ScrollView>
           <View
             style={[
-              sharedStyles.lotteryDetailsBottomToolbar,
+              sharedStyles.editLotteryBottomToolBar,
               {backgroundColor: 'white'},
             ]}>
             <Button

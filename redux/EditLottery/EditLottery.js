@@ -7,6 +7,9 @@ import invoke from 'lodash/invoke';
 import {lotteryDetailsActions} from '../LotteryDetails/actions';
 import {reject, uniq} from 'lodash';
 import {homeActions} from '../Home/actions';
+import { shipLotteryActions } from '../ShipLottery/actions';
+import { lotteriesActions } from '../Lotteries/actions';
+import { chatActions } from '../Chat/actions';
 
 const handleUpdateLottery = payload => {
   return dispatch => {
@@ -88,7 +91,19 @@ const handleUpdateLottery = payload => {
                   ),
                 };
                 dispatch({
-                  type: homeActions.setLotteries,
+                  type: homeActions.editLottery,
+                  payload: updatedLottery,
+                });
+                dispatch({
+                  type: chatActions.editLottery,
+                  payload: updatedLottery,
+                });
+                dispatch({
+                  type: shipLotteryActions.editLottery,
+                  payload: updatedLottery,
+                });
+                dispatch({
+                  type: lotteriesActions.editLottery,
                   payload: updatedLottery,
                 });
                 return dispatch({
@@ -96,7 +111,7 @@ const handleUpdateLottery = payload => {
                   payload: {
                     ...updatedLottery,
                     resetState: false,
-                  }
+                  },
                 });
               }
             },
@@ -158,7 +173,19 @@ const handleUpdateLottery = payload => {
             };
             invoke(payload, 'onSuccess');
             dispatch({
-              type: homeActions.setLotteries,
+              type: homeActions.editLottery,
+              payload: updatedLottery,
+            });
+            dispatch({
+              type: chatActions.editLottery,
+              payload: updatedLottery,
+            });
+            dispatch({
+              type: shipLotteryActions.editLottery,
+              payload: updatedLottery,
+            });
+            dispatch({
+              type: lotteriesActions.editLottery,
               payload: updatedLottery,
             });
             return dispatch({
@@ -166,7 +193,7 @@ const handleUpdateLottery = payload => {
               payload: {
                 ...updatedLottery,
                 resetState: false,
-              }
+              },
             });
           }
         },

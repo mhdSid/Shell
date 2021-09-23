@@ -8,6 +8,8 @@ const lotteriesActions = {
   resetState: 'LOTTERIES_REDUCER_RESET_STATE',
   likeLottery: 'LOTTERIES_REDUCER_LIKE_LOTTERY',
   dislikeLottery: 'LOTTERIES_REDUCER_DISLIKE_LOTTERY',
+  editLottery: 'LOTTERIES_REDUCER_EDIT_LOTTERY',
+  cancelLottery: 'LOTTERIES_CANCEL_LOTTERY',
 };
 
 export {lotteriesActions};

@@ -12,6 +12,7 @@ import {logoutAction} from '../../redux/Auth/actions';
 import {handleLogout} from '../../redux/Auth/Logout';
 import {getUserSelector} from './Selectors';
 import {handleDisconnectChatSocketCommunication} from '../../redux/Chat/actions';
+import FastImage from 'react-native-fast-image';
 
 let UserLikedLotteries = null;
 let UserCreatedLotteries = null;
@@ -151,14 +152,14 @@ const UserProfile = props => {
                   <Avatar
                     image={
                       user.image ? (
-                        <Image
+                        <FastImage
                           style={sharedStyles.profileImage}
                           source={{
                             uri: user.image,
-                            // priority: FastImage.priority.high,
-                            cache: 'force-cache',
+                            priority: FastImage.priority.high,
+                            cache: FastImage.cacheControl.web,
                           }}
-                          resizeMode={'cover'}
+                          resizeMode={FastImage.resizeMode.cover}
                         />
                       ) : (
                         <Icon name="account-circle" />

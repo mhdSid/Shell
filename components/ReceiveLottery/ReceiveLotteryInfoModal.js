@@ -21,6 +21,7 @@ import cancellableFetch from 'react-native-cancelable-fetch';
 import ChatModal from '../Chat';
 import formatDate from '../../lib/formatDate';
 import {handleMarkLotteryAsReceived} from '../../redux/ReceiveLottery/MarkLotteryAsReceived';
+import FastImage from 'react-native-fast-image';
 
 const ReceiveLotteryInfoModal = props => {
   const {receiveLotteryDetails, user, lotteryPosterData} = props;
@@ -127,14 +128,14 @@ const ReceiveLotteryInfoModal = props => {
               <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={sharedStyles.lotteryShipReceiveStepsContainer}>
                   <View style={sharedStyles.lotteryShipReceiveStep}>
-                    <Image
+                    <FastImage
                       style={sharedStyles.stepImage}
                       source={{
                         uri: lotteryPosterData.image,
-                        // priority: FastImage.priority.high,
-                        cache: 'force-cache',
+                        priority: FastImage.priority.high,
+                        cache: FastImage.cacheControl.web,
                       }}
-                      resizeMode={'cover'}
+                      resizeMode={FastImage.resizeMode.cover}
                     />
                     <Button
                       primary
@@ -149,26 +150,26 @@ const ReceiveLotteryInfoModal = props => {
                   </View>
                   <Icon name="arrow-forward" />
                   <View style={sharedStyles.lotteryShipReceiveStep}>
-                    <Image
+                    <FastImage
                       style={sharedStyles.stepImage}
                       source={{
                         uri: receiveLotteryDetails.images[0],
-                        // priority: FastImage.priority.high,
-                        cache: 'force-cache',
+                        priority: FastImage.priority.high,
+                        cache: FastImage.cacheControl.web,
                       }}
-                      resizeMode={'cover'}
+                      resizeMode={FastImage.resizeMode.cover}
                     />
                   </View>
                   <Icon name="arrow-forward" />
                   <View style={sharedStyles.lotteryShipReceiveStep}>
-                    <Image
+                    <FastImage
                       style={sharedStyles.stepImage}
                       source={{
                         uri: user.image,
-                        // priority: FastImage.priority.high,
-                        cache: 'force-cache',
+                        priority: FastImage.priority.high,
+                        cache: FastImage.cacheControl.web,
                       }}
-                      resizeMode={'cover'}
+                      resizeMode={FastImage.resizeMode.cover}
                     />
                   </View>
                 </View>

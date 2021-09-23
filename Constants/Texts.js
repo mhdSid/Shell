@@ -92,7 +92,7 @@ const validationMessages = {
   },
   importLottery: {
     adName: 'Length should be between 5 and 30 characters.',
-    description: 'Length should be between 20 and 100 characters.',
+    description: 'Length should be between 20 and 500 characters.',
     price: 'Price should be be divisble by 100',
   },
   loginSignup: {
@@ -107,6 +107,17 @@ const validationMessages = {
 };
 
 const lotteryDetails = {
+  cancelLottery: 'Cancel Lottery',
+  reAddLottery: 'Readd Lottery',
+  shareLottery: 'Share Lottery',
+  areYouSureShare: 'Share',
+  cancelThisLottery: 'Cancel this lottery',
+  reAddThisLottery: 'Readd this lottery',
+  close: 'Close',
+  areYouSureCancel:
+    'You are about to cancel this lottery. Are you sure you want to cancel it?',
+  areYouSureReAdd:
+    'You are about to make this lottery available again. Are you sure you want to proceed?',
   inProgress: 'This lottery is still in progress.',
   winnerAccouncementSoon: 'Kindly be patient for the winner announcement.',
   youAreTheWinner: 'YOU ARE THE WINNER OF THIS LOTTERY!',
@@ -118,11 +129,16 @@ const lotteryDetails = {
     win: 'win',
     receive: 'receive',
     ship: 'ship',
-    remove: 'remove',
+    cancel: 'cancel',
+    readd: 'readd',
     result: 'result',
     chat: 'chat',
   },
+  cancelled: 'Cancelled',
+  cancelledOn: 'Cancelled on ',
   like: {icon: 'favorite-border', text: 'like', action: 'like'},
+  cancelActions: [{icon: 'cancel', text: 'cancel', action: 'cancel'}],
+  reAddActions: [{icon: 'check', text: 'readd', action: 'readd'}],
   dislike: {icon: 'favorite', text: 'dislike', action: 'dislike'},
   visitorActions: [
     {icon: 'shop', text: 'win', action: 'win'},
@@ -140,7 +156,6 @@ const lotteryDetails = {
   lotteryPosterActions: [
     {icon: 'track-changes', text: 'result', action: 'result'},
     {icon: 'share', text: 'share', action: 'share'},
-    {icon: 'delete', text: 'remove', action: 'remove'},
     // {icon: 'chat', text: 'chat', action: 'chat'},
     // {icon: 'local-shipping', text: 'check', action: 'ship'},
   ],
@@ -159,11 +174,10 @@ const lotteryDetails = {
   collectedPrice: 'Collected Price',
   payToWin: 'Pay to win the lottery',
   currentLotteryUsers: 'Current lottery users',
-  currentLotteryUsersNumber: lotteryUserIds => {
-    if (!lotteryUserIds || !lotteryUserIds.length) {
-      return;
+  currentLotteryUsersNumber: lotteryUserIdsLength => {
+    if (!lotteryUserIdsLength) {
+      return 'No users have joined the lottery yet.';
     }
-    const lotteryUserIdsLength = lotteryUserIds.length;
     if (lotteryUserIdsLength === 1) {
       return `${lotteryUserIdsLength} user has joined this lottery.`;
     }
@@ -178,7 +192,7 @@ const lotteryDetails = {
   location: 'Location',
   user: 'Owner',
   adId: 'Ad ID',
-  emptyUserAds: 'User has no available lotteries',
+  emptyUserLotteries: 'User has no available lotteries',
   userLotteries: 'User Lotteries',
 };
 
@@ -259,6 +273,16 @@ const chat = {
   chatWithOwner: 'Chat with lottery owner',
   chatWithWinner: 'Chat with lottery winner',
   emptyChat: "You haven't sent any messages yet.",
+  notReceived: 'Not Received',
+  notShipped: 'Not Shipped',
+  shipped: 'Already Shipped',
+  received: 'Already Received',
+  youHaveShipped: 'You have already shipped this item.',
+  youHaveReceived: 'You have already received this item.',
+  youWonThisLottery:
+    "You won this lottery but you haven't received the item yet.\nPlease contact the owner and plan shipping procedures.",
+  thereIsAWinner:
+    "There is a winner for this lottery but you haven't shipped the item yet.\nPlease contact the winner and plan shipping procedures.",
 };
 
 const uploadAdProgress = {
@@ -305,7 +329,7 @@ const profile = {
   verifyAccount: 'Verify your account',
   verify: 'Verify',
   checkYourInbox:
-    'Please check your e-mail inbox in order to verify your email.',
+    'In order to verify your e-mail, we have sent you a verification link to your e-mail inbox.\nPlease check your inbox and verify your email.',
   howToUseTheApp: 'How to use the App',
   notifications: 'Notifications',
   paymentInformation: 'Payment information',
@@ -370,6 +394,7 @@ const settings = {
 
 const updateUserr = {
   updateProfile: 'Update Profile',
+  choosePhoto: 'Choose a profile image',
   save: 'Save',
   firstName: 'First Name',
   lastName: 'Last Name',

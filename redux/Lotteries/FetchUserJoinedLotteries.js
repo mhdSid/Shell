@@ -7,6 +7,7 @@ const handleFetchUserJoinedLotteries = payload => {
   return dispatch => {
     const {onError, userId, cancelTag} = payload;
     const onGetLotteriesSuccess = data => {
+      console.log('fetching user joined lotteries success')
       const {lotteries, error} = data;
       if (error) {
         return handleError({error, onError});
@@ -17,6 +18,7 @@ const handleFetchUserJoinedLotteries = payload => {
         payload: lotteries || [],
       });
     };
+    console.log('fetching user joined lotteries')
     return getUserJoinedLotteries({userId, cancelTag}).then(
       onGetLotteriesSuccess,
       error => {

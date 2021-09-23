@@ -20,6 +20,16 @@ const homeReducer = (state = initialState, action) => {
         lotteries: [...state.lotteries, ...newLotteries],
       };
     }
+    case homeActions.resetHomeLotteries: {
+      let newLotteries = [];
+      if (Array.isArray(action.payload) && action.payload.length) {
+        newLotteries = [...action.payload];
+      }
+      return {
+        ...state,
+        lotteries: newLotteries && newLotteries.length ? newLotteries : [],
+      };
+    }
     case homeActions.setLotteries: {
       const {payload} = action;
       let newLotteries = [];
@@ -79,6 +89,7 @@ const homeReducer = (state = initialState, action) => {
               return {
                 ...lottery,
                 id: `${lottery.id}`,
+                userId: `${lottery.userId}`,
               };
             }
             return item;
@@ -100,6 +111,7 @@ const homeReducer = (state = initialState, action) => {
               return {
                 ...lottery,
                 id: `${lottery.id}`,
+                userId: `${lottery.userId}`,
               };
             }
             return item;
@@ -134,6 +146,54 @@ const homeReducer = (state = initialState, action) => {
       return {
         ...state,
         searchPageToken: action.payload,
+      };
+    }
+    case homeActions.editLottery: {
+      if (
+        action.payload &&
+        Array.isArray(state.lotteries) &&
+        state.lotteries.length
+      ) {
+        return {
+          ...state,
+          lotteries: state.lotteries.map(item => {
+            if (`${item.id}` === `${action.payload.id}`) {
+              return {
+                ...action.payload,
+                id: `${action.payload.id}`,
+                userId: `${action.payload.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case homeActions.cancelLottery: {
+      if (
+        action.payload &&
+        Array.isArray(state.lotteries) &&
+        state.lotteries.length
+      ) {
+        return {
+          ...state,
+          lotteries: state.lotteries.map(item => {
+            if (`${item.id}` === `${action.payload.id}`) {
+              return {
+                ...action.payload,
+                id: `${action.payload.id}`,
+                userId: `${action.payload.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
       };
     }
     default: {

@@ -35,6 +35,7 @@ import {Dropdown} from 'react-native-material-dropdown';
 import {navigate} from '../MainContainer';
 import {successConfirmationModal as successConfirmationModalTexts} from '../../Constants/Texts';
 import ImageResizer from 'react-native-image-resizer';
+import FastImage from 'react-native-fast-image';
 
 let SuccessConfirmationModal = null;
 let UploadLotteryProgressModal = null;
@@ -118,7 +119,7 @@ const ImportLottery = props => {
     },
     description: () => {
       return value => {
-        if (value && value.length >= 20 && value.length <= 100) {
+        if (value && value.length >= 20 && value.length <= 500) {
           setDescriptionChanged(true);
           setErrors({
             ...errors,
@@ -286,8 +287,8 @@ const ImportLottery = props => {
           if (response.uri) {
             ImageResizer.createResizedImage(
               response.uri,
-              400,
-              400,
+              350,
+              350,
               'JPEG',
               40,
               0,
@@ -446,6 +447,8 @@ const ImportLottery = props => {
               </Text>
               <TextField
                 placeholder={importLotteryTexts.enterName}
+                autoCapitalize={false}
+                autoCorrect={false}
                 placeholderTextColor={'rgba(0,0,0,0.3)'}
                 onBlur={handleBlur('adName')}
                 onChangeText={handleChange.adName()}
@@ -463,10 +466,13 @@ const ImportLottery = props => {
               </Text>
               <TextField
                 placeholder={importLotteryTexts.enterDescription}
+                autoCapitalize={false}
+                autoCorrect={false}
                 placeholderTextColor={'rgba(0,0,0,0.3)'}
                 onChangeText={handleChange.description()}
-                maxLength={100}
-                returnKeyType="done"
+                maxLength={500}
+                multiline={true}
+                numberOfLines={5}
                 minLength={20}
                 tintColor={'#b69cf6'}
                 error={errors.description}
@@ -481,6 +487,8 @@ const ImportLottery = props => {
                 <View style={sharedStyles.adPriceTextfieldContainer}>
                   <TextField
                     placeholder={importLotteryTexts.enterPrice}
+                    autoCapitalize={false}
+                    autoCorrect={false}
                     placeholderTextColor={'rgba(0,0,0,0.3)'}
                     keyboardType="phone-pad"
                     maxLength={9}
@@ -515,14 +523,14 @@ const ImportLottery = props => {
                       <Icon name="image" size={35} color="white" />
                     )}
                     {images[index] && (
-                      <Image
+                      <FastImage
                         style={sharedStyles.adImage}
                         source={{
                           uri: images[index],
-                          // priority: FastImage.priority.high,
-                          cache: 'force-cache',
+                          priority: FastImage.priority.high,
+                          cache: FastImage.cacheControl.web,
                         }}
-                        resizeMode={'cover'}
+                        resizeMode={FastImage.resizeMode.cover}
                       />
                     )}
                   </TouchableBounce>

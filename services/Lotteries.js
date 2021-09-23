@@ -19,16 +19,32 @@ const getAds = async props => {
   return data;
 };
 
-const getMyAds = async props => {
+const getMyLotteries = async props => {
   const {userId, pageToken, cancelTag} = props;
   const data = await request({
-    endpoint: 'ads/myAds',
+    endpoint: 'ads/myLotteries',
     method: 'POST',
     cancelTag,
     body: {
       userId,
       pageToken,
       hash: sha256(userId + hashkey).toString(),
+    },
+  });
+  return data;
+};
+
+const cancelLottery = async props => {
+  const {userId, lotteryId, reAdd, cancelTag} = props;
+  const data = await request({
+    endpoint: 'ads/cancelLottery',
+    method: 'POST',
+    cancelTag,
+    body: {
+      userId,
+      lotteryId,
+      reAdd,
+      hash: sha256(`${userId}` + `${lotteryId}` + reAdd + hashkey).toString(),
     },
   });
   return data;
@@ -113,6 +129,20 @@ const getUserWonLotteries = async props => {
   const {userId, cancelTag} = props;
   const data = await request({
     endpoint: 'ads/myWonLotteries',
+    method: 'POST',
+    cancelTag,
+    body: {
+      userId,
+      hash: sha256(userId + hashkey).toString(),
+    },
+  });
+  return data;
+};
+
+const getChattableLotteries = async props => {
+  const {userId, cancelTag} = props;
+  const data = await request({
+    endpoint: 'ads/myChattableLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -405,7 +435,7 @@ const enterLottery = async props => {
 
 export {
   getAds,
-  getMyAds,
+  getMyLotteries,
   getUserCreatedLotteries,
   enterLottery,
   getUserJoinedLotteries,
@@ -419,4 +449,6 @@ export {
   getUserCreatedWonLotteries,
   markLotteryAsReceived,
   markLotteryAsShipped,
+  getChattableLotteries,
+  cancelLottery,
 };

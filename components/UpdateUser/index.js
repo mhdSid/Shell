@@ -23,6 +23,7 @@ import {Dropdown} from 'react-native-material-dropdown';
 // import {handleUpdateUserDataBackground} from '../../redux/Auth/UpdateUserBackground';
 import {handleUpdateUserData} from '../../redux/Auth/UpdateUser';
 import ImageResizer from 'react-native-image-resizer';
+import FastImage from 'react-native-fast-image';
 
 const UpdateUser = props => {
   const {user} = props;
@@ -171,7 +172,7 @@ const UpdateUser = props => {
                 <View style={sharedStyles.mobileContainer}>
                   <View
                     style={[
-                      sharedStyles.imageBtnContainer,
+                      // sharedStyles.imageBtnContainer,
                       sharedStyles.userImageBtnContainer,
                     ]}>
                     <TouchableBounce
@@ -184,17 +185,20 @@ const UpdateUser = props => {
                         <Icon name="image" size={35} color="white" />
                       ) : null}
                       {image || user.image ? (
-                        <Image
+                        <FastImage
                           style={[sharedStyles.adImage, sharedStyles.userImage]}
                           source={{
                             uri: image || user.image,
-                            // priority: FastImage.priority.high,
-                            cache: 'force-cache',
+                            priority: FastImage.priority.high,
+                            cache: FastImage.cacheControl.web,
                           }}
-                          resizeMode={'cover'}
+                          resizeMode={FastImage.resizeMode.cover}
                         />
                       ) : null}
                     </TouchableBounce>
+                    <Text style={sharedStyles.chooseProfileImageText}>
+                      {updateUserr.choosePhoto}
+                    </Text>
                   </View>
                 </View>
                 <Text style={sharedStyles.label}>{profile.prefecture}</Text>

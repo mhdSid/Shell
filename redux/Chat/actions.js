@@ -11,6 +11,10 @@ const chatActions = {
   initChatSocketCommunication: 'INIT_SOCKET_CHAT_COMMUNICATION',
   disconnectChatSocketCommunication: 'DISCONNECT_SOCKET_CHAT_COMMUNICATION',
   receiveChatMessage: 'CHAT_RECEIVE_MESSAGE',
+  setChattableLotteries: 'CHAT_SET_CHATTABLE_LOTTERIES',
+  likeLottery: 'CHAT_LIKE_LOTTERY',
+  dislikeLottery: 'CHAT_DISLIKE_LOTTERY',
+  editLottery: 'CHAT_EDIT_LOTTERY',
 };
 
 const handleInitChatSocketCommunication = payload => {

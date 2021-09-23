@@ -103,7 +103,7 @@ const search = async props => {
   const category = searchFilters.category || '';
   const condition = searchFilters.condition || '';
   const data = await request({
-    endpoint: 'ads/search',
+    endpoint: 'ads/search/v2',
     method: 'POST',
     body: {
       searchText,
@@ -113,7 +113,7 @@ const search = async props => {
       prefecture,
       category,
       condition,
-      pageToken,
+      // pageToken,
       hash: sha256(
         searchText +
           fromDate +

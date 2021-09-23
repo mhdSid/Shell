@@ -129,9 +129,12 @@ const Login = props => {
             placeholderTextColor={'rgba(0,0,0,0.3)'}
             ref={emailRef}
             tintColor={'#b69cf6'}
+            autoCapitalize={false}
+            autoCorrect={false}
             disabled={loading}
             maxLength={50}
             returnKeyType="done"
+            onSubmitEditing={handleSubmit}
             minLength={1}
             onBlur={handleBlur('email')}
             error={errors.email}
@@ -146,7 +149,10 @@ const Login = props => {
             ref={passwordRef}
             secureTextEntry={true}
             disabled={loading}
+            autoCorrect={false}
+            autoCapitalize={false}
             returnKeyType="done"
+            onSubmitEditing={handleSubmit}
             tintColor={'#b69cf6'}
             maxLength={50}
             minLength={8}

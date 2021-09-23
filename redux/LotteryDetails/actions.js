@@ -1,10 +1,12 @@
 const lotteryDetailsActions = {
   setWinnerUserData: 'LOTTERY_DETAILS_SET_WINNER_USER_DATA',
   setAdPosterData: 'LOTTERY_DETAILS_SET_AD_POSTER_DATA',
-  setLotteryUsersData: 'LOTTERY_DETAILS_SET_LOTTERY_USERS_DATA',
+  // setLotteryUsersData: 'LOTTERY_DETAILS_SET_LOTTERY_USERS_DATA',
   showLotteryDetails: 'LOTTERY_DETAILS_SHOW',
-  fetchUserAds: 'LOTTERY_DETAILS_FETCH_USER_ADS',
+  setUserLotteries: 'LOTTERY_DETAILS_SET_USER_LOTTERIES',
   resetState: 'LOTTERY_DETAILS_RESET_STATE',
+  setUserLotteriesPageToken: 'LOTTERY_DETAILS_SET_USER_LOTTERIES_PAGE_TOKEN',
+  cancelLottery: 'LOTTERY_DETAILS_CANCEL_LOTTERY',
 };
 
 const showLotteryDetails = payload => {
@@ -16,4 +18,13 @@ const showLotteryDetails = payload => {
   };
 };
 
-export {lotteryDetailsActions, showLotteryDetails};
+const setUserLotteriesPageToken = payload => {
+  return dispatch => {
+    return dispatch({
+      type: lotteryDetailsActions.setUserLotteriesPageToken,
+      payload,
+    });
+  };
+};
+
+export {lotteryDetailsActions, showLotteryDetails, setUserLotteriesPageToken};

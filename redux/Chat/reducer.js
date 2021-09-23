@@ -3,6 +3,7 @@ import {chatActions} from './actions';
 const initialState = {
   chatList: {},
   isSocketInitiated: false,
+  chattableLotteries: [],
 };
 
 const chatReducer = (state = initialState, action) => {
@@ -107,6 +108,83 @@ const chatReducer = (state = initialState, action) => {
           },
         };
       }
+    }
+    case chatActions.setChattableLotteries: {
+      return {
+        ...state,
+        chattableLotteries:
+          Array.isArray(action.payload) && action.payload.length
+            ? action.payload
+            : [],
+      };
+    }
+    case chatActions.likeLottery: {
+      let {chattableLotteries: lotteries} = state;
+      const lottery = action.payload;
+      if (lottery && lottery.id && lotteries && lotteries.length) {
+        return {
+          ...state,
+          chattableLotteries: lotteries.map(item => {
+            if (`${item.id}` === `${lottery.id}`) {
+              return {
+                ...lottery,
+                id: `${lottery.id}`,
+                userId: `${lottery.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case chatActions.dislikeLottery: {
+      let {chattableLotteries: lotteries} = state;
+      const lottery = action.payload;
+      if (lottery && lottery.id && lotteries && lotteries.length) {
+        return {
+          ...state,
+          chattableLotteries: lotteries.map(item => {
+            if (`${item.id}` === `${lottery.id}`) {
+              return {
+                ...lottery,
+                id: `${lottery.id}`,
+                userId: `${lottery.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case chatActions.editLottery: {
+      if (
+        action.payload &&
+        Array.isArray(state.chattableLotteries) &&
+        state.chattableLotteries.length
+      ) {
+        return {
+          ...state,
+          chattableLotteries: state.chattableLotteries.map(item => {
+            if (`${item.id}` === `${action.payload.id}`) {
+              return {
+                ...action.payload,
+                id: `${action.payload.id}`,
+                userId: `${action.payload.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
     }
     default: {
       return {

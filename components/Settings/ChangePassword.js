@@ -157,7 +157,10 @@ const ChangePassword = props => {
                     placeholder={updateUserr.currentPassword}
                     placeholderTextColor={'rgba(0,0,0,0.3)'}
                     secureTextEntry={true}
+                    autoCapitalize={false}
+                    autoCorrect={false}
                     returnKeyType="done"
+                    onSubmitEditing={handleUpdateUser}
                     tintColor={'#b69cf6'}
                     onChangeText={handleCurrentPasswordChangeText}
                     ref={currentPasswordRef}
@@ -173,7 +176,10 @@ const ChangePassword = props => {
                     placeholder={updateUserr.newPassword}
                     placeholderTextColor={'rgba(0,0,0,0.3)'}
                     secureTextEntry={true}
+                    autoCapitalize={false}
+                    autoCorrect={false}
                     returnKeyType="done"
+                    onSubmitEditing={handleUpdateUser}
                     tintColor={'#b69cf6'}
                     onChangeText={handleNewPasswordChangedText}
                     ref={newPasswordRef}

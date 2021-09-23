@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ActionSheetIOS, Image, View} from 'react-native';
+import {ActionSheetIOS, View} from 'react-native';
 import PropTypes from 'prop-types';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {invoke} from 'lodash';
@@ -9,8 +9,10 @@ import {getUserIdSelector} from '../Profile/Selectors';
 import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
 import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
 import {connect} from 'react-redux';
-import {listItemActions} from '../../Constants/Texts';
+import {chat as chatTexts, listItemActions} from '../../Constants/Texts';
 import {showLotteryResult} from '../../redux/LotteryResult/actions';
+import FastImage from 'react-native-fast-image';
+import {Alert} from 'react-native';
 
 class ListItemCommon extends Component {
   static propTypes = {
@@ -20,6 +22,12 @@ class ListItemCommon extends Component {
     index: PropTypes.number,
     showLotteryResult: PropTypes.func,
     hideMoreActions: PropTypes.bool,
+    isWinner: PropTypes.bool,
+    isLotteryPoster: PropTypes.bool,
+    showReceivedTag: PropTypes.bool,
+    showShippedTag: PropTypes.bool,
+    isReceived: PropTypes.bool,
+    isShipped: PropTypes.bool,
   };
   constructor() {
     super();
@@ -85,6 +93,42 @@ class ListItemCommon extends Component {
       },
     );
   };
+  handleNotReceivedPress = () => {
+    Alert.alert(chatTexts.notReceived, chatTexts.youWonThisLottery, [
+      {
+        text: chatTexts.chatWithOwner,
+        onPress: () => {
+          this.handleItemPress();
+        },
+      },
+    ]);
+  };
+  handleNotShippedPress = () => {
+    Alert.alert(chatTexts.notShipped, chatTexts.thereIsAWinner, [
+      {
+        text: chatTexts.chatWithWinner,
+        onPress: () => {
+          this.handleItemPress();
+        },
+      },
+    ]);
+  };
+  handleReceivedPress = () => {
+    Alert.alert(chatTexts.received, chatTexts.youHaveReceived, [
+      {
+        text: chatTexts.cancel,
+        style: 'cancel',
+      },
+    ]);
+  };
+  handleShippedPress = () => {
+    Alert.alert(chatTexts.shipped, chatTexts.youHaveShipped, [
+      {
+        text: chatTexts.cancel,
+        style: 'cancel',
+      },
+    ]);
+  };
   render() {
     return (
       <View
@@ -98,14 +142,14 @@ class ListItemCommon extends Component {
           divider
           leftElement={
             this.props.item.images && this.props.item.images[0] ? (
-              <Image
+              <FastImage
                 style={sharedStyles.homeListItemImage}
                 source={{
                   uri: this.props.item.images[0],
-                  // priority: FastImage.priority.high,
-                  cache: 'force-cache',
+                  priority: FastImage.priority.high,
+                  cache: FastImage.cacheControl.web,
                 }}
-                resizeMode={'cover'}
+                resizeMode={FastImage.resizeMode.cover}
               />
             ) : null
           }
@@ -143,6 +187,29 @@ class ListItemCommon extends Component {
                 <IconToggle
                   name="more-vert"
                   onPress={this.handleMoreButtonPress}
+                />
+              ) : null}
+              {this.props.isWinner && this.props.showReceivedTag ? (
+                <IconToggle
+                  name="call-received"
+                  color={this.props.isReceived ? 'green' : 'red'}
+                  onPress={
+                    !this.props.isReceived
+                      ? this.handleNotReceivedPress
+                      : this.handleReceivedPress
+                  }
+                />
+              ) : null}
+              {this.props.isLotteryPoster && this.props.showShippedTag ? (
+                <IconToggle
+                  name="call-received"
+                  color={this.props.isShipped ? 'green' : 'red'}
+                  onPress={
+                    !this.props.isShipped
+                      ? this.handleNotShippedPress
+                      : this.handleShippedPress
+                  }
+                  style={{container: sharedStyles.listItemNotReceivedIcon}}
                 />
               ) : null}
             </>

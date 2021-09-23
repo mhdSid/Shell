@@ -141,30 +141,32 @@ const ChatModal = props => {
       };
       socket.on('chatMessage', onChangeMessageCallback);
       showSubscription = Keyboard.addListener('keyboardDidShow', () => {
-        setTimeout(() => {
-          if (virtualizedListRef && virtualizedListRef.current) {
-            virtualizedListRef.current.scrollToEnd();
-          }
-        }, 1000);
+        if (virtualizedListRef && virtualizedListRef.current) {
+          virtualizedListRef.current.scrollToEnd();
+        }
       });
       hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
-        setTimeout(() => {
-          if (virtualizedListRef && virtualizedListRef.current) {
-            virtualizedListRef.current.scrollToEnd();
-          }
-        }, 1000);
+        if (virtualizedListRef && virtualizedListRef.current) {
+          virtualizedListRef.current.scrollToEnd();
+        }
       });
     }
     return () => {
-      socket.emit('disconnect.userId', {
-        userId: authUserId,
-        lotteryId: lottery.id,
-        lotteryPosterId: lotteryPoster.id,
-        winnerUserId: lotteryWinner.id,
-      });
-      socket.off('chatMessage', onChangeMessageCallback);
-      showSubscription.remove();
-      hideSubscription.remove();
+      if (socket) {
+        socket.emit('disconnect.userId', {
+          userId: authUserId,
+          lotteryId: lottery.id,
+          lotteryPosterId: lotteryPoster.id,
+          winnerUserId: lotteryWinner.id,
+        });
+        socket.off('chatMessage', onChangeMessageCallback);
+      }
+      if (showSubscription) {
+        showSubscription.remove();
+      }
+      if (hideSubscription) {
+        hideSubscription.remove();
+      }
     };
   }, [isSocketInitiated]);
 
@@ -233,15 +235,19 @@ const ChatModal = props => {
                   style={sharedStyles.chatMessageInput}
                   onChangeText={handleOnMessageChange}
                   value={chatMessage}
+                  autoCorrect={false}
+                  autoCapitalize={false}
                   multiline={true}
-                  placeholder="Send a message"
+                  // placeholder="Send a message"
                   numberOfLines={4}
                   maxLength={500}
                   // keyboardType="numeric"
                 />
                 <IconToggle
                   name="send"
+                  color="white"
                   size={30}
+                  disabled={!chatMessage}
                   onPress={handleSendMessagePress}
                 />
               </View>

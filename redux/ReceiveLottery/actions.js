@@ -9,6 +9,9 @@ const receiveLotteryActions = {
   setLotteryPosterData: 'RECEIVE_LOTTERY_MODAL_SET_LOTTERY_POSTER_DATA',
   markLotteryAsReceived: 'RECEIVE_LOTTERY_MODAL_MARK_AS_RECEIVED',
   resetState: 'RECEIVE_LOTTERY_RESET_STATE',
+  likeLottery: 'RECEIVE_LOTTERY_LIKE_LOTTERY',
+  dislikeLottery: 'RECEIVE_LOTTERY_DISLIKE_LOTTERY',
+  cancelLottery: 'RECEIVE_LOTTERY_CANCEL_LOTTERY',
 };
 
 const showReceiveLotteryModal = payload => {
