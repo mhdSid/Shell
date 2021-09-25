@@ -3,6 +3,8 @@ import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {OutlinedTextField} from 'react-native-material-textfield';
 import {filter as filterTexts} from '../../Constants/Texts';
+import {View} from 'react-native';
+import sharedStyles from '../../assets/styles/sharedStyles';
 
 const Filter = props => {
   const filterTextfieldRef = createRef();
@@ -14,17 +16,19 @@ const Filter = props => {
   };
 
   return (
-    <OutlinedTextField
-      blurOnSubmit={true}
-      label={filterTexts.filterLabel}
-      tintColor={'rgba(0,0,0,0.3)'}
-      baseColor="rgba(0, 0, 0, 0.3)"
-      onChangeText={handleChange}
-      placeholderTextColor={'rgba(0,0,0,0.3)'}
-      activeLineWidth={0.5}
-      disabledLineWidth={0.5}
-      ref={filterTextfieldRef}
-    />
+    <View style={sharedStyles.filterView}>
+      <OutlinedTextField
+        blurOnSubmit={true}
+        label={filterTexts.filterLabel}
+        tintColor={'rgba(0,0,0,0.3)'}
+        baseColor="rgba(0, 0, 0, 0.3)"
+        onChangeText={handleChange}
+        placeholderTextColor={'rgba(0,0,0,0.3)'}
+        activeLineWidth={0.5}
+        disabledLineWidth={0.5}
+        ref={filterTextfieldRef}
+      />
+    </View>
   );
 };
 

@@ -10,6 +10,7 @@ const shipLotteryActions = {
   resetState: 'SHIP_LOTTERY_RESET_STATE',
   editLottery: 'SHIP_LOTTERY_REDUCER_EDIT_LOTTERY',
   cancelLottery: 'SHIP_LOTTERY_REDUCER_CANCEL_LOTTERY',
+  enterLottery: 'SHIP_LOTTERY_ENTER_LOTTERY',
 };
 
 const showShipLotteryModal = payload => {

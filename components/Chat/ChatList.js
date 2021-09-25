@@ -114,35 +114,37 @@ const ChatList = props => {
           lottery={selectedLottery.lottery}
         />
       ) : null}
-      {loading && loadingPopup}
-      {Array.isArray(chattableLotteries) &&
-        (chattableLotteries.length ? (
-          <VirtualizedList
-            initialNumToRender={10}
-            windowSize={2}
-            maxToRenderPerBatch={10}
-            updateCellsBatchingPeriod={0.0}
-            removeClippedSubviews={true}
-            refreshing={loading}
-            onRefresh={fetchLotteries}
-            horizontal={false}
-            showsVerticalScrollIndicator={false}
-            data={chattableLotteries}
-            contentContainerStyle={sharedStyles.listViewContainer}
-            getItem={getItem}
-            getItemCount={getItemCount}
-            keyExtractor={getItemKey}
-            renderItem={renderListItem}
-          />
-        ) : !loading ? (
-          <View style={sharedStyles.homeEmptySearchResultsView}>
-            <Text style={sharedStyles.emptySearchResultsText}>
-              {lotteriesTexts.emptyLotteries}
-            </Text>
-          </View>
-        ) : (
-          loadingPopup
-        ))}
+      {(!chattableLotteries ||
+        (chattableLotteries && chattableLotteries.length === 0)) &&
+      loading
+        ? loadingPopup
+        : null}
+      <VirtualizedList
+        initialNumToRender={10}
+        windowSize={2}
+        maxToRenderPerBatch={10}
+        updateCellsBatchingPeriod={0.0}
+        removeClippedSubviews={true}
+        refreshing={loading}
+        onRefresh={fetchLotteries}
+        horizontal={false}
+        showsVerticalScrollIndicator={false}
+        data={chattableLotteries}
+        contentContainerStyle={sharedStyles.listViewContainer}
+        getItem={getItem}
+        getItemCount={getItemCount}
+        keyExtractor={getItemKey}
+        renderItem={renderListItem}
+        ListEmptyComponent={
+          !loading ? (
+            <View style={sharedStyles.homeEmptySearchResultsView}>
+              <Text style={sharedStyles.emptySearchResultsText}>
+                {lotteriesTexts.emptyLotteries}
+              </Text>
+            </View>
+          ) : null
+        }
+      />
     </View>
   );
 };

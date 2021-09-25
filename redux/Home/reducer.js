@@ -1,6 +1,5 @@
 import {homeActions} from './actions';
 import uniqBy from 'lodash/uniqBy';
-import {uniq} from 'lodash';
 
 const initialState = {
   lotteries: [],
@@ -64,7 +63,6 @@ const homeReducer = (state = initialState, action) => {
               ...item,
               ...lottery,
               id: `${lottery.id}`,
-              lotteryUserIds: uniq(lottery.lotteryUserIds),
             };
           }
           return item;
@@ -173,6 +171,78 @@ const homeReducer = (state = initialState, action) => {
       };
     }
     case homeActions.cancelLottery: {
+      if (
+        action.payload &&
+        Array.isArray(state.lotteries) &&
+        state.lotteries.length
+      ) {
+        return {
+          ...state,
+          lotteries: state.lotteries.map(item => {
+            if (`${item.id}` === `${action.payload.id}`) {
+              return {
+                ...action.payload,
+                id: `${action.payload.id}`,
+                userId: `${action.payload.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case homeActions.markLotteryAsShipped: {
+      if (
+        action.payload &&
+        Array.isArray(state.lotteries) &&
+        state.lotteries.length
+      ) {
+        return {
+          ...state,
+          lotteries: state.lotteries.map(item => {
+            if (`${item.id}` === `${action.payload.id}`) {
+              return {
+                ...action.payload,
+                id: `${action.payload.id}`,
+                userId: `${action.payload.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case homeActions.markLotteryAsReceived: {
+      if (
+        action.payload &&
+        Array.isArray(state.lotteries) &&
+        state.lotteries.length
+      ) {
+        return {
+          ...state,
+          lotteries: state.lotteries.map(item => {
+            if (`${item.id}` === `${action.payload.id}`) {
+              return {
+                ...action.payload,
+                id: `${action.payload.id}`,
+                userId: `${action.payload.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case homeActions.enterLottery: {
       if (
         action.payload &&
         Array.isArray(state.lotteries) &&

@@ -40,7 +40,7 @@ const ReceiveLotteryInfoModal = props => {
     userId,
     // cancelled,
     available,
-    lotteryUserIds,
+    lotteryUsersLength,
     winnerUserId,
     currentCollectedPrice,
     // images,

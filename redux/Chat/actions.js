@@ -15,6 +15,10 @@ const chatActions = {
   likeLottery: 'CHAT_LIKE_LOTTERY',
   dislikeLottery: 'CHAT_DISLIKE_LOTTERY',
   editLottery: 'CHAT_EDIT_LOTTERY',
+  cancelLottery: 'CHAT_CANCEL_LOTTERY',
+  markLotteryAsReceived: 'CHAT_MARK_LOTTERY_AS_RECEIVED',
+  markLotteryAsShipped: 'CHAT_MARK_LOTTERY_AS_SHIPPED',
+  enterLottery: 'CHAT_ENTER_LOTTERY',
 };
 
 const handleInitChatSocketCommunication = payload => {

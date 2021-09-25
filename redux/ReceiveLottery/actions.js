@@ -12,6 +12,7 @@ const receiveLotteryActions = {
   likeLottery: 'RECEIVE_LOTTERY_LIKE_LOTTERY',
   dislikeLottery: 'RECEIVE_LOTTERY_DISLIKE_LOTTERY',
   cancelLottery: 'RECEIVE_LOTTERY_CANCEL_LOTTERY',
+  enterLottery: 'RECEIVE_LOTTERY_ENTER_LOTTERY',
 };
 
 const showReceiveLotteryModal = payload => {

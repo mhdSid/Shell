@@ -10,7 +10,6 @@ const handleFetchUsersData = payload => {
       winnerUserId,
       userId,
       onEror,
-      // lotteryUserIds,
       currentCollectedPrice,
       cancelTag,
     } = payload;
@@ -34,18 +33,6 @@ const handleFetchUsersData = payload => {
             });
           }
         });
-        // if (currentCollectedPrice > 0) {
-        //   const lotteryUsersData = lotteryUserIds.map(item => {
-        //     const lotteryUser = users.find(user => `${item}` === `${user.id}`);
-        //     return {
-        //       ...lotteryUser,
-        //     };
-        //   });
-        //   dispatch({
-        //     type: lotteryResultActions.setLotteryUsersData,
-        //     payload: lotteryUsersData,
-        //   });
-        // }
       }
       return invoke(payload, 'onSuccess');
     };

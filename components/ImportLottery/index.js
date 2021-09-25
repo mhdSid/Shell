@@ -480,6 +480,32 @@ const ImportLottery = props => {
                 ref={descriptionRef}
               />
             </View>
+            <Text style={sharedStyles.label}>
+              {importLotteryTexts.category}
+            </Text>
+            <View style={sharedStyles.dropdownView}>
+              <Dropdown
+                label={importLotteryTexts.enterCategory}
+                baseColor={'rgba(0,0,0,0.3)'}
+                selectedItemColor={'rgba(0, 0, 0, .87)'}
+                data={lotteryItemCategories}
+                onChangeText={updateItemCategory}
+                value={itemCategory}
+              />
+            </View>
+            <Text style={sharedStyles.label}>
+              {importLotteryTexts.condition}
+            </Text>
+            <View style={sharedStyles.dropdownView}>
+              <Dropdown
+                baseColor={'rgba(0,0,0,0.3)'}
+                label={importLotteryTexts.enterCondition}
+                selectedItemColor={'rgba(0, 0, 0, .87)'}
+                data={lotteryItemConditions}
+                onChangeText={updateItemCondition}
+                value={itemCondition}
+              />
+            </View>
             <View style={sharedStyles.mobileContainer}>
               <Text style={sharedStyles.label}>{importLotteryTexts.price}</Text>
               <View style={sharedStyles.priceContainer}>
@@ -557,33 +583,6 @@ const ImportLottery = props => {
                 data={cityDropdownData}
                 onChangeText={cityOnChangeText}
                 value={city}
-              />
-            </View>
-
-            <Text style={sharedStyles.label}>
-              {importLotteryTexts.category}
-            </Text>
-            <View style={sharedStyles.dropdownView}>
-              <Dropdown
-                label={importLotteryTexts.enterCategory}
-                baseColor={'rgba(0,0,0,0.3)'}
-                selectedItemColor={'rgba(0, 0, 0, .87)'}
-                data={lotteryItemCategories}
-                onChangeText={updateItemCategory}
-                value={itemCategory}
-              />
-            </View>
-            <Text style={sharedStyles.label}>
-              {importLotteryTexts.condition}
-            </Text>
-            <View style={sharedStyles.dropdownView}>
-              <Dropdown
-                baseColor={'rgba(0,0,0,0.3)'}
-                label={importLotteryTexts.enterCondition}
-                selectedItemColor={'rgba(0, 0, 0, .87)'}
-                data={lotteryItemConditions}
-                onChangeText={updateItemCondition}
-                value={itemCondition}
               />
             </View>
           </View>

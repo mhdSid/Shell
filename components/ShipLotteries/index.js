@@ -41,7 +41,7 @@ const ShipLotteryModal = props => {
 
   const getItem = (data, index) => data[index];
   const getItemCount = () =>
-    (filteredLotteries || userCreatedWonLotteries).length;
+    (filteredLotteries || userCreatedWonLotteries || []).length;
   const getItemKey = item => item.id;
   const onItemPress = index => {
     invoke(props, 'handleShowShipLotteryModal', {
@@ -54,7 +54,7 @@ const ShipLotteryModal = props => {
       item={item}
       index={index}
       onItemPress={onItemPress}
-      listLength={(filteredLotteries || userCreatedWonLotteries).length}
+      listLength={(filteredLotteries || userCreatedWonLotteries || []).length}
       hideMoreActions={true}
       showLotteryResult={true}
       showReceivedTag={true}
@@ -179,41 +179,41 @@ const ShipLotteryModal = props => {
               onPress={handleSetActiveView('notShipped')}
             />
           </BottomNavigation>
-          {loading && loadingPopup}
-          <View style={sharedStyles.lotteriesContainer}>
-            {Array.isArray(filteredLotteries || userCreatedWonLotteries) &&
-            (filteredLotteries || userCreatedWonLotteries).length ? (
-              <>
-                <Filter onFilterChange={handleFilterChange} />
-                <VirtualizedList
-                  initialNumToRender={10}
-                  windowSize={2}
-                  maxToRenderPerBatch={10}
-                  updateCellsBatchingPeriod={0.0}
-                  removeClippedSubviews={true}
-                  refreshing={loading}
-                  onRefresh={onShowModal}
-                  horizontal={false}
-                  showsVerticalScrollIndicator={false}
-                  data={filteredLotteries || userCreatedWonLotteries}
-                  getItem={getItem}
-                  getItemCount={getItemCount}
-                  keyExtractor={getItemKey}
-                  renderItem={renderListItem}
-                />
-              </>
-            ) : !loading ? (
-              <View style={sharedStyles.emptySearchResultsView}>
-                <Text style={sharedStyles.emptySearchResultsText}>
-                  {activeView === 'shipped'
-                    ? shipLotteryTexts.noShippedLotteries
-                    : lotteriesTexts.emptyLotteries}
-                </Text>
-              </View>
-            ) : (
-              loadingPopup
-            )}
-          </View>
+          {(!userCreatedWonLotteries ||
+            (userCreatedWonLotteries &&
+              userCreatedWonLotteries.length === 0)) &&
+          loading
+            ? loadingPopup
+            : null}
+          <Filter onFilterChange={handleFilterChange} />
+          <VirtualizedList
+            initialNumToRender={10}
+            windowSize={2}
+            maxToRenderPerBatch={10}
+            updateCellsBatchingPeriod={0.0}
+            removeClippedSubviews={true}
+            refreshing={loading}
+            onRefresh={onShowModal}
+            horizontal={false}
+            showsVerticalScrollIndicator={false}
+            data={filteredLotteries || userCreatedWonLotteries}
+            getItem={getItem}
+            getItemCount={getItemCount}
+            keyExtractor={getItemKey}
+            renderItem={renderListItem}
+            contentContainerStyle={sharedStyles.listViewContainer}
+            ListEmptyComponent={
+              !loading ? (
+                <View style={sharedStyles.emptySearchResultsView}>
+                  <Text style={sharedStyles.emptySearchResultsText}>
+                    {activeView === 'shipped'
+                      ? shipLotteryTexts.noShippedLotteries
+                      : lotteriesTexts.emptyLotteries}
+                  </Text>
+                </View>
+              ) : null
+            }
+          />
         </View>
       </SafeAreaView>
     </Modal>

@@ -40,7 +40,7 @@ const ShipLotteryInfoModal = props => {
     userId,
     // cancelled,
     available,
-    lotteryUserIds,
+    lotteryUsersLength,
     winnerUserId,
     currentCollectedPrice,
     // images,

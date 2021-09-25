@@ -8,7 +8,7 @@ const handlePing = payload => {
     const onPingError = ({error, country}) => {
       const {message} = error;
       invoke(payload, 'onError');
-      Alert.alert(message);
+      // Alert.alert(message);
       return dispatch({
         type: authActions.login,
         payload: {country, loggedIn: null, user: null},

@@ -166,48 +166,44 @@ const Lotteries = props => {
         onRightElementPress={changeViewStyle}
       />
       {lotteryResult && <LotteryResultModal />}
-      <View style={sharedStyles.lotteriesContainer}>
-        {(Array.isArray(lotteryCardList) && lotteryCardList.length) ||
-        (Array.isArray(filteredLotteries || userJoinedLotteries) &&
-          (filteredLotteries || userJoinedLotteries).length) ? (
-          <>
-            <Filter onFilterChange={handleFilterChange} />
-            <VirtualizedList
-              initialNumToRender={10}
-              windowSize={2}
-              maxToRenderPerBatch={10}
-              updateCellsBatchingPeriod={0.0}
-              removeClippedSubviews={true}
-              refreshing={loading}
-              onRefresh={fetchLotteries}
-              // onEndReachedThreshold={0.3}
-              // onEndReached={fetchLotteries}
-              horizontal={false}
-              showsVerticalScrollIndicator={false}
-              data={
-                isCard
-                  ? lotteryCardList
-                  : filteredLotteries || userJoinedLotteries
-              }
-              getItem={getItem}
-              getItemCount={isCard ? getRowItemCount : getItemCount}
-              contentContainerStyle={
-                isCard && sharedStyles.homeLotteriesContainer
-              }
-              keyExtractor={isCard ? getRowItemKey : getItemKey}
-              renderItem={isCard ? renderCardListItemRow : renderListItem}
-            />
-          </>
-        ) : !loading ? (
-          <View style={sharedStyles.emptySearchResultsView}>
-            <Text style={sharedStyles.emptySearchResultsText}>
-              {lotteriesTexts.emptyLotteries}
-            </Text>
-          </View>
-        ) : (
-          loadingPopup
-        )}
-      </View>
+      {(!userJoinedLotteries ||
+        (userJoinedLotteries && userJoinedLotteries.length === 0)) &&
+      loading
+        ? loadingPopup
+        : null}
+      <Filter onFilterChange={handleFilterChange} />
+      <VirtualizedList
+        initialNumToRender={10}
+        windowSize={2}
+        maxToRenderPerBatch={10}
+        updateCellsBatchingPeriod={0.0}
+        removeClippedSubviews={true}
+        refreshing={loading}
+        onRefresh={fetchLotteries}
+        horizontal={false}
+        ListEmptyComponent={
+          !loading ? (
+            <View style={sharedStyles.emptySearchResultsView}>
+              <Text style={sharedStyles.emptySearchResultsText}>
+                {lotteriesTexts.emptyLotteries}
+              </Text>
+            </View>
+          ) : null
+        }
+        contentContainerStyle={
+          isCard
+            ? sharedStyles.homeLotteriesContainer
+            : sharedStyles.listViewContainer
+        }
+        showsVerticalScrollIndicator={false}
+        data={
+          isCard ? lotteryCardList : filteredLotteries || userJoinedLotteries
+        }
+        getItem={getItem}
+        getItemCount={isCard ? getRowItemCount : getItemCount}
+        keyExtractor={isCard ? getRowItemKey : getItemKey}
+        renderItem={isCard ? renderCardListItemRow : renderListItem}
+      />
     </View>
   );
 };

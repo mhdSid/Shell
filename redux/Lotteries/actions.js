@@ -10,6 +10,9 @@ const lotteriesActions = {
   dislikeLottery: 'LOTTERIES_REDUCER_DISLIKE_LOTTERY',
   editLottery: 'LOTTERIES_REDUCER_EDIT_LOTTERY',
   cancelLottery: 'LOTTERIES_CANCEL_LOTTERY',
+  markLotteryAsReceived: 'LOTTERIES_MARK_LOTTERY_AS_RECEIVED',
+  markLotteryAsShipped: 'LOTTERIES_MARK_LOTTERY_AS_SHIPPED',
+  enterLottery: 'LOTTERIES_ENTER_LOTTERY',
 };
 
 export {lotteriesActions};

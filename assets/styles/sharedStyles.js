@@ -1209,6 +1209,14 @@ const sharedStyles = StyleSheet.create({
   chatVirtualizedListContainer: {
     paddingTop: 20,
   },
+  filterView: {
+    width: '80%',
+    alignSelf: 'center',
+    marginTop: 10,
+  },
+  confettiView: {
+    zIndex: 9999,
+  }
 });
 
 export default sharedStyles;

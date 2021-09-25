@@ -22,7 +22,9 @@ const shipLotteryReducer = (state = initialState, action) => {
       };
     }
     case shipLotteryActions.markLotteryAsShipped: {
-      const userCreatedWonLotteries = [...state.userCreatedWonLotteries];
+      const userCreatedWonLotteries = [
+        ...(state.userCreatedWonLotteries || []),
+      ];
       return {
         ...state,
         userCreatedWonLotteries: userCreatedWonLotteries.map(lottery => {
@@ -44,6 +46,30 @@ const shipLotteryReducer = (state = initialState, action) => {
       };
     }
     case shipLotteryActions.editLottery: {
+      if (
+        action.payload &&
+        Array.isArray(state.userCreatedWonLotteries) &&
+        state.userCreatedWonLotteries.length
+      ) {
+        return {
+          ...state,
+          userCreatedWonLotteries: state.userCreatedWonLotteries.map(item => {
+            if (`${item.id}` === `${action.payload.id}`) {
+              return {
+                ...action.payload,
+                id: `${action.payload.id}`,
+                userId: `${action.payload.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case shipLotteryActions.enterLottery: {
       if (
         action.payload &&
         Array.isArray(state.userCreatedWonLotteries) &&

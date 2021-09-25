@@ -308,6 +308,153 @@ const lotteriesReducer = (state = initialState, action) => {
         ...state,
       };
     }
+    case lotteriesActions.markLotteryAsShipped: {
+      if (action.payload) {
+        return {
+          ...state,
+          userCreatedLotteries:
+            state.userCreatedLotterie && state.userCreatedLotterie.length
+              ? state.userCreatedLotteries.map(item => {
+                  if (`${item.id}` === `${action.payload.id}`) {
+                    return {
+                      ...action.payload,
+                      id: `${action.payload.id}`,
+                      userId: `${action.payload.userId}`,
+                    };
+                  }
+                  return item;
+                })
+              : state.userCreatedLotteries,
+          userLikedLotteries:
+            state.userLikedLotteries && state.userLikedLotteries.length
+              ? state.userLikedLotteries.map(item => {
+                  if (`${item.id}` === `${action.payload.id}`) {
+                    return {
+                      ...action.payload,
+                      id: `${action.payload.id}`,
+                      userId: `${action.payload.userId}`,
+                    };
+                  }
+                  return item;
+                })
+              : state.userLikedLotteries,
+          userJoinedLotteries:
+            state.userJoinedLotteries && state.userJoinedLotteries.length
+              ? state.userJoinedLotteries.map(item => {
+                  if (`${item.id}` === `${action.payload.id}`) {
+                    return {
+                      ...action.payload,
+                      id: `${action.payload.id}`,
+                      userId: `${action.payload.userId}`,
+                    };
+                  }
+                  return item;
+                })
+              : state.userJoinedLotteries,
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case lotteriesActions.markLotteryAsReceived: {
+      if (action.payload) {
+        return {
+          ...state,
+          userCreatedLotteries:
+            state.userCreatedLotterie && state.userCreatedLotterie.length
+              ? state.userCreatedLotteries.map(item => {
+                  if (`${item.id}` === `${action.payload.id}`) {
+                    return {
+                      ...action.payload,
+                      id: `${action.payload.id}`,
+                      userId: `${action.payload.userId}`,
+                    };
+                  }
+                  return item;
+                })
+              : state.userCreatedLotteries,
+          userLikedLotteries:
+            state.userLikedLotteries && state.userLikedLotteries.length
+              ? state.userLikedLotteries.map(item => {
+                  if (`${item.id}` === `${action.payload.id}`) {
+                    return {
+                      ...action.payload,
+                      id: `${action.payload.id}`,
+                      userId: `${action.payload.userId}`,
+                    };
+                  }
+                  return item;
+                })
+              : state.userLikedLotteries,
+          userJoinedLotteries:
+            state.userJoinedLotteries && state.userJoinedLotteries.length
+              ? state.userJoinedLotteries.map(item => {
+                  if (`${item.id}` === `${action.payload.id}`) {
+                    return {
+                      ...action.payload,
+                      id: `${action.payload.id}`,
+                      userId: `${action.payload.userId}`,
+                    };
+                  }
+                  return item;
+                })
+              : state.userJoinedLotteries,
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case lotteriesActions.enterLottery: {
+      if (action.payload) {
+        return {
+          ...state,
+          userCreatedLotteries:
+            state.userCreatedLotterie && state.userCreatedLotterie.length
+              ? state.userCreatedLotteries.map(item => {
+                  if (`${item.id}` === `${action.payload.id}`) {
+                    return {
+                      ...action.payload,
+                      id: `${action.payload.id}`,
+                      userId: `${action.payload.userId}`,
+                    };
+                  }
+                  return item;
+                })
+              : state.userCreatedLotteries,
+          userLikedLotteries:
+            state.userLikedLotteries && state.userLikedLotteries.length
+              ? state.userLikedLotteries.map(item => {
+                  if (`${item.id}` === `${action.payload.id}`) {
+                    return {
+                      ...action.payload,
+                      id: `${action.payload.id}`,
+                      userId: `${action.payload.userId}`,
+                    };
+                  }
+                  return item;
+                })
+              : state.userLikedLotteries,
+          userJoinedLotteries:
+            state.userJoinedLotteries && state.userJoinedLotteries.length
+              ? state.userJoinedLotteries.map(item => {
+                  if (`${item.id}` === `${action.payload.id}`) {
+                    return {
+                      ...action.payload,
+                      id: `${action.payload.id}`,
+                      userId: `${action.payload.userId}`,
+                    };
+                  }
+                  return item;
+                })
+              : state.userJoinedLotteries,
+        };
+      }
+      return {
+        ...state,
+      };
+    }
     case lotteriesActions.resetState: {
       return {
         userJoinedLotteries: [],

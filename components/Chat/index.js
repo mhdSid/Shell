@@ -171,11 +171,9 @@ const ChatModal = props => {
   }, [isSocketInitiated]);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (virtualizedListRef && virtualizedListRef.current) {
-        virtualizedListRef.current.scrollToEnd();
-      }
-    }, 1000);
+    if (virtualizedListRef && virtualizedListRef.current) {
+      virtualizedListRef.current.scrollToEnd();
+    }
   }, [conversation]);
 
   return (
@@ -201,34 +199,33 @@ const ChatModal = props => {
               keyboardVerticalOffset={50}
               behavior={'padding'}>
               <View style={sharedStyles.chatListContainer}>
-                {Array.isArray(conversation) && conversation.length ? (
-                  <VirtualizedList
-                    initialNumToRender={conversation ? conversation.length : 20}
-                    maxToRenderPerBatch={
-                      conversation ? conversation.length : 20
-                    }
-                    removeClippedSubviews={true}
-                    refreshing={loading}
-                    onRefresh={onShow}
-                    horizontal={false}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={
-                      sharedStyles.chatVirtualizedListContainer
-                    }
-                    data={conversation}
-                    getItem={getItem}
-                    getItemCount={getItemCount}
-                    keyExtractor={getItemKey}
-                    renderItem={renderListItem}
-                    ref={virtualizedListRef}
-                  />
-                ) : (
-                  <View style={sharedStyles.emptySearchResultsView}>
-                    <Text style={sharedStyles.emptySearchResultsText}>
-                      {chatText.emptyChat}
-                    </Text>
-                  </View>
-                )}
+                <VirtualizedList
+                  initialNumToRender={conversation ? conversation.length : 20}
+                  maxToRenderPerBatch={conversation ? conversation.length : 20}
+                  removeClippedSubviews={true}
+                  refreshing={loading}
+                  onRefresh={onShow}
+                  horizontal={false}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={
+                    sharedStyles.chatVirtualizedListContainer
+                  }
+                  data={conversation}
+                  getItem={getItem}
+                  getItemCount={getItemCount}
+                  keyExtractor={getItemKey}
+                  renderItem={renderListItem}
+                  ref={virtualizedListRef}
+                  ListEmptyComponent={
+                    !loading ? (
+                      <View style={sharedStyles.emptySearchResultsView}>
+                        <Text style={sharedStyles.emptySearchResultsText}>
+                          {chatText.emptyChat}
+                        </Text>
+                      </View>
+                    ) : null
+                  }
+                />
               </View>
               <View style={sharedStyles.chatBottomToolbar}>
                 <TextInput

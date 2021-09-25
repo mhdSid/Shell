@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {home} from '../../Constants/Texts';
+import {home, lottteries} from '../../Constants/Texts';
 import {handleFetchLotteries} from '../../redux/Home/FetchLotteries';
 import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
 import {setHomeViewStyle} from '../../redux/Settings/actions';
@@ -33,7 +33,7 @@ import {
 } from '../../redux/Search/actions';
 import {loadingPopup} from '../Loading';
 import cancellableFetch from 'react-native-cancelable-fetch';
-import { setPageToken } from '../../redux/Home/actions';
+import {resetHomeLotteries, setPageToken} from '../../redux/Home/actions';
 
 const HomeComponent = props => {
   const {isList, isCard, lotteries, authUserId, searchEventFired} = props;
@@ -175,33 +175,34 @@ const HomeComponent = props => {
   const getListItemKey = item => `${item.id}`;
 
   const handleOnEndReached = () => {
-    console.log('handleon end reached')
-    if (searchEventFired) {
-      // invoke(props, 'handleSearch', {
-      //   onError: onSearchError,
-      //   onSuccess: onSearchSuccess,
-      //   cancelTag: cancelHttpTag,
-      // });
-    } else {
+    if (!searchEventFired) {
       fetchLotteries();
     }
   };
 
   useEffect(() => {
+    return () => {
+      if (searchEventFired) {
+        invoke(props, 'handlerResetHomeLotteries', []);
+        invoke(props, 'handleSetPageToken', null);
+        invoke(props, 'handleSetSearchEventFired', false);
+        invoke(props, 'handleSetSearchFilters', {
+          searchText: '',
+          city: '',
+          prefecture: '',
+          category: '',
+          condition: '',
+          fromDate: '',
+          toDate: '',
+        });
+      }
+    };
+  }, [searchEventFired]);
+
+  useEffect(() => {
     fetchLotteries();
     return () => {
       cancellableFetch.abort(cancelHttpTag);
-      invoke(props, 'handleSetPageToken', null);
-      invoke(props, 'handleSetSearchEventFired', false);
-      invoke(props, 'handleSetSearchFilters', {
-        searchText: '',
-        city: '',
-        prefecture: '',
-        category: '',
-        condition: '',
-        fromDate: '',
-        toDate: '',
-      });
     };
   }, []);
 
@@ -252,40 +253,45 @@ const HomeComponent = props => {
           onPress={handleResetSearchFilters}
         />
       ) : null}
-      {(Array.isArray(lotteries) && lotteries.length) ||
-      (Array.isArray(lotteryCardList) && lotteryCardList.length) ? (
-        <VirtualizedList
-          initialNumToRender={10}
-          windowSize={2}
-          maxToRenderPerBatch={10}
-          updateCellsBatchingPeriod={0.0}
-          removeClippedSubviews={true}
-          refreshing={loading}
-          onRefresh={fetchLotteries}
-          onEndReachedThreshold={0.1}
-          onEndReached={handleOnEndReached}
-          horizontal={false}
-          showsVerticalScrollIndicator={false}
-          data={isCard ? lotteryCardList : lotteries}
-          getItem={getItem}
-          getItemCount={isCard ? getItemCount : getListItemCount}
-          contentContainerStyle={
-            isCard
-              ? sharedStyles.homeLotteriesContainer
-              : sharedStyles.listViewContainer
-          }
-          keyExtractor={isCard ? getItemKey : getListItemKey}
-          renderItem={isCard ? renderCardListItemRow : renderListItem}
-        />
-      ) : !loading ? (
-        <View style={sharedStyles.homeEmptySearchResultsView}>
-          <Text style={sharedStyles.emptySearchResultsText}>
-            {lotteriesTexts.emptyLotteries}
-          </Text>
-        </View>
-      ) : (
-        loadingPopup
-      )}
+      {((lotteries && lotteries.length === 0) ||
+        !lotteries ||
+        searchEventFired) &&
+      loading
+        ? loadingPopup
+        : null}
+      <VirtualizedList
+        initialNumToRender={10}
+        windowSize={2}
+        contentInsetAdjustmentBehavior={'automatic'}
+        maxToRenderPerBatch={10}
+        updateCellsBatchingPeriod={0.0}
+        removeClippedSubviews={true}
+        refreshing={loading}
+        ListEmptyComponent={
+          !loading ? (
+            <View style={sharedStyles.homeEmptySearchResultsView}>
+              <Text style={sharedStyles.emptySearchResultsText}>
+                {lotteriesTexts.emptyLotteries}
+              </Text>
+            </View>
+          ) : null
+        }
+        onRefresh={!searchEventFired && fetchLotteries}
+        onEndReachedThreshold={0.1}
+        onEndReached={!searchEventFired && handleOnEndReached}
+        horizontal={false}
+        showsVerticalScrollIndicator={false}
+        data={isCard ? lotteryCardList : lotteries}
+        getItem={getItem}
+        getItemCount={isCard ? getItemCount : getListItemCount}
+        contentContainerStyle={
+          isCard
+            ? sharedStyles.homeLotteriesContainer
+            : sharedStyles.listViewContainer
+        }
+        keyExtractor={isCard ? getItemKey : getListItemKey}
+        renderItem={isCard ? renderCardListItemRow : renderListItem}
+      />
     </View>
   );
 };
@@ -323,6 +329,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(setSearchEventFired(payload)),
     handleSetSearchFilters: payload => dispatch(setSearchFilters(payload)),
     handleSetPageToken: payload => dispatch(setPageToken(payload)),
+    handlerResetHomeLotteries: payload => dispatch(resetHomeLotteries(payload)),
   };
 };
 

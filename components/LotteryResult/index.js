@@ -1,13 +1,7 @@
 import {connect} from 'react-redux';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import invoke from 'lodash/invoke';
-import {
-  Modal,
-  SafeAreaView,
-  ScrollView,
-  View,
-  VirtualizedList,
-} from 'react-native';
+import {Modal, SafeAreaView, ScrollView, View} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Button, Icon, Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
@@ -18,7 +12,6 @@ import {
 import {
   getAdPosterDataSelector,
   getLotteryResultSelector,
-  // getLotteryUsersDataSelector,
   getWinnerUserDataSelector,
 } from './Selectors';
 import {showLotteryResult} from '../../redux/LotteryResult/actions';
@@ -31,6 +24,8 @@ import formatDate from '../../lib/formatDate';
 import cancellableFetch from 'react-native-cancelable-fetch';
 import {showReceiveLotteryModal} from '../../redux/ReceiveLottery/actions';
 import {showShipLotteryModal} from '../../redux/ShipLottery/actions';
+import Confetti from 'react-native-confetti';
+import { confettiColors } from '../../Constants/Colors';
 
 let ChatModal = null;
 let ReceiveLotteryModal = null;
@@ -59,7 +54,7 @@ const LotteryResult = props => {
     userId,
     // cancelled,
     available,
-    lotteryUserIds,
+    lotteryUsersLength,
     winnerUserId,
     currentCollectedPrice,
     // images,
@@ -71,6 +66,7 @@ const LotteryResult = props => {
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(null);
   const [cancelHttpTag] = useState(11);
+  let confettiRef = useRef();
 
   const handleCloseModal = () => {
     invoke(props, 'showLotteryResult', undefined);
@@ -85,8 +81,7 @@ const LotteryResult = props => {
     invoke(props, 'handleFetchUsersData', {
       winnerUserId,
       userId,
-      users: [userId, winnerUserId], // ...lotteryUserIds
-      // lotteryUserIds,
+      users: [userId, winnerUserId],
       onError: fetchUsersDataCallback,
       onSuccess: fetchUsersDataCallback,
       currentCollectedPrice,
@@ -171,6 +166,18 @@ const LotteryResult = props => {
   };
   const handleOnDismiss = () => {
     cancellableFetch.abort(cancelHttpTag);
+    if (confettiRef && confettiRef.stopConfetti) {
+      confettiRef.stopConfetti();
+    }
+  };
+  const handleConfettiRef = node => {
+    if (node && node.startConfetti) {
+      confettiRef = node;
+      confettiRef.startConfetti();
+      setTimeout(() => {
+        confettiRef.stopConfetti();
+      }, 15000);
+    }
   };
 
   return (
@@ -189,35 +196,21 @@ const LotteryResult = props => {
             centerElement={lotteryResultTexts.lotteryResult}
             onLeftElementPress={handleCloseModal}
           />
+          {isWinner ? (
+            <View style={sharedStyles.confettiView}>
+              <Confetti
+                ref={handleConfettiRef}
+                colors={confettiColors}
+                confettiCount={500}
+                duration={6000}
+              />
+            </View>
+          ) : null}
           {isLoading ? loadingPopup : null}
           {!isLoading ? (
             <>
-              {/* {lotteryUsersData && lotteryUsersData.length ? (
-                <View style={sharedStyles.lotteryResultVirtualizedListTop}>
-                  <VirtualizedList
-                    initialNumToRender={5}
-                    windowSize={2}
-                    maxToRenderPerBatch={5}
-                    updateCellsBatchingPeriod={0.0}
-                    removeClippedSubviews={true}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    data={lotteryUsersData}
-                    getItem={getItem}
-                    getItemCount={getItemCount}
-                    keyExtractor={getVirtualKey}
-                    renderItem={renderLotteryUserItem}
-                  />
-                </View>
-              ) : null} */}
               <ScrollView showsVerticalScrollIndicator={false}>
-                <View
-                  style={[
-                    sharedStyles.lotteryDetailsContainer,
-                    // lotteryUsersData &&
-                    //   lotteryUsersData.length &&
-                    //   sharedStyles.lotteryResultDetailsContainer,
-                  ]}>
+                <View style={sharedStyles.lotteryDetailsContainer}>
                   {!winnerUserId ? (
                     <View style={sharedStyles.lotteryResultNoWinnerContainer}>
                       <Icon name="notifications-active" color="black" />

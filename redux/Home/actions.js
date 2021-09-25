@@ -15,6 +15,9 @@ const homeActions = {
   dislikeLottery: 'HOME_REDUCER_DISLIKE_LOTTERY',
   editLottery: 'HOME_REDUCER_EDIT_LOTTERY',
   cancelLottery: 'HOME_CANCEL_LOTTERY',
+  markLotteryAsReceived: 'HOME_MARK_LOTTERY_AS_RECEIVED',
+  markLotteryAsShipped: 'HOME_MARK_LOTTERY_AS_SHIPPED',
+  enterLottery: 'HOME_ENTER_LOTTERY',
 };
 
 const updateLottery = payload => {
@@ -29,6 +32,12 @@ const setPageToken = payload => {
   };
 };
 
+const resetHomeLotteries = payload => {
+  return dispatch => {
+    return dispatch({type: homeActions.resetHomeLotteries, payload});
+  };
+};
+
 const handleError = props => {
   const {error} = props;
   const message = (error && error.message) || errors.error;
@@ -39,4 +48,10 @@ const handleError = props => {
   return;
 };
 
-export {homeActions, handleError, updateLottery, setPageToken};
+export {
+  homeActions,
+  handleError,
+  updateLottery,
+  setPageToken,
+  resetHomeLotteries,
+};

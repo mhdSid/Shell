@@ -2,6 +2,9 @@ import {markLotteryAsReceived} from '../../services/Lotteries';
 import {handleError} from '../Auth/actions';
 import invoke from 'lodash/invoke';
 import {receiveLotteryActions} from './actions';
+import {homeActions} from '../Home/actions';
+import {chatActions} from '../Chat/actions';
+import {lotteriesActions} from '../Lotteries/actions';
 
 const handleMarkLotteryAsReceived = payload => {
   return dispatch => {
@@ -13,10 +16,24 @@ const handleMarkLotteryAsReceived = payload => {
         return handleError({error, onError});
       }
       invoke(payload, 'onSuccess');
-      return dispatch({
-        type: receiveLotteryActions.markLotteryAsReceived,
-        payload: lottery,
-      });
+      if (lottery) {
+        dispatch({
+          type: receiveLotteryActions.markLotteryAsReceived,
+          payload: lottery,
+        });
+        dispatch({
+          type: homeActions.markLotteryAsReceived,
+          payload: lottery,
+        });
+        dispatch({
+          type: chatActions.markLotteryAsReceived,
+          payload: lottery,
+        });
+        dispatch({
+          type: lotteriesActions.markLotteryAsReceived,
+          payload: lottery,
+        });
+      }
     };
     return markLotteryAsReceived({lotteryId, cancelTag}).then(
       onGetSuccess,

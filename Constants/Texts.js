@@ -15,7 +15,7 @@ const about = {
     'The winner collects the item and you own the collected price value of your item.',
   or: 'Or',
   browse: 'Browse',
-  howtoUseEigtth: 'Browser through a wide variety of uploaded items!',
+  howtoUseEigtth: 'Browse through a wide variety of uploaded items!',
   choose: 'Choose',
   howToUseNineth:
     'Make sure you choose any item you love. It can be a Smart Phone, a Laptop, a Car, a House, or anything you can think about.',
@@ -174,14 +174,14 @@ const lotteryDetails = {
   collectedPrice: 'Collected Price',
   payToWin: 'Pay to win the lottery',
   currentLotteryUsers: 'Current lottery users',
-  currentLotteryUsersNumber: lotteryUserIdsLength => {
-    if (!lotteryUserIdsLength) {
+  currentLotteryUsersNumber: lotteryUsersLength => {
+    if (!lotteryUsersLength) {
       return 'No users have joined the lottery yet.';
     }
-    if (lotteryUserIdsLength === 1) {
-      return `${lotteryUserIdsLength} user has joined this lottery.`;
+    if (lotteryUsersLength === 1) {
+      return `${lotteryUsersLength} user has joined this lottery.`;
     }
-    return `${lotteryUserIdsLength} users have joined this lottery.`;
+    return `${lotteryUsersLength} users have joined this lottery.`;
   },
   winner: 'Winner',
   name: 'Name',

@@ -151,6 +151,12 @@ const UserCreatedLotteries = props => {
   const renderCardListItemRow = ({item}) => (
     <CardListItemRow data={item} onItemPress={handleCardItemPress} />
   );
+  const handleOnEndReached = () => {
+    if (filteredLotteries && filteredLotteries.length) {
+      return;
+    }
+    fetchMyLotteries();
+  };
   useEffect(() => {
     return () => {
       cancellableFetch.abort(cancelHttpTag);
@@ -175,48 +181,54 @@ const UserCreatedLotteries = props => {
             onRightElementPress={changeViewStyle}
           />
           {lotteryResult && <LotteryResultModal />}
-          <View style={sharedStyles.lotteriesContainer}>
-            {(Array.isArray(lotteryCardList) && lotteryCardList.length) ||
-            (Array.isArray(filteredLotteries || userCreatedLotteries) &&
-              (filteredLotteries || userCreatedLotteries).length) ? (
-              <>
-                <Filter onFilterChange={handleFilterChange} />
-                <VirtualizedList
-                  initialNumToRender={10}
-                  windowSize={2}
-                  maxToRenderPerBatch={10}
-                  updateCellsBatchingPeriod={0.0}
-                  removeClippedSubviews={true}
-                  refreshing={loading}
-                  onRefresh={fetchMyLotteries}
-                  onEndReachedThreshold={0.1}
-                  onEndReached={fetchMyLotteries}
-                  horizontal={false}
-                  showsVerticalScrollIndicator={false}
-                  data={
-                    isCard
-                      ? lotteryCardList
-                      : filteredLotteries || userCreatedLotteries
-                  }
-                  getItem={getItem}
-                  getItemCount={isCard ? getRowItemCount : getItemCount}
-                  contentContainerStyle={
-                    isCard && sharedStyles.homeLotteriesContainer
-                  }
-                  keyExtractor={isCard ? getRowItemKey : getKeyExtractor}
-                  renderItem={isCard ? renderCardListItemRow : renderItem}
-                />
-              </>
-            ) : !loading ? (
-              <View style={sharedStyles.emptySearchResultsView}>
-                <Text style={sharedStyles.emptySearchResultsText}>
-                  {lotteriesTexts.emptyLotteries}
-                </Text>
-              </View>
-            ) : (
-              loadingPopup
-            )}
-          </View>
+          {(!userCreatedLotteries ||
+            (userCreatedLotteries && userCreatedLotteries.length === 0)) &&
+          loading
+            ? loadingPopup
+            : null}
+          <Filter onFilterChange={handleFilterChange} />
+          <VirtualizedList
+            initialNumToRender={10}
+            windowSize={2}
+            maxToRenderPerBatch={10}
+            updateCellsBatchingPeriod={0.0}
+            removeClippedSubviews={true}
+            refreshing={loading}
+            onRefresh={
+              (!filteredLotteries || !filteredLotteries.length) &&
+              fetchMyLotteries
+            }
+            onEndReachedThreshold={0.1}
+            onEndReached={
+              (!filteredLotteries || !filteredLotteries.length) &&
+              handleOnEndReached
+            }
+            horizontal={false}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              !loading ? (
+                <View style={sharedStyles.emptySearchResultsView}>
+                  <Text style={sharedStyles.emptySearchResultsText}>
+                    {lotteriesTexts.emptyLotteries}
+                  </Text>
+                </View>
+              ) : null
+            }
+            data={
+              isCard
+                ? lotteryCardList
+                : filteredLotteries || userCreatedLotteries
+            }
+            getItem={getItem}
+            getItemCount={isCard ? getRowItemCount : getItemCount}
+            contentContainerStyle={
+              isCard
+                ? sharedStyles.homeLotteriesContainer
+                : sharedStyles.listViewContainer
+            }
+            keyExtractor={isCard ? getRowItemKey : getKeyExtractor}
+            renderItem={isCard ? renderCardListItemRow : renderItem}
+          />
         </View>
       </SafeAreaView>
     </Modal>

@@ -1,10 +1,11 @@
-import React, {useState, createRef, useEffect} from 'react';
+import React, {useState, createRef, useEffect, useRef} from 'react';
 import {
   Text,
   View,
   Modal,
   SafeAreaView,
   ScrollView,
+  Share,
   VirtualizedList,
 } from 'react-native';
 import {connect} from 'react-redux';
@@ -26,7 +27,10 @@ import {
 } from './Selectors';
 import {handleFetchUserLotteries} from '../../redux/LotteryDetails/FetchUserLotteries';
 import CardListItem from '../Home/CardListItem';
-import {setUserLotteriesPageToken, showLotteryDetails} from '../../redux/LotteryDetails/actions';
+import {
+  setUserLotteriesPageToken,
+  showLotteryDetails,
+} from '../../redux/LotteryDetails/actions';
 import {CarouselComponent} from '../Carousel';
 import {handleFetchUsersData} from '../../redux/LotteryDetails/FetchUsersData';
 import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
@@ -37,6 +41,8 @@ import {showReceiveLotteryModal} from '../../redux/ReceiveLottery/actions';
 import {showShipLotteryModal} from '../../redux/ShipLottery/actions';
 import {handleCancelLottery} from '../../redux/LotteryDetails/CancelLottery';
 import {Alert} from 'react-native';
+import Confetti from 'react-native-confetti';
+import {confettiColors} from '../../Constants/Colors';
 
 let ImagesViewer = null;
 let Payment = null;
@@ -72,7 +78,7 @@ const LotteryDetails = props => {
     cancelled,
     id: lotteryId,
     available,
-    lotteryUserIds,
+    lotteryUsersLength,
     winnerUserId,
     currentCollectedPrice,
     images,
@@ -87,6 +93,7 @@ const LotteryDetails = props => {
   const isVisitor = authUser && authUser.id && userId !== authUser.id;
   const isLotteryPoster = authUser && authUser.id && userId === authUser.id;
   const isWinner = authUser && authUser.id && winnerUserId === authUser.id;
+  let confettiRef = useRef();
 
   const scrollViewRef = createRef();
 
@@ -97,11 +104,7 @@ const LotteryDetails = props => {
     setUserLotteriesLoading(false);
   };
   const fetchUsersData = () => {
-    const users = [
-      userId,
-      // ...(lotteryUserIds || []),
-      winnerUserId || false,
-    ].filter(Boolean);
+    const users = [userId, winnerUserId || false].filter(Boolean);
 
     if (users.length) {
       invoke(props, 'handleFetchUsersData', {
@@ -109,7 +112,6 @@ const LotteryDetails = props => {
         userId,
         users,
         cancelTag: cancelHttpTag,
-        // lotteryUserIds,
         onError: fetchUsersDataCallback,
         onSuccess: fetchUsersDataCallback,
         currentCollectedPrice,
@@ -195,27 +197,42 @@ const LotteryDetails = props => {
     setShowModal(null);
   };
   const handleActionPress = {
-    [lotteryDetailsTexts.actionOptions.share]: () => {
-      Alert.alert(
-        lotteryDetailsTexts.shareLottery,
-        lotteryDetailsTexts.areYouSureShare,
-        [
-          {
-            text: lotteryDetailsTexts.areYouSureShare,
-            onPress: () => {
-              // invoke(props, 'handleShareLottery', {
-              //   userId: authUser.id,
-              //   lotteryId,
-              // });
-            },
-            style: 'default',
-          },
-          {
-            text: lotteryDetailsTexts.close,
-            style: 'cancel',
-          },
-        ],
-      );
+    [lotteryDetailsTexts.actionOptions.share]: async () => {
+      // Alert.alert(
+      //   lotteryDetailsTexts.shareLottery,
+      //   lotteryDetailsTexts.areYouSureShare,
+      //   [
+      //     {
+      //       text: lotteryDetailsTexts.areYouSureShare,
+      //       onPress: async () => {
+      //         // invoke(props, 'handleShareLottery', {
+      //         //   userId: authUser.id,
+      //         //   lotteryId,
+      //         // });
+      //       },
+      //       style: 'default',
+      //     },
+      //     {
+      //       text: lotteryDetailsTexts.close,
+      //       style: 'cancel',
+      //     },
+      //   ],
+      // );
+      try {
+        const result = await Share.share({
+          message:
+            'React Native | A framework for building native apps using React',
+        });
+        if (result.action === Share.sharedAction) {
+          if (result.activityType) {
+            // shared with activity type of result.activityType
+          } else {
+            // shared
+          }
+        } else if (result.action === Share.dismissedAction) {
+          // dismissed
+        }
+      } catch (error) {}
     },
     [lotteryDetailsTexts.actionOptions.chat]: () => {
       if (!ChatModal) {
@@ -349,14 +366,26 @@ const LotteryDetails = props => {
   };
   const handleOnDismiss = () => {
     cancellableFetch.abort(cancelHttpTag);
+    if (confettiRef && confettiRef.stopConfetti) {
+      confettiRef.stopConfetti();
+    }
   };
   const handleOnEndReached = () => {
     invoke(props, 'handleFetchUserLotteries', {
       userId,
       cancelTag: cancelHttpTag,
-      onError: fetchUsersAdsCallback,
-      onSuccess: fetchUsersAdsCallback,
+      onError: fetchUsersLotteriesCallback,
+      onSuccess: fetchUsersLotteriesCallback,
     });
+  };
+  const handleConfettiRef = node => {
+    if (node && node.startConfetti) {
+      confettiRef = node;
+      confettiRef.startConfetti();
+      setTimeout(() => {
+        confettiRef.stopConfetti();
+      }, 15000);
+    }
   };
   useEffect(() => {
     onShow();
@@ -404,6 +433,17 @@ const LotteryDetails = props => {
               </>
             }
           />
+          {isWinner ? (
+            <View style={sharedStyles.confettiView}>
+              <Confetti
+                bsize={2}
+                colors={confettiColors}
+                ref={handleConfettiRef}
+                confettiCount={500}
+                duration={6000}
+              />
+            </View>
+          ) : null}
           <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
             <View style={sharedStyles.flexRow}>
               <CarouselComponent
@@ -535,7 +575,7 @@ const LotteryDetails = props => {
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
                     <Text style={sharedStyles.aboutFirstSectionText}>
                       {lotteryDetailsTexts.currentLotteryUsersNumber(
-                        lotteryUserIds && lotteryUserIds.length,
+                        lotteryUsersLength,
                       )}
                     </Text>
                   </View>

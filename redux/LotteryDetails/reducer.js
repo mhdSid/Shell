@@ -66,9 +66,9 @@ const lotteryDetailsReducer = (state = initialState, action) => {
     }
     case lotteryDetailsActions.showLotteryDetails: {
       if (action.payload) {
+        console.log('showLotteryDetailsshowLotteryDetails: ', action.payload);
         const lotteryDetails = {
           ...action.payload,
-          lotteryUserIds: action.payload.lotteryUserIds || [],
         };
         if (
           !isNil(action.payload.resetState) &&

@@ -6,6 +6,7 @@ import {homeActions} from '../Home/actions';
 import {lotteriesActions} from '../Lotteries/actions';
 import {receiveLotteryActions} from '../ReceiveLottery/actions';
 import {shipLotteryActions} from '../ShipLottery/actions';
+import {chatActions} from '../Chat/actions';
 
 const handleCancelLottery = payload => {
   return dispatch => {
@@ -31,6 +32,10 @@ const handleCancelLottery = payload => {
         });
         dispatch({
           type: receiveLotteryActions.cancelLottery,
+          payload: lottery,
+        });
+        dispatch({
+          type: chatActions.cancelLottery,
           payload: lottery,
         });
         dispatch({

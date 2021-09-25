@@ -186,6 +186,102 @@ const chatReducer = (state = initialState, action) => {
         ...state,
       };
     }
+    case chatActions.markLotteryAsReceived: {
+      if (
+        action.payload &&
+        Array.isArray(state.chattableLotteries) &&
+        state.chattableLotteries.length
+      ) {
+        return {
+          ...state,
+          chattableLotteries: state.chattableLotteries.map(item => {
+            if (`${item.id}` === `${action.payload.id}`) {
+              return {
+                ...action.payload,
+                id: `${action.payload.id}`,
+                userId: `${action.payload.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case chatActions.cancelLottery: {
+      if (
+        action.payload &&
+        Array.isArray(state.chattableLotteries) &&
+        state.chattableLotteries.length
+      ) {
+        return {
+          ...state,
+          chattableLotteries: state.chattableLotteries.map(item => {
+            if (`${item.id}` === `${action.payload.id}`) {
+              return {
+                ...action.payload,
+                id: `${action.payload.id}`,
+                userId: `${action.payload.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case chatActions.enterLottery: {
+      if (
+        action.payload &&
+        Array.isArray(state.chattableLotteries) &&
+        state.chattableLotteries.length
+      ) {
+        return {
+          ...state,
+          chattableLotteries: state.chattableLotteries.map(item => {
+            if (`${item.id}` === `${action.payload.id}`) {
+              return {
+                ...action.payload,
+                id: `${action.payload.id}`,
+                userId: `${action.payload.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+    }
+    case chatActions.markLotteryAsShipped: {
+      if (
+        action.payload &&
+        Array.isArray(state.chattableLotteries) &&
+        state.chattableLotteries.length
+      ) {
+        return {
+          ...state,
+          chattableLotteries: state.chattableLotteries.map(item => {
+            if (`${item.id}` === `${action.payload.id}`) {
+              return {
+                ...action.payload,
+                id: `${action.payload.id}`,
+                userId: `${action.payload.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+    }
     default: {
       return {
         ...state,

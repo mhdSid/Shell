@@ -42,9 +42,9 @@ const Payment = props => {
         expiry: user.creditCardExpiryDate,
         cvc: user.creditCardCVC,
       });
-      setTimeout(() => {
-        creditCardInputRef.current.focus('number');
-      }, 50);
+      // setTimeout(() => {
+      //   creditCardInputRef.current.focus('number');
+      // }, 100);
       setIsValid(true);
     }
   };

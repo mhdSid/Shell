@@ -36,15 +36,43 @@ const receiveLotteryReducer = (state = initialState, action) => {
       };
     }
     case receiveLotteryActions.markLotteryAsReceived: {
-      const userWonLotteries = [...state.userWonLotteries];
+      const userWonLotteries = [...(state.userWonLotteries || [])];
       return {
         ...state,
         userWonLotteries: userWonLotteries.map(lottery => {
           if (`${lottery.id}` === `${action.payload.id}`) {
-            return {...action.payload};
+            return {
+              ...action.payload,
+              id: `${action.payload.id}`,
+              userId: `${action.payload.userId}`,
+            };
           }
           return lottery;
         }),
+      };
+    }
+    case receiveLotteryActions.enterLottery: {
+      if (
+        action.payload &&
+        Array.isArray(state.userWonLotteries) &&
+        state.userWonLotteries.length
+      ) {
+        return {
+          ...state,
+          userWonLotteries: state.userWonLotteries.map(item => {
+            if (`${item.id}` === `${action.payload.id}`) {
+              return {
+                ...action.payload,
+                id: `${action.payload.id}`,
+                userId: `${action.payload.userId}`,
+              };
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
       };
     }
     case receiveLotteryActions.setLotteryPosterData: {
@@ -73,6 +101,7 @@ const receiveLotteryReducer = (state = initialState, action) => {
               return {
                 ...lottery,
                 id: `${lottery.id}`,
+                userId: `${lottery.userId}`,
               };
             }
             return item;
@@ -109,6 +138,7 @@ const receiveLotteryReducer = (state = initialState, action) => {
               return {
                 ...lottery,
                 id: `${lottery.id}`,
+                userId: `${lottery.userId}`,
               };
             }
             return item;
