@@ -362,7 +362,9 @@ const LotteryDetails = props => {
     shipLotteryModal: (
       <ShipLotteryModal onClose={handleShipLotteryModalClose} />
     ),
-    paymentModal: <Payment onClose={onPaymentClose} />,
+    paymentModal: (
+      <Payment onClose={onPaymentClose} item={lotteryDetails || item} />
+    ),
   };
   const handleOnDismiss = () => {
     cancellableFetch.abort(cancelHttpTag);

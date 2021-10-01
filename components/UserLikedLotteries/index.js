@@ -91,6 +91,7 @@ const UserLikedLotteries = props => {
     if (!LotteryDetails) {
       LotteryDetails = require('../LotteryDetails').default;
     }
+    console.log(index)
     setShowLotteryDetails(true);
     setSelectedLottery((filteredLotteries || userLikedLotteries)[index]);
   };
@@ -206,9 +207,7 @@ const UserLikedLotteries = props => {
             getItem={getItem}
             getItemCount={isCard ? getRowItemCount : getItemCount}
             contentContainerStyle={
-              isCard
-                ? sharedStyles.homeLotteriesContainer
-                : sharedStyles.listViewContainer
+              isCard && sharedStyles.homeLotteriesContainer
             }
             keyExtractor={isCard ? getRowItemKey : getKeyExtractor}
             renderItem={isCard ? renderCardListItemRow : renderItem}

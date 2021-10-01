@@ -130,7 +130,6 @@ const ChatList = props => {
         horizontal={false}
         showsVerticalScrollIndicator={false}
         data={chattableLotteries}
-        contentContainerStyle={sharedStyles.listViewContainer}
         getItem={getItem}
         getItemCount={getItemCount}
         keyExtractor={getItemKey}

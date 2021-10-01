@@ -524,11 +524,11 @@ const sharedStyles = StyleSheet.create({
   //   justifyContent: 'center',
   //   alignItems: 'flex-start',
   // },
-  listViewContainer: {
-    paddingTop: 10,
-    paddingHorizontal: 10,
-    paddingBottom: 20,
-  },
+  // listViewContainer: {
+  //   // paddingTop: 10,
+  //   // paddingHorizontal: 10,
+  //   // paddingBottom: 20,
+  // },
   homeListItemMargin: {
     marginBottom: 20,
   },

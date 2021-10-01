@@ -21,7 +21,8 @@ import ListItem from '../Home/ListItem';
 let SuccessConfirmationModal = null;
 
 const Payment = props => {
-  const {user, loggedIn, lottery} = props;
+  const {user, loggedIn, lotteryDetails, item} = props;
+  const lottery = item || lotteryDetails;
   const [loading, setLoading] = useState(false);
   const [
     showSuccessConfirmationModal,
@@ -257,13 +258,14 @@ Payment.propTypes = {
   user: PropTypes.object,
   loggedIn: PropTypes.bool,
   onClose: PropTypes.func,
+  item: PropTypes.object,
 };
 
 const mapStateToProps = state => {
   return {
     user: getUserSelector(state),
     loggedIn: getLoggedInSelector(state),
-    lottery: getLotteryDetailsSelector(state),
+    lotteryDetails: getLotteryDetailsSelector(state),
   };
 };
 

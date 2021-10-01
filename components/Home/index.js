@@ -284,11 +284,7 @@ const HomeComponent = props => {
         data={isCard ? lotteryCardList : lotteries}
         getItem={getItem}
         getItemCount={isCard ? getItemCount : getListItemCount}
-        contentContainerStyle={
-          isCard
-            ? sharedStyles.homeLotteriesContainer
-            : sharedStyles.listViewContainer
-        }
+        contentContainerStyle={isCard && sharedStyles.homeLotteriesContainer}
         keyExtractor={isCard ? getItemKey : getListItemKey}
         renderItem={isCard ? renderCardListItemRow : renderListItem}
       />

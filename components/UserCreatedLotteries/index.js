@@ -222,9 +222,7 @@ const UserCreatedLotteries = props => {
             getItem={getItem}
             getItemCount={isCard ? getRowItemCount : getItemCount}
             contentContainerStyle={
-              isCard
-                ? sharedStyles.homeLotteriesContainer
-                : sharedStyles.listViewContainer
+              isCard && sharedStyles.homeLotteriesContainer
             }
             keyExtractor={isCard ? getRowItemKey : getKeyExtractor}
             renderItem={isCard ? renderCardListItemRow : renderItem}

@@ -199,7 +199,6 @@ const ReceiveLotteryModal = props => {
             getItemCount={getItemCount}
             keyExtractor={getItemKey}
             renderItem={renderListItem}
-            contentContainerStyle={sharedStyles.listViewContainer}
             ListEmptyComponent={
               !loading ? (
                 <View style={sharedStyles.emptySearchResultsView}>

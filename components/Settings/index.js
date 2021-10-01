@@ -11,7 +11,7 @@ import {settings} from '../../Constants/Texts';
 import pkg from '../../package.json';
 import {getLangSelector} from './Selectors';
 
-let FaqMofal = null;
+// let FaqMofal = null;
 let ChangePassword = null;
 let ContactUsModal = null;
 let TermsAndPrivacyPolicyModal = null;
@@ -37,12 +37,12 @@ const Settings = props => {
     setSettingsModal(null);
   };
   const settingsModals = {
-    faq: () => {
-      if (!FaqMofal) {
-        FaqMofal = require('./FaqModal').default;
-      }
-      return <FaqMofal onClose={handleSettingsModalClose} />;
-    },
+    // faq: () => {
+    //   if (!FaqMofal) {
+    //     FaqMofal = require('./FaqModal').default;
+    //   }
+    //   return <FaqMofal onClose={handleSettingsModalClose} />;
+    // },
     contactUs: () => {
       if (!ContactUsModal) {
         ContactUsModal = require('./ContactUsModal').default;
@@ -141,12 +141,12 @@ const Settings = props => {
                     icon: sharedStyles.langIcon,
                   }}
                   items={[
-                    {
-                      key: settings.faq,
-                      icon: 'question-answer',
-                      value: settings.faq,
-                      onPress: handleSettingsModalClick('faq'),
-                    },
+                    // {
+                    //   key: settings.faq,
+                    //   icon: 'question-answer',
+                    //   value: settings.faq,
+                    //   onPress: handleSettingsModalClick('faq'),
+                    // },
                     {
                       key: settings.contactUs,
                       icon: 'contact-mail',
