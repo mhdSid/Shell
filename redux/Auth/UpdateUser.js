@@ -1,4 +1,4 @@
-import {update} from '../../services/Auth';
+import {update} from '../../services/auth';
 import {handleError, authActions} from './actions';
 import invoke from 'lodash/invoke';
 

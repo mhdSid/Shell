@@ -1,4 +1,4 @@
-import {updateUserBackground} from '../../services/Auth';
+import {updateUserBackground} from '../../services/auth';
 import {handleError, authActions} from './actions';
 import invoke from 'lodash/invoke';
 

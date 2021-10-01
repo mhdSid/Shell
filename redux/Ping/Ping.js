@@ -1,6 +1,6 @@
 import {Alert} from 'react-native';
 import {authActions} from '../Auth/actions';
-import {ping} from '../../services/Auth';
+import {ping} from '../../services/auth';
 import invoke from 'lodash/invoke';
 
 const handlePing = payload => {

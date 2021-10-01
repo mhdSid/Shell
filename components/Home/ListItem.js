@@ -28,6 +28,9 @@ class ListItemCommon extends Component {
     showShippedTag: PropTypes.bool,
     isReceived: PropTypes.bool,
     isShipped: PropTypes.bool,
+    disableActions: PropTypes.bool,
+    disableBorder: PropTypes.bool,
+    rounded: PropTypes.bool,
   };
   constructor() {
     super();
@@ -133,13 +136,18 @@ class ListItemCommon extends Component {
     return (
       <View
         style={[
-          sharedStyles.listComponentContainer,
+          !this.props.disableBorder && sharedStyles.listComponentContainer,
           this.props.index === this.props.listLength - 1 &&
             sharedStyles.homeListItemMargin,
         ]}>
         {this.props.showUploadProgress ? loadingPopup : null}
         <ListItem
           divider
+          style={{
+            container: {
+              ...(this.props.rounded && sharedStyles.listItemRounded),
+            },
+          }}
           leftElement={
             this.props.item.images && this.props.item.images[0] ? (
               <FastImage
@@ -161,58 +169,61 @@ class ListItemCommon extends Component {
             }`,
           }}
           rightElement={
-            <>
-              {this.props.authUserId &&
-              this.props.item.userId !== this.props.authUserId ? (
-                <>
-                  {Array.isArray(this.props.item.likedBy) &&
-                  this.props.item.likedBy.length &&
-                  this.props.item.likedBy.includes(this.props.authUserId) ? (
-                    <IconToggle
-                      name="favorite"
-                      onPress={this.handleDislikeLottery}
-                    />
-                  ) : null}
-                  {!Array.isArray(this.props.item.likedBy) ||
-                  !this.props.item.likedBy.length ||
-                  !this.props.item.likedBy.includes(this.props.authUserId) ? (
-                    <IconToggle
-                      name="favorite-border"
-                      onPress={this.handleLikeLottery}
-                    />
-                  ) : null}
-                </>
-              ) : null}
-              {!this.props.hideMoreActions ? (
-                <IconToggle
-                  name="more-vert"
-                  onPress={this.handleMoreButtonPress}
-                />
-              ) : null}
-              {this.props.isWinner && this.props.showReceivedTag ? (
-                <IconToggle
-                  name="call-received"
-                  color={this.props.isReceived ? 'green' : 'red'}
-                  onPress={
-                    !this.props.isReceived
-                      ? this.handleNotReceivedPress
-                      : this.handleReceivedPress
-                  }
-                />
-              ) : null}
-              {this.props.isLotteryPoster && this.props.showShippedTag ? (
-                <IconToggle
-                  name="call-received"
-                  color={this.props.isShipped ? 'green' : 'red'}
-                  onPress={
-                    !this.props.isShipped
-                      ? this.handleNotShippedPress
-                      : this.handleShippedPress
-                  }
-                  style={{container: sharedStyles.listItemNotReceivedIcon}}
-                />
-              ) : null}
-            </>
+            !this.props.disableActions && (
+              <>
+                {this.props.authUserId &&
+                this.props.item.userId !== this.props.authUserId ? (
+                  <>
+                    {Array.isArray(this.props.item.likedBy) &&
+                    this.props.item.likedBy.length &&
+                    this.props.item.likedBy.includes(this.props.authUserId) ? (
+                      <IconToggle
+                        name="favorite"
+                        color="#e34977"
+                        onPress={this.handleDislikeLottery}
+                      />
+                    ) : null}
+                    {!Array.isArray(this.props.item.likedBy) ||
+                    !this.props.item.likedBy.length ||
+                    !this.props.item.likedBy.includes(this.props.authUserId) ? (
+                      <IconToggle
+                        name="favorite-border"
+                        onPress={this.handleLikeLottery}
+                      />
+                    ) : null}
+                  </>
+                ) : null}
+                {!this.props.hideMoreActions ? (
+                  <IconToggle
+                    name="more-vert"
+                    onPress={this.handleMoreButtonPress}
+                  />
+                ) : null}
+                {this.props.isWinner && this.props.showReceivedTag ? (
+                  <IconToggle
+                    name="call-received"
+                    color={this.props.isReceived ? 'green' : 'red'}
+                    onPress={
+                      !this.props.isReceived
+                        ? this.handleNotReceivedPress
+                        : this.handleReceivedPress
+                    }
+                  />
+                ) : null}
+                {this.props.isLotteryPoster && this.props.showShippedTag ? (
+                  <IconToggle
+                    name="call-received"
+                    color={this.props.isShipped ? 'green' : 'red'}
+                    onPress={
+                      !this.props.isShipped
+                        ? this.handleNotShippedPress
+                        : this.handleShippedPress
+                    }
+                    style={{container: sharedStyles.listItemNotReceivedIcon}}
+                  />
+                ) : null}
+              </>
+            )
           }
           onRightElementPress={this.handleRightElementPress}
           onPress={this.handleItemPress}

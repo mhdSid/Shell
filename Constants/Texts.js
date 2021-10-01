@@ -429,6 +429,12 @@ const payment = {
   title: 'Get a Chance to Win',
   submit: 'Pay fee of ¥100',
   cancel: 'Cancel',
+  joinLottery: 'Join lottery',
+  fee: '¥100.00',
+  total: 'Total',
+  joinLotteryFee: 'Join lottery fee',
+  tax: 'Tax',
+  taxFee: '00.00',
 };
 
 const uploadProgress = {

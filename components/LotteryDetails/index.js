@@ -220,8 +220,8 @@ const LotteryDetails = props => {
       // );
       try {
         const result = await Share.share({
-          message:
-            'React Native | A framework for building native apps using React',
+          message: `Come check this lottery and have a chance to win ${name}`,
+          // title: ''
         });
         if (result.action === Share.sharedAction) {
           if (result.activityType) {
@@ -309,7 +309,7 @@ const LotteryDetails = props => {
     },
     [lotteryDetailsTexts.actionOptions.like]: () => {
       invoke(props, 'handleLikeLottery', {
-        userId: authUser.id,
+        userId: authUser && authUser.id,
         cancelTag: cancelHttpTag,
         lotteryId: (lotteryDetails || item).id,
         showLotteryDetails: true,
@@ -317,7 +317,7 @@ const LotteryDetails = props => {
     },
     [lotteryDetailsTexts.actionOptions.dislike]: () => {
       invoke(props, 'handleDislikeLottery', {
-        userId: authUser.id,
+        userId: authUser && authUser.id,
         cancelTag: cancelHttpTag,
         lotteryId: (lotteryDetails || item).id,
         showLotteryDetails: true,
@@ -776,7 +776,14 @@ const LotteryDetails = props => {
                   style={{
                     container: sharedStyles.bottomToolbarActionButtonContainer,
                   }}
-                  icon={lotteryDetailsTexts.dislike.icon}
+                  icon={
+                    <Icon
+                      name={lotteryDetailsTexts.dislike.icon}
+                      color="#e34977"
+                      style={{marginRight: 7}}
+                      size={25}
+                    />
+                  }
                   text={''}
                   onPress={
                     handleActionPress[lotteryDetailsTexts.dislike.action]

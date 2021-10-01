@@ -171,9 +171,11 @@ const ChatModal = props => {
   }, [isSocketInitiated]);
 
   useEffect(() => {
-    if (virtualizedListRef && virtualizedListRef.current) {
-      virtualizedListRef.current.scrollToEnd();
-    }
+    setTimeout(() => {
+      if (virtualizedListRef && virtualizedListRef.current) {
+        virtualizedListRef.current.scrollToEnd();
+      }
+    }, 500);
   }, [conversation]);
 
   return (

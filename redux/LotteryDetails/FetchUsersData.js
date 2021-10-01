@@ -1,4 +1,4 @@
-import {getUsersData} from '../../services/Auth';
+import {getUsersData} from '../../services/auth';
 import {handleError} from '../Home/actions';
 import invoke from 'lodash/invoke';
 import {lotteryDetailsActions} from './actions';

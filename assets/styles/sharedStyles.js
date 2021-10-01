@@ -443,6 +443,12 @@ const sharedStyles = StyleSheet.create({
     ...flex,
     backgroundColor: 'rgba(0,0,0,.1)',
   },
+  paymentSafeViewContainer: {
+    paddingTop: 20,
+  },
+  paymentSectionMarginBottom: {
+    marginBottom: 100,
+  },
   aboutScrollViewContainer: {
     marginVertical: 20,
     paddingBottom: 50,
@@ -529,6 +535,15 @@ const sharedStyles = StyleSheet.create({
   listComponentContainer: {
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0,0,0,0.05)',
+  },
+  listItemRounded: {
+    borderRadius: 20,
+  },
+  listItemNoBorder: {
+    borderBottomColor: 'transparent',
+    borderBottomWidth: 0,
+    borderWidth: 0,
+    backgroundColor: 'transparent',
   },
   lotteryDetailsUsersListItemContainer: {
     marginRight: 10,
@@ -748,6 +763,39 @@ const sharedStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },
+  paymentCurrentCartContainer: {
+    fontWeight: '500',
+    color: 'rgba(0,0,0,.8)',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    // marginBottom: 20,
+    padding: 20,
+    lineHeight: 20,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  paymentCurrentCartInvoiceItem: {
+    width: '100%%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  paymentCurrentCartInvoiceItemMargin: {
+    marginBottom: 10,
+  },
+  paymentLotteryListItem: {
+    marginBottom: 30,
+    width: '100%',
+  },
+  paymentCurrentCartInvoiceText: {
+    fontSize: 16,
+    lineHeight: 22,
+    fontWeight: '500',
+    color: 'rgba(0,0,0,.8)',
+  },
   aboutFirstSectionTextContainerNoFlex: {
     fontWeight: '500',
     color: 'rgba(0,0,0,.8)',
@@ -761,8 +809,9 @@ const sharedStyles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingRight: 20,
     alignItems: 'center',
+    paddingLeft: 10,
   },
   userDetailsIconTextContainer: {
     display: 'flex',
@@ -976,6 +1025,7 @@ const sharedStyles = StyleSheet.create({
   },
   btnContainer: {
     marginVertical: 30,
+    marginBottom: 20,
   },
   paymentTitle: {
     marginLeft: -20,
@@ -1216,7 +1266,7 @@ const sharedStyles = StyleSheet.create({
   },
   confettiView: {
     zIndex: 9999,
-  }
+  },
 });
 
 export default sharedStyles;

@@ -1,5 +1,5 @@
 import {handleError, authActions} from './actions';
-import {signup} from '../../services/Auth';
+import {signup} from '../../services/auth';
 import invoke from 'lodash/invoke';
 
 const handleSignUp = payload => {

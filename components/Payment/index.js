@@ -1,10 +1,13 @@
-import React, {createRef, useState} from 'react';
+import React, {createRef, useRef, useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, View, Text, ScrollView} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {Icon, Button} from 'react-native-material-ui';
+import {Icon, Button, Toolbar} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';
-import {payment, about} from '../../Constants/Texts';
+import {
+  payment as paymentTexts,
+  about as aboutTexts,
+} from '../../Constants/Texts';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {CreditCardInput} from 'react-native-credit-card-input';
@@ -13,6 +16,7 @@ import NoAuth from '../NoAuth';
 import {handleEnterLottery} from '../../redux/Payment/EnterLottery';
 import {getLotteryDetailsSelector} from '../Pinger/Selectors';
 import {successConfirmationModal as successConfirmationModalTexts} from '../../Constants/Texts';
+import ListItem from '../Home/ListItem';
 
 let SuccessConfirmationModal = null;
 
@@ -29,7 +33,7 @@ const Payment = props => {
   const [creditCardNumber, setCreditCardNumber] = useState(false);
   const [creditCardType, setCreditCardType] = useState(false);
 
-  const creditCardInputRef = createRef();
+  const creditCardInputRef = useRef();
 
   const onShowModal = () => {
     if (
@@ -42,9 +46,9 @@ const Payment = props => {
         expiry: user.creditCardExpiryDate,
         cvc: user.creditCardCVC,
       });
-      // setTimeout(() => {
-      //   creditCardInputRef.current.focus('number');
-      // }, 100);
+      setTimeout(() => {
+        creditCardInputRef.current.focus('number');
+      }, 200);
       setIsValid(true);
     }
   };
@@ -134,6 +138,12 @@ const Payment = props => {
               actions={successModalActions}
             />
           ) : null}
+          <Toolbar
+            style={{container: sharedStyles.toolbarContainer}}
+            leftElement="arrow-back"
+            centerElement={paymentTexts.joinLottery}
+            onLeftElementPress={handleCloseModal}
+          />
           {loading ? loadingPopup : null}
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -150,47 +160,90 @@ const Payment = props => {
                 ref={creditCardInputRef}
               />
             </View>
-            <View style={sharedStyles.btnContainer}>
-              <View style={sharedStyles.paymentBtn}>
-                <Button
-                  raised
-                  primary
-                  disabled={loading || !isValid}
-                  icon="payment"
-                  text={payment.submit}
-                  style={{
-                    container:
-                      loading || !isValid
-                        ? sharedStyles.paymentBtnContainerDisabled
-                        : sharedStyles.paymentBtnContainer,
-                  }}
-                  onPress={handlePayment}
+            <View style={sharedStyles.paymentCurrentCartContainer}>
+              <View style={sharedStyles.paymentLotteryListItem}>
+                <ListItem
+                  item={lottery}
+                  disableActions={true}
+                  disableBorder={true}
+                  rounded={true}
                 />
               </View>
-              <Button text={payment.cancel} onPress={handleCloseModal} />
+              <View
+                style={[
+                  sharedStyles.paymentCurrentCartInvoiceItem,
+                  sharedStyles.paymentCurrentCartInvoiceItemMargin,
+                ]}>
+                <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
+                  {paymentTexts.tax}
+                </Text>
+                <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
+                  {paymentTexts.taxFee}
+                </Text>
+              </View>
+              <View
+                style={[
+                  sharedStyles.paymentCurrentCartInvoiceItem,
+                  sharedStyles.paymentCurrentCartInvoiceItemMargin,
+                ]}>
+                <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
+                  {paymentTexts.joinLottery}
+                </Text>
+                <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
+                  {paymentTexts.fee}
+                </Text>
+              </View>
+              <View style={sharedStyles.paymentCurrentCartInvoiceItem}>
+                <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
+                  {paymentTexts.total}
+                </Text>
+                <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
+                  {paymentTexts.fee}
+                </Text>
+              </View>
+            </View>
+            <View style={sharedStyles.btnContainer}>
+              <Button
+                raised
+                primary
+                disabled={loading || !isValid}
+                icon="payment"
+                text={paymentTexts.submit}
+                style={{
+                  container:
+                    loading || !isValid
+                      ? sharedStyles.paymentBtnContainerDisabled
+                      : sharedStyles.paymentBtnContainer,
+                }}
+                onPress={handlePayment}
+              />
             </View>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="black" name="receipt" />
               <Text
                 style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
-                {about.enterLottery}
+                {aboutTexts.enterLottery}
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {about.howToUseTenth}
+                {aboutTexts.howToUseTenth}
               </Text>
             </View>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="black" name="star" />
               <Text
                 style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
-                {about.joinLottery}
+                {aboutTexts.joinLottery}
               </Text>
             </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
+            <View
+              style={[
+                sharedStyles.aboutFirstSectionTextContainer,
+                sharedStyles.paymentSectionMarginBottom,
+              ]}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {about.howToUseEleventh}
+                {aboutTexts.howToUseEleventh}
               </Text>
             </View>
           </ScrollView>

@@ -1,4 +1,4 @@
-import {search} from '../../services/Auth';
+import {search} from '../../services/auth';
 import {handleError} from '../Auth/actions';
 import invoke from 'lodash/invoke';
 import {homeActions} from '../Home/actions';

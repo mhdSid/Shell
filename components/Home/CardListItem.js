@@ -94,8 +94,8 @@ class CardListItem extends Component {
         item.likedBy.includes(authUserId) ? (
           <IconToggle
             name="favorite"
-            color="white"
             size={17}
+            color="#e34977"
             style={{
               container: sharedStyles.homeCardItemIconHeart,
             }}

@@ -1,4 +1,4 @@
-import {verify} from '../../services/Auth';
+import {verify} from '../../services/auth';
 import {handleError, authActions} from './actions';
 import invoke from 'lodash/invoke';
 
