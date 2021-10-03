@@ -25,7 +25,6 @@ const handlePing = payload => {
         payload: {
           loggedIn: true,
           user: authUser,
-          sessionID: authUser.sessionID,
           country,
         },
       });

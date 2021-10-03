@@ -1,10 +1,12 @@
 import {verify} from '../../services/auth';
 import {handleError, authActions} from './actions';
 import invoke from 'lodash/invoke';
+import {errors} from '../../Constants/Texts';
+import {Alert} from 'react-native';
 
 const handleVerifyUser = payload => {
   return dispatch => {
-    const {email, passwordHash, verificationId, onError} = payload;
+    const {email, passwordHash, verificationCode, onError} = payload;
     /*
      * Verify user Handler
      */
@@ -12,11 +14,16 @@ const handleVerifyUser = payload => {
     const onVerifyUserSuccess = data => {
       const {error, user: authUser} = data;
       if (error) {
-        return handleError({error, onError, dispatch});
+        const message = (error && error.message) || errors.error;
+        invoke(payload, 'onError');
+        if (message) {
+          Alert.alert(message);
+        }
+        return;
       }
-      const {verificationId: authVerificationId, emailVerified} = authUser;
+      const {verificationCode: authVerificationCode, emailVerified} = authUser;
       invoke(payload, 'onSuccess');
-      if (emailVerified === true && authVerificationId) {
+      if (emailVerified === true && authVerificationCode) {
         dispatch({
           type: authActions.login,
           payload: {
@@ -25,8 +32,8 @@ const handleVerifyUser = payload => {
         });
       }
     };
-    if (email && passwordHash && verificationId) {
-      return verify({email, passwordHash, verificationId}).then(
+    if (email && passwordHash && verificationCode) {
+      return verify({email, passwordHash, verificationCode}).then(
         onVerifyUserSuccess,
         error => {
           return handleError({error, onError, dispatch});

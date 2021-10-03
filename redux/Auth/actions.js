@@ -38,7 +38,7 @@ const handleError = props => {
     payload: {
       loggedIn: false,
       user: false,
-      verificationId: undefined,
+      verificationCode: undefined,
       loading: false,
     },
   });

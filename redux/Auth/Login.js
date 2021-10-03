@@ -14,32 +14,33 @@ const handleLogin = payload => {
         return handleError({error, onError, dispatch});
       }
       const {
-        verificationId,
+        verificationCode,
         emailVerified,
         signedUp,
         email: authEmail,
         passwordHash,
       } = authUser;
       invoke(payload, 'onSuccess');
-      // should should confirmation button and go to sign up screen afterwards
-      if (emailVerified === false && verificationId) {
+      console.log('onSubmitSuccess: ', authUser);
+      // should show confirmation button and go to sign up screen afterwards
+      if (emailVerified === false && verificationCode) {
         return dispatch({
           type: authActions.login,
           payload: {
             email,
             passwordHash,
             // show confirmation button and request to /authenticate/email/verify with email and password again and verification id
-            verificationId,
+            verificationCode,
           },
         });
       }
       // user exists in the database and can login normally
-      else if (emailVerified === true && verificationId) {
+      else if (emailVerified === true && verificationCode) {
         if (signedUp === false) {
           return dispatch({
             type: authActions.login,
             payload: {
-              verificationId,
+              verificationCode,
               showSingup: true,
               email: authEmail,
               passwordHash,

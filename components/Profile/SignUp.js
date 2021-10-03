@@ -12,14 +12,14 @@ import {connect} from 'react-redux';
 import {handleSignUp} from '../../redux/Auth/SignUp';
 import {
   getEmailSelector,
-  getVerificationIdSelector,
+  getVerificationCodeSelector,
   getPasswordHashSelector,
 } from './Selectors';
 import {Dropdown} from 'react-native-material-dropdown';
 import TermsAndPrivacyPolicyModal from '../Settings/TermsAndPrivacyPolicyModal';
 
 const SignUp = props => {
-  const {email, passwordHash, verificationId} = props;
+  const {email, passwordHash, verificationCode} = props;
   const [loading, setLoading] = useState(false);
   const [userDataChanged, setUserDataChanged] = useState(false);
   const [cityChanged, setCityChanged] = useState(false);
@@ -61,11 +61,11 @@ const SignUp = props => {
     setLoading(false);
   };
   const handleSignupPress = () => {
-    if (email && passwordHash && verificationId && prefecture && city) {
+    if (email && passwordHash && verificationCode && prefecture && city) {
       const newUser = {
         email,
         passwordHash,
-        verificationId,
+        verificationCode,
         country: 'Japan',
         prefecture,
         city,
@@ -160,7 +160,7 @@ const SignUp = props => {
 SignUp.propTypes = {
   email: PropTypes.string,
   passwordHash: PropTypes.string,
-  verificationId: PropTypes.string,
+  verificationCode: PropTypes.string,
   login: PropTypes.func,
   logout: PropTypes.func,
 };
@@ -169,7 +169,7 @@ const mapStateToProps = state => {
   return {
     email: getEmailSelector(state),
     passwordHash: getPasswordHashSelector(state),
-    verificationId: getVerificationIdSelector(state),
+    verificationCode: getVerificationCodeSelector(state),
   };
 };
 

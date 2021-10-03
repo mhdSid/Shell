@@ -328,6 +328,7 @@ const profile = {
   shellSignUp: 'Sign up to Shell',
   verifyAccount: 'Verify your account',
   verify: 'Verify',
+  resend: 'Resend Code',
   checkYourInbox:
     'In order to verify your e-mail, we have sent you a verification link to your e-mail inbox.\nPlease check your inbox and verify your email.',
   howToUseTheApp: 'How to use the App',
@@ -345,6 +346,8 @@ const profile = {
   info: 'Info',
   email: 'Email',
   password: 'Password',
+  verificationSubTitle:
+    'Please enter the verification code that we sent to your email address',
 };
 
 const searchh = {

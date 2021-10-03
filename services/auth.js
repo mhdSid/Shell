@@ -42,15 +42,31 @@ const ping = async () => {
 };
 
 const verify = async props => {
-  const {email, passwordHash, verificationId} = props;
+  const {email, passwordHash, verificationCode} = props;
   const data = await request({
     endpoint: 'users/authenticate/email/verify',
     method: 'POST',
     body: {
       email,
       passwordHash,
-      verificationId,
-      hash: sha256(email + passwordHash + verificationId + hashkey).toString(),
+      verificationCode,
+      hash: sha256(
+        email + passwordHash + verificationCode + hashkey,
+      ).toString(),
+    },
+  });
+  return data;
+};
+
+const resendVerificationCode = async props => {
+  const {email, passwordHash} = props;
+  const data = await request({
+    endpoint: 'users/authenticate/email/verify/resend',
+    method: 'POST',
+    body: {
+      email,
+      passwordHash,
+      hash: sha256(email + passwordHash + hashkey).toString(),
     },
   });
   return data;
@@ -60,7 +76,7 @@ const signup = async props => {
   const {
     email,
     passwordHash,
-    verificationId,
+    verificationCode,
     country,
     prefecture,
     city,
@@ -71,14 +87,14 @@ const signup = async props => {
     body: {
       email,
       passwordHash,
-      verificationId,
+      verificationCode,
       country,
       prefecture,
       city,
       hash: sha256(
         email +
           passwordHash +
-          verificationId +
+          verificationCode +
           country +
           prefecture +
           city +
@@ -371,4 +387,5 @@ export {
   search,
   getUsersData,
   updateUserBackground,
+  resendVerificationCode,
 };

@@ -1267,6 +1267,34 @@ const sharedStyles = StyleSheet.create({
   confettiView: {
     zIndex: 9999,
   },
+  verificationCodeCell: {
+    width: windowWidth / 6 - 20,
+    height: windowWidth / 6 - 20,
+    // lineHeight: 38,
+    fontSize: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.1)',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  verificationCodeFocusCell: {
+    borderColor: '#000',
+  },
+  verificationTitleSubTitle: {
+    fontWeight: '400',
+    fontSize: 16,
+    color: 'rgba(0,0,0,.9)',
+    marginVertical: 30,
+  },
+  verificationIcon: {
+    width: 217 / 2.4,
+    height: 158 / 2.4,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  verificaitonContainer: {
+    marginTop: 75,
+  },
 });
 
 export default sharedStyles;

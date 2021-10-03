@@ -8,7 +8,7 @@ const initialState = {
   country: 'JP',
   email: undefined,
   passwordHash: undefined,
-  verificationId: undefined,
+  verificationCode: undefined,
   showSignup: undefined,
 };
 

@@ -19,16 +19,16 @@ import {
   getUserSelector,
   getCountrySelector,
   getShowSignUpSelector,
-  getVerificationIdSelector,
+  getVerificationCodeSelector,
 } from './Selectors';
 
 let SignUp = null;
-let VerifyUser = null;
+let VerifyCode = null;
 let UserProfile = null;
 let Login = null;
 
 const AuthComponent = props => {
-  const {loggedIn, user, showSignup, verificationId} = props;
+  const {loggedIn, user, showSignup, verificationCode} = props;
   // useEffect(() => {
   //   if (loggedIn && user) {
   //     // AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/4925593277');
@@ -39,17 +39,17 @@ const AuthComponent = props => {
   if (isUndefined(loggedIn) && isUndefined(user)) {
     return Loading;
   }
-  if (showSignup === true && verificationId) {
+  if (showSignup === true && verificationCode) {
     if (!SignUp) {
       SignUp = require('./SignUp').default;
     }
     return <SignUp />;
   }
-  if (verificationId) {
-    if (!VerifyUser) {
-      VerifyUser = require('./VerifyUser').default;
+  if (verificationCode) {
+    if (!VerifyCode) {
+      VerifyCode = require('./VerifyCode').default;
     }
-    return <VerifyUser />;
+    return <VerifyCode />;
   }
   if (loggedIn && user) {
     if (!UserProfile) {
@@ -70,6 +70,7 @@ AuthComponent.propTypes = {
   logout: PropTypes.func,
   login: PropTypes.func,
   updateUserAction: PropTypes.func,
+  verificationCode: PropTypes.string,
 };
 
 const mapStateToProps = state => {
@@ -78,7 +79,7 @@ const mapStateToProps = state => {
     user: getUserSelector(state),
     country: getCountrySelector(state),
     showSignup: getShowSignUpSelector(state),
-    verificationId: getVerificationIdSelector(state),
+    verificationCode: getVerificationCodeSelector(state),
   };
 };
 

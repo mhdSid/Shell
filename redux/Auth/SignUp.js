@@ -5,24 +5,25 @@ import invoke from 'lodash/invoke';
 const handleSignUp = payload => {
   return dispatch => {
     const {onError, newUser} = payload;
-    const {verificationId, email} = newUser;
+    const {verificationCode, email} = newUser;
     /*
      * signup Handler
      */
     const onSignupSuccess = data => {
       const {error, user} = data;
+      console.log('onSignupSuccess: ', user, newUser);
       if (error) {
         return handleError({error, onError, dispatch});
       }
       const {
-        verificationId: authVerificationId,
+        verificationCode: authVerificationCode,
         emailVerified,
         signedUp,
       } = user;
       if (
         emailVerified === true &&
-        authVerificationId &&
-        authVerificationId === verificationId &&
+        authVerificationCode &&
+        authVerificationCode === verificationCode &&
         user.email === email &&
         signedUp === true
       ) {
@@ -32,9 +33,8 @@ const handleSignUp = payload => {
           payload: {
             loggedIn: true,
             user,
-            sessionID: user.sessionID,
             showSignup: false,
-            verificationId: null,
+            verificationCode: null,
           },
         });
       } else {
