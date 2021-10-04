@@ -41,7 +41,8 @@ const handleFetchUsersData = payload => {
       onGetUsersDataSuccess,
       error => {
         return handleError({error, onEror});
-    });
+      },
+    );
   };
 };
 

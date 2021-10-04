@@ -27,7 +27,6 @@ const chatReducer = (state = initialState, action) => {
         winnerUserId,
         lotteryId,
       } = action.payload;
-      console.log('setChatConversation: ', action.payload);
       if (state.chatList[lotteryId]) {
         if (Array.isArray(conversation) && conversation.length) {
           const updatedChatList = {

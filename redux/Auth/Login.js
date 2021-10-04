@@ -21,7 +21,6 @@ const handleLogin = payload => {
         passwordHash,
       } = authUser;
       invoke(payload, 'onSuccess');
-      console.log('onSubmitSuccess: ', authUser);
       // should show confirmation button and go to sign up screen afterwards
       if (emailVerified === false && verificationCode) {
         return dispatch({

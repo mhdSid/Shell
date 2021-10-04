@@ -119,7 +119,6 @@ const LotteryDetails = props => {
     }
   };
   const onShow = () => {
-    console.log('showing lottery details');
     fetchUsersData();
     invoke(props, 'handleFetchUserLotteries', {
       userId,
@@ -257,49 +256,53 @@ const LotteryDetails = props => {
       setShowModal('shipLotteryModal');
     },
     [lotteryDetailsTexts.actionOptions.cancel]: () => {
-      Alert.alert(
-        lotteryDetailsTexts.cancelLottery,
-        lotteryDetailsTexts.areYouSureCancel,
-        [
-          {
-            text: lotteryDetailsTexts.cancelThisLottery,
-            onPress: () => {
-              invoke(props, 'handleCancelLottery', {
-                userId: authUser.id,
-                lotteryId,
-              });
+      if (authUser && authUser.id) {
+        Alert.alert(
+          lotteryDetailsTexts.cancelLottery,
+          lotteryDetailsTexts.areYouSureCancel,
+          [
+            {
+              text: lotteryDetailsTexts.cancelThisLottery,
+              onPress: () => {
+                invoke(props, 'handleCancelLottery', {
+                  userId: authUser && authUser.id,
+                  lotteryId,
+                });
+              },
+              style: 'default',
             },
-            style: 'default',
-          },
-          {
-            text: lotteryDetailsTexts.close,
-            style: 'cancel',
-          },
-        ],
-      );
+            {
+              text: lotteryDetailsTexts.close,
+              style: 'cancel',
+            },
+          ],
+        );
+      }
     },
     [lotteryDetailsTexts.actionOptions.readd]: () => {
-      Alert.alert(
-        lotteryDetailsTexts.reAddLottery,
-        lotteryDetailsTexts.areYouSureReAdd,
-        [
-          {
-            text: lotteryDetailsTexts.reAddThisLottery,
-            onPress: () => {
-              invoke(props, 'handleCancelLottery', {
-                userId: authUser.id,
-                lotteryId,
-                reAdd: true,
-              });
+      if (authUser && authUser.id) {
+        Alert.alert(
+          lotteryDetailsTexts.reAddLottery,
+          lotteryDetailsTexts.areYouSureReAdd,
+          [
+            {
+              text: lotteryDetailsTexts.reAddThisLottery,
+              onPress: () => {
+                invoke(props, 'handleCancelLottery', {
+                  userId: authUser && authUser.id,
+                  lotteryId,
+                  reAdd: true,
+                });
+              },
+              style: 'default',
             },
-            style: 'default',
-          },
-          {
-            text: lotteryDetailsTexts.close,
-            style: 'cancel',
-          },
-        ],
-      );
+            {
+              text: lotteryDetailsTexts.close,
+              style: 'cancel',
+            },
+          ],
+        );
+      }
     },
     [lotteryDetailsTexts.actionOptions.result]: () => {
       if (!LotteryResultModal) {
@@ -308,20 +311,24 @@ const LotteryDetails = props => {
       setShowModal('lotteryResultModal');
     },
     [lotteryDetailsTexts.actionOptions.like]: () => {
-      invoke(props, 'handleLikeLottery', {
-        userId: authUser && authUser.id,
-        cancelTag: cancelHttpTag,
-        lotteryId: (lotteryDetails || item).id,
-        showLotteryDetails: true,
-      });
+      if (authUser && authUser.id) {
+        invoke(props, 'handleLikeLottery', {
+          userId: authUser && authUser.id,
+          cancelTag: cancelHttpTag,
+          lotteryId: (lotteryDetails || item).id,
+          showLotteryDetails: true,
+        });
+      }
     },
     [lotteryDetailsTexts.actionOptions.dislike]: () => {
-      invoke(props, 'handleDislikeLottery', {
-        userId: authUser && authUser.id,
-        cancelTag: cancelHttpTag,
-        lotteryId: (lotteryDetails || item).id,
-        showLotteryDetails: true,
-      });
+      if (authUser && authUser.id) {
+        invoke(props, 'handleDislikeLottery', {
+          userId: authUser && authUser.id,
+          cancelTag: cancelHttpTag,
+          lotteryId: (lotteryDetails || item).id,
+          showLotteryDetails: true,
+        });
+      }
     },
     [lotteryDetailsTexts.actionOptions.win]: handleEnterDraw,
   };
@@ -345,17 +352,18 @@ const LotteryDetails = props => {
         onClose={onImagesViewerClose}
       />
     ),
-    chatModal: (
-      <ChatModal
-        onClose={handleChatModalClose}
-        isWinner={isWinner}
-        lottery={lotteryDetails || item}
-        isLotteryPoster={isLotteryPoster}
-        lotteryPoster={adPosterData}
-        lotteryWinner={winnerUserData}
-        authUserId={authUser.id}
-      />
-    ),
+    chatModal:
+      authUser && authUser.id ? (
+        <ChatModal
+          onClose={handleChatModalClose}
+          isWinner={isWinner}
+          lottery={lotteryDetails || item}
+          isLotteryPoster={isLotteryPoster}
+          lotteryPoster={adPosterData}
+          lotteryWinner={winnerUserData}
+          authUserId={authUser.id}
+        />
+      ) : null,
     receiveLotteryModal: (
       <ReceiveLotteryModal onClose={handleReceiveLotteryModalClose} />
     ),
@@ -399,7 +407,6 @@ const LotteryDetails = props => {
       onRequestClose={handleCloseModal}
       onDismiss={handleOnDismiss}>
       {showModal && modals[showModal]}
-
       <SafeAreaView
         style={[sharedStyles.container, sharedStyles.rootSafeAreaView]}>
         <View style={sharedStyles.innerSafeAreaView}>

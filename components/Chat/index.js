@@ -30,7 +30,6 @@ const ChatModal = props => {
     authUserId,
     isSocketInitiated,
   } = props;
-  // console.log(conversation, lotteryPoster.id, lotteryWinner.id); // lotteryPosterId: 5758387459457024 lotteryWinnerUserId: 5662484329398272
   const [loading, setIsLoading] = useState(true);
   const [chatMessage, setChatMessage] = useState(false);
 
@@ -113,7 +112,6 @@ const ChatModal = props => {
         winnerUserId: lotteryWinner.id,
       });
       onChangeMessageCallback = data => {
-        console.log('just received chat message: ', data);
         // TODO: update this
         if (data) {
           const {

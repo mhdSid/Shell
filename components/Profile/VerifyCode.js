@@ -118,6 +118,7 @@ const VerifyUserCode = props => {
             // primary
             style={{
               container: sharedStyles.mainButtonContainer,
+              text: sharedStyles.resendCodeButtonText,
             }}
             text={profileTexts.resend}
             onPress={handleResendPress}

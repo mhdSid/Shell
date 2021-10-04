@@ -299,7 +299,6 @@ const ImportLottery = props => {
                 onlyScaleDown: true,
               },
             ).then(data => {
-              console.log(data);
               const imagesArray = [...images];
               const imagesFilesArray = [...imageFiles];
               imagesArray[index] = data.uri;

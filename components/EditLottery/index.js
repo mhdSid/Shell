@@ -38,7 +38,6 @@ const EditLottery = props => {
     userId,
     id: lotteryDetailsId,
   } = lotteryDetails;
-  console.log(' ');
   const userPrefecture = prefectures.Japan.find(
     item =>
       item.kanji === lotteryDetailsPrefecture ||
@@ -265,7 +264,6 @@ const EditLottery = props => {
               };
               setImagesChanged(true);
               setImages([...imagesArray]);
-              console.log([...imagesArray]);
               setImageFiles([...imagesFilesArray]);
             });
           }

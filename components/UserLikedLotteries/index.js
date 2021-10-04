@@ -91,7 +91,6 @@ const UserLikedLotteries = props => {
     if (!LotteryDetails) {
       LotteryDetails = require('../LotteryDetails').default;
     }
-    console.log(index)
     setShowLotteryDetails(true);
     setSelectedLottery((filteredLotteries || userLikedLotteries)[index]);
   };

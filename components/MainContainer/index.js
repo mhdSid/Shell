@@ -1,10 +1,7 @@
 import React, {useState} from 'react';
-import {Image, SafeAreaView} from 'react-native';
+import {SafeAreaView} from 'react-native';
 import {BottomNavigation, Icon} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
-import {getLoggedInSelector, getUserSelector} from './Selectors';
 import FastImage from 'react-native-fast-image';
 
 export let navigate;
@@ -174,16 +171,4 @@ const MainContainer = () => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    loggedIn: getLoggedInSelector(state),
-    user: getUserSelector(state),
-  };
-};
-
-MainContainer.propTypes = {
-  loggedIn: PropTypes.bool,
-  user: PropTypes.object,
-};
-
-export default connect(mapStateToProps)(MainContainer);
+export default MainContainer;

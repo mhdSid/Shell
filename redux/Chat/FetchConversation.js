@@ -14,7 +14,6 @@ const handleFetchConversation = payload => {
     } = payload;
     const onGetSuccess = data => {
       let {error, conversation} = data;
-      console.log('handleFetchConversation: ', conversation)
       if (error) {
         return handleError({error, onEror});
       }

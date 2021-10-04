@@ -1270,9 +1270,11 @@ const sharedStyles = StyleSheet.create({
   verificationCodeCell: {
     width: windowWidth / 6 - 20,
     height: windowWidth / 6 - 20,
-    // lineHeight: 38,
+    lineHeight: windowWidth / 6 - 20 - 2,
+    color: 'rgba(0,0,0,.6)',
     fontSize: 24,
     borderWidth: 1,
+    borderRadius: 10,
     borderColor: 'rgba(0,0,0,0.1)',
     textAlign: 'center',
     marginBottom: 20,
@@ -1280,10 +1282,13 @@ const sharedStyles = StyleSheet.create({
   verificationCodeFocusCell: {
     borderColor: '#000',
   },
+  resendCodeButtonText: {
+    color: 'rgba(0,0,0,.6)',
+  },
   verificationTitleSubTitle: {
     fontWeight: '400',
     fontSize: 16,
-    color: 'rgba(0,0,0,.9)',
+    color: 'rgba(0,0,0,.6)',
     marginVertical: 30,
   },
   verificationIcon: {

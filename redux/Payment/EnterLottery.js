@@ -24,7 +24,6 @@ const handleEnterLottery = payload => {
     const onEnterLotterySuccess = data => {
       invoke(payload, 'onSuccess');
       const {error, updatedAd} = data;
-      console.log('updated ADDDD: ', updatedAd);
       if (error) {
         return handleError({error, onError});
       }

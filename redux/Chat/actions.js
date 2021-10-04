@@ -26,13 +26,11 @@ const handleInitChatSocketCommunication = payload => {
     const {userId} = payload;
     if (userId) {
       const isSocketInitiated = getState().chatReducer.isSocketInitiated;
-      console.log('isSocketInitiated: ', isSocketInitiated);
       if (!isSocketInitiated) {
         socket = SocketIOClient(apiRequest.apiUri);
         socket.open();
         socket.connect();
         socket.on('connect', () => {
-          console.log('connected');
           return dispatch({
             type: chatActions.initChatSocketCommunication,
             payload: true,
@@ -77,7 +75,6 @@ const handleSendChatMessage = payload => {
       to,
       onEror,
     } = payload;
-    console.log('handleSendChatMessage: ', payload);
     socket.emit('chatMessage', {
       from,
       to,
