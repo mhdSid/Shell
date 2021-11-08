@@ -12,17 +12,20 @@ const persistConfig = {
   // Storage Method (React Native)
   storage: AsyncStorage,
   // Whitelist (Save Specific Reducers)
-  whitelist: ['authReducer', 'settingsReducer'],
-  blackList: [
-    'homeReducer',
+  whitelist: [
+    'authReducer',
+    'settingsReducer',
     'lotteriesReducer',
+    'chatReducer',
+    'homeReducer',
+    'receiveLotteryReducer',
+    'shipLotteryReducer',
+  ],
+  blackList: [
     'lotteryDetailsReducer',
     'searchReducer',
     'uploadProgressReducer',
     'lotteryResultReducer',
-    'receiveLotteryReducer',
-    'shipLotteryReducer',
-    'chatReducer',
   ],
   // Blacklist (Don't Save Specific Reducers)
 };
