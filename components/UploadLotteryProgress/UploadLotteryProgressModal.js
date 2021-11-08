@@ -9,9 +9,10 @@ import {connect} from 'react-redux';
 import {getProgressItemsSelector} from './Selectors';
 import {VirtualizedList} from 'react-native';
 import ListItemCommon from '../Home/ListItem';
+import { getLangSelector } from '../Settings/Selectors';
 
 const UploadLotteryProgressModal = props => {
-  const {progressItems} = props;
+  const {progressItems, lang} = props;
 
   const [loading] = useState(false);
 
@@ -40,7 +41,7 @@ const UploadLotteryProgressModal = props => {
           <Toolbar
             style={{container: sharedStyles.toolbarContainer}}
             leftElement="arrow-back"
-            centerElement={uploadAdProgress.uploading}
+            centerElement={uploadAdProgress[lang].uploading}
             onLeftElementPress={handleCloseModal}
           />
           {Array.isArray(progressItems) && progressItems.length ? (
@@ -61,7 +62,7 @@ const UploadLotteryProgressModal = props => {
           ) : (
             <View style={sharedStyles.homeEmptySearchResultsView}>
               <Text style={sharedStyles.uploadProgressModalText}>
-                {uploadAdProgress.noItems}
+                {uploadAdProgress[lang].noItems}
               </Text>
             </View>
           )}
@@ -73,11 +74,13 @@ const UploadLotteryProgressModal = props => {
 
 UploadLotteryProgressModal.propTypes = {
   onClose: PropTypes.func,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
   return {
     progressItems: getProgressItemsSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

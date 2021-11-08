@@ -17,9 +17,10 @@ import {
 } from './Selectors';
 import {Dropdown} from 'react-native-material-dropdown';
 import TermsAndPrivacyPolicyModal from '../Settings/TermsAndPrivacyPolicyModal';
+import { getLangSelector } from '../Settings/Selectors';
 
 const SignUp = props => {
-  const {email, passwordHash, verificationCode} = props;
+  const {email, passwordHash, verificationCode, lang} = props;
   const [loading, setLoading] = useState(false);
   const [userDataChanged, setUserDataChanged] = useState(false);
   const [cityChanged, setCityChanged] = useState(false);
@@ -106,26 +107,26 @@ const SignUp = props => {
           style={{
             container: sharedStyles.toolbarContainerPadding,
           }}
-          centerElement={profile.shellSignUp}
+          centerElement={profile[lang].shellSignUp}
           leftElement={<Icon color="white" name="perm-identity" />}
         />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View
             style={[sharedStyles.loginContainer, sharedStyles.signUpContainer]}>
-            <Text style={sharedStyles.label}>{profile.prefecture}</Text>
+            <Text style={sharedStyles.label}>{profile[lang].prefecture}</Text>
             <View style={sharedStyles.dropdownView}>
               <Dropdown
-                label={profile.enterPrefecture}
+                label={profile[lang].enterPrefecture}
                 data={prefecturesDropdownData}
                 onChangeText={prefectureOnChangeText}
                 selectedItemColor={'rgba(0, 0, 0, .87)'}
                 baseColor={'rgba(0,0,0,0.25)'}
               />
             </View>
-            <Text style={sharedStyles.label}>{profile.city}</Text>
+            <Text style={sharedStyles.label}>{profile[lang].city}</Text>
             <View style={sharedStyles.dropdownView}>
               <Dropdown
-                label={profile.enterCity}
+                label={profile[lang].enterCity}
                 selectedItemColor={'rgba(0, 0, 0, .87)'}
                 baseColor={'rgba(0,0,0,0.25)'}
                 data={cityDropdownData}
@@ -133,7 +134,7 @@ const SignUp = props => {
               />
             </View>
             <Checkbox
-              label={profile.agreePriacyPolicy}
+              label={profile[lang].agreePriacyPolicy}
               checked={agreedOnPrivacyPolicy}
               value={true}
               onCheck={onCheckPrivacyPolicy}
@@ -143,7 +144,7 @@ const SignUp = props => {
                 disabled={loading || !userDataChanged}
                 raised={true}
                 primary
-                text={profile.signUp}
+                text={profile[lang].signUp}
                 style={{
                   container: sharedStyles.mainButtonContainer,
                 }}
@@ -163,6 +164,7 @@ SignUp.propTypes = {
   verificationCode: PropTypes.string,
   login: PropTypes.func,
   logout: PropTypes.func,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
@@ -170,6 +172,7 @@ const mapStateToProps = state => {
     email: getEmailSelector(state),
     passwordHash: getPasswordHashSelector(state),
     verificationCode: getVerificationCodeSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

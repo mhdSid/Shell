@@ -10,7 +10,7 @@ const handleFetchUserCreatedLotteries = payload => {
     const onGetMyLotteriesSuccess = data => {
       const {myLotteries: userCreatedLotteries, error, nextPageToken} = data;
       if (error) {
-        return handleError({error, onError});
+        return handleError({error, onError}, getState);
       }
       dispatch({
         type: lotteriesActions.setUserCreatedLotteriesPageToken,
@@ -28,7 +28,7 @@ const handleFetchUserCreatedLotteries = payload => {
       return getUserCreatedLotteries({userId, pageToken, cancelTag}).then(
         onGetMyLotteriesSuccess,
         error => {
-          return handleError({error, onError});
+          return handleError({error, onError}, getState);
         },
       );
     }

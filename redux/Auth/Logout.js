@@ -11,7 +11,7 @@ import {settingsActions} from '../Settings/actions';
 import {shipLotteryActions} from '../ShipLottery/actions';
 
 const handleLogout = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const {onError} = payload;
     /*
      * Logout Handler
@@ -19,7 +19,7 @@ const handleLogout = payload => {
     const onLogoutSuccess = data => {
       const {error} = data;
       if (error) {
-        return handleError({error, onError, dispatch});
+        return handleError({error, onError, dispatch}, getState);
       }
       invoke(payload, 'onSuccess');
       dispatch({
@@ -55,7 +55,7 @@ const handleLogout = payload => {
       });
     };
     return logout().then(onLogoutSuccess, error => {
-      return handleError({error, onError, dispatch});
+      return handleError({error, onError, dispatch}, getState);
     });
   };
 };

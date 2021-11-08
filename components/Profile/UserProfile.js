@@ -13,6 +13,7 @@ import {handleLogout} from '../../redux/Auth/Logout';
 import {getUserSelector} from './Selectors';
 import {handleDisconnectChatSocketCommunication} from '../../redux/Chat/actions';
 import FastImage from 'react-native-fast-image';
+import { getLangSelector } from '../Settings/Selectors';
 
 let UserLikedLotteries = null;
 let UserCreatedLotteries = null;
@@ -25,7 +26,7 @@ let UserReceivedLotteries = null;
 let UserShippedLotteries = null;
 
 const UserProfile = props => {
-  const {user} = props;
+  const {user, lang} = props;
   const [userProfileModal, setUserProfileModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const {gameStatus: userGameStatus, gamePoints: userGamePoints} = user;
@@ -38,8 +39,8 @@ const UserProfile = props => {
     ActionSheetIOS.showActionSheetWithOptions(
       {
         options: [
-          userProfileLogoutActions.cancel,
-          userProfileLogoutActions.logout,
+          userProfileLogoutActions[lang].cancel,
+          userProfileLogoutActions[lang].logout,
         ],
         destructiveButtonIndex: 1,
         cancelButtonIndex: 0,
@@ -82,13 +83,13 @@ const UserProfile = props => {
       if (!Notifications) {
         Notifications = require('../Notifications').default;
       }
-      return <Notifications onClose={onModalClose} />;
+      return <Notifications lang={lang} onClose={onModalClose} />;
     },
     about: () => {
       if (!About) {
         About = require('../About').default;
       }
-      return <About onClose={onModalClose} />;
+      return <About lang={lang} onClose={onModalClose} />;
     },
     userCreatedLotteries: () => {
       if (!UserCreatedLotteries) {
@@ -197,52 +198,52 @@ const UserProfile = props => {
               items={[
                 {
                   icon: 'help',
-                  value: profile.howToUseTheApp,
+                  value: profile[lang].howToUseTheApp,
                   onPress: handleShowModal('about'),
                 },
                 {
                   icon: 'bookmark-border',
-                  value: profile.notifications,
+                  value: profile[lang].notifications,
                   onPress: handleShowModal('notifications'),
                 },
                 {
                   icon: 'grade',
-                  value: profile.myCreatedLotteries,
+                  value: profile[lang].myCreatedLotteries,
                   onPress: handleShowModal('userCreatedLotteries'),
                 },
                 {
                   icon: 'favorite',
-                  value: profile.myLikedLotteries,
+                  value: profile[lang].myLikedLotteries,
                   onPress: handleShowModal('userLikedLotteries'),
                 },
                 {
                   icon: 'markunread-mailbox',
-                  value: profile.myReceivedLotteries,
+                  value: profile[lang].myReceivedLotteries,
                   onPress: handleShowModal('userReceivedLotteries'),
                 },
                 {
                   icon: 'local-shipping',
-                  value: profile.myShippedLotteries,
+                  value: profile[lang].myShippedLotteries,
                   onPress: handleShowModal('userShippedLotteries'),
                 },
               ]}
             />
             <Drawer.Section
-              title={profile.personal}
+              title={profile[lang].personal}
               items={[
                 {
                   icon: 'credit-card',
-                  value: profile.paymentInformation,
+                  value: profile[lang].paymentInformation,
                   onPress: handleShowModal('paymentInformation'),
                 },
                 {
                   icon: 'settings',
-                  value: profile.settings,
+                  value: profile[lang].settings,
                   onPress: handleShowModal('settings'),
                 },
                 {
                   icon: 'exit-to-app',
-                  value: profile.logout,
+                  value: profile[lang].logout,
                   onPress: handleLogoutPress,
                 },
               ]}
@@ -257,11 +258,13 @@ const UserProfile = props => {
 UserProfile.propTypes = {
   user: PropTypes.object,
   logout: PropTypes.func,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
   return {
     user: getUserSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

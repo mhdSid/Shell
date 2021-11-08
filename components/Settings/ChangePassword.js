@@ -19,9 +19,10 @@ import {connect} from 'react-redux';
 import {getUserSelector} from '../UpdateUser/Selectors';
 import sha256 from 'crypto-js/sha256';
 import {password as hashkey} from '../../services/Encrypt';
+import { getLangSelector } from './Selectors';
 
 const ChangePassword = props => {
-  const {user} = props;
+  const {user, lang} = props;
   const currentPasswordRef = createRef();
   const newPasswordRef = createRef();
   const [currentPasswordChanged, setCurrentPasswordChanged] = useState(false);
@@ -56,7 +57,7 @@ const ChangePassword = props => {
       setCurrentPasswordChanged(false);
       setErrors({
         ...errors,
-        currentPassword: validationMessages.changePassword.currentPassword,
+        currentPassword: validationMessages[lang].changePassword.currentPassword,
       });
     }
   };
@@ -79,7 +80,7 @@ const ChangePassword = props => {
       setNewPasswordChanged(false);
       setErrors({
         ...errors,
-        newPassword: validationMessages.changePassword.newPassword,
+        newPassword: validationMessages[lang].changePassword.newPassword,
       });
     }
   };
@@ -118,7 +119,7 @@ const ChangePassword = props => {
           <Toolbar
             style={{container: sharedStyles.toolbarContainerPaddingRight}}
             leftElement="arrow-back"
-            centerElement={settings.changePassword}
+            centerElement={settings[lang].changePassword}
             onLeftElementPress={handleCloseModal}
             // rightElement={
             //   <Button
@@ -132,7 +133,7 @@ const ChangePassword = props => {
             //       text: {color: '#b69cf6'},
             //     }}
             //     raised
-            //     text={updateUserr.save}
+            //     text={updateUserr[lang].save}
             //     icon="done-all"
             //   />
             // }
@@ -151,10 +152,10 @@ const ChangePassword = props => {
                 ]}>
                 <View style={sharedStyles.mobileContainer}>
                   <Text style={sharedStyles.label}>
-                    {updateUserr.currentPassword}
+                    {updateUserr[lang].currentPassword}
                   </Text>
                   <TextField
-                    placeholder={updateUserr.currentPassword}
+                    placeholder={updateUserr[lang].currentPassword}
                     placeholderTextColor={'rgba(0,0,0,0.3)'}
                     secureTextEntry={true}
                     autoCapitalize={false}
@@ -170,10 +171,10 @@ const ChangePassword = props => {
                 </View>
                 <View style={sharedStyles.mobileContainer}>
                   <Text style={sharedStyles.label}>
-                    {updateUserr.newPassword}
+                    {updateUserr[lang].newPassword}
                   </Text>
                   <TextField
-                    placeholder={updateUserr.newPassword}
+                    placeholder={updateUserr[lang].newPassword}
                     placeholderTextColor={'rgba(0,0,0,0.3)'}
                     secureTextEntry={true}
                     autoCapitalize={false}
@@ -197,7 +198,7 @@ const ChangePassword = props => {
                     }}
                     raised={true}
                     primary
-                    text={updateUserr.save}
+                    text={updateUserr[lang].save}
                     onPress={handleUpdateUser}
                   />
                 </View>
@@ -214,11 +215,13 @@ ChangePassword.propTypes = {
   user: PropTypes.object,
   onClose: PropTypes.func,
   updateUserAction: PropTypes.func,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
   return {
     user: getUserSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

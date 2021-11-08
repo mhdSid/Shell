@@ -7,13 +7,13 @@ import {chatActions} from '../Chat/actions';
 import {lotteriesActions} from '../Lotteries/actions';
 
 const handleMarkLotteryAsReceived = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const {onError, lotteryId, cancelTag} = payload;
 
     const onGetSuccess = data => {
       const {lottery, error} = data;
       if (error) {
-        return handleError({error, onError});
+        return handleError({error, onError}, getState);
       }
       invoke(payload, 'onSuccess');
       if (lottery) {
@@ -38,7 +38,7 @@ const handleMarkLotteryAsReceived = payload => {
     return markLotteryAsReceived({lotteryId, cancelTag}).then(
       onGetSuccess,
       error => {
-        return handleError({error, onError});
+        return handleError({error, onError}, getState);
       },
     );
   };

@@ -5,7 +5,7 @@ import {errors} from '../../Constants/Texts';
 import {Alert} from 'react-native';
 
 const handleVerifyUser = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const {email, passwordHash, verificationCode, onError} = payload;
     /*
      * Verify user Handler
@@ -14,7 +14,8 @@ const handleVerifyUser = payload => {
     const onVerifyUserSuccess = data => {
       const {error, user: authUser} = data;
       if (error) {
-        const message = (error && error.message) || errors.error;
+        const lang = getState().settingsReducer.lang;
+        const message = (error && error.message) || errors[lang].error;
         invoke(payload, 'onError');
         if (message) {
           Alert.alert(message);
@@ -36,7 +37,7 @@ const handleVerifyUser = payload => {
       return verify({email, passwordHash, verificationCode}).then(
         onVerifyUserSuccess,
         error => {
-          return handleError({error, onError, dispatch});
+          return handleError({error, onError, dispatch}, getState);
         },
       );
     }

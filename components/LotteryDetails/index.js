@@ -43,6 +43,7 @@ import {handleCancelLottery} from '../../redux/LotteryDetails/CancelLottery';
 import {Alert} from 'react-native';
 import Confetti from 'react-native-confetti';
 import {confettiColors} from '../../Constants/Colors';
+import { getLangSelector } from '../Settings/Selectors';
 
 let ImagesViewer = null;
 let Payment = null;
@@ -61,6 +62,7 @@ const LotteryDetails = props => {
     userLotteries,
     // lotteryUsersData,
     lotteryDetails,
+    lang,
   } = props;
   const {
     name,
@@ -196,13 +198,13 @@ const LotteryDetails = props => {
     setShowModal(null);
   };
   const handleActionPress = {
-    [lotteryDetailsTexts.actionOptions.share]: async () => {
+    [lotteryDetailsTexts[lang].actionOptions.share]: async () => {
       // Alert.alert(
-      //   lotteryDetailsTexts.shareLottery,
-      //   lotteryDetailsTexts.areYouSureShare,
+      //   lotteryDetailsTexts[lang].shareLottery,
+      //   lotteryDetailsTexts[lang].areYouSureShare,
       //   [
       //     {
-      //       text: lotteryDetailsTexts.areYouSureShare,
+      //       text: lotteryDetailsTexts[lang].areYouSureShare,
       //       onPress: async () => {
       //         // invoke(props, 'handleShareLottery', {
       //         //   userId: authUser.id,
@@ -212,7 +214,7 @@ const LotteryDetails = props => {
       //       style: 'default',
       //     },
       //     {
-      //       text: lotteryDetailsTexts.close,
+      //       text: lotteryDetailsTexts[lang].close,
       //       style: 'cancel',
       //     },
       //   ],
@@ -233,13 +235,13 @@ const LotteryDetails = props => {
         }
       } catch (error) {}
     },
-    [lotteryDetailsTexts.actionOptions.chat]: () => {
+    [lotteryDetailsTexts[lang].actionOptions.chat]: () => {
       if (!ChatModal) {
         ChatModal = require('../Chat').default;
       }
       setShowModal('chatModal');
     },
-    [lotteryDetailsTexts.actionOptions.receive]: () => {
+    [lotteryDetailsTexts[lang].actionOptions.receive]: () => {
       if (!ReceiveLotteryModal) {
         ReceiveLotteryModal = require('../ReceiveLottery/ReceiveLotteryInfoModal')
           .default;
@@ -247,7 +249,7 @@ const LotteryDetails = props => {
       invoke(props, 'handleShowReceiveLotteryModal', lotteryDetails || item);
       setShowModal('receiveLotteryModal');
     },
-    [lotteryDetailsTexts.actionOptions.ship]: () => {
+    [lotteryDetailsTexts[lang].actionOptions.ship]: () => {
       if (!ShipLotteryModal) {
         ShipLotteryModal = require('../ShipLotteries/ShipLotteryInfoModal')
           .default;
@@ -255,14 +257,14 @@ const LotteryDetails = props => {
       invoke(props, 'handleShowShipLotteryModal', lotteryDetails || item);
       setShowModal('shipLotteryModal');
     },
-    [lotteryDetailsTexts.actionOptions.cancel]: () => {
+    [lotteryDetailsTexts[lang].actionOptions.cancel]: () => {
       if (authUser && authUser.id) {
         Alert.alert(
-          lotteryDetailsTexts.cancelLottery,
-          lotteryDetailsTexts.areYouSureCancel,
+          lotteryDetailsTexts[lang].cancelLottery,
+          lotteryDetailsTexts[lang].areYouSureCancel,
           [
             {
-              text: lotteryDetailsTexts.cancelThisLottery,
+              text: lotteryDetailsTexts[lang].cancelThisLottery,
               onPress: () => {
                 invoke(props, 'handleCancelLottery', {
                   userId: authUser && authUser.id,
@@ -272,21 +274,21 @@ const LotteryDetails = props => {
               style: 'default',
             },
             {
-              text: lotteryDetailsTexts.close,
+              text: lotteryDetailsTexts[lang].close,
               style: 'cancel',
             },
           ],
         );
       }
     },
-    [lotteryDetailsTexts.actionOptions.readd]: () => {
+    [lotteryDetailsTexts[lang].actionOptions.readd]: () => {
       if (authUser && authUser.id) {
         Alert.alert(
-          lotteryDetailsTexts.reAddLottery,
-          lotteryDetailsTexts.areYouSureReAdd,
+          lotteryDetailsTexts[lang].reAddLottery,
+          lotteryDetailsTexts[lang].areYouSureReAdd,
           [
             {
-              text: lotteryDetailsTexts.reAddThisLottery,
+              text: lotteryDetailsTexts[lang].reAddThisLottery,
               onPress: () => {
                 invoke(props, 'handleCancelLottery', {
                   userId: authUser && authUser.id,
@@ -297,20 +299,20 @@ const LotteryDetails = props => {
               style: 'default',
             },
             {
-              text: lotteryDetailsTexts.close,
+              text: lotteryDetailsTexts[lang].close,
               style: 'cancel',
             },
           ],
         );
       }
     },
-    [lotteryDetailsTexts.actionOptions.result]: () => {
+    [lotteryDetailsTexts[lang].actionOptions.result]: () => {
       if (!LotteryResultModal) {
         LotteryResultModal = require('../LotteryResult').default;
       }
       setShowModal('lotteryResultModal');
     },
-    [lotteryDetailsTexts.actionOptions.like]: () => {
+    [lotteryDetailsTexts[lang].actionOptions.like]: () => {
       if (authUser && authUser.id) {
         invoke(props, 'handleLikeLottery', {
           userId: authUser && authUser.id,
@@ -320,7 +322,7 @@ const LotteryDetails = props => {
         });
       }
     },
-    [lotteryDetailsTexts.actionOptions.dislike]: () => {
+    [lotteryDetailsTexts[lang].actionOptions.dislike]: () => {
       if (authUser && authUser.id) {
         invoke(props, 'handleDislikeLottery', {
           userId: authUser && authUser.id,
@@ -330,7 +332,7 @@ const LotteryDetails = props => {
         });
       }
     },
-    [lotteryDetailsTexts.actionOptions.win]: handleEnterDraw,
+    [lotteryDetailsTexts[lang].actionOptions.win]: handleEnterDraw,
   };
   const handleEditLottery = () => {
     if (!EditLotteryModal) {
@@ -435,7 +437,7 @@ const LotteryDetails = props => {
                       container: sharedStyles.mainButtonContainer,
                       text: {color: '#b69cf6'},
                     }}
-                    text={lotteryDetailsTexts.enterDraw}
+                    text={lotteryDetailsTexts[lang].enterDraw}
                     icon="shop"
                   />
                 ) : null}
@@ -468,14 +470,14 @@ const LotteryDetails = props => {
                   name={available ? 'verified-user' : 'close'}
                 />
                 <Text style={sharedStyles.userDetailsText}>
-                  {lotteryDetailsTexts.availability}
+                  {lotteryDetailsTexts[lang].availability}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
                 <Text style={sharedStyles.aboutFirstSectionText}>
                   {available
-                    ? lotteryDetailsTexts.lotteryAvailable
-                    : lotteryDetailsTexts.lotteryNotAvailable}
+                    ? lotteryDetailsTexts[lang].lotteryAvailable
+                    : lotteryDetailsTexts[lang].lotteryNotAvailable}
                 </Text>
               </View>
               {cancelled ? (
@@ -483,13 +485,14 @@ const LotteryDetails = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="red" name="cancel" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.cancelled}
+                      {lotteryDetailsTexts[lang].cancelled}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
                     <Text style={sharedStyles.aboutFirstSectionText}>
-                      {`${lotteryDetailsTexts.cancelledOn}${formatDate(
+                      {`${lotteryDetailsTexts[lang].cancelledOn}${formatDate(
                         cancelDate,
+                        lang,
                       )}`}
                     </Text>
                   </View>
@@ -498,7 +501,7 @@ const LotteryDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="dns" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {lotteryDetailsTexts.name}
+                  {lotteryDetailsTexts[lang].name}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -507,7 +510,7 @@ const LotteryDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="description" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {lotteryDetailsTexts.description}
+                  {lotteryDetailsTexts[lang].description}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -518,7 +521,7 @@ const LotteryDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="exposure" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {lotteryDetailsTexts.condition}
+                  {lotteryDetailsTexts[lang].condition}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -529,7 +532,7 @@ const LotteryDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="class" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {lotteryDetailsTexts.category}
+                  {lotteryDetailsTexts[lang].category}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -542,7 +545,7 @@ const LotteryDetails = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="local-atm" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.totalPrice}
+                      {lotteryDetailsTexts[lang].totalPrice}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -554,7 +557,7 @@ const LotteryDetails = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="credit-card" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.collectedPrice}
+                      {lotteryDetailsTexts[lang].collectedPrice}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -566,7 +569,7 @@ const LotteryDetails = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="monetization-on" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.payToWin}
+                      {lotteryDetailsTexts[lang].payToWin}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -578,12 +581,12 @@ const LotteryDetails = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="group-add" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.currentLotteryUsers}
+                      {lotteryDetailsTexts[lang].currentLotteryUsers}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
                     <Text style={sharedStyles.aboutFirstSectionText}>
-                      {lotteryDetailsTexts.currentLotteryUsersNumber(
+                      {lotteryDetailsTexts[lang].currentLotteryUsersNumber(
                         lotteryUsersLength,
                       )}
                     </Text>
@@ -591,7 +594,7 @@ const LotteryDetails = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="green" name="star" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.winner}
+                      {lotteryDetailsTexts[lang].winner}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -601,7 +604,7 @@ const LotteryDetails = props => {
                     ) : null}
                     {!usersDataLoading && (!winnerUserData || !winnerUserId) ? (
                       <Text style={sharedStyles.aboutFirstSectionText}>
-                        {lotteryDetailsTexts.inProgress}
+                        {lotteryDetailsTexts[lang].inProgress}
                       </Text>
                     ) : null}
                   </View>
@@ -610,18 +613,18 @@ const LotteryDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="today" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {lotteryDetailsTexts.publishDate}
+                  {lotteryDetailsTexts[lang].publishDate}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
                 <Text style={sharedStyles.aboutFirstSectionText}>
-                  {formatDate(publishDate)}
+                  {formatDate(publishDate, lang)}
                 </Text>
               </View>
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {lotteryDetailsTexts.location}
+                  {lotteryDetailsTexts[lang].location}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -632,7 +635,7 @@ const LotteryDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="person" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {lotteryDetailsTexts.user}
+                  {lotteryDetailsTexts[lang].user}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -645,7 +648,7 @@ const LotteryDetails = props => {
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon color="rgba(0,0,0,.55)" name="collections" />
                 <Text style={sharedStyles.userDetailsText}>
-                  {lotteryDetailsTexts.userLotteries}
+                  {lotteryDetailsTexts[lang].userLotteries}
                 </Text>
               </View>
               <View style={sharedStyles.aboutFirstSectionTextContainerNoFlex}>
@@ -670,7 +673,7 @@ const LotteryDetails = props => {
                 )}
                 {!userLotteriesLoading && !userLotteries && (
                   <Text style={sharedStyles.userDetailsText}>
-                    {lotteryDetailsTexts.emptyUserLotteries}
+                    {lotteryDetailsTexts[lang].emptyUserLotteries}
                   </Text>
                 )}
               </View>
@@ -680,7 +683,7 @@ const LotteryDetails = props => {
             <View style={sharedStyles.lotteryDetailsBottomToolbar}>
               {isLotteryPoster ? (
                 <>
-                  {lotteryDetailsTexts.lotteryPosterActions.map(userAction => (
+                  {lotteryDetailsTexts[lang].lotteryPosterActions.map(userAction => (
                     <Button
                       primary
                       raised
@@ -694,7 +697,7 @@ const LotteryDetails = props => {
                     />
                   ))}
                   {winnerUserId
-                    ? lotteryDetailsTexts.shipActions.map(shipAction => (
+                    ? lotteryDetailsTexts[lang].shipActions.map(shipAction => (
                         <Button
                           primary
                           raised
@@ -709,7 +712,7 @@ const LotteryDetails = props => {
                       ))
                     : null}
                   {!cancelled
-                    ? lotteryDetailsTexts.cancelActions.map(cancelAction => (
+                    ? lotteryDetailsTexts[lang].cancelActions.map(cancelAction => (
                         <Button
                           primary
                           raised
@@ -724,7 +727,7 @@ const LotteryDetails = props => {
                       ))
                     : null}
                   {cancelled
-                    ? lotteryDetailsTexts.reAddActions.map(reAddAction => (
+                    ? lotteryDetailsTexts[lang].reAddActions.map(reAddAction => (
                         <Button
                           primary
                           raised
@@ -740,7 +743,7 @@ const LotteryDetails = props => {
                     : null}
                 </>
               ) : isWinner && !cancelled && available ? (
-                lotteryDetailsTexts.lotteryWinnerActions.map(winnerAction => (
+                lotteryDetailsTexts[lang].lotteryWinnerActions.map(winnerAction => (
                   <Button
                     primary
                     raised
@@ -754,7 +757,7 @@ const LotteryDetails = props => {
                   />
                 ))
               ) : isVisitor && !cancelled && available ? (
-                lotteryDetailsTexts.visitorActions.map(visitorAction => (
+                lotteryDetailsTexts[lang].visitorActions.map(visitorAction => (
                   <Button
                     primary
                     raised
@@ -764,7 +767,7 @@ const LotteryDetails = props => {
                     }}
                     disabled={
                       visitorAction.action ===
-                        lotteryDetailsTexts.actionOptions.win &&
+                        lotteryDetailsTexts[lang].actionOptions.win &&
                       `${currentCollectedPrice}` === `${price}`
                     }
                     icon={visitorAction.icon}
@@ -787,7 +790,7 @@ const LotteryDetails = props => {
                   }}
                   icon={
                     <Icon
-                      name={lotteryDetailsTexts.dislike.icon}
+                      name={lotteryDetailsTexts[lang].dislike.icon}
                       color="#e34977"
                       style={{marginRight: 7}}
                       size={25}
@@ -795,7 +798,7 @@ const LotteryDetails = props => {
                   }
                   text={''}
                   onPress={
-                    handleActionPress[lotteryDetailsTexts.dislike.action]
+                    handleActionPress[lotteryDetailsTexts[lang].dislike.action]
                   }
                 />
               ) : null}
@@ -809,9 +812,9 @@ const LotteryDetails = props => {
                   style={{
                     container: sharedStyles.bottomToolbarActionButtonContainer,
                   }}
-                  icon={lotteryDetailsTexts.like.icon}
+                  icon={lotteryDetailsTexts[lang].like.icon}
                   text={''}
-                  onPress={handleActionPress[lotteryDetailsTexts.like.action]}
+                  onPress={handleActionPress[lotteryDetailsTexts[lang].like.action]}
                 />
               ) : null}
             </View>
@@ -836,6 +839,7 @@ LotteryDetails.propTypes = {
   winnerUserData: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
   userLotteries: PropTypes.oneOfType([PropTypes.array, PropTypes.any]),
   lotteryDetails: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
@@ -847,6 +851,7 @@ const mapStateToProps = state => {
     winnerUserData: getWinnerUserDataSelector(state),
     userLotteries: getUserLotteriesSelector(state),
     lotteryDetails: getLotteryDetailsSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

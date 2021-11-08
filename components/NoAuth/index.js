@@ -4,8 +4,10 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {Button} from 'react-native-material-ui';
 import {navigate} from '../MainContainer';
 import {noAuth, loginSingup} from '../../Constants/Texts';
+import PropTypes from 'prop-types';
 
-const NoAuth = () => {
+const NoAuth = props => {
+  const {lang} = props;
   const navigateToAuth = () => {
     navigate('profile')();
   };
@@ -17,18 +19,22 @@ const NoAuth = () => {
         sharedStyles.importAdNoAuthContainer,
       ]}>
       <Text style={[sharedStyles.label, sharedStyles.verificationLabel]}>
-        {noAuth.loginSingup}
+        {noAuth[lang].loginSingup}
       </Text>
       <View style={sharedStyles.loginBtn}>
         <Button
           raised={true}
           primary
-          text={loginSingup}
+          text={loginSingup[lang].loginSingup}
           onPress={navigateToAuth}
         />
       </View>
     </View>
   );
+};
+
+NoAuth.propTypes = {
+  lang: PropTypes.string,
 };
 
 export default NoAuth;

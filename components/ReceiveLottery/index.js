@@ -17,9 +17,10 @@ import {showReceiveLotteryModal} from '../../redux/ReceiveLottery/actions';
 import ReceiveLotteryInfoModal from './ReceiveLotteryInfoModal';
 import {getUserWonLotteriesSelector} from './Selectors';
 import {handleFetchUserWonLotteries} from '../../redux/ReceiveLottery/FetchUserWonLotteries';
+import { getLangSelector } from '../Settings/Selectors';
 
 const ReceiveLotteryModal = props => {
-  const {userWonLotteries: lotteries, authUserId} = props;
+  const {userWonLotteries: lotteries, authUserId, lang} = props;
   const [loading, setLoading] = useState(true);
   const [filteredLotteries, setFilteredLotteries] = useState(null);
   const [cancelHttpTag] = useState(20);
@@ -132,7 +133,7 @@ const ReceiveLotteryModal = props => {
               ],
             }}
             leftElement="arrow-back"
-            centerElement={receiveLotteryTexts.receiveLottery}
+            centerElement={receiveLotteryTexts[lang].receiveLottery}
             onLeftElementPress={handleCloseModal}
           />
           {isShowReceiveLotteryModal ? (
@@ -155,7 +156,7 @@ const ReceiveLotteryModal = props => {
                   fontSize: 16,
                 },
               }}
-              label={receiveLotteryTexts.receivedLotteries}
+              label={receiveLotteryTexts[lang].receivedLotteries}
               key="received"
               active={activeView === 'received'}
               onPress={handleSetActiveView('received')}
@@ -173,7 +174,7 @@ const ReceiveLotteryModal = props => {
                 },
               }}
               key="notReceived"
-              label={receiveLotteryTexts.notReceivedLotteries}
+              label={receiveLotteryTexts[lang].notReceivedLotteries}
               active={activeView === 'notReceived'}
               onPress={handleSetActiveView('notReceived')}
             />
@@ -183,7 +184,9 @@ const ReceiveLotteryModal = props => {
           loading
             ? loadingPopup
             : null}
-          <Filter onFilterChange={handleFilterChange} />
+          {userWonLotteries && userWonLotteries.length ? (
+            <Filter lang={lang} onFilterChange={handleFilterChange} />
+          ) : null}
           <VirtualizedList
             initialNumToRender={10}
             windowSize={2}
@@ -204,8 +207,8 @@ const ReceiveLotteryModal = props => {
                 <View style={sharedStyles.emptySearchResultsView}>
                   <Text style={sharedStyles.emptySearchResultsText}>
                     {activeView === 'received'
-                      ? receiveLotteryTexts.noReceivedLotteries
-                      : lotteriesTexts.emptyLotteries}
+                      ? receiveLotteryTexts[lang].noReceivedLotteries
+                      : lotteriesTexts[lang].emptyLotteries}
                   </Text>
                 </View>
               ) : null
@@ -220,12 +223,14 @@ const ReceiveLotteryModal = props => {
 ReceiveLotteryModal.propTypes = {
   userWonLotteries: PropTypes.any,
   authUserId: PropTypes.string,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
   return {
     userWonLotteries: getUserWonLotteriesSelector(state),
     authUserId: getUserIdSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

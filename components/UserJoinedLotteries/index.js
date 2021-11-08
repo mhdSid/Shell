@@ -7,7 +7,10 @@ import isUndefined from 'lodash/isUndefined';
 import {Loading, loadingPopup} from '../Loading';
 import PropTypes from 'prop-types';
 import {Toolbar} from 'react-native-material-ui';
-import {lottteries as lotteriesTexts} from '../../Constants/Texts';
+import {
+  lottteries as lotteriesTexts,
+  noAuth as noAuthTexts,
+} from '../../Constants/Texts';
 import {
   getLoggedInSelector,
   getUserSelector,
@@ -27,6 +30,7 @@ import CardListItemRow from '../Home/CardListItemRow';
 import {getLotteryResultSelector} from '../LotteryResult/Selectors';
 import LotteryResultModal from '../LotteryResult';
 import cancellableFetch from 'react-native-cancelable-fetch';
+import { getLangSelector } from '../Settings/Selectors';
 
 const Lotteries = props => {
   const {
@@ -37,6 +41,7 @@ const Lotteries = props => {
     isList,
     isCard,
     lotteryResult,
+    lang,
   } = props;
   const [loading, setLoading] = useState(true);
   const [filteredLotteries, setFilteredLotteries] = useState(null);
@@ -154,14 +159,14 @@ const Lotteries = props => {
   }
 
   if (!loggedIn && !user) {
-    return <NoAuth />;
+    return <NoAuth text={noAuthTexts[lang].userJoinedLotteries} />;
   }
 
   return (
     <View style={sharedStyles.fullheightView}>
       <Toolbar
         style={{container: sharedStyles.toolbarContainer}}
-        centerElement={lotteriesTexts.lotteries}
+        centerElement={lotteriesTexts[lang].lotteries}
         rightElement={isCard ? 'view-list' : 'view-comfy'}
         onRightElementPress={changeViewStyle}
       />
@@ -171,7 +176,9 @@ const Lotteries = props => {
       loading
         ? loadingPopup
         : null}
-      <Filter onFilterChange={handleFilterChange} />
+      {userJoinedLotteries && userJoinedLotteries.length ? (
+        <Filter lang={lang} onFilterChange={handleFilterChange} />
+      ) : null}
       <VirtualizedList
         initialNumToRender={10}
         windowSize={2}
@@ -185,7 +192,7 @@ const Lotteries = props => {
           !loading ? (
             <View style={sharedStyles.emptySearchResultsView}>
               <Text style={sharedStyles.emptySearchResultsText}>
-                {lotteriesTexts.emptyLotteries}
+                {lotteriesTexts[lang].emptyLotteries}
               </Text>
             </View>
           ) : null
@@ -214,6 +221,7 @@ Lotteries.propTypes = {
   userJoinedLotteries: PropTypes.any,
   showLotteryResult: PropTypes.func,
   lotteryDetails: PropTypes.object,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
@@ -225,6 +233,7 @@ const mapStateToProps = state => {
     isList: getIsListSelector(state),
     isCard: getIsCardSelector(state),
     lotteryResult: getLotteryResultSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

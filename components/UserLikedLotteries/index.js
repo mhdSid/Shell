@@ -23,6 +23,7 @@ import {getLotteryResultSelector} from '../LotteryResult/Selectors';
 import LotteryResultModal from '../LotteryResult';
 import {loadingPopup} from '../Loading';
 import cancellableFetch from 'react-native-cancelable-fetch';
+import { getLangSelector } from '../Settings/Selectors';
 
 let LotteryDetails = null;
 
@@ -34,6 +35,7 @@ const UserLikedLotteries = props => {
     isCard,
     isList,
     lotteryResult,
+    lang,
   } = props;
   const [loading, setLoading] = useState(true);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
@@ -178,7 +180,7 @@ const UserLikedLotteries = props => {
           <Toolbar
             style={{container: sharedStyles.toolbarContainer}}
             leftElement="arrow-back"
-            centerElement={profile.myLikedLotteries}
+            centerElement={profile[lang].myLikedLotteries}
             onLeftElementPress={handleCloseModal}
             rightElement={isCard ? 'view-list' : 'view-comfy'}
             onRightElementPress={changeViewStyle}
@@ -189,7 +191,9 @@ const UserLikedLotteries = props => {
           loading
             ? loadingPopup
             : null}
-          <Filter onFilterChange={handleFilterChange} />
+          {userLikedLotteries && userLikedLotteries.length ? (
+            <Filter lang={lang} onFilterChange={handleFilterChange} />
+          ) : null}
           <VirtualizedList
             initialNumToRender={10}
             windowSize={2}
@@ -214,7 +218,7 @@ const UserLikedLotteries = props => {
               !loading ? (
                 <View style={sharedStyles.emptySearchResultsView}>
                   <Text style={sharedStyles.emptySearchResultsText}>
-                    {lotteriesTexts.emptyLotteries}
+                    {lotteriesTexts[lang].emptyLotteries}
                   </Text>
                 </View>
               ) : null
@@ -232,6 +236,7 @@ UserLikedLotteries.propTypes = {
   onClose: PropTypes.func,
   lotteryDetails: PropTypes.oneOfType([PropTypes.any, PropTypes.object]),
   lotteryResult: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
@@ -242,6 +247,7 @@ const mapStateToProps = state => {
     isList: getIsListSelector(state),
     isCard: getIsCardSelector(state),
     lotteryResult: getLotteryResultSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

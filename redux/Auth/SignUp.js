@@ -3,7 +3,7 @@ import {signup} from '../../services/auth';
 import invoke from 'lodash/invoke';
 
 const handleSignUp = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const {onError, newUser} = payload;
     const {verificationCode, email} = newUser;
     /*
@@ -12,7 +12,7 @@ const handleSignUp = payload => {
     const onSignupSuccess = data => {
       const {error, user} = data;
       if (error) {
-        return handleError({error, onError, dispatch});
+        return handleError({error, onError, dispatch}, getState);
       }
       const {
         verificationCode: authVerificationCode,
@@ -48,7 +48,7 @@ const handleSignUp = payload => {
       }
     };
     return signup(newUser).then(onSignupSuccess, error => {
-      return handleError({error, onError, dispatch});
+      return handleError({error, onError, dispatch}, getState);
     });
   };
 };

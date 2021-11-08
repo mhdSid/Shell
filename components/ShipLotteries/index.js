@@ -17,9 +17,10 @@ import ShipLotteryInfoModal from './ShipLotteryInfoModal';
 import {getUserCreatedWonLotteriesSelector} from './Selectors';
 import {handleFetchUserCreatedWonLotteries} from '../../redux/ShipLottery/FetchUserCreatedWonLotteries';
 import {showShipLotteryModal} from '../../redux/ShipLottery/actions';
+import { getLangSelector } from '../Settings/Selectors';
 
 const ShipLotteryModal = props => {
-  const {userCreatedWonLotteries: lotteries, authUserId} = props;
+  const {userCreatedWonLotteries: lotteries, authUserId, lang} = props;
   const [loading, setLoading] = useState(true);
   const [filteredLotteries, setFilteredLotteries] = useState(null);
   const [cancelHttpTag] = useState(20);
@@ -133,7 +134,7 @@ const ShipLotteryModal = props => {
               ],
             }}
             leftElement="arrow-back"
-            centerElement={shipLotteryTexts.shipLottery}
+            centerElement={shipLotteryTexts[lang].shipLottery}
             onLeftElementPress={handleCloseModal}
           />
           {isShowShipLotteryModal ? (
@@ -156,7 +157,7 @@ const ShipLotteryModal = props => {
                   fontSize: 16,
                 },
               }}
-              label={shipLotteryTexts.shippedLotteries}
+              label={shipLotteryTexts[lang].shippedLotteries}
               key="shipped"
               active={activeView === 'shipped'}
               onPress={handleSetActiveView('shipped')}
@@ -174,7 +175,7 @@ const ShipLotteryModal = props => {
                 },
               }}
               key="notShipped"
-              label={shipLotteryTexts.notShippedLotteries}
+              label={shipLotteryTexts[lang].notShippedLotteries}
               active={activeView === 'notShipped'}
               onPress={handleSetActiveView('notShipped')}
             />
@@ -185,7 +186,9 @@ const ShipLotteryModal = props => {
           loading
             ? loadingPopup
             : null}
-          <Filter onFilterChange={handleFilterChange} />
+          {userCreatedWonLotteries && userCreatedWonLotteries.length ? (
+            <Filter lang={lang} onFilterChange={handleFilterChange} />
+          ) : null}
           <VirtualizedList
             initialNumToRender={10}
             windowSize={2}
@@ -206,8 +209,8 @@ const ShipLotteryModal = props => {
                 <View style={sharedStyles.emptySearchResultsView}>
                   <Text style={sharedStyles.emptySearchResultsText}>
                     {activeView === 'shipped'
-                      ? shipLotteryTexts.noShippedLotteries
-                      : lotteriesTexts.emptyLotteries}
+                      ? shipLotteryTexts[lang].noShippedLotteries
+                      : lotteriesTexts[lang].emptyLotteries}
                   </Text>
                 </View>
               ) : null
@@ -222,12 +225,14 @@ const ShipLotteryModal = props => {
 ShipLotteryModal.propTypes = {
   userCreatedWonLotteries: PropTypes.any,
   authUserId: PropTypes.string,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
   return {
     userCreatedWonLotteries: getUserCreatedWonLotteriesSelector(state),
     authUserId: getUserIdSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

@@ -4,12 +4,12 @@ import invoke from 'lodash/invoke';
 import {lotteriesActions} from './actions';
 
 const handleFetchUserLikedLotteries = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const {userId, onError, cancelTag} = payload;
     const onGetMyLotteriesSuccess = data => {
       const {likedLotteries, error} = data;
       if (error) {
-        return handleError({error, onError});
+        return handleError({error, onError}, getState);
       }
       invoke(payload, 'onSuccess');
       return dispatch({
@@ -20,7 +20,7 @@ const handleFetchUserLikedLotteries = payload => {
     return getUserLikedLotteries({userId, cancelTag}).then(
       onGetMyLotteriesSuccess,
       error => {
-        return handleError({error, onError});
+        return handleError({error, onError}, getState);
       },
     );
   };

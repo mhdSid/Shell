@@ -9,12 +9,12 @@ import {shipLotteryActions} from '../ShipLottery/actions';
 import {chatActions} from '../Chat/actions';
 
 const handleCancelLottery = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const {userId, lotteryId, onError, cancelTag, reAdd} = payload;
     const onCancelSuccess = data => {
       const {lottery, error} = data;
       if (error) {
-        return handleError({error, onError});
+        return handleError({error, onError}, getState);
       }
       invoke(payload, 'onSuccess');
       if (lottery) {
@@ -50,7 +50,7 @@ const handleCancelLottery = payload => {
       reAdd: reAdd || false,
       cancelTag,
     }).then(onCancelSuccess, error => {
-      return handleError({error, onError});
+      return handleError({error, onError}, getState);
     });
   };
 };

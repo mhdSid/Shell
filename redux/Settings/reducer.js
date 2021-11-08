@@ -1,7 +1,7 @@
 import {settingsActions} from './actions';
 
 const initialState = {
-  lang: 'US',
+  lang: 'en',
   isHomeListStyle: true,
   isHomeCardStyle: false,
 };
@@ -22,7 +22,7 @@ const settingsReducer = (state = initialState, action) => {
     }
     case settingsActions.resetState: {
       return {
-        lang: 'JP',
+        lang: 'jp',
         isHomeListStyle: true,
         isHomeCardStyle: false,
       };

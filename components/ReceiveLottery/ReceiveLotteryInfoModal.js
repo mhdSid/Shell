@@ -22,9 +22,10 @@ import ChatModal from '../Chat';
 import formatDate from '../../lib/formatDate';
 import {handleMarkLotteryAsReceived} from '../../redux/ReceiveLottery/MarkLotteryAsReceived';
 import FastImage from 'react-native-fast-image';
+import { getLangSelector } from '../Settings/Selectors';
 
 const ReceiveLotteryInfoModal = props => {
-  const {receiveLotteryDetails, user, lotteryPosterData} = props;
+  const {receiveLotteryDetails, user, lotteryPosterData, lang} = props;
   const {
     id: lotteryId,
     name,
@@ -108,7 +109,7 @@ const ReceiveLotteryInfoModal = props => {
           <Toolbar
             style={{container: sharedStyles.toolbarContainer}}
             leftElement="arrow-back"
-            centerElement={receiveLotteryTexts.receiveLottery}
+            centerElement={receiveLotteryTexts[lang].receiveLottery}
             onLeftElementPress={handleCloseModal}
           />
           {showChatModal ? (
@@ -176,12 +177,12 @@ const ReceiveLotteryInfoModal = props => {
                 <View style={sharedStyles.shipReceiveLotteryInfoContainer}>
                   <Icon name="notifications-active" color="black" />
                   <Text style={sharedStyles.receiveLotteryAnnouncement}>
-                    {receiveLotteryTexts.announcement}
+                    {receiveLotteryTexts[lang].announcement}
                   </Text>
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="dns" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.name}
+                      {lotteryDetailsTexts[lang].name}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -192,7 +193,7 @@ const ReceiveLotteryInfoModal = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="description" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.description}
+                      {lotteryDetailsTexts[lang].description}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -203,7 +204,7 @@ const ReceiveLotteryInfoModal = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="exposure" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.condition}
+                      {lotteryDetailsTexts[lang].condition}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -214,7 +215,7 @@ const ReceiveLotteryInfoModal = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="class" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.category}
+                      {lotteryDetailsTexts[lang].category}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -225,7 +226,7 @@ const ReceiveLotteryInfoModal = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="local-atm" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.totalPrice}
+                      {lotteryDetailsTexts[lang].totalPrice}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -237,7 +238,7 @@ const ReceiveLotteryInfoModal = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="credit-card" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.collectedPrice}
+                      {lotteryDetailsTexts[lang].collectedPrice}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -249,7 +250,7 @@ const ReceiveLotteryInfoModal = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="monetization-on" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.payToWin}
+                      {lotteryDetailsTexts[lang].payToWin}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -261,18 +262,18 @@ const ReceiveLotteryInfoModal = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="today" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.publishDate}
+                      {lotteryDetailsTexts[lang].publishDate}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
                     <Text style={sharedStyles.aboutFirstSectionText}>
-                      {formatDate(publishDate)}
+                      {formatDate(publishDate, lang)}
                     </Text>
                   </View>
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.location}
+                      {lotteryDetailsTexts[lang].location}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -305,6 +306,7 @@ const ReceiveLotteryInfoModal = props => {
 ReceiveLotteryInfoModal.propTypes = {
   onClose: PropTypes.func,
   receiveLotteryDetails: PropTypes.object,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
@@ -312,6 +314,7 @@ const mapStateToProps = state => {
     user: getUserSelector(state),
     receiveLotteryDetails: getReceiveLotteryDetailsSelector(state),
     lotteryPosterData: getLotteryPosterDataSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

@@ -26,6 +26,7 @@ import {showReceiveLotteryModal} from '../../redux/ReceiveLottery/actions';
 import {showShipLotteryModal} from '../../redux/ShipLottery/actions';
 import Confetti from 'react-native-confetti';
 import { confettiColors } from '../../Constants/Colors';
+import { getLangSelector } from '../Settings/Selectors';
 
 let ChatModal = null;
 let ReceiveLotteryModal = null;
@@ -39,6 +40,7 @@ const LotteryResult = props => {
     adPosterData,
     winnerUserData,
     item: lotteryDetails,
+    lang,
   } = props;
   const {
     name,
@@ -103,7 +105,7 @@ const LotteryResult = props => {
   //   />
   // );
   const handleActionPress = {
-    [lotteryResultTexts.actionOptions.receive]: () => {
+    [lotteryResultTexts[lang].actionOptions.receive]: () => {
       if (!ReceiveLotteryModal) {
         ReceiveLotteryModal = require('../ReceiveLottery/ReceiveLotteryInfoModal')
           .default;
@@ -115,7 +117,7 @@ const LotteryResult = props => {
       );
       setShowModal('receiveLotteryModal');
     },
-    [lotteryResultTexts.actionOptions.ship]: () => {
+    [lotteryResultTexts[lang].actionOptions.ship]: () => {
       if (!ShipLotteryModal) {
         ShipLotteryModal = require('../ShipLotteries/ShipLotteryInfoModal')
           .default;
@@ -127,7 +129,7 @@ const LotteryResult = props => {
       );
       setShowModal('shipLotteryModal');
     },
-    [lotteryResultTexts.actionOptions.chat]: () => {
+    [lotteryResultTexts[lang].actionOptions.chat]: () => {
       if (!ChatModal) {
         ChatModal = require('../Chat').default;
       }
@@ -193,7 +195,7 @@ const LotteryResult = props => {
           <Toolbar
             style={{container: sharedStyles.toolbarContainer}}
             leftElement="arrow-back"
-            centerElement={lotteryResultTexts.lotteryResult}
+            centerElement={lotteryResultTexts[lang].lotteryResult}
             onLeftElementPress={handleCloseModal}
           />
           {isWinner ? (
@@ -215,29 +217,29 @@ const LotteryResult = props => {
                     <View style={sharedStyles.lotteryResultNoWinnerContainer}>
                       <Icon name="notifications-active" color="black" />
                       <Text style={sharedStyles.lotteryResultNoWinnerText}>
-                        {lotteryDetailsTexts.winnerAccouncementSoon}
+                        {lotteryDetailsTexts[lang].winnerAccouncementSoon}
                       </Text>
                       <Text style={sharedStyles.lotteryResultNoWinnerText}>
-                        {lotteryDetailsTexts.inProgress}
+                        {lotteryDetailsTexts[lang].inProgress}
                       </Text>
                     </View>
                   ) : null}
                   {(isWinner || isLotteryPoster) && winnerUserId ? (
                     <View style={sharedStyles.congratulationsContainer}>
                       <Text style={sharedStyles.congratulationsText}>
-                        {lotteryResultTexts.congratulations}
+                        {lotteryResultTexts[lang].congratulations}
                       </Text>
                       <Text style={sharedStyles.congratulationsWinnerText}>
                         {isWinner
-                          ? lotteryDetailsTexts.youAreTheWinner
-                          : lotteryDetailsTexts.lotteryPosterWinner}
+                          ? lotteryDetailsTexts[lang].youAreTheWinner
+                          : lotteryDetailsTexts[lang].lotteryPosterWinner}
                       </Text>
                     </View>
                   ) : null}
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="person" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.user}
+                      {lotteryDetailsTexts[lang].user}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -246,7 +248,7 @@ const LotteryResult = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="dns" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.name}
+                      {lotteryDetailsTexts[lang].name}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -257,7 +259,7 @@ const LotteryResult = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="description" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.description}
+                      {lotteryDetailsTexts[lang].description}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -268,7 +270,7 @@ const LotteryResult = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="exposure" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.condition}
+                      {lotteryDetailsTexts[lang].condition}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -279,7 +281,7 @@ const LotteryResult = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="class" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.category}
+                      {lotteryDetailsTexts[lang].category}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -290,7 +292,7 @@ const LotteryResult = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="local-atm" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.totalPrice}
+                      {lotteryDetailsTexts[lang].totalPrice}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -302,7 +304,7 @@ const LotteryResult = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="credit-card" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.collectedPrice}
+                      {lotteryDetailsTexts[lang].collectedPrice}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -314,7 +316,7 @@ const LotteryResult = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="monetization-on" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.payToWin}
+                      {lotteryDetailsTexts[lang].payToWin}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -326,18 +328,18 @@ const LotteryResult = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="today" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.publishDate}
+                      {lotteryDetailsTexts[lang].publishDate}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
                     <Text style={sharedStyles.aboutFirstSectionText}>
-                      {formatDate(publishDate)}
+                      {formatDate(publishDate, lang)}
                     </Text>
                   </View>
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.location}
+                      {lotteryDetailsTexts[lang].location}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -350,7 +352,7 @@ const LotteryResult = props => {
               {(isLotteryPoster && winnerUserId) || isWinner ? (
                 <View style={sharedStyles.lotteryDetailsBottomToolbar}>
                   {isLotteryPoster && winnerUserId
-                    ? lotteryResultTexts.lotteryPosterActions.map(action => (
+                    ? lotteryResultTexts[lang].lotteryPosterActions.map(action => (
                         <Button
                           primary
                           raised
@@ -365,7 +367,7 @@ const LotteryResult = props => {
                         />
                       ))
                     : isWinner
-                    ? lotteryResultTexts.lotteryWinnerActions.map(action => (
+                    ? lotteryResultTexts[lang].lotteryWinnerActions.map(action => (
                         <Button
                           primary
                           raised
@@ -393,6 +395,7 @@ LotteryResult.propTypes = {
   lotteryResult: PropTypes.object,
   item: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
   onClose: PropTypes.func,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
@@ -402,6 +405,7 @@ const mapStateToProps = state => {
     adPosterData: getAdPosterDataSelector(state),
     // lotteryUsersData: getLotteryUsersDataSelector(state),
     winnerUserData: getWinnerUserDataSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

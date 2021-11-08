@@ -23,9 +23,10 @@ import {handleUpdateLottery} from '../../redux/EditLottery/EditLottery';
 import ImageResizer from 'react-native-image-resizer';
 import {isNumber} from 'lodash';
 import FastImage from 'react-native-fast-image';
+import { getLangSelector } from '../Settings/Selectors';
 
 const EditLottery = props => {
-  const {item: lotteryDetails} = props;
+  const {item: lotteryDetails, lang} = props;
   const {
     name: lotteryDetailsName,
     description: lotteryDetailsDescription,
@@ -105,7 +106,7 @@ const EditLottery = props => {
         } else {
           setErrors({
             ...errors,
-            adName: validationMessages.importLottery.adName,
+            adName: validationMessages[lang].importLottery.adName,
           });
           setLotteryNameChanged(false);
         }
@@ -122,7 +123,7 @@ const EditLottery = props => {
         } else {
           setErrors({
             ...errors,
-            description: validationMessages.importLottery.description,
+            description: validationMessages[lang].importLottery.description,
           });
           setDescriptionChanged(false);
         }
@@ -144,7 +145,7 @@ const EditLottery = props => {
         } else {
           setErrors({
             ...errors,
-            price: validationMessages.importLottery.price,
+            price: validationMessages[lang].importLottery.price,
           });
           setPriceChanged(false);
         }
@@ -326,7 +327,7 @@ const EditLottery = props => {
               style={{
                 container: sharedStyles.toolbarContainerPadding,
               }}
-              centerElement={importLotteryTexts.updateLottery}
+              centerElement={importLotteryTexts[lang].updateLottery}
               leftElement="arrow-back"
               onLeftElementPress={handleCloseModal}
               // rightElement={
@@ -334,7 +335,7 @@ const EditLottery = props => {
               //     onPress={updateLottery}
               //     disabled={!lotteryDataChanged}
               //     raised
-              //     text={importLotteryTexts.update}
+              //     text={importLotteryTexts[lang].update}
               //     style={{
               //       container: sharedStyles.mainButtonContainer,
               //       text: {color: '#b69cf6'},
@@ -348,12 +349,12 @@ const EditLottery = props => {
             <View style={sharedStyles.importAdContainer}>
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>
-                  {importLotteryTexts.productName}
+                  {importLotteryTexts[lang].productName}
                 </Text>
                 <TextField
                   autoCapitalize={false}
                   autoCorrect={false}
-                  placeholder={importLotteryTexts.enterName}
+                  placeholder={importLotteryTexts[lang].enterName}
                   placeholderTextColor={'rgba(0,0,0,0.3)'}
                   onBlur={handleBlur('adName')}
                   onChangeText={handleChange.adName()}
@@ -368,12 +369,12 @@ const EditLottery = props => {
               </View>
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>
-                  {importLotteryTexts.description}
+                  {importLotteryTexts[lang].description}
                 </Text>
                 <TextField
                   autoCapitalize={false}
                   autoCorrect={false}
-                  placeholder={importLotteryTexts.enterDescription}
+                  placeholder={importLotteryTexts[lang].enterDescription}
                   placeholderTextColor={'rgba(0,0,0,0.3)'}
                   onChangeText={handleChange.description()}
                   maxLength={500}
@@ -389,7 +390,7 @@ const EditLottery = props => {
               </View>
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>
-                  {importLotteryTexts.price}
+                  {importLotteryTexts[lang].price}
                 </Text>
                 <View style={sharedStyles.priceContainer}>
                   <Text style={sharedStyles.currencyLabel}>
@@ -399,7 +400,7 @@ const EditLottery = props => {
                     <TextField
                       autoCapitalize={false}
                       autoCorrect={false}
-                      placeholder={importLotteryTexts.enterPrice}
+                      placeholder={importLotteryTexts[lang].enterPrice}
                       placeholderTextColor={'rgba(0,0,0,0.3)'}
                       keyboardType="phone-pad"
                       defaultValue={lotteryDetailsPrice}
@@ -417,7 +418,7 @@ const EditLottery = props => {
               </View>
               <View style={sharedStyles.mobileContainer}>
                 <Text style={sharedStyles.label}>
-                  {importLotteryTexts.images}
+                  {importLotteryTexts[lang].images}
                 </Text>
                 <View style={sharedStyles.imageBtnContainer}>
                   {images.map((value, index) => (
@@ -447,22 +448,22 @@ const EditLottery = props => {
                   ))}
                 </View>
               </View>
-              <Text style={sharedStyles.label}>{profile.prefecture}</Text>
+              <Text style={sharedStyles.label}>{profile[lang].prefecture}</Text>
               <View style={sharedStyles.dropdownView}>
                 <Dropdown
                   baseColor={'rgba(0,0,0,0.3)'}
-                  label={profile.enterPrefecture}
+                  label={profile[lang].enterPrefecture}
                   data={prefecturesDropdownData}
                   onChangeText={prefectureOnChangeText}
                   selectedItemColor={'rgba(0, 0, 0, .87)'}
                   value={prefecture}
                 />
               </View>
-              <Text style={sharedStyles.label}>{profile.city}</Text>
+              <Text style={sharedStyles.label}>{profile[lang].city}</Text>
               <View style={sharedStyles.dropdownView}>
                 <Dropdown
                   baseColor={'rgba(0,0,0,0.3)'}
-                  label={profile.enterCity}
+                  label={profile[lang].enterCity}
                   selectedItemColor={'rgba(0, 0, 0, .87)'}
                   data={cityDropdownData}
                   onChangeText={cityOnChangeText}
@@ -471,27 +472,27 @@ const EditLottery = props => {
               </View>
 
               <Text style={sharedStyles.label}>
-                {importLotteryTexts.category}
+                {importLotteryTexts[lang].category}
               </Text>
               <View style={sharedStyles.dropdownView}>
                 <Dropdown
-                  label={importLotteryTexts.enterCategory}
+                  label={importLotteryTexts[lang].enterCategory}
                   baseColor={'rgba(0,0,0,0.3)'}
                   selectedItemColor={'rgba(0, 0, 0, .87)'}
-                  data={lotteryItemCategories}
+                  data={lotteryItemCategories[lang]}
                   onChangeText={updateItemCategory}
                   value={itemCategory}
                 />
               </View>
               <Text style={sharedStyles.label}>
-                {importLotteryTexts.condition}
+                {importLotteryTexts[lang].condition}
               </Text>
               <View style={sharedStyles.dropdownView}>
                 <Dropdown
                   baseColor={'rgba(0,0,0,0.3)'}
-                  label={importLotteryTexts.enterCondition}
+                  label={importLotteryTexts[lang].enterCondition}
                   selectedItemColor={'rgba(0, 0, 0, .87)'}
-                  data={lotteryItemConditions}
+                  data={lotteryItemConditions[lang]}
                   onChangeText={updateItemCondition}
                   value={itemCondition}
                 />
@@ -509,7 +510,7 @@ const EditLottery = props => {
               primary
               icon="done-all"
               style={{container: sharedStyles.mainButtonContainer}}
-              text={importLotteryTexts.updateLottery}
+              text={importLotteryTexts[lang].updateLottery}
               onPress={updateLottery}
             />
           </View>
@@ -521,10 +522,13 @@ const EditLottery = props => {
 
 EditLottery.propTypes = {
   item: PropTypes.object,
+  lang: PropTypes.string,
 };
 
-const mapStateToProps = () => {
-  return {};
+const mapStateToProps = state => {
+  return {
+    lang: getLangSelector(state),
+  };
 };
 
 const mapDispatchToProps = dispatch => {

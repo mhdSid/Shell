@@ -10,7 +10,7 @@ import {reject, uniq} from 'lodash';
 import {homeActions} from '../Home/actions';
 
 const handleImportLottery = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const uniqId = `_${Math.random()
       .toString(36)
       .substr(2, 9)}`;
@@ -43,6 +43,7 @@ const handleImportLottery = payload => {
           error && error.error
             ? {error: error.error, onError}
             : {error, onError},
+          getState,
         );
       }
       if (imageFiles && imageFiles.length) {
@@ -70,7 +71,7 @@ const handleImportLottery = payload => {
                       ? {error: err.error, onError}
                       : {error: err, onError};
                   reject(errorObj);
-                  return handleError(errorObj);
+                  return handleError(errorObj, getState);
                 }
                 // dispatch({
                 //   type: homeActions.setLotteries,
@@ -120,7 +121,7 @@ const handleImportLottery = payload => {
                 id: uniqId,
               },
             });
-            return handleError({error: reason, onError});
+            return handleError({error: reason, onError}, getState);
           },
         );
       }
@@ -168,7 +169,7 @@ const handleImportLottery = payload => {
           id: uniqId,
         },
       });
-      return handleError({error, onError});
+      return handleError({error, onError}, getState);
     });
   };
 };

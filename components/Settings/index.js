@@ -47,20 +47,20 @@ const Settings = props => {
       if (!ContactUsModal) {
         ContactUsModal = require('./ContactUsModal').default;
       }
-      return <ContactUsModal onClose={handleSettingsModalClose} />;
+      return <ContactUsModal lang={lang} onClose={handleSettingsModalClose} />;
     },
     privacyAndTerms: () => {
       if (!TermsAndPrivacyPolicyModal) {
         TermsAndPrivacyPolicyModal = require('./TermsAndPrivacyPolicyModal')
           .default;
       }
-      return <TermsAndPrivacyPolicyModal onClose={handleSettingsModalClose} />;
+      return <TermsAndPrivacyPolicyModal lang={lang} onClose={handleSettingsModalClose} />;
     },
     changePassword: () => {
       if (!ChangePassword) {
         ChangePassword = require('./ChangePassword').default;
       }
-      return <ChangePassword onClose={handleSettingsModalClose} />;
+      return <ChangePassword lang={lang} onClose={handleSettingsModalClose} />;
     },
   };
 
@@ -73,13 +73,13 @@ const Settings = props => {
           <Toolbar
             style={{container: sharedStyles.toolbarContainer}}
             leftElement="arrow-back"
-            centerElement={settings.settings}
+            centerElement={settings[lang].settings}
             onLeftElementPress={handleCloseModal}
           />
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={sharedStyles.settingsView}>
               <Drawer>
-                <Drawer.Section title={settings.language} />
+                <Drawer.Section title={settings[lang].language} />
                 <Drawer.Section
                   style={{
                     container: sharedStyles.settingsDrawerLanguageSection,
@@ -87,17 +87,17 @@ const Settings = props => {
                   }}
                   items={[
                     {
-                      key: settings.en,
-                      icon: <Flag id={settings.en} width={30} height={30} />,
+                      key: settings[lang].en,
+                      icon: <Flag id={'US'} width={30} height={30} />,
                       value:
-                        lang === settings.en ? (
+                        lang === settings[lang].en ? (
                           <View
                             style={[
                               sharedStyles.flexRow,
                               sharedStyles.textAlignVertical,
                             ]}>
                             <Text style={sharedStyles.appText}>
-                              {settings.english}
+                              {settings[lang].english}
                             </Text>
                             <Icon
                               style={sharedStyles.langChecked}
@@ -107,18 +107,18 @@ const Settings = props => {
                             />
                           </View>
                         ) : (
-                          settings.english
+                          settings[lang].english
                         ),
-                      onPress: handleSetLanguage(settings.en),
+                      onPress: handleSetLanguage(settings[lang].en),
                     },
                     {
-                      key: settings.jp,
-                      icon: <Flag id={settings.jp} width={30} height={30} />,
+                      key: settings[lang].jp,
+                      icon: <Flag id={'JP'} width={30} height={30} />,
                       value:
-                        lang === settings.jp ? (
+                        lang === settings[lang].jp ? (
                           <View style={sharedStyles.flexRow}>
                             <Text style={sharedStyles.appText}>
-                              {settings.japanese}
+                              {settings[lang].japanese}
                             </Text>
                             <Icon
                               style={sharedStyles.langChecked}
@@ -128,13 +128,13 @@ const Settings = props => {
                             />
                           </View>
                         ) : (
-                          settings.japanese
+                          settings[lang].japanese
                         ),
-                      onPress: handleSetLanguage(settings.jp),
+                      onPress: handleSetLanguage(settings[lang].jp),
                     },
                   ]}
                 />
-                <Drawer.Section title={settings.privacy} />
+                <Drawer.Section title={settings[lang].privacy} />
                 <Drawer.Section
                   style={{
                     container: sharedStyles.settingsDrawerLanguageSection,
@@ -142,32 +142,32 @@ const Settings = props => {
                   }}
                   items={[
                     // {
-                    //   key: settings.faq,
+                    //   key: settings[lang].faq,
                     //   icon: 'question-answer',
-                    //   value: settings.faq,
+                    //   value: settings[lang].faq,
                     //   onPress: handleSettingsModalClick('faq'),
                     // },
                     {
-                      key: settings.contactUs,
+                      key: settings[lang].contactUs,
                       icon: 'contact-mail',
-                      value: settings.contactUs,
+                      value: settings[lang].contactUs,
                       onPress: handleSettingsModalClick('contactUs'),
                     },
                     {
-                      key: settings.privacyAndTerms,
+                      key: settings[lang].privacyAndTerms,
                       icon: 'security',
-                      value: settings.privacyAndTerms,
+                      value: settings[lang].privacyAndTerms,
                       onPress: handleSettingsModalClick('privacyAndTerms'),
                     },
                     // {
-                    //   key: settings.licenses,
+                    //   key: settings[lang].licenses,
                     //   icon: 'questionsAnswers',
-                    //   value: settings.licenses,
-                    //   // onPress: handleSetLanguage(settings.en),
+                    //   value: settings[lang].licenses,
+                    //   // onPress: handleSetLanguage(settings[lang].en),
                     // },
                   ]}
                 />
-                <Drawer.Section title={settings.security} />
+                <Drawer.Section title={settings[lang].security} />
                 <Drawer.Section
                   style={{
                     container: sharedStyles.settingsDrawerLanguageSection,
@@ -175,21 +175,21 @@ const Settings = props => {
                   }}
                   items={[
                     {
-                      key: settings.faq,
+                      key: settings[lang].faq,
                       icon: 'lock',
-                      value: settings.changePassword,
+                      value: settings[lang].changePassword,
                       onPress: handleSettingsModalClick('changePassword'),
                     },
                     // {
-                    //   key: settings.licenses,
+                    //   key: settings[lang].licenses,
                     //   icon: 'questionsAnswers',
-                    //   value: settings.licenses,
-                    //   // onPress: handleSetLanguage(settings.en),
+                    //   value: settings[lang].licenses,
+                    //   // onPress: handleSetLanguage(settings[lang].en),
                     // },
                   ]}
                 />
                 <Drawer.Section
-                  title={settings.version}
+                  title={settings[lang].version}
                   items={[
                     {
                       value: (

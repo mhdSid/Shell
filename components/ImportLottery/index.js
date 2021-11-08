@@ -26,6 +26,7 @@ import {LoadingComponent} from '../Loading';
 import {
   importLottery as importLotteryTexts,
   profile,
+  noAuth as noAuthTexts,
   validationMessages,
 } from '../../Constants/Texts';
 import invoke from 'lodash/invoke';
@@ -36,12 +37,13 @@ import {navigate} from '../MainContainer';
 import {successConfirmationModal as successConfirmationModalTexts} from '../../Constants/Texts';
 import ImageResizer from 'react-native-image-resizer';
 import FastImage from 'react-native-fast-image';
+import { getLangSelector } from '../Settings/Selectors';
 
 let SuccessConfirmationModal = null;
 let UploadLotteryProgressModal = null;
 
 const ImportLottery = props => {
-  const {loggedIn, user} = props;
+  const {loggedIn, user, lang} = props;
   let userPrefecture;
   if (user) {
     userPrefecture = prefectures.Japan.find(
@@ -111,7 +113,7 @@ const ImportLottery = props => {
         } else {
           setErrors({
             ...errors,
-            adName: validationMessages.importLottery.adName,
+            adName: validationMessages[lang].importLottery.adName,
           });
           setLotteryNameChanged(false);
         }
@@ -128,7 +130,7 @@ const ImportLottery = props => {
         } else {
           setErrors({
             ...errors,
-            description: validationMessages.importLottery.description,
+            description: validationMessages[lang].importLottery.description,
           });
           setDescriptionChanged(false);
         }
@@ -150,7 +152,7 @@ const ImportLottery = props => {
         } else {
           setErrors({
             ...errors,
-            price: validationMessages.importLottery.price,
+            price: validationMessages[lang].importLottery.price,
           });
           setPriceChanged(false);
         }
@@ -355,19 +357,19 @@ const ImportLottery = props => {
   const successModalActions = [
     {
       text:
-        successConfirmationModalTexts.importLottery.actions.createAnotherLottery
+        successConfirmationModalTexts[lang].importLottery.actions.createAnotherLottery
           .text,
       icon:
-        successConfirmationModalTexts.importLottery.actions.createAnotherLottery
+        successConfirmationModalTexts[lang].importLottery.actions.createAnotherLottery
           .icon,
       onPress: handleSuccessConfirmationModalCreateAnotherLottery,
     },
     {
       text:
-        successConfirmationModalTexts.importLottery.actions.continueBrowsing
+        successConfirmationModalTexts[lang].importLottery.actions.continueBrowsing
           .text,
       icon:
-        successConfirmationModalTexts.importLottery.actions.continueBrowsing
+        successConfirmationModalTexts[lang].importLottery.actions.continueBrowsing
           .icon,
       onPress: handleSuccessConfirmationModalClose,
     },
@@ -396,7 +398,7 @@ const ImportLottery = props => {
   }
 
   if (!loggedIn && !user) {
-    return <NoAuth />;
+    return <NoAuth text={noAuthTexts[lang].imporLottery} />;
   }
 
   if (loggedIn === true && user) {
@@ -404,10 +406,11 @@ const ImportLottery = props => {
       <View style={sharedStyles.fullheightView}>
         {showSuccessConfirmationModal ? (
           <SuccessConfirmationModal
-            title={successConfirmationModalTexts.importLottery.title}
-            subtitle={successConfirmationModalTexts.importLottery.subtitle}
+            title={successConfirmationModalTexts[lang].importLottery.title}
+            subtitle={successConfirmationModalTexts[lang].importLottery.subtitle}
             onClose={handleSuccessConfirmationModalCreateAnotherLottery}
             actions={successModalActions}
+            lang={lang}
           />
         ) : null}
         {showLotteryProgressModal ? (
@@ -420,7 +423,7 @@ const ImportLottery = props => {
             style={{
               container: sharedStyles.toolbarContainerPadding,
             }}
-            centerElement={importLotteryTexts.createLottery}
+            centerElement={importLotteryTexts[lang].createLottery}
             leftElement={'cloud-upload'}
             onLeftElementPress={handleShowUploadLotteryProgressModal}
             // rightElement={
@@ -428,7 +431,7 @@ const ImportLottery = props => {
             //     onPress={handleUploadLottery}
             //     disabled={!lotteryDataChanged}
             //     raised
-            //     text={importLotteryTexts.create}
+            //     text={importLotteryTexts[lang].create}
             //     style={{
             //       container: sharedStyles.mainButtonContainer,
             //       text: {color: '#b69cf6'},
@@ -442,10 +445,10 @@ const ImportLottery = props => {
           <View style={sharedStyles.importAdContainer}>
             <View style={sharedStyles.mobileContainer}>
               <Text style={sharedStyles.label}>
-                {importLotteryTexts.productName}
+                {importLotteryTexts[lang].productName}
               </Text>
               <TextField
-                placeholder={importLotteryTexts.enterName}
+                placeholder={importLotteryTexts[lang].enterName}
                 autoCapitalize={false}
                 autoCorrect={false}
                 placeholderTextColor={'rgba(0,0,0,0.3)'}
@@ -461,10 +464,10 @@ const ImportLottery = props => {
             </View>
             <View style={sharedStyles.mobileContainer}>
               <Text style={sharedStyles.label}>
-                {importLotteryTexts.description}
+                {importLotteryTexts[lang].description}
               </Text>
               <TextField
-                placeholder={importLotteryTexts.enterDescription}
+                placeholder={importLotteryTexts[lang].enterDescription}
                 autoCapitalize={false}
                 autoCorrect={false}
                 placeholderTextColor={'rgba(0,0,0,0.3)'}
@@ -480,38 +483,38 @@ const ImportLottery = props => {
               />
             </View>
             <Text style={sharedStyles.label}>
-              {importLotteryTexts.category}
+              {importLotteryTexts[lang].category}
             </Text>
             <View style={sharedStyles.dropdownView}>
               <Dropdown
-                label={importLotteryTexts.enterCategory}
+                label={importLotteryTexts[lang].enterCategory}
                 baseColor={'rgba(0,0,0,0.3)'}
                 selectedItemColor={'rgba(0, 0, 0, .87)'}
-                data={lotteryItemCategories}
+                data={lotteryItemCategories[lang]}
                 onChangeText={updateItemCategory}
                 value={itemCategory}
               />
             </View>
             <Text style={sharedStyles.label}>
-              {importLotteryTexts.condition}
+              {importLotteryTexts[lang].condition}
             </Text>
             <View style={sharedStyles.dropdownView}>
               <Dropdown
                 baseColor={'rgba(0,0,0,0.3)'}
-                label={importLotteryTexts.enterCondition}
+                label={importLotteryTexts[lang].enterCondition}
                 selectedItemColor={'rgba(0, 0, 0, .87)'}
-                data={lotteryItemConditions}
+                data={lotteryItemConditions[lang]}
                 onChangeText={updateItemCondition}
                 value={itemCondition}
               />
             </View>
             <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>{importLotteryTexts.price}</Text>
+              <Text style={sharedStyles.label}>{importLotteryTexts[lang].price}</Text>
               <View style={sharedStyles.priceContainer}>
                 <Text style={sharedStyles.currencyLabel}>{userCurrency}</Text>
                 <View style={sharedStyles.adPriceTextfieldContainer}>
                   <TextField
-                    placeholder={importLotteryTexts.enterPrice}
+                    placeholder={importLotteryTexts[lang].enterPrice}
                     autoCapitalize={false}
                     autoCorrect={false}
                     placeholderTextColor={'rgba(0,0,0,0.3)'}
@@ -530,7 +533,7 @@ const ImportLottery = props => {
             </View>
             <View style={sharedStyles.mobileContainer}>
               <Text style={sharedStyles.label}>
-                {importLotteryTexts.images}
+                {importLotteryTexts[lang].images}
               </Text>
               <View style={sharedStyles.imageBtnContainer}>
                 {adImages.map(index => (
@@ -562,22 +565,22 @@ const ImportLottery = props => {
                 ))}
               </View>
             </View>
-            <Text style={sharedStyles.label}>{profile.prefecture}</Text>
+            <Text style={sharedStyles.label}>{profile[lang].prefecture}</Text>
             <View style={sharedStyles.dropdownView}>
               <Dropdown
                 baseColor={'rgba(0,0,0,0.3)'}
-                label={profile.enterPrefecture}
+                label={profile[lang].enterPrefecture}
                 data={prefecturesDropdownData}
                 onChangeText={prefectureOnChangeText}
                 selectedItemColor={'rgba(0, 0, 0, .87)'}
                 value={prefecture}
               />
             </View>
-            <Text style={sharedStyles.label}>{profile.city}</Text>
+            <Text style={sharedStyles.label}>{profile[lang].city}</Text>
             <View style={sharedStyles.dropdownView}>
               <Dropdown
                 baseColor={'rgba(0,0,0,0.3)'}
-                label={profile.enterCity}
+                label={profile[lang].enterCity}
                 selectedItemColor={'rgba(0, 0, 0, .87)'}
                 data={cityDropdownData}
                 onChangeText={cityOnChangeText}
@@ -597,7 +600,7 @@ const ImportLottery = props => {
             primary
             icon="done-all"
             style={{container: sharedStyles.mainButtonContainer}}
-            text={importLotteryTexts.createLottery}
+            text={importLotteryTexts[lang].createLottery}
             onPress={handleUploadLottery}
           />
         </View>
@@ -626,12 +629,14 @@ const ImportLottery = props => {
 ImportLottery.propTypes = {
   loggedIn: PropTypes.bool,
   user: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
   return {
     loggedIn: getLoggedInSelector(state),
     user: getUserSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

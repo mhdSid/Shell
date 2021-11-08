@@ -18,9 +18,10 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {invoke} from 'lodash';
 import {handleResendVerificationCode} from '../../redux/Auth/ResendVerificationCode';
+import { getLangSelector } from '../Settings/Selectors';
 
 const VerifyUserCode = props => {
-  const {email, passwordHash} = props;
+  const {email, passwordHash, lang} = props;
   const [verificationCode, setVerificationCode] = useState('');
   const [loading, setLoading] = useState(false);
   const ref = useBlurOnFulfill({verificationCode, cellCount: 6});
@@ -83,7 +84,7 @@ const VerifyUserCode = props => {
         style={{
           container: sharedStyles.toolbarContainerPadding,
         }}
-        centerElement={profileTexts.verifyAccount}
+        centerElement={profileTexts[lang].verifyAccount}
         leftElement={<Icon color="white" name="verified-user" />}
       />
       <View
@@ -99,7 +100,7 @@ const VerifyUserCode = props => {
           }}
         />
         <Text style={sharedStyles.verificationTitleSubTitle}>
-          {profileTexts.verificationSubTitle}
+          {profileTexts[lang].verificationSubTitle}
         </Text>
         <CodeField
           ref={ref}
@@ -120,7 +121,7 @@ const VerifyUserCode = props => {
               container: sharedStyles.mainButtonContainer,
               text: sharedStyles.resendCodeButtonText,
             }}
-            text={profileTexts.resend}
+            text={profileTexts[lang].resend}
             onPress={handleResendPress}
           />
         </View>
@@ -134,12 +135,14 @@ VerifyUserCode.propTypes = {
   passwordHash: PropTypes.string,
   logout: PropTypes.func,
   login: PropTypes.func,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
   return {
     email: getEmailSelector(state),
     passwordHash: getPasswordHashSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

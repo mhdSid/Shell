@@ -9,7 +9,7 @@ import {shipLotteryActions} from '../ShipLottery/actions';
 import {receiveLotteryActions} from '../ReceiveLottery/actions';
 
 const handleEnterLottery = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const {
       onError,
       adId,
@@ -25,7 +25,7 @@ const handleEnterLottery = payload => {
       invoke(payload, 'onSuccess');
       const {error, updatedAd} = data;
       if (error) {
-        return handleError({error, onError});
+        return handleError({error, onError}, getState);
       }
       if (updatedAd) {
         dispatch({
@@ -64,7 +64,7 @@ const handleEnterLottery = payload => {
       creditCardExpiryDate,
       creditCardType,
     }).then(onEnterLotterySuccess, error => {
-      return handleError({error, onError});
+      return handleError({error, onError}, getState);
     });
   };
 };

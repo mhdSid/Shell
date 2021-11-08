@@ -4,7 +4,7 @@ import {chatActions} from './actions';
 import {getConversation} from '../../services/Chat';
 
 const handleFetchConversation = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const {
       lotteryPosterId,
       lotteryId,
@@ -15,7 +15,7 @@ const handleFetchConversation = payload => {
     const onGetSuccess = data => {
       let {error, conversation} = data;
       if (error) {
-        return handleError({error, onEror});
+        return handleError({error, onEror}, getState);
       }
       if (Array.isArray(conversation) && conversation.length) {
         dispatch({
@@ -36,7 +36,7 @@ const handleFetchConversation = payload => {
       lotteryPosterId,
       cancelTag,
     }).then(onGetSuccess, error => {
-      return handleError({error, onEror});
+      return handleError({error, onEror}, getState);
     });
   };
 };

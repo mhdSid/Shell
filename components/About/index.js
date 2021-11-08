@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import {about} from '../../Constants/Texts';
 
 const About = props => {
+  const {lang} = props;
   const handleCloseModal = () => {
     invoke(props, 'onClose');
   };
@@ -23,7 +24,7 @@ const About = props => {
             style={{container: sharedStyles.toolbarContainer}}
             leftElement={'arrow-back'}
             onLeftElementPress={handleCloseModal}
-            centerElement={about.howTo}
+            centerElement={about[lang].howTo}
           />
           <ScrollView
             style={sharedStyles.aboutContainer}
@@ -31,7 +32,7 @@ const About = props => {
             showsVerticalScrollIndicator={false}>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="store" />
-              <Text style={sharedStyles.aboutIconText}>{about.sell}</Text>
+              <Text style={sharedStyles.aboutIconText}>{about[lang].sell}</Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text
@@ -39,90 +40,90 @@ const About = props => {
                   sharedStyles.aboutFirstSectionText,
                   sharedStyles.aboutFirstSectionTextMargin,
                 ]}>
-                {about.howToUseFirst}
+                {about[lang].howToUseFirst}
               </Text>
               <Text
                 style={[
                   sharedStyles.aboutFirstSectionText,
                   sharedStyles.aboutFirstSectionTextMargin,
                 ]}>
-                {about.howToUseSecond}
+                {about[lang].howToUseSecond}
               </Text>
               <Text
                 style={[
                   sharedStyles.aboutFirstSectionText,
                   sharedStyles.aboutFirstSectionTextMargin,
                 ]}>
-                {about.howToUseThird}
+                {about[lang].howToUseThird}
               </Text>
               <Text
                 style={[
                   sharedStyles.aboutFirstSectionText,
                   sharedStyles.aboutFirstSectionTextMargin,
                 ]}>
-                {about.howToUseFourth}
+                {about[lang].howToUseFourth}
               </Text>
               <Text
                 style={[
                   sharedStyles.aboutFirstSectionText,
                   sharedStyles.aboutFirstSectionTextMargin,
                 ]}>
-                {about.howToUseFifth}
+                {about[lang].howToUseFifth}
               </Text>
               <Text
                 style={[
                   sharedStyles.aboutFirstSectionText,
                   sharedStyles.aboutFirstSectionTextMargin,
                 ]}>
-                {about.howToUseSixth}
+                {about[lang].howToUseSixth}
               </Text>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {about.howToUseSeventh}
+                {about[lang].howToUseSeventh}
               </Text>
             </View>
             <View style={sharedStyles.aboutSeparatorSection}>
               <Text style={sharedStyles.aboutSeparatorSectionText}>
-                {about.or}
+                {about[lang].or}
               </Text>
             </View>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="explore" />
-              <Text style={sharedStyles.aboutIconText}>{about.browse}</Text>
+              <Text style={sharedStyles.aboutIconText}>{about[lang].browse}</Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {about.howtoUseEigtth}
+                {about[lang].howtoUseEigtth}
               </Text>
             </View>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="remove-red-eye" />
-              <Text style={sharedStyles.aboutIconText}>{about.choose}</Text>
+              <Text style={sharedStyles.aboutIconText}>{about[lang].choose}</Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {about.howToUseNineth}
+                {about[lang].howToUseNineth}
               </Text>
             </View>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="receipt" />
               <Text style={sharedStyles.aboutIconText}>
-                {about.enterLottery}
+                {about[lang].enterLottery}
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {about.howToUseTenth}
+                {about[lang].howToUseTenth}
               </Text>
             </View>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="star" />
               <Text style={sharedStyles.aboutIconText}>
-                {about.joinLottery}
+                {about[lang].joinLottery}
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {about.howToUseEleventh}
+                {about[lang].howToUseEleventh}
               </Text>
             </View>
           </ScrollView>
@@ -134,6 +135,7 @@ const About = props => {
 
 About.propTypes = {
   onClose: PropTypes.func,
+  lang: PropTypes.string,
 };
 
 export default About;

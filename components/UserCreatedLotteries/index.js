@@ -22,11 +22,12 @@ import {getLotteryResultSelector} from '../LotteryResult/Selectors';
 import LotteryResultModal from '../LotteryResult';
 import {loadingPopup} from '../Loading';
 import cancellableFetch from 'react-native-cancelable-fetch';
+import { getLangSelector } from '../Settings/Selectors';
 
 let LotteryDetails = null;
 
 const UserCreatedLotteries = props => {
-  const {user, userCreatedLotteries, isCard, isList, lotteryResult} = props;
+  const {user, userCreatedLotteries, isCard, isList, lotteryResult, lang} = props;
   const [loading, setLoading] = useState(true);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
   const [selectedLottery, setSelectedLottery] = useState();
@@ -175,7 +176,7 @@ const UserCreatedLotteries = props => {
           <Toolbar
             style={{container: sharedStyles.toolbarContainer}}
             leftElement="arrow-back"
-            centerElement={profile.myCreatedLotteries}
+            centerElement={profile[lang].myCreatedLotteries}
             onLeftElementPress={handleCloseModal}
             rightElement={isCard ? 'view-list' : 'view-comfy'}
             onRightElementPress={changeViewStyle}
@@ -186,7 +187,9 @@ const UserCreatedLotteries = props => {
           loading
             ? loadingPopup
             : null}
-          <Filter onFilterChange={handleFilterChange} />
+          {userCreatedLotteries && userCreatedLotteries.length ? (
+            <Filter lang={lang} onFilterChange={handleFilterChange} />
+          ) : null}
           <VirtualizedList
             initialNumToRender={10}
             windowSize={2}
@@ -209,7 +212,7 @@ const UserCreatedLotteries = props => {
               !loading ? (
                 <View style={sharedStyles.emptySearchResultsView}>
                   <Text style={sharedStyles.emptySearchResultsText}>
-                    {lotteriesTexts.emptyLotteries}
+                    {lotteriesTexts[lang].emptyLotteries}
                   </Text>
                 </View>
               ) : null
@@ -237,6 +240,7 @@ UserCreatedLotteries.propTypes = {
   user: PropTypes.object,
   userCreatedLotteries: PropTypes.oneOfType([PropTypes.any, PropTypes.array]),
   onClose: PropTypes.func,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
@@ -246,6 +250,7 @@ const mapStateToProps = state => {
     isList: getIsListSelector(state),
     isCard: getIsCardSelector(state),
     lotteryResult: getLotteryResultSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

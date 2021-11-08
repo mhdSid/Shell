@@ -8,6 +8,7 @@ import {loadingPopup} from '../Loading';
 import {notifications} from '../../Constants/Texts';
 
 const Notifications = props => {
+  const {lang} = props;
   const [loading] = useState(false);
 
   const handleCloseModal = () => {
@@ -22,7 +23,7 @@ const Notifications = props => {
           <Toolbar
             style={{container: sharedStyles.toolbarContainer}}
             leftElement="arrow-back"
-            centerElement={notifications.notifications}
+            centerElement={notifications[lang].notifications}
             onLeftElementPress={handleCloseModal}
           />
           {loading && loadingPopup}
@@ -43,6 +44,7 @@ const Notifications = props => {
 
 Notifications.propTypes = {
   onClose: PropTypes.func,
+  lang: PropTypes.string,
 };
 
 export default Notifications;

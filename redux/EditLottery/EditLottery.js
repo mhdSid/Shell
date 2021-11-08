@@ -12,7 +12,7 @@ import { lotteriesActions } from '../Lotteries/actions';
 import { chatActions } from '../Chat/actions';
 
 const handleUpdateLottery = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const {
       onError,
       name,
@@ -40,7 +40,7 @@ const handleUpdateLottery = payload => {
       const onUpdateUserSuccess = data => {
         let {error, updatedLottery} = data;
         if (error) {
-          return handleError({error, onError});
+          return handleError({error, onError}, getState);
         }
         invoke(payload, 'onSuccess');
         dispatch({
@@ -70,7 +70,7 @@ const handleUpdateLottery = payload => {
                         ? {error: err.error, onError}
                         : {error: err, onError};
                     reject(errorObj);
-                    return handleError(errorObj);
+                    return handleError(errorObj, getState);
                   }
                   resolve(updatedAd);
                 });
@@ -116,7 +116,7 @@ const handleUpdateLottery = payload => {
               }
             },
             reason => {
-              return handleError({error: reason, onError});
+              return handleError({error: reason, onError}, getState);
             },
           );
         } else {
@@ -134,7 +134,7 @@ const handleUpdateLottery = payload => {
         price,
         userId,
       }).then(onUpdateUserSuccess, error => {
-        return handleError({error, onError});
+        return handleError({error, onError}, getState);
       });
     } else if (imageFiles && imageFiles.length) {
       const updatePromises = [];
@@ -152,7 +152,7 @@ const handleUpdateLottery = payload => {
                     ? {error: err.error, onError}
                     : {error: err, onError};
                 reject(errorObj);
-                return handleError(errorObj);
+                return handleError(errorObj, getState);
               }
               resolve(updatedAd);
             });
@@ -198,7 +198,7 @@ const handleUpdateLottery = payload => {
           }
         },
         reason => {
-          return handleError({error: reason, onError});
+          return handleError({error: reason, onError}, getState);
         },
       );
     }

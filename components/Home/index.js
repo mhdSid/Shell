@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {home, lottteries} from '../../Constants/Texts';
 import {handleFetchLotteries} from '../../redux/Home/FetchLotteries';
 import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
 import {setHomeViewStyle} from '../../redux/Settings/actions';
@@ -20,7 +19,7 @@ import {
 // import {emitSocketEvents} from '../../services/Socket';
 import {chunk} from 'lodash';
 import {getLoggedInSelector, getUserIdSelector} from '../Profile/Selectors';
-import {lottteries as lotteriesTexts} from '../../Constants/Texts';
+import {home, lottteries as lotteriesTexts} from '../../Constants/Texts';
 // import {AdMobBanner} from 'react-native-admob';
 import SearchBox from './SearchBox';
 import UploadLotteryProgressModal from '../UploadLotteryProgress/UploadLotteryProgressModal';
@@ -34,9 +33,10 @@ import {
 import {loadingPopup} from '../Loading';
 import cancellableFetch from 'react-native-cancelable-fetch';
 import {resetHomeLotteries, setPageToken} from '../../redux/Home/actions';
+import { getLangSelector } from '../Settings/Selectors';
 
 const HomeComponent = props => {
-  const {isList, isCard, lotteries, authUserId, searchEventFired} = props;
+  const {isList, isCard, lotteries, authUserId, searchEventFired, lang} = props;
   const [loading, setLoading] = useState(true);
   const [showLotteryProgressModal, setShowLotteryProgressModal] = useState(
     false,
@@ -215,7 +215,7 @@ const HomeComponent = props => {
       )}
       <Toolbar
         style={{container: sharedStyles.toolbarContainer}}
-        centerElement={home.appName}
+        centerElement={home[lang].appName}
         rightElement={[
           authUserId && 'search',
           authUserId && 'cloud-upload',
@@ -271,7 +271,7 @@ const HomeComponent = props => {
           !loading ? (
             <View style={sharedStyles.homeEmptySearchResultsView}>
               <Text style={sharedStyles.emptySearchResultsText}>
-                {lotteriesTexts.emptyLotteries}
+                {lotteriesTexts[lang].emptyLotteries}
               </Text>
             </View>
           ) : null
@@ -300,6 +300,7 @@ HomeComponent.propTypes = {
   isLoggedIn: PropTypes.bool,
   searchEventFired: PropTypes.bool,
   authUserId: PropTypes.oneOfType([PropTypes.string, PropTypes.any]),
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
@@ -312,6 +313,7 @@ const mapStateToProps = state => {
     isLoggedIn: getLoggedInSelector(state),
     searchEventFired: getSearchEventFiredSelector(state),
     emptySearchResults: getEmptySearchResultsSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

@@ -10,7 +10,7 @@ const handleSearch = payload => {
     const onSeachSuccess = data => {
       const {error, lotteries} = data; // nextPageToken
       if (error) {
-        return handleError({error, onError});
+        return handleError({error, onError}, getState);
       }
       invoke(payload, 'onSuccess');
       dispatch({
@@ -19,7 +19,7 @@ const handleSearch = payload => {
       });
     };
     return search({searchFilters, cancelTag}).then(onSeachSuccess, error => {
-      return handleError({error, onError});
+      return handleError({error, onError}, getState);
     });
   };
 };

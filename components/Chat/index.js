@@ -18,6 +18,7 @@ import {
   handleSendChatMessage,
   socket,
 } from '../../redux/Chat/actions';
+import { getLangSelector } from '../Settings/Selectors';
 
 const ChatModal = props => {
   const {
@@ -29,6 +30,7 @@ const ChatModal = props => {
     conversation,
     authUserId,
     isSocketInitiated,
+    lang,
   } = props;
   const [loading, setIsLoading] = useState(true);
   const [chatMessage, setChatMessage] = useState(false);
@@ -95,7 +97,7 @@ const ChatModal = props => {
         <Text style={sharedStyles.chatTextMessage}>{item.message}</Text>
       </View>
       <Text style={sharedStyles.chatTextMessageDate}>
-        {formatDate(item.date)}
+        {formatDate(item.date, lang)}
       </Text>
     </View>
   );
@@ -188,7 +190,7 @@ const ChatModal = props => {
             style={{container: sharedStyles.toolbarContainer}}
             leftElement="arrow-back"
             centerElement={
-              isWinner ? chatText.chatWithOwner : chatText.chatWithWinner
+              isWinner ? chatText[lang].chatWithOwner : chatText[lang].chatWithWinner
             }
             onLeftElementPress={handleCloseModal}
           />
@@ -220,7 +222,7 @@ const ChatModal = props => {
                     !loading ? (
                       <View style={sharedStyles.emptySearchResultsView}>
                         <Text style={sharedStyles.emptySearchResultsText}>
-                          {chatText.emptyChat}
+                          {chatText[lang].emptyChat}
                         </Text>
                       </View>
                     ) : null
@@ -266,12 +268,14 @@ ChatModal.propTypes = {
   authUserId: PropTypes.string,
   conversation: PropTypes.oneOfType([PropTypes.array, PropTypes.any]),
   isSocketInitiated: PropTypes.bool,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = (state, props) => {
   return {
     conversation: getConversationSelector(state, props),
     isSocketInitiated: getIsSocketInitiatedSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

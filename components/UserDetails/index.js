@@ -52,7 +52,7 @@ const UserDetails = props => {
             {/* <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="person" />
               <Text style={sharedStyles.userDetailsText}>
-                {userDetails.name}
+                {userDetails[lang].name}
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -63,7 +63,7 @@ const UserDetails = props => {
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="email" />
               <Text style={sharedStyles.userDetailsText}>
-                {userDetails.email}
+                {userDetails[lang].email}
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -72,7 +72,7 @@ const UserDetails = props => {
             {/* <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="phone" />
               <Text style={sharedStyles.userDetailsText}>
-                {userDetails.mobile}
+                {userDetails[lang].mobile}
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -81,7 +81,7 @@ const UserDetails = props => {
             <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
               <Text style={sharedStyles.userDetailsText}>
-                {userDetails.location}
+                {userDetails[lang].location}
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -92,7 +92,7 @@ const UserDetails = props => {
             {/* <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
               <Text style={sharedStyles.userDetailsText}>
-                {userDetails.postalCode}
+                {userDetails[lang].postalCode}
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -103,7 +103,7 @@ const UserDetails = props => {
             {/* <View style={sharedStyles.userDetailsIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
               <Text style={sharedStyles.userDetailsText}>
-                {userDetails.fullAddress}
+                {userDetails[lang].fullAddress}
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>

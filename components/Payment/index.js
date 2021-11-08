@@ -17,11 +17,12 @@ import {handleEnterLottery} from '../../redux/Payment/EnterLottery';
 import {getLotteryDetailsSelector} from '../Pinger/Selectors';
 import {successConfirmationModal as successConfirmationModalTexts} from '../../Constants/Texts';
 import ListItem from '../Home/ListItem';
+import { getLangSelector } from '../Settings/Selectors';
 
 let SuccessConfirmationModal = null;
 
 const Payment = props => {
-  const {user, loggedIn, lotteryDetails, item} = props;
+  const {user, loggedIn, lotteryDetails, item, lang} = props;
   const lottery = item || lotteryDetails;
   const [loading, setLoading] = useState(false);
   const [
@@ -108,13 +109,13 @@ const Payment = props => {
   };
   const successModalActions = [
     {
-      text: successConfirmationModalTexts.payment.actions.joinAgain.text,
-      icon: successConfirmationModalTexts.payment.actions.joinAgain.icon,
+      text: successConfirmationModalTexts[lang].payment.actions.joinAgain.text,
+      icon: successConfirmationModalTexts[lang].payment.actions.joinAgain.icon,
       onPress: handleSuccessConfirmationModalJoinAgain,
     },
     {
-      text: successConfirmationModalTexts.payment.actions.goBack.text,
-      icon: successConfirmationModalTexts.payment.actions.goBack.icon,
+      text: successConfirmationModalTexts[lang].payment.actions.goBack.text,
+      icon: successConfirmationModalTexts[lang].payment.actions.goBack.icon,
       onPress: handleSuccessConfirmationModalGoBack,
     },
   ];
@@ -133,16 +134,17 @@ const Payment = props => {
         <View style={sharedStyles.innerSafeAreaView}>
           {showSuccessConfirmationModal ? (
             <SuccessConfirmationModal
-              title={successConfirmationModalTexts.payment.title}
-              subtitle={successConfirmationModalTexts.payment.subtitle}
+              title={successConfirmationModalTexts[lang].payment.title}
+              subtitle={successConfirmationModalTexts[lang].payment.subtitle}
               onClose={handleCloseModal}
               actions={successModalActions}
+              lang={lang}
             />
           ) : null}
           <Toolbar
             style={{container: sharedStyles.toolbarContainer}}
             leftElement="arrow-back"
-            centerElement={paymentTexts.joinLottery}
+            centerElement={paymentTexts[lang].joinLottery}
             onLeftElementPress={handleCloseModal}
           />
           {loading ? loadingPopup : null}
@@ -176,10 +178,10 @@ const Payment = props => {
                   sharedStyles.paymentCurrentCartInvoiceItemMargin,
                 ]}>
                 <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
-                  {paymentTexts.tax}
+                  {paymentTexts[lang].tax}
                 </Text>
                 <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
-                  {paymentTexts.taxFee}
+                  {paymentTexts[lang].taxFee}
                 </Text>
               </View>
               <View
@@ -188,18 +190,18 @@ const Payment = props => {
                   sharedStyles.paymentCurrentCartInvoiceItemMargin,
                 ]}>
                 <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
-                  {paymentTexts.joinLottery}
+                  {paymentTexts[lang].joinLottery}
                 </Text>
                 <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
-                  {paymentTexts.fee}
+                  {paymentTexts[lang].fee}
                 </Text>
               </View>
               <View style={sharedStyles.paymentCurrentCartInvoiceItem}>
                 <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
-                  {paymentTexts.total}
+                  {paymentTexts[lang].total}
                 </Text>
                 <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
-                  {paymentTexts.fee}
+                  {paymentTexts[lang].fee}
                 </Text>
               </View>
             </View>
@@ -209,7 +211,7 @@ const Payment = props => {
                 primary
                 disabled={loading || !isValid}
                 icon="payment"
-                text={paymentTexts.submit}
+                text={paymentTexts[lang].submit}
                 style={{
                   container:
                     loading || !isValid
@@ -223,19 +225,19 @@ const Payment = props => {
               <Icon color="black" name="receipt" />
               <Text
                 style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
-                {aboutTexts.enterLottery}
+                {aboutTexts[lang].enterLottery}
               </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {aboutTexts.howToUseTenth}
+                {aboutTexts[lang].howToUseTenth}
               </Text>
             </View>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="black" name="star" />
               <Text
                 style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
-                {aboutTexts.joinLottery}
+                {aboutTexts[lang].joinLottery}
               </Text>
             </View>
             <View
@@ -244,7 +246,7 @@ const Payment = props => {
                 sharedStyles.paymentSectionMarginBottom,
               ]}>
               <Text style={sharedStyles.aboutFirstSectionText}>
-                {aboutTexts.howToUseEleventh}
+                {aboutTexts[lang].howToUseEleventh}
               </Text>
             </View>
           </ScrollView>
@@ -259,6 +261,7 @@ Payment.propTypes = {
   loggedIn: PropTypes.bool,
   onClose: PropTypes.func,
   item: PropTypes.object,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
@@ -266,6 +269,7 @@ const mapStateToProps = state => {
     user: getUserSelector(state),
     loggedIn: getLoggedInSelector(state),
     lotteryDetails: getLotteryDetailsSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

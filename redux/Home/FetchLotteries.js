@@ -10,7 +10,7 @@ const handleFetchLotteries = payload => {
       invoke(payload, 'onSuccess');
       const {error, ads: lotteries, nextPageToken} = data;
       if (error) {
-        return handleError({error, onError});
+        return handleError({error, onError}, getState);
       }
       dispatch({
         type: homeActions.setPageToken,
@@ -34,7 +34,7 @@ const handleFetchLotteries = payload => {
         pageToken,
         cancelTag,
       }).then(onGetAdsSuccess, error => {
-        return handleError({error, onError});
+        return handleError({error, onError}, getState);
       });
     }
     invoke(payload, 'onSuccess');

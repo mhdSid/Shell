@@ -24,9 +24,10 @@ import {Dropdown} from 'react-native-material-dropdown';
 import {handleUpdateUserData} from '../../redux/Auth/UpdateUser';
 import ImageResizer from 'react-native-image-resizer';
 import FastImage from 'react-native-fast-image';
+import { getLangSelector } from '../Settings/Selectors';
 
 const UpdateUser = props => {
-  const {user} = props;
+  const {user, lang} = props;
   let userPrefecture;
   if (user) {
     userPrefecture = prefectures.Japan.find(
@@ -142,7 +143,7 @@ const UpdateUser = props => {
             style={{container: sharedStyles.toolbarContainerPaddingRight}}
             leftElement="arrow-back"
             onLeftElementPress={handleCloseModal}
-            centerElement={updateUserr.updateProfile}
+            centerElement={updateUserr[lang].updateProfile}
             // rightElement={
             //   <Button
             //     color="white"
@@ -153,7 +154,7 @@ const UpdateUser = props => {
             //       text: {color: '#b69cf6'},
             //     }}
             //     raised
-            //     text={updateUserr.update}
+            //     text={updateUserr[lang].update}
             //     icon="done-all"
             //   />
             // }
@@ -197,25 +198,25 @@ const UpdateUser = props => {
                       ) : null}
                     </TouchableBounce>
                     <Text style={sharedStyles.chooseProfileImageText}>
-                      {updateUserr.choosePhoto}
+                      {updateUserr[lang].choosePhoto}
                     </Text>
                   </View>
                 </View>
-                <Text style={sharedStyles.label}>{profile.prefecture}</Text>
+                <Text style={sharedStyles.label}>{profile[lang].prefecture}</Text>
                 <View style={sharedStyles.dropdownView}>
                   <Dropdown
                     baseColor={'rgba(0,0,0,0.3)'}
-                    label={profile.enterPrefecture}
+                    label={profile[lang].enterPrefecture}
                     data={prefecturesDropdownData}
                     onChangeText={prefectureOnChangeText}
                     selectedItemColor={'rgba(0, 0, 0, .87)'}
                     value={prefecture}
                   />
                 </View>
-                <Text style={sharedStyles.label}>{profile.city}</Text>
+                <Text style={sharedStyles.label}>{profile[lang].city}</Text>
                 <View style={sharedStyles.dropdownView}>
                   <Dropdown
-                    label={profile.enterCity}
+                    label={profile[lang].enterCity}
                     baseColor={'rgba(0,0,0,0.3)'}
                     selectedItemColor={'rgba(0, 0, 0, .87)'}
                     data={cityDropdownData}
@@ -229,7 +230,7 @@ const UpdateUser = props => {
                     raised={true}
                     primary
                     style={{container: sharedStyles.mainButtonContainer}}
-                    text={updateUserr.update}
+                    text={updateUserr[lang].update}
                     onPress={handleUpdateUser}
                   />
                 </View>
@@ -246,11 +247,13 @@ UpdateUser.propTypes = {
   user: PropTypes.object,
   onClose: PropTypes.func,
   updateUserAction: PropTypes.func,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
   return {
     user: getUserSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

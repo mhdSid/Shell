@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import {settings} from '../../Constants/Texts';
 
 const FaqModal = props => {
+  const {lang} = props;
   const handleCloseModal = () => {
     invoke(props, 'onClose');
   };
@@ -19,7 +20,7 @@ const FaqModal = props => {
           <Toolbar
             style={{container: sharedStyles.toolbarContainer}}
             leftElement="arrow-back"
-            centerElement={settings.faq}
+            centerElement={settings[lang].faq}
             onLeftElementPress={handleCloseModal}
           />
           <ScrollView showsVerticalScrollIndicator={false} />
@@ -31,6 +32,7 @@ const FaqModal = props => {
 
 FaqModal.propTypes = {
   onClose: PropTypes.func,
+  lang: PropTypes.string,
 };
 
 export default FaqModal;

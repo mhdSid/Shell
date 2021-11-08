@@ -86,9 +86,10 @@ const handleSendChatMessage = payload => {
   };
 };
 
-const handleError = props => {
+const handleError = (props, getState) => {
+  const lang = getState().settingsReducer.lang;
   const {error} = props;
-  const message = (error && error.message) || errors.error;
+  const message = (error && error.message) || errors[lang].error;
   invoke(props, 'onError');
   if (message) {
     Alert.alert(message);

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import {Button, Icon} from 'react-native-material-ui';
 
 const SuccessConfirmationModal = props => {
-  const {title, subtitle, actions} = props;
+  const {title, subtitle, actions, lang} = props;
   const handleCloseModal = () => {
     invoke(props, 'onClose');
   };
@@ -54,6 +54,7 @@ SuccessConfirmationModal.propTypes = {
   title: PropTypes.string,
   subtitle: PropTypes.string,
   actions: PropTypes.array,
+  lang: PropTypes.string,
 };
 
 export default SuccessConfirmationModal;

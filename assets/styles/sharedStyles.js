@@ -1,6 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
+
 const stepImageWidth = windowWidth / 3 - 30;
 const fullWidthHeight = {
   width: '100%',
@@ -938,6 +939,7 @@ const sharedStyles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: '40%',
   },
   emptySearchResultsView: {
     width: '100%',
@@ -945,6 +947,7 @@ const sharedStyles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: '40%',
   },
   uploadProgressModalView: {
     width: '100%',

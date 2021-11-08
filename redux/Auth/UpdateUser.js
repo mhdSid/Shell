@@ -3,12 +3,12 @@ import {handleError, authActions} from './actions';
 import invoke from 'lodash/invoke';
 
 const handleUpdateUserData = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const {onError, updatedUserData} = payload;
     const onUpdateUserSuccess = data => {
       let {error, user: updatedUser} = data;
       if (error) {
-        return handleError({error, onError});
+        return handleError({error, onError}, getState);
       }
       invoke(payload, 'onSuccess');
       return dispatch({
@@ -17,7 +17,7 @@ const handleUpdateUserData = payload => {
       });
     };
     return update(updatedUserData).then(onUpdateUserSuccess, error => {
-      return handleError({error, onError});
+      return handleError({error, onError}, getState);
     });
   };
 };

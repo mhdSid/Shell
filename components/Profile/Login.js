@@ -12,8 +12,10 @@ import {connect} from 'react-redux';
 import {loginAction, logoutAction} from '../../redux/Auth/actions';
 import {handleLogin} from '../../redux/Auth/Login';
 import {Text} from 'react-native';
+import { getLangSelector } from '../Settings/Selectors';
 
 const Login = props => {
+  const {lang} = props;
   const [loading, setLoading] = useState(false);
   const [emailPassChanged, setEmailPassChanged] = useState(false);
   const [emailChanged, setEmailChanged] = useState(false);
@@ -70,7 +72,7 @@ const Login = props => {
           setEmailChanged(false);
           setErrors({
             ...errors,
-            email: validationMessages.loginSignup.email,
+            email: validationMessages[lang].loginSignup.email,
           });
         }
       };
@@ -87,7 +89,7 @@ const Login = props => {
           setPasswordChanged(false);
           setErrors({
             ...errors,
-            password: validationMessages.loginSignup.password,
+            password: validationMessages[lang].loginSignup.password,
           });
         }
       };
@@ -117,15 +119,15 @@ const Login = props => {
         style={{
           container: sharedStyles.toolbarContainerPadding,
         }}
-        centerElement={profile.loginOrSignup}
+        centerElement={profile[lang].loginOrSignup}
         leftElement={<Icon color="white" name="exit-to-app" />}
       />
       <View
         style={[sharedStyles.loginContainer, sharedStyles.relativeConatainer]}>
         <View style={sharedStyles.mobileContainer}>
-          <Text style={sharedStyles.label}>{profile.email}</Text>
+          <Text style={sharedStyles.label}>{profile[lang].email}</Text>
           <TextField
-            placeholder={profile.enterEmail}
+            placeholder={profile[lang].enterEmail}
             placeholderTextColor={'rgba(0,0,0,0.3)'}
             ref={emailRef}
             tintColor={'#b69cf6'}
@@ -142,9 +144,9 @@ const Login = props => {
           />
         </View>
         <View style={sharedStyles.mobileContainer}>
-          <Text style={sharedStyles.label}>{profile.password}</Text>
+          <Text style={sharedStyles.label}>{profile[lang].password}</Text>
           <TextField
-            placeholder={profile.enterPassword}
+            placeholder={profile[lang].enterPassword}
             placeholderTextColor={'rgba(0,0,0,0.3)'}
             ref={passwordRef}
             secureTextEntry={true}
@@ -166,7 +168,7 @@ const Login = props => {
             disabled={loading || !emailPassChanged}
             raised={true}
             primary
-            text={loginSingup}
+            text={loginSingup[lang].loginSingup}
             style={{
               container: sharedStyles.mainButtonContainer,
             }}
@@ -181,10 +183,13 @@ const Login = props => {
 Login.propTypes = {
   login: PropTypes.func,
   logout: PropTypes.func,
+  lang: PropTypes.string,
 };
 
-const mapStateToProps = () => {
-  return {};
+const mapStateToProps = state => {
+  return {
+    lang: getLangSelector(state),
+  };
 };
 
 const mapDispatchToProps = dispatch => {

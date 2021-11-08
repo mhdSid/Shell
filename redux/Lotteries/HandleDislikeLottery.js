@@ -8,12 +8,12 @@ import { receiveLotteryActions } from '../ReceiveLottery/actions';
 import { chatActions } from '../Chat/actions';
 
 const handleDislikeLottery = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const {userId, lotteryId, onError, showLotteryDetails, cancelTag} = payload;
     const onGetMyLotteriesSuccess = data => {
       const {dislikedLottery, error} = data;
       if (error) {
-        return handleError({error, onError});
+        return handleError({error, onError}, getState);
       }
       invoke(payload, 'onSuccess');
       if (dislikedLottery) {
@@ -49,7 +49,7 @@ const handleDislikeLottery = payload => {
     return dislikeLottery({userId, lotteryId, cancelTag}).then(
       onGetMyLotteriesSuccess,
       error => {
-        return handleError({error, onError});
+        return handleError({error, onError}, getState);
       },
     );
   };

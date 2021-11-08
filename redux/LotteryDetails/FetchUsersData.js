@@ -5,7 +5,7 @@ import {lotteryDetailsActions} from './actions';
 // import {uniq} from 'lodash';
 
 const handleFetchUsersData = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const {
       users: adUsers,
       winnerUserId,
@@ -17,7 +17,7 @@ const handleFetchUsersData = payload => {
     const onGetUsersDataSuccess = data => {
       let {error, users} = data;
       if (error) {
-        return handleError({error, onEror});
+        return handleError({error, onEror}, getState);
       }
       users = users.filter(Boolean);
       if (Array.isArray(users) && users.length) {
@@ -40,7 +40,7 @@ const handleFetchUsersData = payload => {
     return getUsersData({users: adUsers, cancelTag}).then(
       onGetUsersDataSuccess,
       error => {
-        return handleError({error, onEror});
+        return handleError({error, onEror}, getState);
       },
     );
   };

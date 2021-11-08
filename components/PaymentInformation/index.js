@@ -10,9 +10,10 @@ import {CreditCardInput} from 'react-native-credit-card-input';
 import {handlerUpdateUserData} from '../../redux/Auth/UpdateUser';
 import {getUserSelector} from '../UpdateUser/Selectors';
 import {connect} from 'react-redux';
+import { getLangSelector } from '../Settings/Selectors';
 
 const PaymentInformation = props => {
-  const {user} = props;
+  const {user, lang} = props;
   const [loading, setLoading] = useState(false);
   const creditCardInputRef = useRef(null);
   const [isValid, setIsValid] = useState(false);
@@ -135,7 +136,7 @@ const PaymentInformation = props => {
               ],
             }}
             leftElement="arrow-back"
-            centerElement={paymentInformation.creditCard}
+            centerElement={paymentInformation[lang].creditCard}
             onLeftElementPress={handleCloseModal}
           />
           {loading && loadingPopup}
@@ -161,7 +162,7 @@ const PaymentInformation = props => {
                   raised={true}
                   primary
                   style={{container: sharedStyles.mainButtonContainer}}
-                  text={paymentInformation.submit}
+                  text={paymentInformation[lang].submit}
                   onPress={handleUpdateUserPaymentInfo}
                 />
               </View>
@@ -173,15 +174,17 @@ const PaymentInformation = props => {
   );
 };
 
-PaymentInformation.propTypes = {
+paymentInformation.propTypes = {
   user: PropTypes.object,
   onClose: PropTypes.func,
   updateUserAction: PropTypes.func,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
   return {
     user: getUserSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

@@ -13,6 +13,7 @@ import {chat as chatTexts, listItemActions} from '../../Constants/Texts';
 import {showLotteryResult} from '../../redux/LotteryResult/actions';
 import FastImage from 'react-native-fast-image';
 import {Alert} from 'react-native';
+import { getLangSelector } from '../Settings/Selectors';
 
 class ListItemCommon extends Component {
   static propTypes = {
@@ -68,9 +69,9 @@ class ListItemCommon extends Component {
     ActionSheetIOS.showActionSheetWithOptions(
       {
         options: [
-          listItemActions.cancel,
-          listItemActions.goToLotteryDetails,
-          this.props.showLotteryResult && listItemActions.goToLotteryResults,
+          listItemActions[this.props.lang].cancel,
+          listItemActions[this.props.lang].goToLotteryDetails,
+          this.props.showLotteryResult && listItemActions[this.props.lang].goToLotteryResults,
         ].filter(Boolean),
         // destructiveButtonIndex: 1,
         cancelButtonIndex: 0,
@@ -97,9 +98,9 @@ class ListItemCommon extends Component {
     );
   };
   handleNotReceivedPress = () => {
-    Alert.alert(chatTexts.notReceived, chatTexts.youWonThisLottery, [
+    Alert.alert(chatTexts[this.props.lang].notReceived, chatTexts[this.props.lang].youWonThisLottery, [
       {
-        text: chatTexts.chatWithOwner,
+        text: chatTexts[this.props.lang].chatWithOwner,
         onPress: () => {
           this.handleItemPress();
         },
@@ -107,9 +108,9 @@ class ListItemCommon extends Component {
     ]);
   };
   handleNotShippedPress = () => {
-    Alert.alert(chatTexts.notShipped, chatTexts.thereIsAWinner, [
+    Alert.alert(chatTexts[this.props.lang].notShipped, chatTexts[this.props.lang].thereIsAWinner, [
       {
-        text: chatTexts.chatWithWinner,
+        text: chatTexts[this.props.lang].chatWithWinner,
         onPress: () => {
           this.handleItemPress();
         },
@@ -117,17 +118,17 @@ class ListItemCommon extends Component {
     ]);
   };
   handleReceivedPress = () => {
-    Alert.alert(chatTexts.received, chatTexts.youHaveReceived, [
+    Alert.alert(chatTexts[this.props.lang].received, chatTexts[this.props.lang].youHaveReceived, [
       {
-        text: chatTexts.cancel,
+        text: chatTexts[this.props.lang].cancel,
         style: 'cancel',
       },
     ]);
   };
   handleShippedPress = () => {
-    Alert.alert(chatTexts.shipped, chatTexts.youHaveShipped, [
+    Alert.alert(chatTexts[this.props.lang].shipped, chatTexts[this.props.lang].youHaveShipped, [
       {
-        text: chatTexts.cancel,
+        text: chatTexts[this.props.lang].cancel,
         style: 'cancel',
       },
     ]);
@@ -236,6 +237,7 @@ class ListItemCommon extends Component {
 const mapStateToProps = state => {
   return {
     authUserId: getUserIdSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

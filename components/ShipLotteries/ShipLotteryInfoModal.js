@@ -22,9 +22,10 @@ import ChatModal from '../Chat';
 import formatDate from '../../lib/formatDate';
 import {handleMarkLotteryAsShipped} from '../../redux/ShipLottery/MarkLotteryAsShipped';
 import FastImage from 'react-native-fast-image';
+import { getLangSelector } from '../Settings/Selectors';
 
 const ShipLotteryInfoModal = props => {
-  const {shipLotteryDetails, user, lotteryWinnerData} = props;
+  const {shipLotteryDetails, user, lotteryWinnerData, lang} = props;
   const {
     id: lotteryId,
     name,
@@ -103,7 +104,7 @@ const ShipLotteryInfoModal = props => {
           <Toolbar
             style={{container: sharedStyles.toolbarContainer}}
             leftElement="arrow-back"
-            centerElement={shipLotteryTexts.shipLottery}
+            centerElement={shipLotteryTexts[lang].shipLottery}
             onLeftElementPress={handleCloseModal}
           />
           {loading && loadingPopup}
@@ -171,12 +172,12 @@ const ShipLotteryInfoModal = props => {
                 <View style={sharedStyles.shipReceiveLotteryInfoContainer}>
                   <Icon name="notifications-active" color="black" />
                   <Text style={sharedStyles.receiveLotteryAnnouncement}>
-                    {shipLotteryTexts.announcement}
+                    {shipLotteryTexts[lang].announcement}
                   </Text>
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="dns" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.name}
+                      {lotteryDetailsTexts[lang].name}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -187,7 +188,7 @@ const ShipLotteryInfoModal = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="description" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.description}
+                      {lotteryDetailsTexts[lang].description}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -198,7 +199,7 @@ const ShipLotteryInfoModal = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="exposure" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.condition}
+                      {lotteryDetailsTexts[lang].condition}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -209,7 +210,7 @@ const ShipLotteryInfoModal = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="class" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.category}
+                      {lotteryDetailsTexts[lang].category}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -220,7 +221,7 @@ const ShipLotteryInfoModal = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="local-atm" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.totalPrice}
+                      {lotteryDetailsTexts[lang].totalPrice}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -232,7 +233,7 @@ const ShipLotteryInfoModal = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="credit-card" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.collectedPrice}
+                      {lotteryDetailsTexts[lang].collectedPrice}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -244,7 +245,7 @@ const ShipLotteryInfoModal = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="monetization-on" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.payToWin}
+                      {lotteryDetailsTexts[lang].payToWin}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -256,18 +257,18 @@ const ShipLotteryInfoModal = props => {
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="today" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.publishDate}
+                      {lotteryDetailsTexts[lang].publishDate}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
                     <Text style={sharedStyles.aboutFirstSectionText}>
-                      {formatDate(publishDate)}
+                      {formatDate(publishDate, lang)}
                     </Text>
                   </View>
                   <View style={sharedStyles.userDetailsIconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
                     <Text style={sharedStyles.userDetailsText}>
-                      {lotteryDetailsTexts.location}
+                      {lotteryDetailsTexts[lang].location}
                     </Text>
                   </View>
                   <View style={sharedStyles.aboutFirstSectionTextContainer}>
@@ -300,6 +301,7 @@ const ShipLotteryInfoModal = props => {
 ShipLotteryInfoModal.propTypes = {
   onClose: PropTypes.func,
   shipLotteryDetails: PropTypes.object,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
@@ -307,6 +309,7 @@ const mapStateToProps = state => {
     user: getUserSelector(state),
     shipLotteryDetails: getShipLotteryDetailsSelector(state),
     lotteryWinnerData: getLotteryWinnerDataSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

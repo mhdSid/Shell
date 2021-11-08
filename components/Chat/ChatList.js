@@ -8,6 +8,7 @@ import {Toolbar} from 'react-native-material-ui';
 import {
   chat as chatTexts,
   lottteries as lotteriesTexts,
+  noAuth as noAuthTexts,
 } from '../../Constants/Texts';
 import invoke from 'lodash/invoke';
 import ListItemCommon from '../Home/ListItem';
@@ -18,9 +19,10 @@ import {getChattableLotteriesSelector} from './Selectors';
 import {handleFetchChattableLotteries} from '../../redux/Chat/FetchChattableLotteries';
 import { isUndefined } from 'lodash';
 import NoAuth from '../NoAuth';
+import { getLangSelector } from '../Settings/Selectors';
 
 const ChatList = props => {
-  const {chattableLotteries, authUser} = props;
+  const {chattableLotteries, authUser, lang} = props;
   const [loading, setLoading] = useState(true);
   const [cancelHttpTag] = useState(55);
   const [
@@ -94,14 +96,14 @@ const ChatList = props => {
   }
 
   if (!authUser) {
-    return <NoAuth />;
+    return <NoAuth text={noAuthTexts[lang].chat} />;
   }
 
   return (
     <View style={sharedStyles.fullheightView}>
       <Toolbar
         style={{container: sharedStyles.toolbarContainer}}
-        centerElement={chatTexts.chat}
+        centerElement={chatTexts[lang].chat}
       />
       {isShowChatCOnversationModal ? (
         <ChatModal
@@ -138,7 +140,7 @@ const ChatList = props => {
           !loading ? (
             <View style={sharedStyles.homeEmptySearchResultsView}>
               <Text style={sharedStyles.emptySearchResultsText}>
-                {lotteriesTexts.emptyLotteries}
+                {lotteriesTexts[lang].emptyLotteries}
               </Text>
             </View>
           ) : null
@@ -151,12 +153,14 @@ const ChatList = props => {
 ChatList.propTypes = {
   chattableLotteries: PropTypes.array,
   authUser: PropTypes.object,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
   return {
     chattableLotteries: getChattableLotteriesSelector(state),
     authUser: getUserSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

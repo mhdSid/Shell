@@ -30,9 +30,10 @@ import {
 } from '../../Constants/Lotteries';
 import {handleFetchLotteries} from '../../redux/Home/FetchLotteries';
 import {getUserIdSelector} from '../Profile/Selectors';
+import { getLangSelector } from '../Settings/Selectors';
 
 const SearchBox = props => {
-  const {searchFilters, style, searchEventFired} = props;
+  const {searchFilters, style, searchEventFired, lang} = props;
   let searchFiltersPrefecture;
   if (searchFilters.prefecture) {
     searchFiltersPrefecture = prefectures.Japan.find(
@@ -90,7 +91,7 @@ const SearchBox = props => {
             if (toDate && toDate <= fromDate) {
               setErrors({
                 ...errors,
-                fromDate: validationMessages.search.fromDateLessThanToDate,
+                fromDate: validationMessages[lang].search.fromDateLessThanToDate,
               });
             } else {
               setErrors({
@@ -102,7 +103,7 @@ const SearchBox = props => {
           } else {
             setErrors({
               ...errors,
-              fromDate: validationMessages.search.fromDate,
+              fromDate: validationMessages[lang].search.fromDate,
             });
           }
         }
@@ -121,7 +122,7 @@ const SearchBox = props => {
             if (fromDate && fromDate >= toDate) {
               setErrors({
                 ...errors,
-                toDate: validationMessages.search.toDateGreaterThanFromDate,
+                toDate: validationMessages[lang].search.toDateGreaterThanFromDate,
               });
             } else {
               setErrors({
@@ -133,7 +134,7 @@ const SearchBox = props => {
           } else {
             setErrors({
               ...errors,
-              toDate: validationMessages.search.toDate,
+              toDate: validationMessages[lang].search.toDate,
             });
           }
         }
@@ -151,7 +152,7 @@ const SearchBox = props => {
           } else {
             setErrors({
               ...errors,
-              searchQuery: validationMessages.search.searchQuery,
+              searchQuery: validationMessages[lang].search.searchQuery,
             });
           }
         }
@@ -213,7 +214,7 @@ const SearchBox = props => {
               sharedStyles.searchBoxDivisionFirst,
             ]}>
             <Dropdown
-              label={profile.prefecture}
+              label={profile[lang].prefecture}
               data={prefecturesDropdownData}
               onChangeText={prefectureOnChangeText}
               selectedItemColor={'rgba(0, 0, 0, .87)'}
@@ -227,7 +228,7 @@ const SearchBox = props => {
               sharedStyles.searchBoxDivisionSecond,
             ]}>
             <Dropdown
-              label={profile.city}
+              label={profile[lang].city}
               data={cityDropdownData}
               onChangeText={cityOnChangeText}
               selectedItemColor={'rgba(0, 0, 0, .87)'}
@@ -249,8 +250,8 @@ const SearchBox = props => {
               autoCorrect={false}
               returnKeyType="done"
               activeLineWidth={1}
-              placeholder={searchBoxTexts.fromDatePlaceholder}
-              label={searchBoxTexts.fromDateLabel}
+              placeholder={searchBoxTexts[lang].fromDatePlaceholder}
+              label={searchBoxTexts[lang].fromDateLabel}
               value={searchFilters.fromDate}
               onSubmitEditing={handleSearchPress}
               keyboardType="numbers-and-punctuation"
@@ -271,8 +272,8 @@ const SearchBox = props => {
               outlined
               autoCapitalize={false}
               autoCorrect={false}
-              placeholder={searchBoxTexts.toDatePlaceholder}
-              label={searchBoxTexts.toDateLabel}
+              placeholder={searchBoxTexts[lang].toDatePlaceholder}
+              label={searchBoxTexts[lang].toDateLabel}
               returnKeyType="done"
               onSubmitEditing={handleSearchPress}
               activeLineWidth={1}
@@ -295,10 +296,10 @@ const SearchBox = props => {
               sharedStyles.searchBoxDivisionFirst,
             ]}>
             <Dropdown
-              label={importLottery.category}
+              label={importLottery[lang].category}
               baseColor={'rgba(0,0,0,0.3)'}
               selectedItemColor={'rgba(0, 0, 0, .87)'}
-              data={lotteryItemCategories}
+              data={lotteryItemCategories[lang]}
               onChangeText={categoryOnChangeText}
               value={searchFilters.category}
             />
@@ -310,9 +311,9 @@ const SearchBox = props => {
             ]}>
             <Dropdown
               baseColor={'rgba(0,0,0,0.3)'}
-              label={importLottery.condition}
+              label={importLottery[lang].condition}
               selectedItemColor={'rgba(0, 0, 0, .87)'}
-              data={lotteryItemConditions}
+              data={lotteryItemConditions[lang]}
               onChangeText={conditionOnChangeText}
               value={searchFilters.condition}
             />
@@ -325,10 +326,10 @@ const SearchBox = props => {
               autoCapitalize={false}
               autoCorrect={false}
               blurOnSubmit={true}
-              label={searchBoxTexts.searchQueryLabel}
+              label={searchBoxTexts[lang].searchQueryLabel}
               returnKeyType="done"
               activeLineWidth={1}
-              placeholder={searchBoxTexts.searchQueryPlaceholder}
+              placeholder={searchBoxTexts[lang].searchQueryPlaceholder}
               onBlur={handleBlur('searchQuery')}
               onSubmitEditing={handleSearchPress}
               onChangeText={handleChange.searchQuery()}
@@ -387,6 +388,7 @@ SearchBox.propTypes = {
   searchFilters: PropTypes.object,
   fetchLotteries: PropTypes.func,
   searchEventFired: PropTypes.bool,
+  lang: PropTypes.string,
 };
 
 const mapStateToProps = state => {
@@ -394,6 +396,7 @@ const mapStateToProps = state => {
     searchFilters: getSearchFiltersSelector(state),
     searchEventFired: getSearchEventFiredSelector(state),
     authUserId: getUserIdSelector(state),
+    lang: getLangSelector(state),
   };
 };
 

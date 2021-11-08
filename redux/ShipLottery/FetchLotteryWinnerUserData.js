@@ -4,12 +4,12 @@ import invoke from 'lodash/invoke';
 import {shipLotteryActions} from './actions';
 
 const handleFetchLotteryWinnerUserData = payload => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const {winnerUserId, onEror, cancelTag} = payload;
     const onGetUsersDataSuccess = data => {
       let {error, users} = data;
       if (error) {
-        return handleError({error, onEror});
+        return handleError({error, onEror}, getState);
       }
       if (Array.isArray(users) && users.length) {
         dispatch({
@@ -22,7 +22,7 @@ const handleFetchLotteryWinnerUserData = payload => {
     return getUsersData({users: [winnerUserId], cancelTag}).then(
       onGetUsersDataSuccess,
       error => {
-        return handleError({error, onEror});
+        return handleError({error, onEror}, getState);
       },
     );
   };

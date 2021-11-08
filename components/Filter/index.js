@@ -7,6 +7,7 @@ import {View} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 
 const Filter = props => {
+  const {lang} = props;
   const filterTextfieldRef = createRef();
   const handleChange = value => {
     if (!value) {
@@ -19,7 +20,7 @@ const Filter = props => {
     <View style={sharedStyles.filterView}>
       <OutlinedTextField
         blurOnSubmit={true}
-        label={filterTexts.filterLabel}
+        label={filterTexts[lang].filterLabel}
         tintColor={'rgba(0,0,0,0.3)'}
         baseColor="rgba(0, 0, 0, 0.3)"
         onChangeText={handleChange}
@@ -34,6 +35,7 @@ const Filter = props => {
 
 Filter.propTypes = {
   onFilterChange: PropTypes.func,
+  lang: PropTypes.string,
 };
 
 export default Filter;
