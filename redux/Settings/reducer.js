@@ -22,9 +22,7 @@ const settingsReducer = (state = initialState, action) => {
     }
     case settingsActions.resetState: {
       return {
-        lang: 'jp',
-        isHomeListStyle: true,
-        isHomeCardStyle: false,
+        ...state,
       };
     }
     default: {

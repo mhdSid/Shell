@@ -75,6 +75,7 @@ const ShipLotteryInfoModal = props => {
   };
   const handleMarkAsShippedCallback = () => {
     setIsLoading(false);
+    handleCloseModal();
   };
   const handleMarkAsShippedPress = () => {
     setIsLoading(true);

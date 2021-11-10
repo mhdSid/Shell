@@ -30,7 +30,6 @@ const UserProfile = props => {
   const [userProfileModal, setUserProfileModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const {gameStatus: userGameStatus, gamePoints: userGamePoints} = user;
-  const {points} = profile;
 
   const afterLogoutCallback = () => {
     setLoading(false);
@@ -178,7 +177,9 @@ const UserProfile = props => {
                     ),
                     secondaryText: (
                       <Text style={sharedStyles.profileUserText}>
-                        {`${userGameStatus} • ${userGamePoints} ${points}`}
+                        {`${userGameStatus} • ${userGamePoints} ${
+                          profile[lang].points
+                        }`}
                       </Text>
                     ),
                   },

@@ -149,6 +149,9 @@ const sharedStyles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 7,
   },
+  likedByNumberText: {
+    display: 'flex',
+  },
   mainButtonContainer: {
     borderRadius: 20,
   },

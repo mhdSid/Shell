@@ -43,7 +43,8 @@ import {handleCancelLottery} from '../../redux/LotteryDetails/CancelLottery';
 import {Alert} from 'react-native';
 import Confetti from 'react-native-confetti';
 import {confettiColors} from '../../Constants/Colors';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
+import formatedNumberOfLikes from '../../lib/formatNumberOfLikes';
 
 let ImagesViewer = null;
 let Payment = null;
@@ -428,6 +429,8 @@ const LotteryDetails = props => {
                 ) : null}
                 {authUser &&
                 `${userId}` !== `${authUser.id}` &&
+                !cancelled &&
+                available &&
                 !disableHeaderActions ? (
                   <Button
                     disabled={`${currentCollectedPrice}` === `${price}`}
@@ -683,19 +686,21 @@ const LotteryDetails = props => {
             <View style={sharedStyles.lotteryDetailsBottomToolbar}>
               {isLotteryPoster ? (
                 <>
-                  {lotteryDetailsTexts[lang].lotteryPosterActions.map(userAction => (
-                    <Button
-                      primary
-                      raised
-                      style={{
-                        container:
-                          sharedStyles.bottomToolbarActionButtonContainer,
-                      }}
-                      icon={userAction.icon}
-                      text={''}
-                      onPress={handleActionPress[userAction.action]}
-                    />
-                  ))}
+                  {lotteryDetailsTexts[lang].lotteryPosterActions.map(
+                    userAction => (
+                      <Button
+                        primary
+                        raised
+                        style={{
+                          container:
+                            sharedStyles.bottomToolbarActionButtonContainer,
+                        }}
+                        icon={userAction.icon}
+                        text={''}
+                        onPress={handleActionPress[userAction.action]}
+                      />
+                    ),
+                  )}
                   {winnerUserId
                     ? lotteryDetailsTexts[lang].shipActions.map(shipAction => (
                         <Button
@@ -712,50 +717,56 @@ const LotteryDetails = props => {
                       ))
                     : null}
                   {!cancelled
-                    ? lotteryDetailsTexts[lang].cancelActions.map(cancelAction => (
-                        <Button
-                          primary
-                          raised
-                          style={{
-                            container:
-                              sharedStyles.bottomToolbarActionButtonContainer,
-                          }}
-                          icon={cancelAction.icon}
-                          text={''}
-                          onPress={handleActionPress[cancelAction.action]}
-                        />
-                      ))
+                    ? lotteryDetailsTexts[lang].cancelActions.map(
+                        cancelAction => (
+                          <Button
+                            primary
+                            raised
+                            style={{
+                              container:
+                                sharedStyles.bottomToolbarActionButtonContainer,
+                            }}
+                            icon={cancelAction.icon}
+                            text={''}
+                            onPress={handleActionPress[cancelAction.action]}
+                          />
+                        ),
+                      )
                     : null}
                   {cancelled
-                    ? lotteryDetailsTexts[lang].reAddActions.map(reAddAction => (
-                        <Button
-                          primary
-                          raised
-                          style={{
-                            container:
-                              sharedStyles.bottomToolbarActionButtonContainer,
-                          }}
-                          icon={reAddAction.icon}
-                          text={''}
-                          onPress={handleActionPress[reAddAction.action]}
-                        />
-                      ))
+                    ? lotteryDetailsTexts[lang].reAddActions.map(
+                        reAddAction => (
+                          <Button
+                            primary
+                            raised
+                            style={{
+                              container:
+                                sharedStyles.bottomToolbarActionButtonContainer,
+                            }}
+                            icon={reAddAction.icon}
+                            text={''}
+                            onPress={handleActionPress[reAddAction.action]}
+                          />
+                        ),
+                      )
                     : null}
                 </>
               ) : isWinner && !cancelled && available ? (
-                lotteryDetailsTexts[lang].lotteryWinnerActions.map(winnerAction => (
-                  <Button
-                    primary
-                    raised
-                    style={{
-                      container:
-                        sharedStyles.bottomToolbarActionButtonContainer,
-                    }}
-                    icon={winnerAction.icon}
-                    text={''}
-                    onPress={handleActionPress[winnerAction.action]}
-                  />
-                ))
+                lotteryDetailsTexts[lang].lotteryWinnerActions.map(
+                  winnerAction => (
+                    <Button
+                      primary
+                      raised
+                      style={{
+                        container:
+                          sharedStyles.bottomToolbarActionButtonContainer,
+                      }}
+                      icon={winnerAction.icon}
+                      text={''}
+                      onPress={handleActionPress[winnerAction.action]}
+                    />
+                  ),
+                )
               ) : isVisitor && !cancelled && available ? (
                 lotteryDetailsTexts[lang].visitorActions.map(visitorAction => (
                   <Button
@@ -777,8 +788,8 @@ const LotteryDetails = props => {
                 ))
               ) : null}
               {isVisitor &&
-              !cancelled &&
-              available &&
+              // !cancelled &&
+              // available &&
               Array.isArray(likedBy) &&
               likedBy.length &&
               likedBy.includes(authUser.id) ? (
@@ -787,6 +798,7 @@ const LotteryDetails = props => {
                   raised
                   style={{
                     container: sharedStyles.bottomToolbarActionButtonContainer,
+                    text: sharedStyles.likedByNumberText,
                   }}
                   icon={
                     <Icon
@@ -796,7 +808,9 @@ const LotteryDetails = props => {
                       size={25}
                     />
                   }
-                  text={''}
+                  text={
+                    likedBy.length ? formatedNumberOfLikes(likedBy.length) : ''
+                  }
                   onPress={
                     handleActionPress[lotteryDetailsTexts[lang].dislike.action]
                   }
@@ -811,10 +825,15 @@ const LotteryDetails = props => {
                   raised
                   style={{
                     container: sharedStyles.bottomToolbarActionButtonContainer,
+                    text: sharedStyles.likedByNumberText,
                   }}
                   icon={lotteryDetailsTexts[lang].like.icon}
-                  text={''}
-                  onPress={handleActionPress[lotteryDetailsTexts[lang].like.action]}
+                  text={
+                    likedBy.length ? formatedNumberOfLikes(likedBy.length) : ''
+                  }
+                  onPress={
+                    handleActionPress[lotteryDetailsTexts[lang].like.action]
+                  }
                 />
               ) : null}
             </View>
