@@ -121,7 +121,7 @@ const Payment = props => {
   ];
 
   if (!loggedIn || !user) {
-    return <NoAuth />;
+    return <NoAuth lang={lang} />;
   }
 
   return (

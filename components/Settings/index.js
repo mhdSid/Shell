@@ -10,6 +10,7 @@ import {Flag} from 'react-native-svg-flagkit';
 import {settings} from '../../Constants/Texts';
 import pkg from '../../package.json';
 import {getLangSelector} from './Selectors';
+import {getLoggedInSelector, getUserSelector} from '../Profile/Selectors';
 
 // let FaqMofal = null;
 let ChangePassword = null;
@@ -17,7 +18,8 @@ let ContactUsModal = null;
 let TermsAndPrivacyPolicyModal = null;
 
 const Settings = props => {
-  const {lang} = props;
+  const {lang, user, loggedIn} = props;
+  const isAuthenticated = user && loggedIn;
   const [settingsModal, setSettingsModal] = useState(false);
 
   const handleSetLanguage = value => {
@@ -54,7 +56,12 @@ const Settings = props => {
         TermsAndPrivacyPolicyModal = require('./TermsAndPrivacyPolicyModal')
           .default;
       }
-      return <TermsAndPrivacyPolicyModal lang={lang} onClose={handleSettingsModalClose} />;
+      return (
+        <TermsAndPrivacyPolicyModal
+          lang={lang}
+          onClose={handleSettingsModalClose}
+        />
+      );
     },
     changePassword: () => {
       if (!ChangePassword) {
@@ -167,27 +174,31 @@ const Settings = props => {
                     // },
                   ]}
                 />
-                <Drawer.Section title={settings[lang].security} />
-                <Drawer.Section
-                  style={{
-                    container: sharedStyles.settingsDrawerLanguageSection,
-                    icon: sharedStyles.langIcon,
-                  }}
-                  items={[
-                    {
-                      key: settings[lang].faq,
-                      icon: 'lock',
-                      value: settings[lang].changePassword,
-                      onPress: handleSettingsModalClick('changePassword'),
-                    },
-                    // {
-                    //   key: settings[lang].licenses,
-                    //   icon: 'questionsAnswers',
-                    //   value: settings[lang].licenses,
-                    //   // onPress: handleSetLanguage(settings[lang].en),
-                    // },
-                  ]}
-                />
+                {isAuthenticated ? (
+                  <>
+                    <Drawer.Section title={settings[lang].security} />
+                    <Drawer.Section
+                      style={{
+                        container: sharedStyles.settingsDrawerLanguageSection,
+                        icon: sharedStyles.langIcon,
+                      }}
+                      items={[
+                        {
+                          key: settings[lang].faq,
+                          icon: 'lock',
+                          value: settings[lang].changePassword,
+                          onPress: handleSettingsModalClick('changePassword'),
+                        },
+                        // {
+                        //   key: settings[lang].licenses,
+                        //   icon: 'questionsAnswers',
+                        //   value: settings[lang].licenses,
+                        //   // onPress: handleSetLanguage(settings[lang].en),
+                        // },
+                      ]}
+                    />
+                  </>
+                ) : null}
                 <Drawer.Section
                   title={settings[lang].version}
                   items={[
@@ -211,11 +222,15 @@ Settings.propTypes = {
   lang: PropTypes.string,
   setLang: PropTypes.func,
   onClose: PropTypes.func,
+  user: PropTypes.object,
+  loggedIn: PropTypes.bool,
 };
 
 const mapStateToProps = state => {
   return {
+    user: getUserSelector(state),
     lang: getLangSelector(state),
+    loggedIn: getLoggedInSelector(state),
   };
 };
 

@@ -175,6 +175,7 @@ const HomeComponent = props => {
   const getListItemKey = item => `${item.id}`;
 
   const handleOnEndReached = () => {
+    console.log('handleOnEndReached');
     if (!searchEventFired) {
       fetchLotteries();
     }
@@ -217,7 +218,7 @@ const HomeComponent = props => {
         style={{container: sharedStyles.toolbarContainer}}
         centerElement={home[lang].appName}
         rightElement={[
-          authUserId && 'search',
+          'search',
           authUserId && 'cloud-upload',
           isCard ? 'view-list' : 'view-comfy',
         ].filter(Boolean)}

@@ -21,14 +21,15 @@ import {
   getShowSignUpSelector,
   getVerificationCodeSelector,
 } from './Selectors';
+import {invoke} from 'lodash';
 
 let SignUp = null;
 let VerifyCode = null;
-let UserProfile = null;
+// let UserProfile = null;
 let Login = null;
 
 const AuthComponent = props => {
-  const {loggedIn, user, showSignup, verificationCode} = props;
+  const {loggedIn, user, showSignup, verificationCode, onClose} = props;
   // useEffect(() => {
   //   if (loggedIn && user) {
   //     // AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/4925593277');
@@ -36,6 +37,10 @@ const AuthComponent = props => {
   //     // AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
   //   }
   // }, []);
+  if (loggedIn && user) {
+    invoke(props, 'onClose');
+    return null;
+  }
   if (isUndefined(loggedIn) && isUndefined(user)) {
     return Loading;
   }
@@ -43,24 +48,24 @@ const AuthComponent = props => {
     if (!SignUp) {
       SignUp = require('./SignUp').default;
     }
-    return <SignUp />;
+    return <SignUp onClose={onClose} />;
   }
   if (verificationCode) {
     if (!VerifyCode) {
       VerifyCode = require('./VerifyCode').default;
     }
-    return <VerifyCode />;
+    return <VerifyCode onClose={onClose} />;
   }
-  if (loggedIn && user) {
-    if (!UserProfile) {
-      UserProfile = require('./UserProfile').default;
-    }
-    return <UserProfile />;
-  }
+  // if (loggedIn && user) {
+  //   if (!UserProfile) {
+  //     UserProfile = require('./UserProfile').default;
+  //   }
+  //   return <UserProfile />;
+  // }
   if (!Login) {
     Login = require('./Login').default;
   }
-  return <Login />;
+  return <Login onClose={onClose} />;
 };
 
 AuthComponent.propTypes = {
@@ -71,6 +76,7 @@ AuthComponent.propTypes = {
   login: PropTypes.func,
   updateUserAction: PropTypes.func,
   verificationCode: PropTypes.string,
+  onClose: PropTypes.func,
 };
 
 const mapStateToProps = state => {

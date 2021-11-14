@@ -40,7 +40,7 @@ const handleLogin = payload => {
             type: authActions.login,
             payload: {
               verificationCode,
-              showSingup: true,
+              showSignup: true,
               email: authEmail,
               passwordHash,
             },

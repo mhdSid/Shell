@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, ScrollView, Text, KeyboardAvoidingView} from 'react-native';
+import {
+  View,
+  ScrollView,
+  Text,
+  KeyboardAvoidingView,
+  Modal,
+  SafeAreaView,
+} from 'react-native';
 import {Button, Checkbox, Icon, Toolbar} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';
 import {profile} from '../../Constants/Texts';
@@ -17,7 +24,7 @@ import {
 } from './Selectors';
 import {Dropdown} from 'react-native-material-dropdown';
 import TermsAndPrivacyPolicyModal from '../Settings/TermsAndPrivacyPolicyModal';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 const SignUp = props => {
   const {email, passwordHash, verificationCode, lang} = props;
@@ -82,6 +89,9 @@ const SignUp = props => {
   const handlePrivacyModalClose = () => {
     setShowPrivacyModal(false);
   };
+  const handleCloseModal = () => {
+    invoke(props, 'onClose');
+  };
 
   useEffect(() => {
     setUserDataChanged(
@@ -94,67 +104,85 @@ const SignUp = props => {
   }, [agreedOnPrivacyPolicy]);
 
   return (
-    <View style={sharedStyles.fullheightView}>
-      {loading && loadingPopup}
-      {showPrivacyModal && (
-        <TermsAndPrivacyPolicyModal onClose={handlePrivacyModalClose} />
-      )}
-      <KeyboardAvoidingView
-        behavior="padding"
-        enabled
-        keyboardVerticalOffset={25}>
-        <Toolbar
-          style={{
-            container: sharedStyles.toolbarContainerPadding,
-          }}
-          centerElement={profile[lang].shellSignUp}
-          leftElement={<Icon color="white" name="perm-identity" />}
-        />
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View
-            style={[sharedStyles.loginContainer, sharedStyles.signUpContainer]}>
-            <Text style={sharedStyles.label}>{profile[lang].prefecture}</Text>
-            <View style={sharedStyles.dropdownView}>
-              <Dropdown
-                label={profile[lang].enterPrefecture}
-                data={prefecturesDropdownData}
-                onChangeText={prefectureOnChangeText}
-                selectedItemColor={'rgba(0, 0, 0, .87)'}
-                baseColor={'rgba(0,0,0,0.25)'}
-              />
-            </View>
-            <Text style={sharedStyles.label}>{profile[lang].city}</Text>
-            <View style={sharedStyles.dropdownView}>
-              <Dropdown
-                label={profile[lang].enterCity}
-                selectedItemColor={'rgba(0, 0, 0, .87)'}
-                baseColor={'rgba(0,0,0,0.25)'}
-                data={cityDropdownData}
-                onChangeText={cityOnChangeText}
-              />
-            </View>
-            <Checkbox
-              label={profile[lang].agreePriacyPolicy}
-              checked={agreedOnPrivacyPolicy}
-              value={true}
-              onCheck={onCheckPrivacyPolicy}
+    <Modal animationType="slide" onRequestClose={handleCloseModal}>
+      <SafeAreaView
+        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
+        <View style={sharedStyles.innerSafeAreaView}>
+          <KeyboardAvoidingView
+            behavior="padding"
+            enabled
+            keyboardVerticalOffset={25}>
+            <Toolbar
+              style={{
+                container: [
+                  sharedStyles.toolbarContainer,
+                  sharedStyles.toolbarContainerPadding,
+                ],
+              }}
+              leftElement="arrow-back"
+              centerElement={profile[lang].shellSignUp}
+              onLeftElementPress={handleCloseModal}
             />
-            <View style={[sharedStyles.loginBtn, sharedStyles.loginBtnMargin]}>
-              <Button
-                disabled={loading || !userDataChanged}
-                raised={true}
-                primary
-                text={profile[lang].signUp}
-                style={{
-                  container: sharedStyles.mainButtonContainer,
-                }}
-                onPress={handleSignupPress}
+            {loading && loadingPopup}
+            {showPrivacyModal && (
+              <TermsAndPrivacyPolicyModal
+                lang={lang}
+                onClose={handlePrivacyModalClose}
               />
-            </View>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </View>
+            )}
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View
+                style={[
+                  sharedStyles.loginContainer,
+                  sharedStyles.signUpContainer,
+                ]}>
+                <Text style={sharedStyles.label}>
+                  {profile[lang].prefecture}
+                </Text>
+                <View style={sharedStyles.dropdownView}>
+                  <Dropdown
+                    label={profile[lang].enterPrefecture}
+                    data={prefecturesDropdownData}
+                    onChangeText={prefectureOnChangeText}
+                    selectedItemColor={'rgba(0, 0, 0, .87)'}
+                    baseColor={'rgba(0,0,0,0.25)'}
+                  />
+                </View>
+                <Text style={sharedStyles.label}>{profile[lang].city}</Text>
+                <View style={sharedStyles.dropdownView}>
+                  <Dropdown
+                    label={profile[lang].enterCity}
+                    selectedItemColor={'rgba(0, 0, 0, .87)'}
+                    baseColor={'rgba(0,0,0,0.25)'}
+                    data={cityDropdownData}
+                    onChangeText={cityOnChangeText}
+                  />
+                </View>
+                <Checkbox
+                  label={profile[lang].agreePriacyPolicy}
+                  checked={agreedOnPrivacyPolicy}
+                  value={true}
+                  onCheck={onCheckPrivacyPolicy}
+                />
+                <View
+                  style={[sharedStyles.loginBtn, sharedStyles.loginBtnMargin]}>
+                  <Button
+                    disabled={loading || !userDataChanged}
+                    raised={true}
+                    primary
+                    text={profile[lang].signUp}
+                    style={{
+                      container: sharedStyles.mainButtonContainer,
+                    }}
+                    onPress={handleSignupPress}
+                  />
+                </View>
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </View>
+      </SafeAreaView>
+    </Modal>
   );
 };
 

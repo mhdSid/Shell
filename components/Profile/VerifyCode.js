@@ -1,4 +1,4 @@
-import {Image, Text, View} from 'react-native';
+import {Image, Modal, SafeAreaView, ScrollView, Text, View} from 'react-native';
 import React, {useState} from 'react';
 
 import {
@@ -18,7 +18,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {invoke} from 'lodash';
 import {handleResendVerificationCode} from '../../redux/Auth/ResendVerificationCode';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 const VerifyUserCode = props => {
   const {email, passwordHash, lang} = props;
@@ -76,57 +76,71 @@ const VerifyUserCode = props => {
       </Text>
     );
   };
+  const handleCloseModal = () => {
+    invoke(props, 'onClose');
+  };
 
   return (
-    <View style={sharedStyles.fullheightView}>
-      {loading && loadingPopup}
-      <Toolbar
-        style={{
-          container: sharedStyles.toolbarContainerPadding,
-        }}
-        centerElement={profileTexts[lang].verifyAccount}
-        leftElement={<Icon color="white" name="verified-user" />}
-      />
-      <View
-        style={[
-          sharedStyles.loginContainer,
-          sharedStyles.verificaitonContainer,
-        ]}>
-        <Image
-          style={sharedStyles.verificationIcon}
-          source={{
-            uri:
-              'https://user-images.githubusercontent.com/4661784/56352614-4631a680-61d8-11e9-880d-86ecb053413d.png',
-          }}
-        />
-        <Text style={sharedStyles.verificationTitleSubTitle}>
-          {profileTexts[lang].verificationSubTitle}
-        </Text>
-        <CodeField
-          ref={ref}
-          {...codeFieldProps}
-          value={verificationCode}
-          onChangeText={handleChangeText}
-          cellCount={6}
-          // rootStyle={sharedStyles.verificationCellRoot}
-          keyboardType="number-pad"
-          textContentType="oneTimeCode"
-          renderCell={renderCell}
-        />
-        <View style={sharedStyles.loginBtn}>
-          <Button
-            raised={true}
-            // primary
+    <Modal animationType="slide" onRequestClose={handleCloseModal}>
+      <SafeAreaView
+        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
+        <View style={sharedStyles.innerSafeAreaView}>
+          <Toolbar
             style={{
-              container: sharedStyles.mainButtonContainer,
-              text: sharedStyles.resendCodeButtonText,
+              container: [
+                sharedStyles.toolbarContainer,
+                sharedStyles.toolbarContainerPadding,
+              ],
             }}
-            text={profileTexts[lang].resend}
-            onPress={handleResendPress}
+            leftElement="arrow-back"
+            centerElement={profileTexts[lang].verifyAccount}
+            onLeftElementPress={handleCloseModal}
           />
+          {loading && loadingPopup}
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View
+              style={[
+                sharedStyles.loginContainer,
+                sharedStyles.verificaitonContainer,
+              ]}>
+              <Image
+                style={sharedStyles.verificationIcon}
+                source={{
+                  uri:
+                    'https://user-images.githubusercontent.com/4661784/56352614-4631a680-61d8-11e9-880d-86ecb053413d.png',
+                }}
+              />
+              <Text style={sharedStyles.verificationTitleSubTitle}>
+                {profileTexts[lang].verificationSubTitle}
+              </Text>
+              <CodeField
+                ref={ref}
+                {...codeFieldProps}
+                value={verificationCode}
+                onChangeText={handleChangeText}
+                cellCount={6}
+                // rootStyle={sharedStyles.verificationCellRoot}
+                keyboardType="number-pad"
+                textContentType="oneTimeCode"
+                renderCell={renderCell}
+              />
+              <View style={sharedStyles.loginBtn}>
+                <Button
+                  raised={true}
+                  // primary
+                  style={{
+                    container: sharedStyles.mainButtonContainer,
+                    text: sharedStyles.resendCodeButtonText,
+                  }}
+                  text={profileTexts[lang].resend}
+                  onPress={handleResendPress}
+                />
+              </View>
+            </View>
+          </ScrollView>
         </View>
-      </View>
-    </View>
+      </SafeAreaView>
+    </Modal>
   );
 };
 
@@ -136,6 +150,7 @@ VerifyUserCode.propTypes = {
   logout: PropTypes.func,
   login: PropTypes.func,
   lang: PropTypes.string,
+  onClose: PropTypes.func,
 };
 
 const mapStateToProps = state => {

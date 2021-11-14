@@ -22,7 +22,7 @@ const viewLoader = {
   },
   profile: () => {
     if (!AuthComponent) {
-      AuthComponent = require('../Profile').default;
+      AuthComponent = require('../Profile/UserProfile').default;
     }
     return <AuthComponent />;
   },

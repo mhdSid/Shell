@@ -522,13 +522,13 @@ const myyLotteries = {
 
 const noAuth = {
   en: {
-    loginSingup: 'Please login or signup to add a new item.',
+    loginSignup: 'Please login or signup to add a new item.',
     importLottery: 'Please login or signup to create a new lottery.',
     chat: 'Please login or signup to create a new lottery.',
     userJoinedLotteries: 'Please login or signup to create a new lottery.',
   },
   jp: {
-    loginSingup:
+    loginSignup:
       '新しいアイテムを追加するには、ログインまたはサインアップしてください。',
     importLottery:
       '新しい宝くじを作成するには、ログインまたはサインアップしてください。',
@@ -539,12 +539,12 @@ const noAuth = {
   },
 };
 
-const loginSingup = {
+const loginSignup = {
   en: {
-    loginSingup: 'Login / Sign up',
+    loginSignup: 'Login / Sign up',
   },
   jp: {
-    loginSingup: 'ログイン / サインアップ',
+    loginSignup: 'ログイン / サインアップ',
   },
 };
 
@@ -953,7 +953,7 @@ export {
   myyAds,
   myyLotteries,
   noAuth,
-  loginSingup,
+  loginSignup,
   notifications,
   profile,
   searchh,

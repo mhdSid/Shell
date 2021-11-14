@@ -37,7 +37,7 @@ import {navigate} from '../MainContainer';
 import {successConfirmationModal as successConfirmationModalTexts} from '../../Constants/Texts';
 import ImageResizer from 'react-native-image-resizer';
 import FastImage from 'react-native-fast-image';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 let SuccessConfirmationModal = null;
 let UploadLotteryProgressModal = null;
@@ -357,20 +357,20 @@ const ImportLottery = props => {
   const successModalActions = [
     {
       text:
-        successConfirmationModalTexts[lang].importLottery.actions.createAnotherLottery
-          .text,
+        successConfirmationModalTexts[lang].importLottery.actions
+          .createAnotherLottery.text,
       icon:
-        successConfirmationModalTexts[lang].importLottery.actions.createAnotherLottery
-          .icon,
+        successConfirmationModalTexts[lang].importLottery.actions
+          .createAnotherLottery.icon,
       onPress: handleSuccessConfirmationModalCreateAnotherLottery,
     },
     {
       text:
-        successConfirmationModalTexts[lang].importLottery.actions.continueBrowsing
-          .text,
+        successConfirmationModalTexts[lang].importLottery.actions
+          .continueBrowsing.text,
       icon:
-        successConfirmationModalTexts[lang].importLottery.actions.continueBrowsing
-          .icon,
+        successConfirmationModalTexts[lang].importLottery.actions
+          .continueBrowsing.icon,
       onPress: handleSuccessConfirmationModalClose,
     },
   ];
@@ -398,7 +398,7 @@ const ImportLottery = props => {
   }
 
   if (!loggedIn && !user) {
-    return <NoAuth text={noAuthTexts[lang].imporLottery} />;
+    return <NoAuth text={noAuthTexts[lang].imporLottery} lang={lang} />;
   }
 
   if (loggedIn === true && user) {
@@ -407,7 +407,9 @@ const ImportLottery = props => {
         {showSuccessConfirmationModal ? (
           <SuccessConfirmationModal
             title={successConfirmationModalTexts[lang].importLottery.title}
-            subtitle={successConfirmationModalTexts[lang].importLottery.subtitle}
+            subtitle={
+              successConfirmationModalTexts[lang].importLottery.subtitle
+            }
             onClose={handleSuccessConfirmationModalCreateAnotherLottery}
             actions={successModalActions}
             lang={lang}
@@ -509,7 +511,9 @@ const ImportLottery = props => {
               />
             </View>
             <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>{importLotteryTexts[lang].price}</Text>
+              <Text style={sharedStyles.label}>
+                {importLotteryTexts[lang].price}
+              </Text>
               <View style={sharedStyles.priceContainer}>
                 <Text style={sharedStyles.currencyLabel}>{userCurrency}</Text>
                 <View style={sharedStyles.adPriceTextfieldContainer}>

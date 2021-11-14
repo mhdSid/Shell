@@ -159,7 +159,7 @@ const Lotteries = props => {
   }
 
   if (!loggedIn && !user) {
-    return <NoAuth text={noAuthTexts[lang].userJoinedLotteries} />;
+    return <NoAuth text={noAuthTexts[lang].userJoinedLotteries} lang={lang} />;
   }
 
   return (

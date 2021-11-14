@@ -96,7 +96,7 @@ const ChatList = props => {
   }
 
   if (!authUser) {
-    return <NoAuth text={noAuthTexts[lang].chat} />;
+    return <NoAuth text={noAuthTexts[lang].chat} lang={lang} />;
   }
 
   return (

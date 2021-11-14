@@ -1,7 +1,7 @@
 import React, {useState, useEffect, createRef} from 'react';
-import {View} from 'react-native';
+import {View, ScrollView, Modal, SafeAreaView} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {profile, loginSingup, validationMessages} from '../../Constants/Texts';
+import {profile, loginSignup, validationMessages} from '../../Constants/Texts';
 import {TextField} from 'react-native-material-textfield';
 import {Button, Icon, Toolbar} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';
@@ -12,7 +12,7 @@ import {connect} from 'react-redux';
 import {loginAction, logoutAction} from '../../redux/Auth/actions';
 import {handleLogin} from '../../redux/Auth/Login';
 import {Text} from 'react-native';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 const Login = props => {
   const {lang} = props;
@@ -108,75 +108,93 @@ const Login = props => {
     };
   };
 
+  const handleCloseModal = () => {
+    invoke(props, 'onClose');
+  };
+
   useEffect(() => {
     setEmailPassChanged(emailChanged && passwordChanged);
   }, [emailChanged, passwordChanged]);
 
   return (
-    <View style={sharedStyles.fullheightView}>
-      {loading && loadingPopup}
-      <Toolbar
-        style={{
-          container: sharedStyles.toolbarContainerPadding,
-        }}
-        centerElement={profile[lang].loginOrSignup}
-        leftElement={<Icon color="white" name="exit-to-app" />}
-      />
-      <View
-        style={[sharedStyles.loginContainer, sharedStyles.relativeConatainer]}>
-        <View style={sharedStyles.mobileContainer}>
-          <Text style={sharedStyles.label}>{profile[lang].email}</Text>
-          <TextField
-            placeholder={profile[lang].enterEmail}
-            placeholderTextColor={'rgba(0,0,0,0.3)'}
-            ref={emailRef}
-            tintColor={'#b69cf6'}
-            autoCapitalize={false}
-            autoCorrect={false}
-            disabled={loading}
-            maxLength={50}
-            returnKeyType="done"
-            onSubmitEditing={handleSubmit}
-            minLength={1}
-            onBlur={handleBlur('email')}
-            error={errors.email}
-            onChangeText={handleChange.email()}
-          />
-        </View>
-        <View style={sharedStyles.mobileContainer}>
-          <Text style={sharedStyles.label}>{profile[lang].password}</Text>
-          <TextField
-            placeholder={profile[lang].enterPassword}
-            placeholderTextColor={'rgba(0,0,0,0.3)'}
-            ref={passwordRef}
-            secureTextEntry={true}
-            disabled={loading}
-            autoCorrect={false}
-            autoCapitalize={false}
-            returnKeyType="done"
-            onSubmitEditing={handleSubmit}
-            tintColor={'#b69cf6'}
-            maxLength={50}
-            minLength={8}
-            onBlur={handleBlur('password')}
-            error={errors.password}
-            onChangeText={handleChange.password()}
-          />
-        </View>
-        <View style={sharedStyles.loginBtn}>
-          <Button
-            disabled={loading || !emailPassChanged}
-            raised={true}
-            primary
-            text={loginSingup[lang].loginSingup}
+    <Modal animationType="slide" onRequestClose={handleCloseModal}>
+      <SafeAreaView
+        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
+        <View style={sharedStyles.innerSafeAreaView}>
+          <Toolbar
             style={{
-              container: sharedStyles.mainButtonContainer,
+              container: [
+                sharedStyles.toolbarContainer,
+                sharedStyles.toolbarContainerPadding,
+              ],
             }}
-            onPress={handleSubmit}
+            leftElement="arrow-back"
+            centerElement={profile[lang].loginOrSignup}
+            onLeftElementPress={handleCloseModal}
           />
+          {loading && loadingPopup}
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View
+              style={[
+                sharedStyles.loginContainer,
+                sharedStyles.relativeConatainer,
+              ]}>
+              <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>{profile[lang].email}</Text>
+                <TextField
+                  placeholder={profile[lang].enterEmail}
+                  placeholderTextColor={'rgba(0,0,0,0.3)'}
+                  ref={emailRef}
+                  tintColor={'#b69cf6'}
+                  autoCapitalize={false}
+                  autoCorrect={false}
+                  disabled={loading}
+                  maxLength={50}
+                  returnKeyType="done"
+                  onSubmitEditing={handleSubmit}
+                  minLength={1}
+                  onBlur={handleBlur('email')}
+                  error={errors.email}
+                  onChangeText={handleChange.email()}
+                />
+              </View>
+              <View style={sharedStyles.mobileContainer}>
+                <Text style={sharedStyles.label}>{profile[lang].password}</Text>
+                <TextField
+                  placeholder={profile[lang].enterPassword}
+                  placeholderTextColor={'rgba(0,0,0,0.3)'}
+                  ref={passwordRef}
+                  secureTextEntry={true}
+                  disabled={loading}
+                  autoCorrect={false}
+                  autoCapitalize={false}
+                  returnKeyType="done"
+                  onSubmitEditing={handleSubmit}
+                  tintColor={'#b69cf6'}
+                  maxLength={50}
+                  minLength={8}
+                  onBlur={handleBlur('password')}
+                  error={errors.password}
+                  onChangeText={handleChange.password()}
+                />
+              </View>
+              <View style={sharedStyles.loginBtn}>
+                <Button
+                  disabled={loading || !emailPassChanged}
+                  raised={true}
+                  primary
+                  text={loginSignup[lang].loginSignup}
+                  style={{
+                    container: sharedStyles.mainButtonContainer,
+                  }}
+                  onPress={handleSubmit}
+                />
+              </View>
+            </View>
+          </ScrollView>
         </View>
-      </View>
-    </View>
+      </SafeAreaView>
+    </Modal>
   );
 };
 
@@ -184,6 +202,7 @@ Login.propTypes = {
   login: PropTypes.func,
   logout: PropTypes.func,
   lang: PropTypes.string,
+  onClose: PropTypes.func,
 };
 
 const mapStateToProps = state => {
