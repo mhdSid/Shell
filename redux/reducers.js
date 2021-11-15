@@ -36,21 +36,7 @@ const rootReducer = combineReducers({
     },
     authReducer,
   ),
-  lotteriesReducer: persistReducer(
-    {
-      key: 'root:lotteries:reducer',
-      storage: AsyncStorage,
-      whitelist: [
-        'userJoinedLotteries',
-        'userCreatedLotteries',
-        'userLikedLotteries',
-        'userJoinedLotteriesPageToken',
-        'userCreatedLotteriesPageToken',
-        'userLikedLotteriesPageToken',
-      ],
-    },
-    lotteriesReducer,
-  ),
+  lotteriesReducer: lotteriesReducer,
   settingsReducer: persistReducer(
     {
       key: 'root:settings:reducer',
@@ -59,46 +45,10 @@ const rootReducer = combineReducers({
     },
     settingsReducer,
   ),
-  homeReducer: persistReducer(
-    {
-      key: 'root:home:reducer',
-      storage: AsyncStorage,
-      whitelist: ['lotteries'],
-    },
-    homeReducer,
-  ),
-  receiveLotteryReducer: persistReducer(
-    {
-      key: 'root:receiveLottery:reducer',
-      storage: AsyncStorage,
-      whitelist: [
-        'receiveLotteryDetails',
-        'userWonLotteries',
-        'lotteryPosterData',
-      ],
-    },
-    receiveLotteryReducer,
-  ),
-  shipLotteryReducer: persistReducer(
-    {
-      key: 'root:shipLottery:reducer',
-      storage: AsyncStorage,
-      whitelist: [
-        'shipLotteryDetails',
-        'userCreatedWonLotteries',
-        'lotteryWinnerData',
-      ],
-    },
-    shipLotteryReducer,
-  ),
-  chatReducer: persistReducer(
-    {
-      key: 'root:chat:reducer',
-      storage: AsyncStorage,
-      whitelist: ['chatList', 'chattableLotteries'],
-    },
-    chatReducer,
-  ),
+  homeReducer: homeReducer,
+  receiveLotteryReducer: receiveLotteryReducer,
+  shipLotteryReducer: shipLotteryReducer,
+  chatReducer: chatReducer,
 });
 
 export default rootReducer;

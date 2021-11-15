@@ -181,10 +181,15 @@ const HomeComponent = props => {
     }
   };
 
+  const handleRefresh = () => {
+    invoke(props, 'handleSetPageToken', null);
+    fetchLotteries();
+  };
+
   useEffect(() => {
     return () => {
       if (searchEventFired) {
-        invoke(props, 'handlerResetHomeLotteries', []);
+        invoke(props, 'handleResetHomeLotteries', []);
         invoke(props, 'handleSetPageToken', null);
         invoke(props, 'handleSetSearchEventFired', false);
         invoke(props, 'handleSetSearchFilters', {
@@ -277,7 +282,7 @@ const HomeComponent = props => {
             </View>
           ) : null
         }
-        onRefresh={!searchEventFired && fetchLotteries}
+        onRefresh={!searchEventFired && handleRefresh}
         onEndReachedThreshold={0.1}
         onEndReached={!searchEventFired && handleOnEndReached}
         horizontal={false}
@@ -328,7 +333,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(setSearchEventFired(payload)),
     handleSetSearchFilters: payload => dispatch(setSearchFilters(payload)),
     handleSetPageToken: payload => dispatch(setPageToken(payload)),
-    handlerResetHomeLotteries: payload => dispatch(resetHomeLotteries(payload)),
+    handleResetHomeLotteries: payload => dispatch(resetHomeLotteries(payload)),
   };
 };
 

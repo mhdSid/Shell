@@ -15,4 +15,13 @@ const lotteriesActions = {
   enterLottery: 'LOTTERIES_ENTER_LOTTERY',
 };
 
-export {lotteriesActions};
+const setUserCreatedLotteriesPageToken = payload => {
+  return dispatch => {
+    return dispatch({
+      type: lotteriesActions.setUserCreatedLotteriesPageToken,
+      payload,
+    });
+  };
+};
+
+export {lotteriesActions, setUserCreatedLotteriesPageToken};

@@ -82,7 +82,7 @@ const MainContainer = () => {
             },
           }}
           key="home"
-          icon={<Icon name="home" size={30} />}
+          icon={<Icon name="home" size={27} />}
           active={activeView === 'home'}
           onPress={handleSetActiveView('home')}
         />
@@ -98,7 +98,7 @@ const MainContainer = () => {
             },
           }}
           key="importLottery"
-          icon={<Icon name="add-circle" size={30} />}
+          icon={<Icon name="add-circle" size={27} />}
           active={activeView === 'importLottery'}
           onPress={handleSetActiveView('importLottery')}
         />
@@ -114,7 +114,7 @@ const MainContainer = () => {
             },
           }}
           key="lotteries"
-          icon={<Icon name="grade" size={30} />}
+          icon={<Icon name="grade" size={27} />}
           active={activeView === 'lotteries'}
           onPress={handleSetActiveView('lotteries')}
         />
@@ -130,7 +130,7 @@ const MainContainer = () => {
             },
           }}
           key="chat"
-          icon={<Icon name="chat" size={30} />}
+          icon={<Icon name="chat" size={27} />}
           active={activeView === 'chat'}
           onPress={handleSetActiveView('chat')}
         />
@@ -160,7 +160,7 @@ const MainContainer = () => {
                 />
               </>
             ) : (
-              <Icon name="account-circle" size={30} />
+              <Icon name="account-circle" size={27} />
             )
           }
           active={activeView === 'profile'}

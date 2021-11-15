@@ -22,12 +22,20 @@ import {getLotteryResultSelector} from '../LotteryResult/Selectors';
 import LotteryResultModal from '../LotteryResult';
 import {loadingPopup} from '../Loading';
 import cancellableFetch from 'react-native-cancelable-fetch';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
+import {setUserCreatedLotteriesPageToken} from '../../redux/Lotteries/actions';
 
 let LotteryDetails = null;
 
 const UserCreatedLotteries = props => {
-  const {user, userCreatedLotteries, isCard, isList, lotteryResult, lang} = props;
+  const {
+    user,
+    userCreatedLotteries,
+    isCard,
+    isList,
+    lotteryResult,
+    lang,
+  } = props;
   const [loading, setLoading] = useState(true);
   const [showLotteryDetails, setShowLotteryDetails] = useState(false);
   const [selectedLottery, setSelectedLottery] = useState();
@@ -158,6 +166,10 @@ const UserCreatedLotteries = props => {
     }
     fetchMyLotteries();
   };
+  const handleRefresh = () => {
+    invoke(props, 'handleSetUserCreatedLotteriesPageToken', null);
+    fetchMyLotteries();
+  };
   useEffect(() => {
     return () => {
       cancellableFetch.abort(cancelHttpTag);
@@ -198,8 +210,7 @@ const UserCreatedLotteries = props => {
             removeClippedSubviews={true}
             refreshing={loading}
             onRefresh={
-              (!filteredLotteries || !filteredLotteries.length) &&
-              fetchMyLotteries
+              (!filteredLotteries || !filteredLotteries.length) && handleRefresh
             }
             onEndReachedThreshold={0.1}
             onEndReached={
@@ -260,6 +271,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(handleFetchUserCreatedLotteries(payload)),
     setHomeViewStyle: payload => dispatch(setHomeViewStyle(payload)),
     showLotteryResult: payload => dispatch(showLotteryResult(payload)),
+    handleSetUserCreatedLotteriesPageToken: payload => dispatch(setUserCreatedLotteriesPageToken(payload)),
   };
 };
 

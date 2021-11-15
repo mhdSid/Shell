@@ -13,7 +13,7 @@ import {chat as chatTexts, listItemActions} from '../../Constants/Texts';
 import {showLotteryResult} from '../../redux/LotteryResult/actions';
 import FastImage from 'react-native-fast-image';
 import {Alert} from 'react-native';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 class ListItemCommon extends Component {
   static propTypes = {
@@ -71,7 +71,8 @@ class ListItemCommon extends Component {
         options: [
           listItemActions[this.props.lang].cancel,
           listItemActions[this.props.lang].goToLotteryDetails,
-          this.props.showLotteryResult && listItemActions[this.props.lang].goToLotteryResults,
+          this.props.showLotteryResult &&
+            listItemActions[this.props.lang].goToLotteryResults,
         ].filter(Boolean),
         // destructiveButtonIndex: 1,
         cancelButtonIndex: 0,
@@ -98,40 +99,56 @@ class ListItemCommon extends Component {
     );
   };
   handleNotReceivedPress = () => {
-    Alert.alert(chatTexts[this.props.lang].notReceived, chatTexts[this.props.lang].youWonThisLottery, [
-      {
-        text: chatTexts[this.props.lang].chatWithOwner,
-        onPress: () => {
-          this.handleItemPress();
+    Alert.alert(
+      chatTexts[this.props.lang].notReceived,
+      chatTexts[this.props.lang].youWonThisLottery,
+      [
+        {
+          text: chatTexts[this.props.lang].chatWithOwner,
+          onPress: () => {
+            this.handleItemPress();
+          },
         },
-      },
-    ]);
+      ],
+    );
   };
   handleNotShippedPress = () => {
-    Alert.alert(chatTexts[this.props.lang].notShipped, chatTexts[this.props.lang].thereIsAWinner, [
-      {
-        text: chatTexts[this.props.lang].chatWithWinner,
-        onPress: () => {
-          this.handleItemPress();
+    Alert.alert(
+      chatTexts[this.props.lang].notShipped,
+      chatTexts[this.props.lang].thereIsAWinner,
+      [
+        {
+          text: chatTexts[this.props.lang].chatWithWinner,
+          onPress: () => {
+            this.handleItemPress();
+          },
         },
-      },
-    ]);
+      ],
+    );
   };
   handleReceivedPress = () => {
-    Alert.alert(chatTexts[this.props.lang].received, chatTexts[this.props.lang].youHaveReceived, [
-      {
-        text: chatTexts[this.props.lang].cancel,
-        style: 'cancel',
-      },
-    ]);
+    Alert.alert(
+      chatTexts[this.props.lang].received,
+      chatTexts[this.props.lang].youHaveReceived,
+      [
+        {
+          text: chatTexts[this.props.lang].cancel,
+          style: 'cancel',
+        },
+      ],
+    );
   };
   handleShippedPress = () => {
-    Alert.alert(chatTexts[this.props.lang].shipped, chatTexts[this.props.lang].youHaveShipped, [
-      {
-        text: chatTexts[this.props.lang].cancel,
-        style: 'cancel',
-      },
-    ]);
+    Alert.alert(
+      chatTexts[this.props.lang].shipped,
+      chatTexts[this.props.lang].youHaveShipped,
+      [
+        {
+          text: chatTexts[this.props.lang].cancel,
+          style: 'cancel',
+        },
+      ],
+    );
   };
   render() {
     return (

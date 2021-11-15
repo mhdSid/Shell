@@ -227,7 +227,7 @@ const sharedStyles = StyleSheet.create({
     paddingTop: 8,
     paddingLeft: 12,
     paddingRight: 12,
-    height: 56,
+    height: 45,
   },
   bottomNavigationRightActionContainer: {
     // paddingBottom: 12,
@@ -243,7 +243,7 @@ const sharedStyles = StyleSheet.create({
     paddingTop: 8,
     paddingLeft: 12,
     paddingRight: 12,
-    height: 56,
+    height: 45,
   },
   rootSafeAreaView: {
     backgroundColor: '#b69cf6',
@@ -291,20 +291,15 @@ const sharedStyles = StyleSheet.create({
     backgroundColor: '#f7f5fe',
   },
   bottomBarUserImage: {
-    width: 30,
-    height: 30,
-    borderRadius: 30 / 2,
+    width: 27,
+    height: 27,
+    borderRadius: 27 / 2,
     backgroundColor: '#f7f5fe',
     // borderWidth: 2,
     // borderColor: 'transparent',
   },
   bottomBarUserImageSelected: {
     borderColor: '#000000',
-  },
-  bottomContainerUserImage: {
-    width: 30,
-    height: 30,
-    borderRadius: 30 / 2,
   },
   userImageBtnContainer: {
     justifyContent: 'center',
@@ -859,6 +854,7 @@ const sharedStyles = StyleSheet.create({
     shadowOpacity: 0,
     borderTopWidth: 0.5,
     backgroundColor: '#b69cf6',
+    height: 45,
   },
   profileUserText: {
     color: '#d9d9d9',

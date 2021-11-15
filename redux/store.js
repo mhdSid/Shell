@@ -15,13 +15,18 @@ const persistConfig = {
   whitelist: [
     'authReducer',
     'settingsReducer',
+    // 'lotteriesReducer',
+    // 'chatReducer',
+    // 'homeReducer',
+    // 'receiveLotteryReducer',
+    // 'shipLotteryReducer',
+  ],
+  blackList: [
     'lotteriesReducer',
     'chatReducer',
     'homeReducer',
     'receiveLotteryReducer',
     'shipLotteryReducer',
-  ],
-  blackList: [
     'lotteryDetailsReducer',
     'searchReducer',
     'uploadProgressReducer',

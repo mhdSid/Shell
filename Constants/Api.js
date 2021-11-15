@@ -7,7 +7,7 @@ const generateBoundary = () => {
 };
 
 const apiRequest = {
-  apiUri: 'http://192.168.100.105:8080/', // 'https://shell-269400.an.r.appspot.com/', //'https://halogen-proxy-239213.appspot.com/',
+  apiUri: 'https://shell-269400.an.r.appspot.com/', //'http://192.168.100.105:8080/', //'https://halogen-proxy-239213.appspot.com/',
   formContentType: () => `multipart/form-data; boundary=${generateBoundary()}`,
   jsonContentType: 'application/json',
 };
