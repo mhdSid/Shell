@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Image, Modal, SafeAreaView, ScrollView, Text, View} from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import sharedStyles, { stepImageWidth } from '../../assets/styles/sharedStyles';
 import {Icon, Toolbar, Button} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {loadingPopup} from '../Loading';
@@ -22,7 +22,8 @@ import ChatModal from '../Chat';
 import formatDate from '../../lib/formatDate';
 import {handleMarkLotteryAsReceived} from '../../redux/ReceiveLottery/MarkLotteryAsReceived';
 import FastImage from 'react-native-fast-image';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
+import {Alert} from 'react-native';
 
 const ReceiveLotteryInfoModal = props => {
   const {receiveLotteryDetails, user, lotteryPosterData, lang} = props;
@@ -47,6 +48,7 @@ const ReceiveLotteryInfoModal = props => {
     // images,
     // disableHeaderActions,
   } = receiveLotteryDetails;
+  console.log(props);
   const isWinner = user && user.id && winnerUserId === user.id;
   const isLotteryPoster = user && userId === user.id;
   const [loading, setIsLoading] = useState(true);
@@ -87,7 +89,8 @@ const ReceiveLotteryInfoModal = props => {
     setIsLoading(false);
     handleCloseModal();
   };
-  const handleMarkAsReceivedPress = () => {
+
+  const markLotteryAsReceivedPress = () => {
     setIsLoading(true);
     invoke(props, 'handleMarkLotteryAsReceived', {
       lotteryId,
@@ -95,6 +98,23 @@ const ReceiveLotteryInfoModal = props => {
       onError: handleMarkAsReceivedCallback,
       cancelHttpTag: cancelHttpTag,
     });
+  };
+
+  const handleMarkAsReceivedPress = () => {
+    Alert.alert(
+      receiveLotteryTexts[lang].receiveAlertTitle,
+      receiveLotteryTexts[lang].receiveAlertMessage,
+      [
+        {
+          text: receiveLotteryTexts[lang].markAsReceived,
+          onPress: markLotteryAsReceivedPress,
+        },
+        {
+          text: receiveLotteryTexts[lang].cancel,
+          style: 'cancel',
+        },
+      ],
+    );
   };
 
   return (
@@ -129,15 +149,19 @@ const ReceiveLotteryInfoModal = props => {
               <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={sharedStyles.lotteryShipReceiveStepsContainer}>
                   <View style={sharedStyles.lotteryShipReceiveStep}>
-                    <FastImage
-                      style={sharedStyles.stepImage}
-                      source={{
-                        uri: lotteryPosterData.image,
-                        priority: FastImage.priority.high,
-                        cache: FastImage.cacheControl.web,
-                      }}
-                      resizeMode={FastImage.resizeMode.cover}
-                    />
+                    {lotteryPosterData.image ? (
+                      <FastImage
+                        style={sharedStyles.stepImage}
+                        source={{
+                          uri: lotteryPosterData.image,
+                          priority: FastImage.priority.high,
+                          cache: FastImage.cacheControl.web,
+                        }}
+                        resizeMode={FastImage.resizeMode.cover}
+                      />
+                    ) : (
+                      <Icon name="account-circle" size={stepImageWidth} />
+                    )}
                     <Button
                       primary
                       raised
@@ -163,15 +187,19 @@ const ReceiveLotteryInfoModal = props => {
                   </View>
                   <Icon name="arrow-forward" />
                   <View style={sharedStyles.lotteryShipReceiveStep}>
-                    <FastImage
-                      style={sharedStyles.stepImage}
-                      source={{
-                        uri: user.image,
-                        priority: FastImage.priority.high,
-                        cache: FastImage.cacheControl.web,
-                      }}
-                      resizeMode={FastImage.resizeMode.cover}
-                    />
+                    {user.image ? (
+                      <FastImage
+                        style={sharedStyles.stepImage}
+                        source={{
+                          uri: user.image,
+                          priority: FastImage.priority.high,
+                          cache: FastImage.cacheControl.web,
+                        }}
+                        resizeMode={FastImage.resizeMode.cover}
+                      />
+                    ) : (
+                      <Icon name="account-circle" size={stepImageWidth} />
+                    )}
                   </View>
                 </View>
                 <View style={sharedStyles.shipReceiveLotteryInfoContainer}>
@@ -291,7 +319,7 @@ const ReceiveLotteryInfoModal = props => {
                     container: sharedStyles.bottomToolbarActionButtonContainer,
                   }}
                   icon={'markunread-mailbox'}
-                  text={'Mark as received'}
+                  text={receiveLotteryTexts[lang].markAsReceived}
                   onPress={handleMarkAsReceivedPress}
                 />
               </View>

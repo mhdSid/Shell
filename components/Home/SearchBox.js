@@ -30,7 +30,8 @@ import {
 } from '../../Constants/Lotteries';
 import {handleFetchLotteries} from '../../redux/Home/FetchLotteries';
 import {getUserIdSelector} from '../Profile/Selectors';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
+import {resetHomeLotteries, setPageToken} from '../../redux/Home/actions';
 
 const SearchBox = props => {
   const {searchFilters, style, searchEventFired, lang} = props;
@@ -176,6 +177,7 @@ const SearchBox = props => {
     fromDateRef.current.blur();
     toDateRef.current.blur();
     searchQueryRef.current.blur();
+    invoke(props, 'handleSetPageToken', null);
     invoke(props, 'handleSearch', {
       onError: props.onSearchError,
       onSuccess: props.onSearchSuccess,
@@ -193,6 +195,8 @@ const SearchBox = props => {
       fromDate: '',
       toDate: '',
     });
+    invoke(props, 'handleResetHomeLotteries', []);
+    invoke(props, 'handleSetPageToken', null);
     invoke(props, 'onSearchPress');
     if (searchEventFired) {
       invoke(props, 'handleSetSearchEventFired', false);
@@ -407,6 +411,8 @@ const mapDispatchToProps = dispatch => {
     handleSetSearchEventFired: payload =>
       dispatch(setSearchEventFired(payload)),
     fetchLotteries: payload => dispatch(handleFetchLotteries(payload)),
+    handleSetPageToken: payload => dispatch(setPageToken(payload)),
+    handleResetHomeLotteries: payload => dispatch(resetHomeLotteries(payload)),
   };
 };
 

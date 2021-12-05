@@ -17,12 +17,16 @@ import ShipLotteryInfoModal from './ShipLotteryInfoModal';
 import {getUserCreatedWonLotteriesSelector} from './Selectors';
 import {handleFetchUserCreatedWonLotteries} from '../../redux/ShipLottery/FetchUserCreatedWonLotteries';
 import {showShipLotteryModal} from '../../redux/ShipLottery/actions';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
+
+let LotteryDetails = null;
 
 const ShipLotteryModal = props => {
   const {userCreatedWonLotteries: lotteries, authUserId, lang} = props;
   const [loading, setLoading] = useState(true);
   const [filteredLotteries, setFilteredLotteries] = useState(null);
+  const [showLotteryDetails, setShowLotteryDetails] = useState(false);
+  const [selectedLottery, setSelectedLottery] = useState();
   const [cancelHttpTag] = useState(20);
   const [activeView, setActiveView] = useState('shipped');
   const [isShowShipLotteryModal, setIsShowShipLotteryModal] = useState(false);
@@ -44,11 +48,32 @@ const ShipLotteryModal = props => {
   const getItemCount = () =>
     (filteredLotteries || userCreatedWonLotteries || []).length;
   const getItemKey = item => item.id;
+  const updateLotteryDetails = item => {
+    setSelectedLottery(item);
+  };
+  const onLotteryDetailsClose = () => {
+    setShowLotteryDetails(false);
+  };
+  const lotteryDetailsModal = showLotteryDetails && (
+    <LotteryDetails
+      updateLotteryDetails={updateLotteryDetails}
+      onClose={onLotteryDetailsClose}
+      item={selectedLottery}
+    />
+  );
   const onItemPress = index => {
-    invoke(props, 'handleShowShipLotteryModal', {
-      ...(filteredLotteries || userCreatedWonLotteries)[index],
-    });
-    setIsShowShipLotteryModal(true);
+    if (activeView === 'shipped') {
+      if (!LotteryDetails) {
+        LotteryDetails = require('../LotteryDetails').default;
+      }
+      setShowLotteryDetails(true);
+      setSelectedLottery((filteredLotteries || userCreatedWonLotteries)[index]);
+    } else {
+      invoke(props, 'handleShowShipLotteryModal', {
+        ...(filteredLotteries || userCreatedWonLotteries)[index],
+      });
+      setIsShowShipLotteryModal(true);
+    }
   };
   const renderListItem = ({item, index}) => (
     <ListItemCommon
@@ -123,6 +148,7 @@ const ShipLotteryModal = props => {
       onShow={onShowModal}
       onDismiss={handleCloseModal}
       onRequestClose={handleCloseModal}>
+      {lotteryDetailsModal}
       <SafeAreaView
         style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
         <View style={sharedStyles.innerSafeAreaView}>

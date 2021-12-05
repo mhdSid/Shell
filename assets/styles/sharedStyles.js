@@ -984,8 +984,8 @@ const sharedStyles = StyleSheet.create({
   },
   imageViewButton: {
     position: 'absolute',
-    top: '20',
-    left: '10',
+    top: 40,
+    left: 10,
     width: '50',
     display: 'flex',
     alignSelf: 'flex-start',
@@ -1305,3 +1305,4 @@ const sharedStyles = StyleSheet.create({
 });
 
 export default sharedStyles;
+export {stepImageWidth};

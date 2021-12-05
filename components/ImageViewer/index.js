@@ -2,14 +2,14 @@ import React from 'react';
 import {Dimensions, Image, View} from 'react-native';
 import ImageZoom from 'react-native-image-pan-zoom';
 import {Modal, SafeAreaView} from 'react-native';
-import {Toolbar} from 'react-native-material-ui';
+import {Button} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import PropTypes from 'prop-types';
 import invoke from 'lodash/invoke';
 import FastImage from 'react-native-fast-image';
 
 const ImagesViewer = props => {
-  const {uri, imageText} = props;
+  const {uri} = props;
   const handleCloseModal = () => {
     invoke(props, 'onClose');
   };
@@ -21,18 +21,21 @@ const ImagesViewer = props => {
       <SafeAreaView
         style={[sharedStyles.fullheightView, sharedStyles.rootSafeAreaView]}>
         <View style={[sharedStyles.fullheightView, sharedStyles.imageViewer]}>
-          <Toolbar
-            style={{container: sharedStyles.lotteryDetailsToolbarContainer}}
-            leftElement="arrow-back"
-            centerElement={imageText}
-            onLeftElementPress={handleCloseModal}
+          <Button
+            icon="arrow-back"
+            color="white"
+            onPress={handleCloseModal}
+            raised={false}
+            primary
+            text={''}
+            style={sharedStyles.imageViewButton}
           />
           <ImageZoom
             cropWidth={cropWidth}
             cropHeight={cropHeight}
             style={sharedStyles.imageViewerZoom}
-            imageWidth={300}
-            imageHeight={300}>
+            imageWidth={cropWidth - 30}
+            imageHeight={cropWidth - 30}>
             <FastImage
               style={sharedStyles.imageViewerImage}
               source={{

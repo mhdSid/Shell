@@ -17,12 +17,16 @@ import {showReceiveLotteryModal} from '../../redux/ReceiveLottery/actions';
 import ReceiveLotteryInfoModal from './ReceiveLotteryInfoModal';
 import {getUserWonLotteriesSelector} from './Selectors';
 import {handleFetchUserWonLotteries} from '../../redux/ReceiveLottery/FetchUserWonLotteries';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
+
+let LotteryDetails = null;
 
 const ReceiveLotteryModal = props => {
   const {userWonLotteries: lotteries, authUserId, lang} = props;
   const [loading, setLoading] = useState(true);
   const [filteredLotteries, setFilteredLotteries] = useState(null);
+  const [showLotteryDetails, setShowLotteryDetails] = useState(false);
+  const [selectedLottery, setSelectedLottery] = useState();
   const [cancelHttpTag] = useState(20);
   const [activeView, setActiveView] = useState('received');
   const [isShowReceiveLotteryModal, setIsShowReceiveLotteryModal] = useState(
@@ -46,11 +50,32 @@ const ReceiveLotteryModal = props => {
   const getItemCount = () =>
     (filteredLotteries || userWonLotteries || []).length;
   const getItemKey = item => item.id;
+  const updateLotteryDetails = item => {
+    setSelectedLottery(item);
+  };
+  const onLotteryDetailsClose = () => {
+    setShowLotteryDetails(false);
+  };
+  const lotteryDetailsModal = showLotteryDetails && (
+    <LotteryDetails
+      updateLotteryDetails={updateLotteryDetails}
+      onClose={onLotteryDetailsClose}
+      item={selectedLottery}
+    />
+  );
   const onItemPress = index => {
-    invoke(props, 'handleShowReceiveLotteryModal', {
-      ...(filteredLotteries || userWonLotteries)[index],
-    });
-    setIsShowReceiveLotteryModal(true);
+    if (activeView === 'received') {
+      if (!LotteryDetails) {
+        LotteryDetails = require('../LotteryDetails').default;
+      }
+      setShowLotteryDetails(true);
+      setSelectedLottery((filteredLotteries || userWonLotteries)[index]);
+    } else {
+      invoke(props, 'handleShowReceiveLotteryModal', {
+        ...(filteredLotteries || userWonLotteries)[index],
+      });
+      setIsShowReceiveLotteryModal(true);
+    }
   };
   const renderListItem = ({item, index}) => (
     <ListItemCommon
@@ -122,6 +147,7 @@ const ReceiveLotteryModal = props => {
       onShow={onShowModal}
       onDismiss={handleCloseModal}
       onRequestClose={handleCloseModal}>
+      {lotteryDetailsModal}
       <SafeAreaView
         style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
         <View style={sharedStyles.innerSafeAreaView}>

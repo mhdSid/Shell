@@ -829,7 +829,9 @@ const LotteryDetails = props => {
                   }}
                   icon={lotteryDetailsTexts[lang].like.icon}
                   text={
-                    likedBy.length ? formatedNumberOfLikes(likedBy.length) : ''
+                    Array.isArray(likedBy) && likedBy.length
+                      ? formatedNumberOfLikes(likedBy.length)
+                      : ''
                   }
                   onPress={
                     handleActionPress[lotteryDetailsTexts[lang].like.action]

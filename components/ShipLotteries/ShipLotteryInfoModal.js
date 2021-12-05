@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Image, Modal, SafeAreaView, ScrollView, Text, View} from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import sharedStyles, { stepImageWidth } from '../../assets/styles/sharedStyles';
 import {Button, Icon, Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {loadingPopup} from '../Loading';
@@ -23,6 +23,7 @@ import formatDate from '../../lib/formatDate';
 import {handleMarkLotteryAsShipped} from '../../redux/ShipLottery/MarkLotteryAsShipped';
 import FastImage from 'react-native-fast-image';
 import { getLangSelector } from '../Settings/Selectors';
+import { Alert } from 'react-native';
 
 const ShipLotteryInfoModal = props => {
   const {shipLotteryDetails, user, lotteryWinnerData, lang} = props;
@@ -77,7 +78,7 @@ const ShipLotteryInfoModal = props => {
     setIsLoading(false);
     handleCloseModal();
   };
-  const handleMarkAsShippedPress = () => {
+  const markLotteryAsReceivedPress = () => {
     setIsLoading(true);
     invoke(props, 'handleMarkLotteryAsShipped', {
       lotteryId,
@@ -85,6 +86,22 @@ const ShipLotteryInfoModal = props => {
       onError: handleMarkAsShippedCallback,
       cancelHttpTag: cancelHttpTag,
     });
+  };
+  const handleMarkAsShippedPress = () => {
+    Alert.alert(
+      shipLotteryTexts[lang].shipAlertTitle,
+      shipLotteryTexts[lang].shipAlertMessage,
+      [
+        {
+          text: shipLotteryTexts[lang].markAsShipped,
+          onPress: markLotteryAsReceivedPress,
+        },
+        {
+          text: shipLotteryTexts[lang].cancel,
+          style: 'cancel',
+        },
+      ],
+    );
   };
   const handleChatModalClose = () => {
     setShowChatModal(false);
@@ -125,15 +142,19 @@ const ShipLotteryInfoModal = props => {
               <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={sharedStyles.lotteryShipReceiveStepsContainer}>
                   <View style={sharedStyles.lotteryShipReceiveStep}>
-                    <FastImage
-                      style={sharedStyles.stepImage}
-                      source={{
-                        uri: user.image,
-                        priority: FastImage.priority.high,
-                        cache: FastImage.cacheControl.web,
-                      }}
-                      resizeMode={FastImage.resizeMode.cover}
-                    />
+                    {user.image ? (
+                      <FastImage
+                        style={sharedStyles.stepImage}
+                        source={{
+                          uri: user.image,
+                          priority: FastImage.priority.high,
+                          cache: FastImage.cacheControl.web,
+                        }}
+                        resizeMode={FastImage.resizeMode.cover}
+                      />
+                    ) : (
+                      <Icon name="account-circle" size={stepImageWidth} />
+                    )}
                   </View>
                   <Icon name="arrow-forward" />
                   <View style={sharedStyles.lotteryShipReceiveStep}>
@@ -149,15 +170,19 @@ const ShipLotteryInfoModal = props => {
                   </View>
                   <Icon name="arrow-forward" />
                   <View style={sharedStyles.lotteryShipReceiveStep}>
-                    <FastImage
-                      style={sharedStyles.stepImage}
-                      source={{
-                        uri: lotteryWinnerData.image,
-                        priority: FastImage.priority.high,
-                        cache: FastImage.cacheControl.web,
-                      }}
-                      resizeMode={FastImage.resizeMode.cover}
-                    />
+                    {lotteryWinnerData.image ? (
+                      <FastImage
+                        style={sharedStyles.stepImage}
+                        source={{
+                          uri: lotteryWinnerData.image,
+                          priority: FastImage.priority.high,
+                          cache: FastImage.cacheControl.web,
+                        }}
+                        resizeMode={FastImage.resizeMode.cover}
+                      />
+                    ) : (
+                      <Icon name="account-circle" size={stepImageWidth} />
+                    )}
                     <Button
                       primary
                       raised
@@ -287,7 +312,7 @@ const ShipLotteryInfoModal = props => {
                     container: sharedStyles.bottomToolbarActionButtonContainer,
                   }}
                   icon={'markunread-mailbox'}
-                  text={'Mark as shipped'}
+                  text={shipLotteryTexts[lang].markAsShipped}
                   onPress={handleMarkAsShippedPress}
                 />
               </View>

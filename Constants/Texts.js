@@ -471,6 +471,10 @@ const lottteries = {
 
 const receiveLottery = {
   en: {
+    cancel: 'Cancel',
+    receiveAlertTitle: 'Mark lottery as received',
+    receiveAlertMessage: 'I confirm that I have successfully received the item',
+    markAsReceived: 'Mark as received',
     receiveLottery: 'Receive Lottery',
     receivedLotteries: 'Received',
     notReceivedLotteries: 'Not Received',
@@ -479,6 +483,10 @@ const receiveLottery = {
       "You are the winner of this lottery, but you haven't received it yet.\nPlease contact the owner and make sure that they ship the item.\nIf you have already received it, please mark it as received.",
   },
   jp: {
+    cancel: 'キャンセル',
+    receiveAlertTitle: '宝くじを受け取ったものとしてマークする',
+    receiveAlertMessage: 'アイテムを正常に受け取ったことを確認します',
+    markAsReceived: '受信済みとしてマーク',
     receiveLottery: '宝くじを受け取る',
     receivedLotteries: '受け取った',
     notReceivedLotteries: '受信していない',
@@ -490,6 +498,10 @@ const receiveLottery = {
 
 const shipLottery = {
   en: {
+    cancel: 'Cancel',
+    shipAlertTitle: 'Mark lottery as shipped',
+    shipAlertMessage: 'I confirm that I have successfully shipped the item',
+    markAsShipped: 'Mark as shipped',
     shipLottery: 'Ship Lottery',
     shippedLotteries: 'Shipped',
     notShippedLotteries: 'Not Shipped',
@@ -498,6 +510,10 @@ const shipLottery = {
       "You haven't shipped this lottery yet.\nThe winner of this lottery hasn't received the item yet.\nPlease contact the winner and make sure that they receive the item.\nAfter you ship the item, please mark the lottery as shipped.",
   },
   jp: {
+    cancel: 'キャンセル',
+    shipAlertTitle: '宝くじを出荷済みとしてマークする',
+    shipAlertMessage: '商品の発送に成功したことを確認しました',
+    markAsShipped: '出荷済みとしてマーク',
     shipLottery: '船の宝くじ',
     shippedLotteries: '出荷済み',
     notShippedLotteries: '出荷されていません',
