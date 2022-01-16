@@ -8,7 +8,7 @@ import {password as hashkey} from './Encrypt';
 const getAds = async props => {
   const {pageToken, cancelTag} = props;
   const data = await request({
-    endpoint: 'ads/get',
+    endpoint: 'api/ads/getLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -22,7 +22,7 @@ const getAds = async props => {
 const getMyLotteries = async props => {
   const {userId, pageToken, cancelTag} = props;
   const data = await request({
-    endpoint: 'ads/myLotteries',
+    endpoint: 'api/ads/myLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -37,7 +37,7 @@ const getMyLotteries = async props => {
 const cancelLottery = async props => {
   const {userId, lotteryId, reAdd, cancelTag} = props;
   const data = await request({
-    endpoint: 'ads/cancelLottery',
+    endpoint: 'api/ads/cancelLottery',
     method: 'POST',
     cancelTag,
     body: {
@@ -53,7 +53,7 @@ const cancelLottery = async props => {
 const getUserCreatedLotteries = async props => {
   const {userId, pageToken, cancelTag} = props;
   const data = await request({
-    endpoint: 'ads/myCreatedLotteries',
+    endpoint: 'api/ads/myCreatedLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -68,7 +68,7 @@ const getUserCreatedLotteries = async props => {
 const getUserLikedLotteries = async props => {
   const {userId, pageToken, cancelTag} = props;
   const data = await request({
-    endpoint: 'ads/myLikedLotteries',
+    endpoint: 'api/ads/myLikedLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -83,7 +83,7 @@ const getUserLikedLotteries = async props => {
 const likeLottery = async props => {
   const {userId, lotteryId, cancelTag} = props;
   const data = await request({
-    endpoint: 'ads/likeLottery',
+    endpoint: 'api/ads/likeLottery',
     method: 'POST',
     cancelTag,
     body: {
@@ -98,7 +98,7 @@ const likeLottery = async props => {
 const dislikeLottery = async props => {
   const {userId, lotteryId, cancelTag} = props;
   const data = await request({
-    endpoint: 'ads/dislikeLottery',
+    endpoint: 'api/ads/dislikeLottery',
     cancelTag,
     method: 'POST',
     body: {
@@ -113,7 +113,7 @@ const dislikeLottery = async props => {
 const getUserJoinedLotteries = async props => {
   const {userId, pageToken, cancelTag} = props;
   const data = await request({
-    endpoint: 'ads/myJoinedLotteries',
+    endpoint: 'api/ads/myJoinedLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -128,7 +128,7 @@ const getUserJoinedLotteries = async props => {
 const getUserWonLotteries = async props => {
   const {userId, cancelTag} = props;
   const data = await request({
-    endpoint: 'ads/myWonLotteries',
+    endpoint: 'api/ads/myWonLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -142,7 +142,7 @@ const getUserWonLotteries = async props => {
 const getChattableLotteries = async props => {
   const {userId, cancelTag} = props;
   const data = await request({
-    endpoint: 'ads/myChattableLotteries',
+    endpoint: 'api/ads/myChattableLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -156,7 +156,7 @@ const getChattableLotteries = async props => {
 const markLotteryAsReceived = async props => {
   const {lotteryId, cancelTag} = props;
   const data = await request({
-    endpoint: 'ads/markLotteryAsReceived',
+    endpoint: 'api/ads/markLotteryAsReceived',
     method: 'POST',
     cancelTag,
     body: {
@@ -170,7 +170,7 @@ const markLotteryAsReceived = async props => {
 const markLotteryAsShipped = async props => {
   const {lotteryId, cancelTag} = props;
   const data = await request({
-    endpoint: 'ads/markLotteryAsShipped',
+    endpoint: 'api/ads/markLotteryAsShipped',
     method: 'POST',
     cancelTag,
     body: {
@@ -184,7 +184,7 @@ const markLotteryAsShipped = async props => {
 const getUserCreatedWonLotteries = async props => {
   const {userId, cancelTag} = props;
   const data = await request({
-    endpoint: 'ads/myCreatedWonLotteries',
+    endpoint: 'api/ads/myCreatedWonLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -208,7 +208,7 @@ const updateLotteryWithoutImage = async props => {
     name,
   } = props;
   const data = await request({
-    endpoint: 'ads/update/noImage',
+    endpoint: 'api/ads/update/noImage',
     method: 'POST',
     body: {
       prefecture,
@@ -252,7 +252,7 @@ const addBackgroundUpload = async props => {
     country,
   } = props;
   const options = {
-    url: `${apiRequest.apiUri}ads/add`,
+    url: `${apiRequest.apiUri}api/ads/addLottery`,
     path: image.uri,
     method: 'POST',
     field: 'image',
@@ -333,7 +333,7 @@ const updateAdBackground = async props => {
   const {id, image} = props;
 
   const options = {
-    url: `${apiRequest.apiUri}ads/update/v2`,
+    url: `${apiRequest.apiUri}api/ads/update`,
     path: image.uri,
     method: 'POST',
     field: 'image',
@@ -406,7 +406,7 @@ const enterLottery = async props => {
   const creditCardTypeEnc = encrypt(creditCardType);
 
   const data = await request({
-    endpoint: 'ads/enterLottery',
+    endpoint: 'api/ads/enterLottery',
     method: 'POST',
     body: {
       userId,
@@ -433,7 +433,48 @@ const enterLottery = async props => {
   return data;
 };
 
+const search = async props => {
+  const {searchFilters, pageToken} = props;
+  const searchText = searchFilters.searchText ? searchFilters.searchText : '';
+  const fromDate = searchFilters.fromDate
+    ? `${new Date(searchFilters.fromDate)}`
+    : '';
+  const toDate = searchFilters.toDate
+    ? `${new Date(searchFilters.toDate)}`
+    : '';
+  const city = searchFilters.city || '';
+  const prefecture = searchFilters.prefecture || '';
+  const category = searchFilters.category || '';
+  const condition = searchFilters.condition || '';
+  const data = await request({
+    endpoint: 'api/ads/search',
+    method: 'POST',
+    body: {
+      searchText,
+      fromDate,
+      toDate,
+      city,
+      prefecture,
+      category,
+      condition,
+      // pageToken,
+      hash: sha256(
+        searchText +
+          fromDate +
+          toDate +
+          prefecture +
+          city +
+          category +
+          condition +
+          hashkey,
+      ).toString(),
+    },
+  });
+  return data;
+};
+
 export {
+  search,
   getAds,
   getMyLotteries,
   getUserCreatedLotteries,

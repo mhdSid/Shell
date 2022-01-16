@@ -29,6 +29,8 @@ let AuthenticateModal = null;
 
 const UserProfile = props => {
   const {user, lang, loggedIn} = props;
+  console.log(user)
+
   const isAuthenticated = user && loggedIn;
   const [userProfileModal, setUserProfileModal] = useState(false);
   const [loading, setLoading] = useState(false);

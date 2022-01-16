@@ -918,7 +918,7 @@ const sharedStyles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 16,
     color: 'rgba(0,0,0,.5)',
-    marginTop: -100,
+    marginTop: -130,
     textAlign: 'center',
   },
   uploadProgressViewContainer: {
@@ -982,10 +982,12 @@ const sharedStyles = StyleSheet.create({
     alignItems: 'flex-start',
     position: 'relative',
   },
-  imageViewButton: {
+  imageViewerBtnContainer: {
     position: 'absolute',
-    top: 40,
-    left: 10,
+    top: 10,
+    left: 0,
+  },
+  imageViewButton: {
     width: '50',
     display: 'flex',
     alignSelf: 'flex-start',
@@ -1027,6 +1029,9 @@ const sharedStyles = StyleSheet.create({
   },
   btnContainer: {
     marginVertical: 30,
+    marginBottom: 20,
+  },
+  lotteryDetailsPaymentBtnContainer: {
     marginBottom: 20,
   },
   paymentTitle: {
@@ -1180,7 +1185,7 @@ const sharedStyles = StyleSheet.create({
     paddingTop: 20,
     paddingLeft: 20,
     paddingRight: 20,
-    marginTop: 60,
+    marginTop: 45,
     backgroundColor: 'rgba(0,0,0,.1)',
     ...flex,
   },
@@ -1217,6 +1222,7 @@ const sharedStyles = StyleSheet.create({
   chatTextMessageDate: {
     display: 'flex',
     fontSize: 12,
+    marginTop: 5,
   },
   chatMessageInput: {
     borderWidth: 1,

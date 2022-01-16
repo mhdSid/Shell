@@ -5,7 +5,7 @@ import {decrypt, encrypt, password as hashkey} from './Encrypt';
 const getConversation = async props => {
   const {lotteryId, winnerUserId, lotteryPosterId, cancelTag} = props;
   const data = await request({
-    endpoint: 'chat/conversation',
+    endpoint: 'api/chat/conversation',
     method: 'POST',
     cancelTag,
     body: {
@@ -23,7 +23,7 @@ const getConversation = async props => {
 const sendChatMessage = async props => {
   const {lotteryId, winnerUserId, lotteryPosterId, message, cancelTag} = props;
   const data = await request({
-    endpoint: 'chat/conversation',
+    endpoint: 'api/chat/conversation',
     method: 'POST',
     cancelTag,
     body: {

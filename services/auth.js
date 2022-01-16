@@ -1,6 +1,6 @@
 import {request} from './Request';
 import sha256 from 'crypto-js/sha256';
-import {decrypt, encrypt, password as hashkey} from './Encrypt';
+import {encrypt, password as hashkey} from './Encrypt';
 import {apiRequest} from '../Constants/Api';
 import Upload from 'react-native-background-upload';
 
@@ -8,7 +8,7 @@ const login = async props => {
   const {email, password} = props;
   const passwordHash = sha256(password + hashkey).toString();
   const data = await request({
-    endpoint: 'users/authenticate/email',
+    endpoint: 'api/users/authenticate/email',
     method: 'POST',
     body: {
       email,
@@ -21,7 +21,7 @@ const login = async props => {
 
 const logout = async () => {
   const data = await request({
-    endpoint: 'users/authenticate/logout',
+    endpoint: 'api/users/authenticate/logout',
     method: 'POST',
     body: {
       hash: sha256(hashkey).toString(),
@@ -32,7 +32,7 @@ const logout = async () => {
 
 const ping = async () => {
   const data = await request({
-    endpoint: 'users/authenticate/ping',
+    endpoint: 'api/users/authenticate/ping',
     method: 'POST',
     body: {
       hash: sha256(hashkey).toString(),
@@ -44,7 +44,7 @@ const ping = async () => {
 const verify = async props => {
   const {email, passwordHash, verificationCode} = props;
   const data = await request({
-    endpoint: 'users/authenticate/email/verify',
+    endpoint: 'api/users/authenticate/email/verify',
     method: 'POST',
     body: {
       email,
@@ -61,7 +61,7 @@ const verify = async props => {
 const resendVerificationCode = async props => {
   const {email, passwordHash} = props;
   const data = await request({
-    endpoint: 'users/authenticate/email/verify/resend',
+    endpoint: 'api/users/authenticate/email/verify/resend',
     method: 'POST',
     body: {
       email,
@@ -82,7 +82,7 @@ const signup = async props => {
     city,
   } = props;
   const data = await request({
-    endpoint: 'users/authenticate/signup',
+    endpoint: 'api/users/authenticate/signup',
     method: 'POST',
     body: {
       email,
@@ -98,46 +98,6 @@ const signup = async props => {
           country +
           prefecture +
           city +
-          hashkey,
-      ).toString(),
-    },
-  });
-  return data;
-};
-
-const search = async props => {
-  const {searchFilters, pageToken} = props;
-  const searchText = searchFilters.searchText ? searchFilters.searchText : '';
-  const fromDate = searchFilters.fromDate
-    ? `${new Date(searchFilters.fromDate)}`
-    : '';
-  const toDate = searchFilters.toDate
-    ? `${new Date(searchFilters.toDate)}`
-    : '';
-  const city = searchFilters.city || '';
-  const prefecture = searchFilters.prefecture || '';
-  const category = searchFilters.category || '';
-  const condition = searchFilters.condition || '';
-  const data = await request({
-    endpoint: 'ads/search/v2',
-    method: 'POST',
-    body: {
-      searchText,
-      fromDate,
-      toDate,
-      city,
-      prefecture,
-      category,
-      condition,
-      // pageToken,
-      hash: sha256(
-        searchText +
-          fromDate +
-          toDate +
-          prefecture +
-          city +
-          category +
-          condition +
           hashkey,
       ).toString(),
     },
@@ -231,7 +191,7 @@ const updateUserBackground = async props => {
     };
   }
   const options = {
-    url: `${apiRequest.apiUri}users/authenticate/update`,
+    url: `${apiRequest.apiUri}api/users/authenticate/update`,
     path: image.uri,
     method: 'POST',
     field: 'image',
@@ -370,7 +330,7 @@ const update = async props => {
     ).toString(),
   );
   const data = await request({
-    endpoint: 'users/authenticate/update',
+    endpoint: 'api/users/authenticate/update',
     method: 'POST',
     body: formData,
   });
@@ -384,7 +344,6 @@ export {
   verify,
   signup,
   update,
-  search,
   getUsersData,
   updateUserBackground,
   resendVerificationCode,

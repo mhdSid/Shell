@@ -400,6 +400,13 @@ const LotteryDetails = props => {
       }, 15000);
     }
   };
+  const canEnterLottery =
+    authUser &&
+    `${userId}` !== `${authUser.id}` &&
+    !cancelled &&
+    available &&
+    !disableHeaderActions;
+
   useEffect(() => {
     onShow();
   }, [item, lotteryDetails]);
@@ -427,11 +434,7 @@ const LotteryDetails = props => {
                     color="white"
                   />
                 ) : null}
-                {authUser &&
-                `${userId}` !== `${authUser.id}` &&
-                !cancelled &&
-                available &&
-                !disableHeaderActions ? (
+                {canEnterLottery ? (
                   <Button
                     disabled={`${currentCollectedPrice}` === `${price}`}
                     onPress={handleEnterDraw}
@@ -467,6 +470,24 @@ const LotteryDetails = props => {
               />
             </View>
             <View style={sharedStyles.lotteryDetailsContainer}>
+              {canEnterLottery ? (
+                <View style={sharedStyles.lotteryDetailsPaymentBtnContainer}>
+                  <Button
+                    raised
+                    primary
+                    disabled={`${currentCollectedPrice}` === `${price}`}
+                    icon="payment"
+                    text={lotteryDetailsTexts[lang].enterDraw}
+                    style={{
+                      container:
+                        `${currentCollectedPrice}` === `${price}`
+                          ? null
+                          : sharedStyles.paymentBtnContainer,
+                    }}
+                    onPress={handleEnterDraw}
+                  />
+                </View>
+              ) : null}
               <View style={sharedStyles.userDetailsIconTextContainer}>
                 <Icon
                   color={available ? 'green' : 'red'}

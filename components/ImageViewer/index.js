@@ -21,15 +21,17 @@ const ImagesViewer = props => {
       <SafeAreaView
         style={[sharedStyles.fullheightView, sharedStyles.rootSafeAreaView]}>
         <View style={[sharedStyles.fullheightView, sharedStyles.imageViewer]}>
-          <Button
-            icon="arrow-back"
-            color="white"
-            onPress={handleCloseModal}
-            raised={false}
-            primary
-            text={''}
-            style={sharedStyles.imageViewButton}
-          />
+          <View style={sharedStyles.imageViewerBtnContainer}>
+            <Button
+              icon="arrow-back"
+              color="white"
+              onPress={handleCloseModal}
+              raised={false}
+              primary
+              text={''}
+              style={sharedStyles.imageViewButton}
+            />
+          </View>
           <ImageZoom
             cropWidth={cropWidth}
             cropHeight={cropHeight}

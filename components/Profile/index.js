@@ -30,6 +30,7 @@ let Login = null;
 
 const AuthComponent = props => {
   const {loggedIn, user, showSignup, verificationCode, onClose} = props;
+  console.log(user);
   // useEffect(() => {
   //   if (loggedIn && user) {
   //     // AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/4925593277');

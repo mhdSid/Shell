@@ -16,6 +16,7 @@ import {getLoggedInSelector, getUserSelector} from '../Profile/Selectors';
 let ChangePassword = null;
 let ContactUsModal = null;
 let TermsAndPrivacyPolicyModal = null;
+let UserAgreementModal = null;
 
 const Settings = props => {
   const {lang, user, loggedIn} = props;
@@ -50,6 +51,14 @@ const Settings = props => {
         ContactUsModal = require('./ContactUsModal').default;
       }
       return <ContactUsModal lang={lang} onClose={handleSettingsModalClose} />;
+    },
+    userAgreement: () => {
+      if (!UserAgreementModal) {
+        UserAgreementModal = require('./UserAgreement').default;
+      }
+      return (
+        <UserAgreementModal lang={lang} onClose={handleSettingsModalClose} />
+      );
     },
     privacyAndTerms: () => {
       if (!TermsAndPrivacyPolicyModal) {
@@ -165,6 +174,12 @@ const Settings = props => {
                       icon: 'security',
                       value: settings[lang].privacyAndTerms,
                       onPress: handleSettingsModalClick('privacyAndTerms'),
+                    },
+                    {
+                      key: settings[lang].userAgreement,
+                      icon: 'person',
+                      value: settings[lang].userAgreement,
+                      onPress: handleSettingsModalClick('userAgreement'),
                     },
                     // {
                     //   key: settings[lang].licenses,
