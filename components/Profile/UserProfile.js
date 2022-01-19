@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {View, Text, ActionSheetIOS, Image} from 'react-native';
+import {View, Text, ActionSheetIOS} from 'react-native';
 import {Button, Drawer, Avatar, Icon} from 'react-native-material-ui';
 import {Loading, loadingPopup} from '../Loading';
-import {profile, userProfileLogoutActions} from '../../Constants/Texts';
+import {profile, userProfileLogoutActions} from '../../constants/Texts';
 import PropTypes from 'prop-types';
 import invoke from 'lodash/invoke';
 import {connect} from 'react-redux';
@@ -29,8 +29,6 @@ let AuthenticateModal = null;
 
 const UserProfile = props => {
   const {user, lang, loggedIn} = props;
-  console.log(user)
-
   const isAuthenticated = user && loggedIn;
   const [userProfileModal, setUserProfileModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -222,11 +220,6 @@ const UserProfile = props => {
                   value: profile[lang].howToUseTheApp,
                   onPress: handleShowModal('about'),
                 },
-                // {
-                //   icon: 'bookmark-border',
-                //   value: profile[lang].notifications,
-                //   onPress: handleShowModal('notifications'),
-                // },
                 {
                   icon: 'grade',
                   value: profile[lang].myCreatedLotteries,

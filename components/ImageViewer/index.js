@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, Image, View} from 'react-native';
+import {Dimensions, View} from 'react-native';
 import ImageZoom from 'react-native-image-pan-zoom';
 import {Modal, SafeAreaView} from 'react-native';
 import {Button} from 'react-native-material-ui';

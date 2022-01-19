@@ -1,7 +1,7 @@
-import {resendVerificationCode} from '../../services/auth';
+import {resendVerificationCode} from '../../services/Auth';
 import {handleError, authActions} from './actions';
 import invoke from 'lodash/invoke';
-import {errors} from '../../Constants/Texts';
+import {errors} from '../../constants/Texts';
 import {Alert} from 'react-native';
 
 const handleResendVerificationCode = payload => {

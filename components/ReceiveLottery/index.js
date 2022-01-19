@@ -5,12 +5,12 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {loadingPopup} from '../Loading';
 import PropTypes from 'prop-types';
 import {BottomNavigation, Toolbar} from 'react-native-material-ui';
-import {lottteries as lotteriesTexts} from '../../Constants/Texts';
+import {lottteries as lotteriesTexts} from '../../constants/Texts';
 import invoke from 'lodash/invoke';
 import Filter from '../Filter';
 import ListItemCommon from '../Home/ListItem';
 import cancellableFetch from 'react-native-cancelable-fetch';
-import {receiveLottery as receiveLotteryTexts} from '../../Constants/Texts';
+import {receiveLottery as receiveLotteryTexts} from '../../constants/Texts';
 import {getUserIdSelector} from '../Profile/Selectors';
 import {Modal} from 'react-native';
 import {showReceiveLotteryModal} from '../../redux/ReceiveLottery/actions';
@@ -129,7 +129,6 @@ const ReceiveLotteryModal = props => {
   const handleReceiveLotteryModalClose = () => {
     setIsShowReceiveLotteryModal(false);
     invoke(props, 'handleShowReceiveLotteryModal', undefined);
-    // onShowModal();
   };
   const handleCloseModal = () => {
     invoke(props, 'onClose');

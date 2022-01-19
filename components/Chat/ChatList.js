@@ -9,7 +9,7 @@ import {
   chat as chatTexts,
   lottteries as lotteriesTexts,
   noAuth as noAuthTexts,
-} from '../../Constants/Texts';
+} from '../../constants/Texts';
 import invoke from 'lodash/invoke';
 import ListItemCommon from '../Home/ListItem';
 import cancellableFetch from 'react-native-cancelable-fetch';
@@ -17,9 +17,9 @@ import ChatModal from './index';
 import {getUserSelector} from '../UpdateUser/Selectors';
 import {getChattableLotteriesSelector} from './Selectors';
 import {handleFetchChattableLotteries} from '../../redux/Chat/FetchChattableLotteries';
-import { isUndefined } from 'lodash';
+import {isUndefined} from 'lodash';
 import NoAuth from '../NoAuth';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 const ChatList = props => {
   const {chattableLotteries, authUser, lang} = props;

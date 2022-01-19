@@ -4,7 +4,7 @@ import {Modal, SafeAreaView, View, VirtualizedList} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
-import {profile} from '../../Constants/Texts';
+import {profile} from '../../constants/Texts';
 import {connect} from 'react-redux';
 import {getUserLikedLotteriesSelector} from '../UserJoinedLotteries/Selectors';
 import {getUserSelector} from '../Profile/Selectors';
@@ -12,7 +12,7 @@ import {Text} from 'react-native';
 import {handleFetchUserLikedLotteries} from '../../redux/Lotteries/FetchUserLikedLotteries';
 import {getLotteryDetailsSelector} from '../Pinger/Selectors';
 import {showLotteryDetails as handleShowLotteryDetails} from '../../redux/LotteryDetails/actions';
-import {lottteries as lotteriesTexts} from '../../Constants/Texts';
+import {lottteries as lotteriesTexts} from '../../constants/Texts';
 import Filter from '../Filter';
 import ListItemCommon from '../Home/ListItem';
 import CardListItemRow from '../Home/CardListItemRow';
@@ -23,7 +23,7 @@ import {getLotteryResultSelector} from '../LotteryResult/Selectors';
 import LotteryResultModal from '../LotteryResult';
 import {loadingPopup} from '../Loading';
 import cancellableFetch from 'react-native-cancelable-fetch';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 let LotteryDetails = null;
 

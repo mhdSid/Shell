@@ -1,8 +1,8 @@
 import {Alert} from 'react-native';
-import {errors} from '../../Constants/Texts';
+import {errors} from '../../constants/Texts';
 import invoke from 'lodash/invoke';
 import SocketIOClient from 'socket.io-client';
-import {apiRequest} from '../../Constants/Api';
+import {apiRequest} from '../../constants/Api';
 
 let socket = null;
 

@@ -1,7 +1,7 @@
 import {request} from './Request';
 import sha256 from 'crypto-js/sha256';
 import {encrypt, password as hashkey} from './Encrypt';
-import {apiRequest} from '../Constants/Api';
+import {apiRequest} from '../constants/Api';
 import Upload from 'react-native-background-upload';
 
 const login = async props => {

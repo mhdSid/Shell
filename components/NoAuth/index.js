@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Button} from 'react-native-material-ui';
 import {navigate} from '../MainContainer';
-import {noAuth, loginSignup} from '../../Constants/Texts';
+import {noAuth, loginSignup} from '../../constants/Texts';
 import PropTypes from 'prop-types';
 
 const NoAuth = props => {

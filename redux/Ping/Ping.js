@@ -1,14 +1,11 @@
-import {Alert} from 'react-native';
 import {authActions} from '../Auth/actions';
-import {ping} from '../../services/auth';
+import {ping} from '../../services/Auth';
 import invoke from 'lodash/invoke';
 
 const handlePing = payload => {
   return dispatch => {
     const onPingError = ({error, country}) => {
-      const {message} = error;
       invoke(payload, 'onError');
-      // Alert.alert(message);
       return dispatch({
         type: authActions.login,
         payload: {country, loggedIn: null, user: null},

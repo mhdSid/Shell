@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import {
   lotteryDetails as lotteryDetailsTexts,
   lotteryResult as lotteryResultTexts,
-} from '../../Constants/Texts';
+} from '../../constants/Texts';
 import {
   getAdPosterDataSelector,
   getLotteryResultSelector,
@@ -25,8 +25,8 @@ import cancellableFetch from 'react-native-cancelable-fetch';
 import {showReceiveLotteryModal} from '../../redux/ReceiveLottery/actions';
 import {showShipLotteryModal} from '../../redux/ShipLottery/actions';
 import Confetti from 'react-native-confetti';
-import { confettiColors } from '../../Constants/Colors';
-import { getLangSelector } from '../Settings/Selectors';
+import {confettiColors} from '../../constants/Colors';
+import {getLangSelector} from '../Settings/Selectors';
 
 let ChatModal = null;
 let ReceiveLotteryModal = null;
@@ -36,7 +36,6 @@ const LotteryResult = props => {
   const {
     lotteryResult,
     user: authUser,
-    // lotteryUsersData,
     adPosterData,
     winnerUserData,
     item: lotteryDetails,
@@ -54,13 +53,8 @@ const LotteryResult = props => {
     publishDate,
     condition,
     userId,
-    // cancelled,
-    available,
-    lotteryUsersLength,
     winnerUserId,
     currentCollectedPrice,
-    // images,
-    // disableHeaderActions,
   } = lotteryDetails || lotteryResult;
 
   const isWinner = authUser && authUser.id && winnerUserId === authUser.id;
@@ -93,17 +87,6 @@ const LotteryResult = props => {
   const onShow = () => {
     fetchUsersData();
   };
-  // const getItem = (data, index) => data[index];
-  // const getItemCount = () => lotteryUsersData.length;
-  // const getVirtualKey = item => item.id;
-  // const renderLotteryUserItem = ({item: user}) => (
-  //   <LotteryDetailsUserListItem
-  //     user={user}
-  //     winnerUserId={winnerUserId}
-  //     withNotificationNum={true}
-  //     largeImage={true}
-  //   />
-  // );
   const handleActionPress = {
     [lotteryResultTexts[lang].actionOptions.receive]: () => {
       if (!ReceiveLotteryModal) {
@@ -352,34 +335,38 @@ const LotteryResult = props => {
               {(isLotteryPoster && winnerUserId) || isWinner ? (
                 <View style={sharedStyles.lotteryDetailsBottomToolbar}>
                   {isLotteryPoster && winnerUserId
-                    ? lotteryResultTexts[lang].lotteryPosterActions.map(action => (
-                        <Button
-                          primary
-                          raised
-                          disabled={action.action === 'chat' && !winnerUserId}
-                          style={{
-                            container:
-                              sharedStyles.bottomToolbarActionButtonContainer,
-                          }}
-                          icon={action.icon}
-                          text={action.text}
-                          onPress={handleActionPress[action.action]}
-                        />
-                      ))
+                    ? lotteryResultTexts[lang].lotteryPosterActions.map(
+                        action => (
+                          <Button
+                            primary
+                            raised
+                            disabled={action.action === 'chat' && !winnerUserId}
+                            style={{
+                              container:
+                                sharedStyles.bottomToolbarActionButtonContainer,
+                            }}
+                            icon={action.icon}
+                            text={action.text}
+                            onPress={handleActionPress[action.action]}
+                          />
+                        ),
+                      )
                     : isWinner
-                    ? lotteryResultTexts[lang].lotteryWinnerActions.map(action => (
-                        <Button
-                          primary
-                          raised
-                          style={{
-                            container:
-                              sharedStyles.bottomToolbarActionButtonContainer,
-                          }}
-                          icon={action.icon}
-                          text={action.text}
-                          onPress={handleActionPress[action.action]}
-                        />
-                      ))
+                    ? lotteryResultTexts[lang].lotteryWinnerActions.map(
+                        action => (
+                          <Button
+                            primary
+                            raised
+                            style={{
+                              container:
+                                sharedStyles.bottomToolbarActionButtonContainer,
+                            }}
+                            icon={action.icon}
+                            text={action.text}
+                            onPress={handleActionPress[action.action]}
+                          />
+                        ),
+                      )
                     : null}
                 </View>
               ) : null}
@@ -403,7 +390,6 @@ const mapStateToProps = state => {
     lotteryResult: getLotteryResultSelector(state),
     user: getUserSelector(state),
     adPosterData: getAdPosterDataSelector(state),
-    // lotteryUsersData: getLotteryUsersDataSelector(state),
     winnerUserData: getWinnerUserDataSelector(state),
     lang: getLangSelector(state),
   };

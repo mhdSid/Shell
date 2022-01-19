@@ -70,8 +70,6 @@ const chatReducer = (state = initialState, action) => {
         lotteryPosterId,
         winnerUserId,
         lotteryId,
-        from,
-        to,
       } = action.payload;
       if (state.chatList[lotteryId]) {
         let updatedConversation = [...state.chatList[lotteryId].conversation];

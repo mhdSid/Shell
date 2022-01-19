@@ -1,5 +1,5 @@
 import {handleError, authActions} from './actions';
-import {logout} from '../../services/auth';
+import {logout} from '../../services/Auth';
 import invoke from 'lodash/invoke';
 import {homeActions} from '../Home/actions';
 import {lotteriesActions} from '../Lotteries/actions';

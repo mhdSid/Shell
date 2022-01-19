@@ -1,6 +1,6 @@
 import {request} from './Request';
 import sha256 from 'crypto-js/sha256';
-import {decrypt, encrypt, password as hashkey} from './Encrypt';
+import {password as hashkey} from './Encrypt';
 
 const getConversation = async props => {
   const {lotteryId, winnerUserId, lotteryPosterId, cancelTag} = props;

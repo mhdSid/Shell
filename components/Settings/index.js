@@ -7,12 +7,12 @@ import {Toolbar, Drawer, Icon} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {setLang} from '../../redux/Settings/actions';
 import {Flag} from 'react-native-svg-flagkit';
-import {settings} from '../../Constants/Texts';
+import {settings} from '../../constants/Texts';
 import pkg from '../../package.json';
 import {getLangSelector} from './Selectors';
 import {getLoggedInSelector, getUserSelector} from '../Profile/Selectors';
 
-// let FaqMofal = null;
+// let FaqModal = null;
 let ChangePassword = null;
 let ContactUsModal = null;
 let TermsAndPrivacyPolicyModal = null;
@@ -41,10 +41,10 @@ const Settings = props => {
   };
   const settingsModals = {
     // faq: () => {
-    //   if (!FaqMofal) {
-    //     FaqMofal = require('./FaqModal').default;
+    //   if (!FaqModal) {
+    //     FaqModal = require('./FaqModal').default;
     //   }
-    //   return <FaqMofal onClose={handleSettingsModalClose} />;
+    //   return <FaqModal onClose={handleSettingsModalClose} />;
     // },
     contactUs: () => {
       if (!ContactUsModal) {

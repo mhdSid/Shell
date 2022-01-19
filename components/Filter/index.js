@@ -2,7 +2,7 @@ import React, {createRef} from 'react';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import {OutlinedTextField} from 'react-native-material-textfield';
-import {filter as filterTexts} from '../../Constants/Texts';
+import {filter as filterTexts} from '../../constants/Texts';
 import {View} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 

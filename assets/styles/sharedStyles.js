@@ -132,7 +132,7 @@ const sharedStyles = StyleSheet.create({
     ...toolbarStyles,
     textAlign: 'center',
     paddingHorizontal: 15,
-    backgroundColor: 'rgba(0,0,0,.1)',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     display: 'flex',

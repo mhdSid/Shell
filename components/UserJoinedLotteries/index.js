@@ -10,7 +10,7 @@ import {Toolbar} from 'react-native-material-ui';
 import {
   lottteries as lotteriesTexts,
   noAuth as noAuthTexts,
-} from '../../Constants/Texts';
+} from '../../constants/Texts';
 import {
   getLoggedInSelector,
   getUserSelector,
@@ -30,7 +30,7 @@ import CardListItemRow from '../Home/CardListItemRow';
 import {getLotteryResultSelector} from '../LotteryResult/Selectors';
 import LotteryResultModal from '../LotteryResult';
 import cancellableFetch from 'react-native-cancelable-fetch';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 const Lotteries = props => {
   const {
@@ -92,8 +92,7 @@ const Lotteries = props => {
   const getRowItemCount = () => lotteryCardList.length;
   const onItemPress = index => {
     invoke(props, 'showLotteryDetails', {
-      ...(filteredLotteries || userJoinedLotteries)[index],
-      // disableHeaderActions: true,
+      ...(filteredLotteries || userJoinedLotteries)[index]
     });
   };
   const renderListItem = ({item, index}) => (

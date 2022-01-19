@@ -1,12 +1,12 @@
 import React, {useState, useEffect, createRef} from 'react';
 import {View, ScrollView, Modal, SafeAreaView} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {profile, loginSignup, validationMessages} from '../../Constants/Texts';
+import {profile, loginSignup, validationMessages} from '../../constants/Texts';
 import {TextField} from 'react-native-material-textfield';
-import {Button, Icon, Toolbar} from 'react-native-material-ui';
+import {Button, Toolbar} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';
 import PropTypes from 'prop-types';
-import {emailsRegex} from '../../Constants/Regexes';
+import {emailsRegex} from '../../constants/Regexes';
 import invoke from 'lodash/invoke';
 import {connect} from 'react-redux';
 import {loginAction, logoutAction} from '../../redux/Auth/actions';

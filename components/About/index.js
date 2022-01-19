@@ -4,7 +4,7 @@ import {Modal, SafeAreaView, ScrollView, View, Text} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, Icon} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
-import {about} from '../../Constants/Texts';
+import {about} from '../../constants/Texts';
 
 const About = props => {
   const {lang} = props;
@@ -88,7 +88,9 @@ const About = props => {
             </View>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="explore" />
-              <Text style={sharedStyles.aboutIconText}>{about[lang].browse}</Text>
+              <Text style={sharedStyles.aboutIconText}>
+                {about[lang].browse}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>
@@ -97,7 +99,9 @@ const About = props => {
             </View>
             <View style={sharedStyles.aboutIconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="remove-red-eye" />
-              <Text style={sharedStyles.aboutIconText}>{about[lang].choose}</Text>
+              <Text style={sharedStyles.aboutIconText}>
+                {about[lang].choose}
+              </Text>
             </View>
             <View style={sharedStyles.aboutFirstSectionTextContainer}>
               <Text style={sharedStyles.aboutFirstSectionText}>

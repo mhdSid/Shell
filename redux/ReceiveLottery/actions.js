@@ -1,5 +1,5 @@
 import {Alert} from 'react-native';
-import {errors} from '../../Constants/Texts';
+import {errors} from '../../constants/Texts';
 import invoke from 'lodash/invoke';
 
 const receiveLotteryActions = {

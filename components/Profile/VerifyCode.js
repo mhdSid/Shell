@@ -1,6 +1,5 @@
 import {Image, Modal, SafeAreaView, ScrollView, Text, View} from 'react-native';
 import React, {useState} from 'react';
-
 import {
   CodeField,
   Cursor,
@@ -8,9 +7,9 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import {loadingPopup} from '../Loading';
-import {Button, Icon, Toolbar} from 'react-native-material-ui';
+import {Button, Toolbar} from 'react-native-material-ui';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {profile as profileTexts} from '../../Constants/Texts';
+import {profile as profileTexts} from '../../constants/Texts';
 import {getEmailSelector, getPasswordHashSelector} from './Selectors';
 import {loginAction, logoutAction} from '../../redux/Auth/actions';
 import {handleVerifyUser} from '../../redux/Auth/VerifyUser';
@@ -119,7 +118,6 @@ const VerifyUserCode = props => {
                 value={verificationCode}
                 onChangeText={handleChangeText}
                 cellCount={6}
-                // rootStyle={sharedStyles.verificationCellRoot}
                 keyboardType="number-pad"
                 textContentType="oneTimeCode"
                 renderCell={renderCell}
@@ -127,7 +125,6 @@ const VerifyUserCode = props => {
               <View style={sharedStyles.loginBtn}>
                 <Button
                   raised={true}
-                  // primary
                   style={{
                     container: sharedStyles.mainButtonContainer,
                     text: sharedStyles.resendCodeButtonText,

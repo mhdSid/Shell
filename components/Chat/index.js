@@ -1,12 +1,15 @@
-import React, {createRef, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, Text, TextInput, View} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {Button, Icon, IconToggle, Toolbar} from 'react-native-material-ui';
+import {IconToggle, Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {loadingPopup} from '../Loading';
-import {chat as chatText} from '../../Constants/Texts';
-import {getConversationSelector, getIsSocketInitiatedSelector} from './Selectors';
+import {chat as chatText} from '../../constants/Texts';
+import {
+  getConversationSelector,
+  getIsSocketInitiatedSelector,
+} from './Selectors';
 import {handleFetchConversation} from '../../redux/Chat/FetchConversation';
 import {connect} from 'react-redux';
 import {VirtualizedList} from 'react-native';
@@ -18,7 +21,7 @@ import {
   handleSendChatMessage,
   socket,
 } from '../../redux/Chat/actions';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 const ChatModal = props => {
   const {
@@ -190,7 +193,9 @@ const ChatModal = props => {
             style={{container: sharedStyles.toolbarContainer}}
             leftElement="arrow-back"
             centerElement={
-              isWinner ? chatText[lang].chatWithOwner : chatText[lang].chatWithWinner
+              isWinner
+                ? chatText[lang].chatWithOwner
+                : chatText[lang].chatWithWinner
             }
             onLeftElementPress={handleCloseModal}
           />
@@ -237,10 +242,8 @@ const ChatModal = props => {
                   autoCorrect={false}
                   autoCapitalize={false}
                   multiline={true}
-                  // placeholder="Send a message"
                   numberOfLines={4}
                   maxLength={500}
-                  // keyboardType="numeric"
                 />
                 <IconToggle
                   name="send"

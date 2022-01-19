@@ -1,5 +1,5 @@
 import {setUserBottomBarImage} from '../../components/MainContainer';
-import {decrypt, password} from '../../services/Encrypt';
+import {decrypt} from '../../services/Encrypt';
 import {authActions} from './actions';
 
 const initialState = {

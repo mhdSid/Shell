@@ -7,11 +7,11 @@ import {
   Modal,
   SafeAreaView,
 } from 'react-native';
-import {Button, Checkbox, Icon, Toolbar} from 'react-native-material-ui';
+import {Button, Checkbox, Toolbar} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';
-import {profile} from '../../Constants/Texts';
+import {profile} from '../../constants/Texts';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {prefectures, cities} from '../../Constants/Countries';
+import {prefectures, cities} from '../../constants/Countries';
 import PropTypes from 'prop-types';
 import invoke from 'lodash/invoke';
 import {loginAction, logoutAction} from '../../redux/Auth/actions';

@@ -1,5 +1,4 @@
-import {decrypt} from './Encrypt';
-import {apiRequest} from '../Constants/Api';
+import {apiRequest} from '../constants/Api';
 import cancellableFetch from 'react-native-cancelable-fetch';
 
 const request = async options => {

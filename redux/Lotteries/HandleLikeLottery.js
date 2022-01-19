@@ -4,19 +4,12 @@ import invoke from 'lodash/invoke';
 import {lotteriesActions} from './actions';
 import {homeActions} from '../Home/actions';
 import {lotteryDetailsActions} from '../LotteryDetails/actions';
-import { receiveLotteryActions } from '../ReceiveLottery/actions';
-import { chatActions } from '../Chat/actions';
+import {receiveLotteryActions} from '../ReceiveLottery/actions';
+import {chatActions} from '../Chat/actions';
 
 const handleLikeLottery = payload => {
   return (dispatch, getState) => {
-    const {
-      userId,
-      lotteryId,
-      onError,
-      showLotteryDetails,
-      isFromLikedLotteriesView,
-      cancelTag,
-    } = payload;
+    const {userId, lotteryId, onError, showLotteryDetails, cancelTag} = payload;
     const onGetMyLotteriesSuccess = data => {
       const {likedLottery, error} = data;
       if (error) {

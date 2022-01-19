@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import invoke from 'lodash/invoke';
-import {Image, Modal, SafeAreaView, ScrollView, Text, View} from 'react-native';
-import sharedStyles, { stepImageWidth } from '../../assets/styles/sharedStyles';
+import {Modal, SafeAreaView, ScrollView, Text, View} from 'react-native';
+import sharedStyles, {stepImageWidth} from '../../assets/styles/sharedStyles';
 import {Icon, Toolbar, Button} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {loadingPopup} from '../Loading';
 import {
   receiveLottery as receiveLotteryTexts,
   lotteryDetails as lotteryDetailsTexts,
-} from '../../Constants/Texts';
+} from '../../constants/Texts';
 import {getUserSelector} from '../Profile/Selectors';
 import {connect} from 'react-redux';
 import {
@@ -40,15 +40,9 @@ const ReceiveLotteryInfoModal = props => {
     publishDate,
     condition,
     userId,
-    // cancelled,
-    available,
-    lotteryUsersLength,
     winnerUserId,
     currentCollectedPrice,
-    // images,
-    // disableHeaderActions,
   } = receiveLotteryDetails;
-  console.log(props);
   const isWinner = user && user.id && winnerUserId === user.id;
   const isLotteryPoster = user && userId === user.id;
   const [loading, setIsLoading] = useState(true);

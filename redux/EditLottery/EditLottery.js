@@ -7,9 +7,9 @@ import invoke from 'lodash/invoke';
 import {lotteryDetailsActions} from '../LotteryDetails/actions';
 import {reject, uniq} from 'lodash';
 import {homeActions} from '../Home/actions';
-import { shipLotteryActions } from '../ShipLottery/actions';
-import { lotteriesActions } from '../Lotteries/actions';
-import { chatActions } from '../Chat/actions';
+import {shipLotteryActions} from '../ShipLottery/actions';
+import {lotteriesActions} from '../Lotteries/actions';
+import {chatActions} from '../Chat/actions';
 
 const handleUpdateLottery = payload => {
   return (dispatch, getState) => {

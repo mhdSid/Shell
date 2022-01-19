@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {
@@ -8,12 +8,6 @@ import {
 } from '../../redux/Auth/actions';
 import isUndefined from 'lodash/isUndefined';
 import {Loading} from '../Loading';
-// import {
-//   //   // AdMobBanner,
-//   AdMobInterstitial,
-//   //   // PublisherBanner,
-//   //   // AdMobRewarded,
-// } from 'react-native-admob';
 import {
   getLoggedInSelector,
   getUserSelector,
@@ -25,19 +19,10 @@ import {invoke} from 'lodash';
 
 let SignUp = null;
 let VerifyCode = null;
-// let UserProfile = null;
 let Login = null;
 
 const AuthComponent = props => {
   const {loggedIn, user, showSignup, verificationCode, onClose} = props;
-  console.log(user);
-  // useEffect(() => {
-  //   if (loggedIn && user) {
-  //     // AdMobInterstitial.setAdUnitID('ca-app-pub-5703846930890914/4925593277');
-  //     // AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
-  //     // AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
-  //   }
-  // }, []);
   if (loggedIn && user) {
     invoke(props, 'onClose');
     return null;
@@ -57,12 +42,6 @@ const AuthComponent = props => {
     }
     return <VerifyCode onClose={onClose} />;
   }
-  // if (loggedIn && user) {
-  //   if (!UserProfile) {
-  //     UserProfile = require('./UserProfile').default;
-  //   }
-  //   return <UserProfile />;
-  // }
   if (!Login) {
     Login = require('./Login').default;
   }

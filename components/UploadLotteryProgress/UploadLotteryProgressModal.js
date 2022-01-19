@@ -4,12 +4,12 @@ import {Modal, SafeAreaView, Text, View} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
-import {uploadAdProgress} from '../../Constants/Texts';
+import {uploadAdProgress} from '../../constants/Texts';
 import {connect} from 'react-redux';
 import {getProgressItemsSelector} from './Selectors';
 import {VirtualizedList} from 'react-native';
 import ListItemCommon from '../Home/ListItem';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 const UploadLotteryProgressModal = props => {
   const {progressItems, lang} = props;

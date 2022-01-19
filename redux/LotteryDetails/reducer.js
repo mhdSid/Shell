@@ -2,7 +2,6 @@ import {isNil} from 'lodash';
 import {lotteryDetailsActions} from './actions';
 
 const initialState = {
-  // lotteryUsersData: undefined,
   adPosterData: undefined,
   winnerUserData: undefined,
   lotteryDetails: undefined,
@@ -18,12 +17,6 @@ const lotteryDetailsReducer = (state = initialState, action) => {
         userLotteriesPageToken: action.payload,
       };
     }
-    // case lotteryDetailsActions.setLotteryUsersData: {
-    //   return {
-    //     ...state,
-    //     lotteryUsersData: action.payload,
-    //   };
-    // }
     case lotteryDetailsActions.setWinnerUserData: {
       return {
         ...state,
@@ -43,21 +36,6 @@ const lotteryDetailsReducer = (state = initialState, action) => {
         userLotteries,
       };
     }
-    // case lotteryDetailsActions.setUserLotteries: {
-    //   const {payload} = action;
-    //   const currentLotteries = state.userLotteries;
-    //   let updatedLotteries = [];
-    //   if (Array.isArray(currentLotteries) && currentLotteries.length) {
-    //     updatedLotteries = updatedLotteries.concat(currentLotteries);
-    //   }
-    //   if (Array.isArray(payload) && payload.length) {
-    //     updatedLotteries = updatedLotteries.concat(payload);
-    //   }
-    //   return {
-    //     ...state,
-    //     userLotteries: updatedLotteries.length ? updatedLotteries : undefined,
-    //   };
-    // }
     case lotteryDetailsActions.setAdPosterData: {
       return {
         ...state,
@@ -79,7 +57,6 @@ const lotteryDetailsReducer = (state = initialState, action) => {
           };
         }
         return {
-          // lotteryUsersData: undefined,
           userLotteriesPageToken: null,
           adPosterData: undefined,
           winnerUserData: undefined,
@@ -88,7 +65,6 @@ const lotteryDetailsReducer = (state = initialState, action) => {
         };
       }
       return {
-        // lotteryUsersData: undefined,
         adPosterData: undefined,
         winnerUserData: undefined,
         userLotteries: undefined,
@@ -125,7 +101,6 @@ const lotteryDetailsReducer = (state = initialState, action) => {
     }
     case lotteryDetailsActions.resetState: {
       return {
-        // lotteryUsersData: undefined,
         adPosterData: undefined,
         winnerUserData: undefined,
         lotteryDetails: undefined,

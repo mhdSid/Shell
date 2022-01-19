@@ -7,7 +7,6 @@ import invoke from 'lodash/invoke';
 import {lotteryDetailsActions} from '../LotteryDetails/actions';
 import {uploadProgressActions} from '../UploadProgress/actions';
 import {reject, uniq} from 'lodash';
-import {homeActions} from '../Home/actions';
 
 const handleImportLottery = payload => {
   return (dispatch, getState) => {
@@ -73,10 +72,6 @@ const handleImportLottery = payload => {
                   reject(errorObj);
                   return handleError(errorObj, getState);
                 }
-                // dispatch({
-                //   type: homeActions.setLotteries,
-                //   payload: updatedAd,
-                // });
                 resolve(updatedAd);
               });
             }),
@@ -100,10 +95,6 @@ const handleImportLottery = payload => {
                     .split(','),
                 ),
               };
-              // dispatch({
-              //   type: homeActions.setLotteries,
-              //   payload: importedLottery,
-              // });
               dispatch({
                 type: lotteryDetailsActions.showLotteryDetails,
                 payload: null,

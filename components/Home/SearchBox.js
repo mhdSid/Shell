@@ -5,13 +5,13 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import PropTypes from 'prop-types';
 import {Animated} from 'react-native';
 import {Dropdown} from 'react-native-material-dropdown';
-import {prefectures, cities} from '../../Constants/Countries';
+import {prefectures, cities} from '../../constants/Countries';
 import {
   importLottery,
   profile,
   validationMessages,
   searchBox as searchBoxTexts,
-} from '../../Constants/Texts';
+} from '../../constants/Texts';
 import {TextField} from 'react-native-material-textfield';
 import {Button} from 'react-native-material-ui';
 import {handleSearch} from '../../redux/Search/Search';
@@ -27,7 +27,7 @@ import {
 import {
   lotteryItemConditions,
   lotteryItemCategories,
-} from '../../Constants/Lotteries';
+} from '../../constants/Lotteries';
 import {handleFetchLotteries} from '../../redux/Home/FetchLotteries';
 import {getUserIdSelector} from '../Profile/Selectors';
 import {getLangSelector} from '../Settings/Selectors';

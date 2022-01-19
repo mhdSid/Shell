@@ -1,8 +1,7 @@
-import {getUsersData} from '../../services/auth';
+import {getUsersData} from '../../services/Auth';
 import {handleError} from '../Home/actions';
 import invoke from 'lodash/invoke';
 import {lotteryDetailsActions} from './actions';
-// import {uniq} from 'lodash';
 
 const handleFetchUsersData = payload => {
   return (dispatch, getState) => {

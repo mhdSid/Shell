@@ -7,24 +7,22 @@ import {
   View,
   Text,
   KeyboardAvoidingView,
-  Image,
 } from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, Icon, Button} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import ImagePicker from 'react-native-image-picker';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
-import {prefectures, cities} from '../../Constants/Countries';
+import {prefectures, cities} from '../../constants/Countries';
 import {loadingPopup} from '../Loading';
-import {profile, updateUserr} from '../../Constants/Texts';
+import {profile, updateUserr} from '../../constants/Texts';
 import {connect} from 'react-redux';
 import {getUserSelector} from './Selectors';
 import {Dropdown} from 'react-native-material-dropdown';
-// import {handleUpdateUserDataBackground} from '../../redux/Auth/UpdateUserBackground';
 import {handleUpdateUserData} from '../../redux/Auth/UpdateUser';
 import ImageResizer from 'react-native-image-resizer';
 import FastImage from 'react-native-fast-image';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 const UpdateUser = props => {
   const {user, lang} = props;
@@ -63,13 +61,6 @@ const UpdateUser = props => {
     setCityChanged(value !== user.city);
     setCity(value);
   };
-  // const setDefaultsDataChanged = () => {
-  //   setLoading(false);
-  //   setUserDataChanged(false);
-  //   setImageChanged(false);
-  //   setPrefectureChanged(false);
-  //   setCityChanged(false);
-  // };
   const handleUpdateUser = () => {
     if (userDataChanged) {
       setLoading(true);
@@ -88,8 +79,6 @@ const UpdateUser = props => {
         },
         updatedUserData,
       });
-      // setDefaultsDataChanged();
-      // handleCloseModal();
     }
   };
   const handleChoosePhoto = () => {
@@ -144,20 +133,6 @@ const UpdateUser = props => {
             leftElement="arrow-back"
             onLeftElementPress={handleCloseModal}
             centerElement={updateUserr[lang].updateProfile}
-            // rightElement={
-            //   <Button
-            //     color="white"
-            //     onPress={handleUpdateUser}
-            //     disabled={loading || !userDataChanged}
-            //     style={{
-            //       container: sharedStyles.mainButtonContainer,
-            //       text: {color: '#b69cf6'},
-            //     }}
-            //     raised
-            //     text={updateUserr[lang].update}
-            //     icon="done-all"
-            //   />
-            // }
           />
           {loading && loadingPopup}
           <KeyboardAvoidingView
@@ -171,11 +146,7 @@ const UpdateUser = props => {
                   sharedStyles.updateUserContainer,
                 ]}>
                 <View style={sharedStyles.mobileContainer}>
-                  <View
-                    style={[
-                      // sharedStyles.imageBtnContainer,
-                      sharedStyles.userImageBtnContainer,
-                    ]}>
+                  <View style={sharedStyles.userImageBtnContainer}>
                     <TouchableBounce
                       onPress={handleChoosePhoto}
                       style={[
@@ -202,7 +173,9 @@ const UpdateUser = props => {
                     </Text>
                   </View>
                 </View>
-                <Text style={sharedStyles.label}>{profile[lang].prefecture}</Text>
+                <Text style={sharedStyles.label}>
+                  {profile[lang].prefecture}
+                </Text>
                 <View style={sharedStyles.dropdownView}>
                   <Dropdown
                     baseColor={'rgba(0,0,0,0.3)'}

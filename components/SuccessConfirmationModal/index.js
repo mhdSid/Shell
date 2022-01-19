@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import {Button, Icon} from 'react-native-material-ui';
 
 const SuccessConfirmationModal = props => {
-  const {title, subtitle, actions, lang} = props;
+  const {title, subtitle, actions} = props;
   const handleCloseModal = () => {
     invoke(props, 'onClose');
   };

@@ -4,7 +4,7 @@ import {Modal, SafeAreaView, ScrollView, View} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
-import {settings} from '../../Constants/Texts';
+import {settings} from '../../constants/Texts';
 
 const UserAgreement = props => {
   const {lang} = props;

@@ -16,10 +16,9 @@ import {
   getSearchEventFiredSelector,
   getEmptySearchResultsSelector,
 } from './Selectors';
-// import {emitSocketEvents} from '../../services/Socket';
 import {chunk} from 'lodash';
 import {getLoggedInSelector, getUserIdSelector} from '../Profile/Selectors';
-import {home, lottteries as lotteriesTexts} from '../../Constants/Texts';
+import {home, lottteries as lotteriesTexts} from '../../constants/Texts';
 // import {AdMobBanner} from 'react-native-admob';
 import SearchBox from './SearchBox';
 import UploadLotteryProgressModal from '../UploadLotteryProgress/UploadLotteryProgressModal';
@@ -33,7 +32,7 @@ import {
 import {loadingPopup} from '../Loading';
 import cancellableFetch from 'react-native-cancelable-fetch';
 import {resetHomeLotteries, setPageToken} from '../../redux/Home/actions';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 const HomeComponent = props => {
   const {isList, isCard, lotteries, authUserId, searchEventFired, lang} = props;
@@ -111,7 +110,6 @@ const HomeComponent = props => {
 
   const handleOnSearch = () => {
     changeViewStyle({action: 'search'});
-    // setLoading(false);
     setLoading(true);
   };
 
@@ -175,7 +173,6 @@ const HomeComponent = props => {
   const getListItemKey = item => `${item.id}`;
 
   const handleOnEndReached = () => {
-    console.log('handleOnEndReached');
     if (!searchEventFired) {
       fetchLotteries();
     }

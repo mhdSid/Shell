@@ -13,13 +13,13 @@ import {Toolbar, Button} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {TextField} from 'react-native-material-textfield';
 import {loadingPopup} from '../Loading';
-import {settings, updateUserr, validationMessages} from '../../Constants/Texts';
+import {settings, updateUserr, validationMessages} from '../../constants/Texts';
 import {handlerUpdateUserData} from '../../redux/Auth/UpdateUser';
 import {connect} from 'react-redux';
 import {getUserSelector} from '../UpdateUser/Selectors';
 import sha256 from 'crypto-js/sha256';
 import {password as hashkey} from '../../services/Encrypt';
-import { getLangSelector } from './Selectors';
+import {getLangSelector} from './Selectors';
 
 const ChangePassword = props => {
   const {user, lang} = props;
@@ -121,22 +121,6 @@ const ChangePassword = props => {
             leftElement="arrow-back"
             centerElement={settings[lang].changePassword}
             onLeftElementPress={handleCloseModal}
-            // rightElement={
-            //   <Button
-            //     color="white"
-            //     onPress={handleUpdateUser}
-            //     disabled={
-            //       loading || !(currentPasswordChanged && newPasswordChanged)
-            //     }
-            //     style={{
-            //       container: sharedStyles.mainButtonContainer,
-            //       text: {color: '#b69cf6'},
-            //     }}
-            //     raised
-            //     text={updateUserr[lang].save}
-            //     icon="done-all"
-            //   />
-            // }
           />
           {loading && loadingPopup}
           <KeyboardAvoidingView

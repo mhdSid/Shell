@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import invoke from 'lodash/invoke';
-import {Image, Modal, SafeAreaView, ScrollView, Text, View} from 'react-native';
-import sharedStyles, { stepImageWidth } from '../../assets/styles/sharedStyles';
+import {Modal, SafeAreaView, ScrollView, Text, View} from 'react-native';
+import sharedStyles, {stepImageWidth} from '../../assets/styles/sharedStyles';
 import {Button, Icon, Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {loadingPopup} from '../Loading';
 import {
   shipLottery as shipLotteryTexts,
   lotteryDetails as lotteryDetailsTexts,
-} from '../../Constants/Texts';
+} from '../../constants/Texts';
 import {getUserSelector} from '../Profile/Selectors';
 import {connect} from 'react-redux';
 import {
@@ -22,8 +22,8 @@ import ChatModal from '../Chat';
 import formatDate from '../../lib/formatDate';
 import {handleMarkLotteryAsShipped} from '../../redux/ShipLottery/MarkLotteryAsShipped';
 import FastImage from 'react-native-fast-image';
-import { getLangSelector } from '../Settings/Selectors';
-import { Alert } from 'react-native';
+import {getLangSelector} from '../Settings/Selectors';
+import {Alert} from 'react-native';
 
 const ShipLotteryInfoModal = props => {
   const {shipLotteryDetails, user, lotteryWinnerData, lang} = props;
@@ -40,13 +40,8 @@ const ShipLotteryInfoModal = props => {
     publishDate,
     condition,
     userId,
-    // cancelled,
-    available,
-    lotteryUsersLength,
     winnerUserId,
     currentCollectedPrice,
-    // images,
-    // disableHeaderActions,
   } = shipLotteryDetails;
   const isWinner = user && user.id && winnerUserId === user.id;
   const isLotteryPoster = user && userId === user.id;

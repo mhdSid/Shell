@@ -1,5 +1,5 @@
-import React, {useState, useEffect, createRef, useMemo} from 'react';
-import {View, ScrollView, Text, SafeAreaView, Modal, Image} from 'react-native';
+import React, {useState, useEffect, createRef} from 'react';
+import {View, ScrollView, Text, SafeAreaView, Modal} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
@@ -7,23 +7,23 @@ import {Button, Icon, Toolbar} from 'react-native-material-ui';
 import {TextField} from 'react-native-material-textfield';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import ImagePicker from 'react-native-image-picker';
-import {prefectures, cities, currencies} from '../../Constants/Countries';
+import {prefectures, cities, currencies} from '../../constants/Countries';
 import {
   lotteryItemConditions,
   lotteryItemCategories,
-} from '../../Constants/Lotteries';
+} from '../../constants/Lotteries';
 import {
   importLottery as importLotteryTexts,
   profile,
   validationMessages,
-} from '../../Constants/Texts';
+} from '../../constants/Texts';
 import invoke from 'lodash/invoke';
 import {Dropdown} from 'react-native-material-dropdown';
 import {handleUpdateLottery} from '../../redux/EditLottery/EditLottery';
 import ImageResizer from 'react-native-image-resizer';
 import {isNumber} from 'lodash';
 import FastImage from 'react-native-fast-image';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 const EditLottery = props => {
   const {item: lotteryDetails, lang} = props;
@@ -152,22 +152,6 @@ const EditLottery = props => {
       };
     },
   };
-  // const setDefault = (nameField, descriptionField, priceField) => {
-  //   nameField.setValue('');
-  //   descriptionField.setValue('');
-  //   priceField.setValue('');
-  //   setImages([]);
-  //   setImageFiles([]);
-  //   setLotteryDataChanged(false);
-  //   setImagesChanged(false);
-  //   setLotteryNameChanged(false);
-  //   setDescriptionChanged(false);
-  //   setPriceChanged(false);
-  //   setItemCategoryChanged(false);
-  //   setItemConditionChanged(false);
-  //   setCityChanged(false);
-  //   setPrefectureChanged(false);
-  // };
 
   const updateLottery = () => {
     const {current: nameField} = adNameRef;
@@ -207,15 +191,9 @@ const EditLottery = props => {
           cityChanged ||
           itemConditionChanged ||
           itemCategoryChanged,
-        // onError: () => {},
-        // onSuccess: () => {
-        //   setLoading(false);
-        //   handleCloseModal();
-        // },
         imageFiles: filteredImages,
       });
       handleCloseModal();
-      // setDefault(nameField, descriptionField, priceField);
     }
   };
   const updateItemCategory = value => {
@@ -330,19 +308,6 @@ const EditLottery = props => {
               centerElement={importLotteryTexts[lang].updateLottery}
               leftElement="arrow-back"
               onLeftElementPress={handleCloseModal}
-              // rightElement={
-              //   <Button
-              //     onPress={updateLottery}
-              //     disabled={!lotteryDataChanged}
-              //     raised
-              //     text={importLotteryTexts[lang].update}
-              //     style={{
-              //       container: sharedStyles.mainButtonContainer,
-              //       text: {color: '#b69cf6'},
-              //     }}
-              //     icon="done-all"
-              //   />
-              // }
             />
           </View>
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -499,11 +464,7 @@ const EditLottery = props => {
               </View>
             </View>
           </ScrollView>
-          <View
-            style={[
-              sharedStyles.editLotteryBottomToolBar,
-              {backgroundColor: 'white'},
-            ]}>
+          <View style={sharedStyles.editLotteryBottomToolBar}>
             <Button
               disabled={!lotteryDataChanged}
               raised={true}

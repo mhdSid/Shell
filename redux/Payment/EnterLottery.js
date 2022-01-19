@@ -7,7 +7,7 @@ import {chatActions} from '../Chat/actions';
 import {lotteriesActions} from '../Lotteries/actions';
 import {shipLotteryActions} from '../ShipLottery/actions';
 import {receiveLotteryActions} from '../ReceiveLottery/actions';
-import { authActions } from '../Auth/actions';
+import {authActions} from '../Auth/actions';
 
 const handleEnterLottery = payload => {
   return (dispatch, getState) => {
@@ -25,7 +25,6 @@ const handleEnterLottery = payload => {
     const onEnterLotterySuccess = data => {
       invoke(payload, 'onSuccess');
       const {error, updatedAd, updatedUser} = data;
-      console.log('updatedUser: ', updatedUser)
       if (error) {
         return handleError({error, onError}, getState);
       }

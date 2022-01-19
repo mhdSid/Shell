@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import invoke from 'lodash/invoke';
 import sharedStyles from '../../assets/styles/sharedStyles';
-import {View, Text, Image} from 'react-native';
+import {View, Text} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import {IconToggle} from 'react-native-material-ui';
 import {connect} from 'react-redux';
@@ -156,12 +156,6 @@ class CardListItem extends Component {
               style={sharedStyles.homeCardItemText}>
               {item.name}
             </Text>
-            {/* <Text
-              numberOfLines={this.numOfLines}
-              ellipsizeMode={this.ellipsizeMode}
-              style={sharedStyles.homeCardItemText}>
-              {item.description}
-            </Text> */}
             <Text
               numberOfLines={this.numOfLines}
               ellipsizeMode={this.ellipsizeMode}

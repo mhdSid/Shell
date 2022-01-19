@@ -4,7 +4,6 @@ const initialState = {
   receiveLotteryDetails: undefined,
   userWonLotteries: undefined,
   lotteryPosterData: undefined,
-  // pageToken: null,
 };
 
 const receiveLotteryReducer = (state = initialState, action) => {
@@ -16,19 +15,6 @@ const receiveLotteryReducer = (state = initialState, action) => {
         receiveLotteryDetails: action.payload,
       };
     }
-    // case receiveLotteryActions.setUserWonLotteries: {
-    //   const stateLotteries = Array.isArray(state.userWonLotteries)
-    //     ? [...state.userWonLotteries]
-    //     : [];
-    //   let userWonLotteries = [...stateLotteries];
-    //   if (Array.isArray(action.payload) && action.payload.length) {
-    //     userWonLotteries = [...userWonLotteries, ...action.payload];
-    //   }
-    //   return {
-    //     ...state,
-    //     userWonLotteries,
-    //   };
-    // }
     case receiveLotteryActions.setUserWonLotteries: {
       return {
         ...state,
@@ -186,12 +172,6 @@ const receiveLotteryReducer = (state = initialState, action) => {
         ...state,
       };
     }
-    // case receiveLotteryActions.setPageToken: {
-    //   return {
-    //     ...state,
-    //     pageToken: action.payload,
-    //   };
-    // }
     default: {
       return {
         ...state,

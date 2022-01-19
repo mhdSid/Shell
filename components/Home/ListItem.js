@@ -9,7 +9,7 @@ import {getUserIdSelector} from '../Profile/Selectors';
 import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
 import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
 import {connect} from 'react-redux';
-import {chat as chatTexts, listItemActions} from '../../Constants/Texts';
+import {chat as chatTexts, listItemActions} from '../../constants/Texts';
 import {showLotteryResult} from '../../redux/LotteryResult/actions';
 import FastImage from 'react-native-fast-image';
 import {Alert} from 'react-native';
@@ -74,7 +74,6 @@ class ListItemCommon extends Component {
           this.props.showLotteryResult &&
             listItemActions[this.props.lang].goToLotteryResults,
         ].filter(Boolean),
-        // destructiveButtonIndex: 1,
         cancelButtonIndex: 0,
         userInterfaceStyle: 'dark',
       },

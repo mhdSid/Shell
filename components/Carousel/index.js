@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {View, Text, Image} from 'react-native';
+import {View, Text} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import Carousel from 'react-native-snap-carousel';
 import {

@@ -1,4 +1,4 @@
-import React, {createRef, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, View, Text, ScrollView} from 'react-native';
 import sharedStyles from '../../assets/styles/sharedStyles';
@@ -7,7 +7,7 @@ import {loadingPopup} from '../Loading';
 import {
   payment as paymentTexts,
   about as aboutTexts,
-} from '../../Constants/Texts';
+} from '../../constants/Texts';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {CreditCardInput} from 'react-native-credit-card-input';
@@ -15,9 +15,9 @@ import {getUserSelector, getLoggedInSelector} from './Selectors';
 import NoAuth from '../NoAuth';
 import {handleEnterLottery} from '../../redux/Payment/EnterLottery';
 import {getLotteryDetailsSelector} from '../Pinger/Selectors';
-import {successConfirmationModal as successConfirmationModalTexts} from '../../Constants/Texts';
+import {successConfirmationModal as successConfirmationModalTexts} from '../../constants/Texts';
 import ListItem from '../Home/ListItem';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 let SuccessConfirmationModal = null;
 
@@ -79,7 +79,6 @@ const Payment = props => {
   };
   const handlePaymentSuccess = () => {
     setDefaultsDataChanged();
-    // invoke(props, 'onClose');
     if (!SuccessConfirmationModal) {
       SuccessConfirmationModal = require('../SuccessConfirmationModal').default;
     }
@@ -157,7 +156,6 @@ const Payment = props => {
             <View style={sharedStyles.creditContainer}>
               <CreditCardInput
                 allowScroll={true}
-                // autoFocus={true}
                 inputStyle={sharedStyles.creditInput}
                 onChange={onCreditChange}
                 ref={creditCardInputRef}

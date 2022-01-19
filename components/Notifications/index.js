@@ -5,7 +5,7 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {loadingPopup} from '../Loading';
-import {notifications} from '../../Constants/Texts';
+import {notifications} from '../../constants/Texts';
 
 const Notifications = props => {
   const {lang} = props;

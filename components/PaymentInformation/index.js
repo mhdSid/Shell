@@ -5,12 +5,12 @@ import sharedStyles from '../../assets/styles/sharedStyles';
 import {Toolbar, Button} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {loadingPopup} from '../Loading';
-import {paymentInformation} from '../../Constants/Texts';
+import {paymentInformation} from '../../constants/Texts';
 import {CreditCardInput} from 'react-native-credit-card-input';
 import {handlerUpdateUserData} from '../../redux/Auth/UpdateUser';
 import {getUserSelector} from '../UpdateUser/Selectors';
 import {connect} from 'react-redux';
-import { getLangSelector } from '../Settings/Selectors';
+import {getLangSelector} from '../Settings/Selectors';
 
 const PaymentInformation = props => {
   const {user, lang} = props;
@@ -149,7 +149,6 @@ const PaymentInformation = props => {
               ]}>
               <View style={sharedStyles.creditContainer}>
                 <CreditCardInput
-                  // autoFocus={true}
                   ref={creditCardInputRef}
                   allowScroll={true}
                   inputStyle={sharedStyles.creditInput}

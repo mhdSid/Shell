@@ -1,6 +1,6 @@
 import {request} from './Request';
 import Upload from 'react-native-background-upload';
-import {apiRequest} from '../Constants/Api';
+import {apiRequest} from '../constants/Api';
 import {encrypt} from './Encrypt';
 import sha256 from 'crypto-js/sha256';
 import {password as hashkey} from './Encrypt';

@@ -8,7 +8,7 @@ const handleSearch = payload => {
     const {onError, cancelTag} = payload;
     const searchFilters = getState().searchReducer.searchFilters;
     const onSeachSuccess = data => {
-      const {error, lotteries} = data; // nextPageToken
+      const {error, lotteries} = data;
       if (error) {
         return handleError({error, onError}, getState);
       }

@@ -15,11 +15,11 @@ import {Button, Icon, Toolbar} from 'react-native-material-ui';
 import {TextField} from 'react-native-material-textfield';
 import sharedStyles from '../../assets/styles/sharedStyles';
 import ImagePicker from 'react-native-image-picker';
-import {prefectures, cities, currencies} from '../../Constants/Countries';
+import {prefectures, cities, currencies} from '../../constants/Countries';
 import {
   lotteryItemConditions,
   lotteryItemCategories,
-} from '../../Constants/Lotteries';
+} from '../../constants/Lotteries';
 import isUndefined from 'lodash/isUndefined';
 import NoAuth from '../NoAuth';
 import {LoadingComponent} from '../Loading';
@@ -28,13 +28,13 @@ import {
   profile,
   noAuth as noAuthTexts,
   validationMessages,
-} from '../../Constants/Texts';
+} from '../../constants/Texts';
 import invoke from 'lodash/invoke';
 import {handleImportLottery} from '../../redux/ImportLottery/ImportLottery';
 import {getLoggedInSelector, getUserSelector} from './Selectors';
 import {Dropdown} from 'react-native-material-dropdown';
 import {navigate} from '../MainContainer';
-import {successConfirmationModal as successConfirmationModalTexts} from '../../Constants/Texts';
+import {successConfirmationModal as successConfirmationModalTexts} from '../../constants/Texts';
 import ImageResizer from 'react-native-image-resizer';
 import FastImage from 'react-native-fast-image';
 import {getLangSelector} from '../Settings/Selectors';
@@ -301,7 +301,6 @@ const ImportLottery = props => {
                 onlyScaleDown: true,
               },
             ).then(data => {
-              console.log(data);
               const imagesArray = [...images];
               const imagesFilesArray = [...imageFiles];
               imagesArray[index] = data.uri;
