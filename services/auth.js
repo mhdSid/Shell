@@ -8,7 +8,7 @@ const login = async props => {
   const {email, password} = props;
   const passwordHash = sha256(password + hashkey).toString();
   const data = await request({
-    endpoint: 'api/users/authenticate/email',
+    endpoint: 'api/user/authenticate/email',
     method: 'POST',
     body: {
       email,
@@ -21,7 +21,7 @@ const login = async props => {
 
 const logout = async () => {
   const data = await request({
-    endpoint: 'api/users/authenticate/logout',
+    endpoint: 'api/user/authenticate/logout',
     method: 'POST',
     body: {
       hash: sha256(hashkey).toString(),
@@ -32,7 +32,7 @@ const logout = async () => {
 
 const ping = async () => {
   const data = await request({
-    endpoint: 'api/users/authenticate/ping',
+    endpoint: 'api/user/authenticate/ping',
     method: 'POST',
     body: {
       hash: sha256(hashkey).toString(),
@@ -44,7 +44,7 @@ const ping = async () => {
 const verify = async props => {
   const {email, passwordHash, verificationCode} = props;
   const data = await request({
-    endpoint: 'api/users/authenticate/email/verify',
+    endpoint: 'api/user/authenticate/email/verify',
     method: 'POST',
     body: {
       email,
@@ -61,7 +61,7 @@ const verify = async props => {
 const resendVerificationCode = async props => {
   const {email, passwordHash} = props;
   const data = await request({
-    endpoint: 'api/users/authenticate/email/verify/resend',
+    endpoint: 'api/user/authenticate/email/verify/resend',
     method: 'POST',
     body: {
       email,
@@ -82,7 +82,7 @@ const signup = async props => {
     city,
   } = props;
   const data = await request({
-    endpoint: 'api/users/authenticate/signup',
+    endpoint: 'api/user/authenticate/signup',
     method: 'POST',
     body: {
       email,
@@ -108,7 +108,7 @@ const signup = async props => {
 const getUsersData = async props => {
   const {users, cancelTag} = props;
   const data = await request({
-    endpoint: 'api/users/userData', // '/api/users/userData',
+    endpoint: 'api/user/userData',
     method: 'POST',
     cancelTag,
     body: {
@@ -191,7 +191,7 @@ const updateUserBackground = async props => {
     };
   }
   const options = {
-    url: `${apiRequest.apiUri}api/users/authenticate/update`,
+    url: `${apiRequest.apiUri}api/user/authenticate/update`,
     path: image.uri,
     method: 'POST',
     field: 'image',
@@ -330,7 +330,7 @@ const update = async props => {
     ).toString(),
   );
   const data = await request({
-    endpoint: 'api/users/authenticate/update',
+    endpoint: 'api/user/authenticate/update',
     method: 'POST',
     body: formData,
   });

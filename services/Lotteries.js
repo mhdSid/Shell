@@ -1,14 +1,14 @@
 import {request} from './Request';
 import Upload from 'react-native-background-upload';
 import {apiRequest} from '../Constants/Api';
-import {decrypt, encrypt} from './Encrypt';
+import {encrypt} from './Encrypt';
 import sha256 from 'crypto-js/sha256';
 import {password as hashkey} from './Encrypt';
 
 const getAds = async props => {
   const {pageToken, cancelTag} = props;
   const data = await request({
-    endpoint: 'api/ads/getLotteries',
+    endpoint: 'api/ad/getLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -22,7 +22,7 @@ const getAds = async props => {
 const getMyLotteries = async props => {
   const {userId, pageToken, cancelTag} = props;
   const data = await request({
-    endpoint: 'api/ads/myLotteries',
+    endpoint: 'api/ad/myLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -37,7 +37,7 @@ const getMyLotteries = async props => {
 const cancelLottery = async props => {
   const {userId, lotteryId, reAdd, cancelTag} = props;
   const data = await request({
-    endpoint: 'api/ads/cancelLottery',
+    endpoint: 'api/ad/cancelLottery',
     method: 'POST',
     cancelTag,
     body: {
@@ -53,7 +53,7 @@ const cancelLottery = async props => {
 const getUserCreatedLotteries = async props => {
   const {userId, pageToken, cancelTag} = props;
   const data = await request({
-    endpoint: 'api/ads/myCreatedLotteries',
+    endpoint: 'api/ad/myCreatedLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -68,7 +68,7 @@ const getUserCreatedLotteries = async props => {
 const getUserLikedLotteries = async props => {
   const {userId, pageToken, cancelTag} = props;
   const data = await request({
-    endpoint: 'api/ads/myLikedLotteries',
+    endpoint: 'api/ad/myLikedLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -83,7 +83,7 @@ const getUserLikedLotteries = async props => {
 const likeLottery = async props => {
   const {userId, lotteryId, cancelTag} = props;
   const data = await request({
-    endpoint: 'api/ads/likeLottery',
+    endpoint: 'api/ad/likeLottery',
     method: 'POST',
     cancelTag,
     body: {
@@ -98,7 +98,7 @@ const likeLottery = async props => {
 const dislikeLottery = async props => {
   const {userId, lotteryId, cancelTag} = props;
   const data = await request({
-    endpoint: 'api/ads/dislikeLottery',
+    endpoint: 'api/ad/dislikeLottery',
     cancelTag,
     method: 'POST',
     body: {
@@ -113,7 +113,7 @@ const dislikeLottery = async props => {
 const getUserJoinedLotteries = async props => {
   const {userId, pageToken, cancelTag} = props;
   const data = await request({
-    endpoint: 'api/ads/myJoinedLotteries',
+    endpoint: 'api/ad/myJoinedLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -128,7 +128,7 @@ const getUserJoinedLotteries = async props => {
 const getUserWonLotteries = async props => {
   const {userId, cancelTag} = props;
   const data = await request({
-    endpoint: 'api/ads/myWonLotteries',
+    endpoint: 'api/ad/myWonLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -142,7 +142,7 @@ const getUserWonLotteries = async props => {
 const getChattableLotteries = async props => {
   const {userId, cancelTag} = props;
   const data = await request({
-    endpoint: 'api/ads/myChattableLotteries',
+    endpoint: 'api/ad/myChattableLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -156,7 +156,7 @@ const getChattableLotteries = async props => {
 const markLotteryAsReceived = async props => {
   const {lotteryId, cancelTag} = props;
   const data = await request({
-    endpoint: 'api/ads/markLotteryAsReceived',
+    endpoint: 'api/ad/markLotteryAsReceived',
     method: 'POST',
     cancelTag,
     body: {
@@ -170,7 +170,7 @@ const markLotteryAsReceived = async props => {
 const markLotteryAsShipped = async props => {
   const {lotteryId, cancelTag} = props;
   const data = await request({
-    endpoint: 'api/ads/markLotteryAsShipped',
+    endpoint: 'api/ad/markLotteryAsShipped',
     method: 'POST',
     cancelTag,
     body: {
@@ -184,7 +184,7 @@ const markLotteryAsShipped = async props => {
 const getUserCreatedWonLotteries = async props => {
   const {userId, cancelTag} = props;
   const data = await request({
-    endpoint: 'api/ads/myCreatedWonLotteries',
+    endpoint: 'api/ad/myCreatedWonLotteries',
     method: 'POST',
     cancelTag,
     body: {
@@ -208,7 +208,7 @@ const updateLotteryWithoutImage = async props => {
     name,
   } = props;
   const data = await request({
-    endpoint: 'api/ads/update/noImage',
+    endpoint: 'api/ad/update/noImage',
     method: 'POST',
     body: {
       prefecture,
@@ -252,7 +252,7 @@ const addBackgroundUpload = async props => {
     country,
   } = props;
   const options = {
-    url: `${apiRequest.apiUri}api/ads/addLottery`,
+    url: `${apiRequest.apiUri}api/ad/addLottery`,
     path: image.uri,
     method: 'POST',
     field: 'image',
@@ -333,7 +333,7 @@ const updateAdBackground = async props => {
   const {id, image} = props;
 
   const options = {
-    url: `${apiRequest.apiUri}api/ads/update`,
+    url: `${apiRequest.apiUri}api/ad/update`,
     path: image.uri,
     method: 'POST',
     field: 'image',
@@ -406,7 +406,7 @@ const enterLottery = async props => {
   const creditCardTypeEnc = encrypt(creditCardType);
 
   const data = await request({
-    endpoint: 'api/ads/enterLottery',
+    endpoint: 'api/ad/enterLottery',
     method: 'POST',
     body: {
       userId,
@@ -447,7 +447,7 @@ const search = async props => {
   const category = searchFilters.category || '';
   const condition = searchFilters.condition || '';
   const data = await request({
-    endpoint: 'api/ads/search',
+    endpoint: 'api/ad/search',
     method: 'POST',
     body: {
       searchText,
