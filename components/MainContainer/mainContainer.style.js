@@ -14,10 +14,10 @@ const flex = {
 
 const styles = StyleSheet.create({
   rootSafeAreaView: {
-    backgroundColor: '#b69cf6',
-    zIndex: 1000,
     width: '100%',
     height: '100%',
+    backgroundColor: '#b69cf6',
+    zIndex: 1000,
   },
   innerSafeAreaView: {
     width: '100%',

@@ -66,7 +66,7 @@ const MainContainer = () => {
       <BottomNavigation
         active={activeView}
         style={{
-          container: styles.bottomNavigatioBarnContainer,
+          container: styles.bottomNavigationBarContainer,
         }}>
         <BottomNavigation.Action
           style={{

@@ -403,19 +403,6 @@ const LotteryDetails = props => {
                     color="white"
                   />
                 ) : null}
-                {canEnterLottery ? (
-                  <Button
-                    disabled={`${currentCollectedPrice}` === `${price}`}
-                    onPress={handleEnterDraw}
-                    raised
-                    style={{
-                      container: styles.enterLotteryButtonContainer,
-                      text: styles.enterLotteryButtonText,
-                    }}
-                    text={lotteryDetailsTexts[lang].enterDraw}
-                    icon="shop"
-                  />
-                ) : null}
               </>
             }
           />

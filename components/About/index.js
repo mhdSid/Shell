@@ -29,7 +29,7 @@ const About = props => {
               <Icon color="rgba(0,0,0,.55)" name="store" />
               <Text style={styles.iconText}>{about[lang].sell}</Text>
             </View>
-            <View style={styles.aboutSectionContainer}>
+            <View style={styles.sectionContainer}>
               <Text style={[styles.sectionText, styles.sectionTextMargin]}>
                 {about[lang].howToUseFirst}
               </Text>
