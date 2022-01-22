@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import invoke from 'lodash/invoke';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './cardListItem.style';
 import {View, Text} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import {IconToggle} from 'react-native-material-ui';
@@ -73,7 +73,7 @@ class CardListItem extends Component {
     const {authUserId} = this.props;
 
     return authUserId ? (
-      <View style={sharedStyles.homeCardMoreActionsContainer}>
+      <View style={styles.cardMoreActionsViewContainer}>
         <IconToggle
           name="more-vert"
           color="white"
@@ -88,7 +88,7 @@ class CardListItem extends Component {
     const {item, authUserId} = this.props;
 
     return !authUserId ? null : item.userId !== authUserId ? (
-      <View style={sharedStyles.homeCardItemIcon}>
+      <View style={styles.cardIconViewContainer}>
         {Array.isArray(item.likedBy) &&
         item.likedBy.length &&
         item.likedBy.includes(authUserId) ? (
@@ -97,7 +97,7 @@ class CardListItem extends Component {
             size={17}
             color="#e34977"
             style={{
-              container: sharedStyles.homeCardItemIconHeart,
+              container: styles.cardItemLikeIconContainer,
             }}
             onPress={this.handleDislikeLottery}
           />
@@ -110,7 +110,7 @@ class CardListItem extends Component {
             color="white"
             size={17}
             style={{
-              container: sharedStyles.homeCardItemIconHeart,
+              container: styles.cardItemLikeIconContainer,
             }}
             onPress={this.handleLikeLottery}
           />
@@ -121,15 +121,9 @@ class CardListItem extends Component {
 
   render() {
     const {item, smallImage, horizontal} = this.props;
-    const viewStyle = horizontal
-      ? sharedStyles.homeCardItemHorizontal
-      : sharedStyles.homeCardItem;
-    const imageStyle = smallImage
-      ? sharedStyles.homeCardItemImageSmall
-      : sharedStyles.homeCardItemImage;
     const image = item.images[0] ? (
       <FastImage
-        style={imageStyle}
+        style={smallImage ? styles.cardItemImageSmall : styles.cardItemImage}
         source={{
           uri: item.images[0],
           cache: FastImage.cacheControl.immutable,
@@ -139,33 +133,39 @@ class CardListItem extends Component {
       />
     ) : null;
     const emptyImage = !item.images[0] ? (
-      <View style={sharedStyles.homeCardItemImage} />
+      <View style={styles.cardItemImage} />
     ) : null;
 
     return (
-      <TouchableBounce style={viewStyle} onPress={this.handleItemPress}>
+      <TouchableBounce
+        style={
+          horizontal
+            ? styles.cardItemHorizontalViewContainer
+            : styles.cardItemViewContainer
+        }
+        onPress={this.handleItemPress}>
         <View>
           {image}
           {emptyImage}
           {this.cardIcon()}
           {this.cardMoreActions()}
-          <View style={sharedStyles.homeCardItemTextContainer}>
+          <View style={styles.cardItemInfoViewContainer}>
             <Text
               numberOfLines={this.numOfLines}
               ellipsizeMode={this.ellipsizeMode}
-              style={sharedStyles.homeCardItemText}>
+              style={styles.cardItemText}>
               {item.name}
             </Text>
             <Text
               numberOfLines={this.numOfLines}
               ellipsizeMode={this.ellipsizeMode}
-              style={sharedStyles.homeCardItemText}>
+              style={styles.cardItemText}>
               {item.category}
             </Text>
             <Text
               numberOfLines={this.numOfLines}
               ellipsizeMode={this.ellipsizeMode}
-              style={sharedStyles.homeCardItemText}>
+              style={styles.cardItemText}>
               {this.getItemFullPrice()}
             </Text>
           </View>

@@ -1,7 +1,7 @@
 import React, {createRef, useState} from 'react';
 import {View} from 'react-native';
 import {connect} from 'react-redux';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './searchBox.style';
 import PropTypes from 'prop-types';
 import {Animated} from 'react-native';
 import {Dropdown} from 'react-native-material-dropdown';
@@ -208,14 +208,14 @@ const SearchBox = props => {
     });
   };
   return (
-    <Animated.View style={[sharedStyles.searchBox, {...style}]}>
-      <View style={sharedStyles.searchBoxOverlay} />
-      <View style={[sharedStyles.searchBoxInnerContainer]}>
-        <View style={sharedStyles.searchBoxRow}>
+    <Animated.View style={[styles.searchBoxAnimatedViewContainer, {...style}]}>
+      <View style={styles.searchBoxOverlayViewContainer} />
+      <View style={[styles.searchBoxInnerViewContainer]}>
+        <View style={styles.searchBoxSectionBlockContainer}>
           <View
             style={[
-              sharedStyles.searchBoxDivision,
-              sharedStyles.searchBoxDivisionFirst,
+              styles.searchBoxSectionBlockDivision,
+              styles.searchBoxSectionBlockDivisionMarginRight,
             ]}>
             <Dropdown
               label={profile[lang].prefecture}
@@ -228,8 +228,8 @@ const SearchBox = props => {
           </View>
           <View
             style={[
-              sharedStyles.searchBoxDivision,
-              sharedStyles.searchBoxDivisionSecond,
+              styles.searchBoxSectionBlockDivision,
+              styles.searchBoxSectionBlockDivisionMarginLeft,
             ]}>
             <Dropdown
               label={profile[lang].city}
@@ -241,11 +241,11 @@ const SearchBox = props => {
             />
           </View>
         </View>
-        <View style={sharedStyles.searchBoxRow}>
+        <View style={styles.searchBoxSectionBlockContainer}>
           <View
             style={[
-              sharedStyles.searchBoxDivision,
-              sharedStyles.searchBoxDivisionFirst,
+              styles.searchBoxSectionBlockDivision,
+              styles.searchBoxSectionBlockDivisionMarginRight,
             ]}>
             <TextField
               blurOnSubmit={true}
@@ -269,8 +269,8 @@ const SearchBox = props => {
           </View>
           <View
             style={[
-              sharedStyles.searchBoxDivision,
-              sharedStyles.searchBoxDivisionSecond,
+              styles.searchBoxSectionBlockDivision,
+              styles.searchBoxSectionBlockDivisionMarginLeft,
             ]}>
             <TextField
               outlined
@@ -293,11 +293,11 @@ const SearchBox = props => {
             />
           </View>
         </View>
-        <View style={sharedStyles.searchBoxRow}>
+        <View style={styles.searchBoxSectionBlockContainer}>
           <View
             style={[
-              sharedStyles.searchBoxDivision,
-              sharedStyles.searchBoxDivisionFirst,
+              styles.searchBoxSectionBlockDivision,
+              styles.searchBoxSectionBlockDivisionMarginRight,
             ]}>
             <Dropdown
               label={importLottery[lang].category}
@@ -310,8 +310,8 @@ const SearchBox = props => {
           </View>
           <View
             style={[
-              sharedStyles.searchBoxDivision,
-              sharedStyles.searchBoxDivisionSecond,
+              styles.searchBoxSectionBlockDivision,
+              styles.searchBoxSectionBlockDivisionMarginLeft,
             ]}>
             <Dropdown
               baseColor={'rgba(0,0,0,0.3)'}
@@ -323,8 +323,8 @@ const SearchBox = props => {
             />
           </View>
         </View>
-        <View style={sharedStyles.searchBoxRow}>
-          <View style={sharedStyles.searchBoxDivision}>
+        <View style={styles.searchBoxSectionBlockContainer}>
+          <View style={styles.searchBoxSectionBlockDivision}>
             <TextField
               outlined
               autoCapitalize={false}
@@ -347,8 +347,8 @@ const SearchBox = props => {
             />
           </View>
         </View>
-        <View style={sharedStyles.searchBoxButtonView}>
-          <View style={sharedStyles.searchBoxDivision}>
+        <View style={styles.searchBoxBottomButtonViewContainer}>
+          <View style={styles.searchBoxSectionBlockDivision}>
             <Button
               disabled={
                 !searchFilters.searchText &&
@@ -363,17 +363,17 @@ const SearchBox = props => {
               primary
               text={'Search'}
               icon="search"
-              style={{container: sharedStyles.mainButtonContainer}}
+              style={{container: styles.searchButtonContainer}}
               onPress={handleSearchPress}
             />
           </View>
-          <View style={sharedStyles.resetButtonView}>
+          <View style={styles.s}>
             <Button
               disabled={!searchEventFired}
               raised={true}
               primary
               text={'Reset'}
-              style={{container: sharedStyles.mainButtonContainer}}
+              style={{container: styles.searchButtonContainer}}
               icon="youtube-searched-for"
               onPress={handleResetSearchFilters}
             />

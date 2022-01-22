@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, View, Text, ScrollView} from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './payment.style';
 import {Icon, Button, Toolbar} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';
 import {
@@ -128,9 +128,8 @@ const Payment = props => {
       animationType="slide"
       onShow={onShowModal}
       onRequestClose={handleCloseModal}>
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.fullheightView]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           {showSuccessConfirmationModal ? (
             <SuccessConfirmationModal
               title={successConfirmationModalTexts[lang].payment.title}
@@ -141,7 +140,7 @@ const Payment = props => {
             />
           ) : null}
           <Toolbar
-            style={{container: sharedStyles.toolbarContainer}}
+            style={{container: styles.toolbarContainer}}
             leftElement="arrow-back"
             centerElement={paymentTexts[lang].joinLottery}
             onLeftElementPress={handleCloseModal}
@@ -149,20 +148,17 @@ const Payment = props => {
           {loading ? loadingPopup : null}
           <ScrollView
             showsVerticalScrollIndicator={false}
-            style={[
-              sharedStyles.aboutContainer,
-              sharedStyles.paymentSafeViewContainer,
-            ]}>
-            <View style={sharedStyles.creditContainer}>
+            style={styles.scrollViewContainer}>
+            <View style={styles.creditCardInputViewContainer}>
               <CreditCardInput
                 allowScroll={true}
-                inputStyle={sharedStyles.creditInput}
+                inputStyle={styles.creditInputContainer}
                 onChange={onCreditChange}
                 ref={creditCardInputRef}
               />
             </View>
-            <View style={sharedStyles.paymentCurrentCartContainer}>
-              <View style={sharedStyles.paymentLotteryListItem}>
+            <View style={styles.currentCartViewContainer}>
+              <View style={styles.lotteryListItemViewContainer}>
                 <ListItem
                   item={lottery}
                   disableActions={true}
@@ -172,38 +168,38 @@ const Payment = props => {
               </View>
               <View
                 style={[
-                  sharedStyles.paymentCurrentCartInvoiceItem,
-                  sharedStyles.paymentCurrentCartInvoiceItemMargin,
+                  styles.currentCartInvoiceItemContainer,
+                  styles.currentCartInvoiceItemContainerMargin,
                 ]}>
-                <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
+                <Text style={styles.currentCartInvoiceItemText}>
                   {paymentTexts[lang].tax}
                 </Text>
-                <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
+                <Text style={styles.currentCartInvoiceItemText}>
                   {paymentTexts[lang].taxFee}
                 </Text>
               </View>
               <View
                 style={[
-                  sharedStyles.paymentCurrentCartInvoiceItem,
-                  sharedStyles.paymentCurrentCartInvoiceItemMargin,
+                  styles.currentCartInvoiceItemContainer,
+                  styles.currentCartInvoiceItemContainerMargin,
                 ]}>
-                <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
+                <Text style={styles.currentCartInvoiceItemText}>
                   {paymentTexts[lang].joinLottery}
                 </Text>
-                <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
+                <Text style={styles.currentCartInvoiceItemText}>
                   {paymentTexts[lang].fee}
                 </Text>
               </View>
-              <View style={sharedStyles.paymentCurrentCartInvoiceItem}>
-                <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
+              <View style={styles.currentCartInvoiceItemContainer}>
+                <Text style={styles.currentCartInvoiceItemText}>
                   {paymentTexts[lang].total}
                 </Text>
-                <Text style={sharedStyles.paymentCurrentCartInvoiceText}>
+                <Text style={styles.currentCartInvoiceItemText}>
                   {paymentTexts[lang].fee}
                 </Text>
               </View>
             </View>
-            <View style={sharedStyles.btnContainer}>
+            <View style={styles.paymentButtonViewContainer}>
               <Button
                 raised
                 primary
@@ -213,37 +209,35 @@ const Payment = props => {
                 style={{
                   container:
                     loading || !isValid
-                      ? sharedStyles.paymentBtnContainerDisabled
-                      : sharedStyles.paymentBtnContainer,
+                      ? styles.paymentButtonContainerDisabled
+                      : styles.paymentButtonContainer,
                 }}
                 onPress={handlePayment}
               />
             </View>
-            <View style={sharedStyles.aboutIconTextContainer}>
+            <View style={styles.iconTextContainer}>
               <Icon color="black" name="receipt" />
-              <Text
-                style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
+              <Text style={styles.iconText}>
                 {aboutTexts[lang].enterLottery}
               </Text>
             </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>
+            <View style={styles.sectionBlockContainer}>
+              <Text style={styles.sectionBlockContainerText}>
                 {aboutTexts[lang].howToUseTenth}
               </Text>
             </View>
-            <View style={sharedStyles.aboutIconTextContainer}>
+            <View style={styles.iconTextContainer}>
               <Icon color="black" name="star" />
-              <Text
-                style={[sharedStyles.aboutIconText, sharedStyles.paymentText]}>
+              <Text style={styles.iconText}>
                 {aboutTexts[lang].joinLottery}
               </Text>
             </View>
             <View
               style={[
-                sharedStyles.aboutFirstSectionTextContainer,
-                sharedStyles.paymentSectionMarginBottom,
+                styles.sectionBlockContainer,
+                styles.currentCartInvoiceItemContainerMargin,
               ]}>
-              <Text style={sharedStyles.aboutFirstSectionText}>
+              <Text style={styles.sectionBlockContainerText}>
                 {aboutTexts[lang].howToUseEleventh}
               </Text>
             </View>

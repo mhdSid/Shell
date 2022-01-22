@@ -1,6 +1,6 @@
 import React, {useState, useEffect, createRef} from 'react';
 import {View, ScrollView, Modal, SafeAreaView} from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './login.style';
 import {profile, loginSignup, validationMessages} from '../../constants/Texts';
 import {TextField} from 'react-native-material-textfield';
 import {Button, Toolbar} from 'react-native-material-ui';
@@ -118,15 +118,11 @@ const Login = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <Toolbar
             style={{
-              container: [
-                sharedStyles.toolbarContainer,
-                sharedStyles.toolbarContainerPadding,
-              ],
+              container: styles.toolbarContainer,
             }}
             leftElement="arrow-back"
             centerElement={profile[lang].loginOrSignup}
@@ -134,13 +130,9 @@ const Login = props => {
           />
           {loading && loadingPopup}
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View
-              style={[
-                sharedStyles.loginContainer,
-                sharedStyles.relativeConatainer,
-              ]}>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>{profile[lang].email}</Text>
+            <View style={styles.scrollViewContainer}>
+              <View style={styles.sectionBlockContainer}>
+                <Text style={styles.label}>{profile[lang].email}</Text>
                 <TextField
                   placeholder={profile[lang].enterEmail}
                   placeholderTextColor={'rgba(0,0,0,0.3)'}
@@ -158,8 +150,8 @@ const Login = props => {
                   onChangeText={handleChange.email()}
                 />
               </View>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>{profile[lang].password}</Text>
+              <View style={styles.sectionBlockContainer}>
+                <Text style={styles.label}>{profile[lang].password}</Text>
                 <TextField
                   placeholder={profile[lang].enterPassword}
                   placeholderTextColor={'rgba(0,0,0,0.3)'}
@@ -178,14 +170,14 @@ const Login = props => {
                   onChangeText={handleChange.password()}
                 />
               </View>
-              <View style={sharedStyles.loginBtn}>
+              <View style={styles.loginButtonViewContainer}>
                 <Button
                   disabled={loading || !emailPassChanged}
                   raised={true}
                   primary
                   text={loginSignup[lang].loginSignup}
                   style={{
-                    container: sharedStyles.mainButtonContainer,
+                    container: styles.loginButtonContainer,
                   }}
                   onPress={handleSubmit}
                 />

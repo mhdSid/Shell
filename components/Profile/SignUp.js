@@ -10,7 +10,7 @@ import {
 import {Button, Checkbox, Toolbar} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';
 import {profile} from '../../constants/Texts';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './signUp.style';
 import {prefectures, cities} from '../../constants/Countries';
 import PropTypes from 'prop-types';
 import invoke from 'lodash/invoke';
@@ -105,19 +105,15 @@ const SignUp = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <KeyboardAvoidingView
             behavior="padding"
             enabled
             keyboardVerticalOffset={25}>
             <Toolbar
               style={{
-                container: [
-                  sharedStyles.toolbarContainer,
-                  sharedStyles.toolbarContainerPadding,
-                ],
+                container: styles.toolbarContainer,
               }}
               leftElement="arrow-back"
               centerElement={profile[lang].shellSignUp}
@@ -131,15 +127,9 @@ const SignUp = props => {
               />
             )}
             <ScrollView showsVerticalScrollIndicator={false}>
-              <View
-                style={[
-                  sharedStyles.loginContainer,
-                  sharedStyles.signUpContainer,
-                ]}>
-                <Text style={sharedStyles.label}>
-                  {profile[lang].prefecture}
-                </Text>
-                <View style={sharedStyles.dropdownView}>
+              <View style={styles.scrollViewContainer}>
+                <Text style={styles.label}>{profile[lang].prefecture}</Text>
+                <View style={styles.dropdownView}>
                   <Dropdown
                     label={profile[lang].enterPrefecture}
                     data={prefecturesDropdownData}
@@ -148,8 +138,8 @@ const SignUp = props => {
                     baseColor={'rgba(0,0,0,0.25)'}
                   />
                 </View>
-                <Text style={sharedStyles.label}>{profile[lang].city}</Text>
-                <View style={sharedStyles.dropdownView}>
+                <Text style={styles.label}>{profile[lang].city}</Text>
+                <View style={styles.dropdownView}>
                   <Dropdown
                     label={profile[lang].enterCity}
                     selectedItemColor={'rgba(0, 0, 0, .87)'}
@@ -164,15 +154,14 @@ const SignUp = props => {
                   value={true}
                   onCheck={onCheckPrivacyPolicy}
                 />
-                <View
-                  style={[sharedStyles.loginBtn, sharedStyles.loginBtnMargin]}>
+                <View style={styles.signUpButtonViewContainer}>
                   <Button
                     disabled={loading || !userDataChanged}
                     raised={true}
                     primary
                     text={profile[lang].signUp}
                     style={{
-                      container: sharedStyles.mainButtonContainer,
+                      container: styles.signUpButtonContainer,
                     }}
                     onPress={handleSignupPress}
                   />

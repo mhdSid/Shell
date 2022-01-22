@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {OutlinedTextField} from 'react-native-material-textfield';
 import {filter as filterTexts} from '../../constants/Texts';
 import {View} from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './filter.style';
 
 const Filter = props => {
   const {lang} = props;
@@ -17,7 +17,7 @@ const Filter = props => {
   };
 
   return (
-    <View style={sharedStyles.filterView}>
+    <View style={styles.filterViewContainer}>
       <OutlinedTextField
         blurOnSubmit={true}
         label={filterTexts[lang].filterLabel}

@@ -8,7 +8,7 @@ import {
 } from 'react-native-confirmation-code-field';
 import {loadingPopup} from '../Loading';
 import {Button, Toolbar} from 'react-native-material-ui';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './verifyCode.style';
 import {profile as profileTexts} from '../../constants/Texts';
 import {getEmailSelector, getPasswordHashSelector} from './Selectors';
 import {loginAction, logoutAction} from '../../redux/Auth/actions';
@@ -69,7 +69,7 @@ const VerifyUserCode = props => {
     return (
       <Text
         key={index}
-        style={sharedStyles.verificationCodeCell}
+        style={styles.verificationCodeCell}
         onLayout={getCellOnLayoutHandler(index)}>
         {symbol || (isFocused ? <Cursor /> : null)}
       </Text>
@@ -81,15 +81,11 @@ const VerifyUserCode = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <Toolbar
             style={{
-              container: [
-                sharedStyles.toolbarContainer,
-                sharedStyles.toolbarContainerPadding,
-              ],
+              container: styles.toolbarContainer,
             }}
             leftElement="arrow-back"
             centerElement={profileTexts[lang].verifyAccount}
@@ -97,19 +93,15 @@ const VerifyUserCode = props => {
           />
           {loading && loadingPopup}
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View
-              style={[
-                sharedStyles.loginContainer,
-                sharedStyles.verificaitonContainer,
-              ]}>
+            <View style={styles.scrollViewContainer}>
               <Image
-                style={sharedStyles.verificationIcon}
+                style={styles.verificationIcon}
                 source={{
                   uri:
                     'https://user-images.githubusercontent.com/4661784/56352614-4631a680-61d8-11e9-880d-86ecb053413d.png',
                 }}
               />
-              <Text style={sharedStyles.verificationTitleSubTitle}>
+              <Text style={styles.verificationTitleSubTitle}>
                 {profileTexts[lang].verificationSubTitle}
               </Text>
               <CodeField
@@ -122,12 +114,12 @@ const VerifyUserCode = props => {
                 textContentType="oneTimeCode"
                 renderCell={renderCell}
               />
-              <View style={sharedStyles.loginBtn}>
+              <View style={styles.resendButtonViewContainer}>
                 <Button
                   raised={true}
                   style={{
-                    container: sharedStyles.mainButtonContainer,
-                    text: sharedStyles.resendCodeButtonText,
+                    container: styles.resendCodeButtonContainer,
+                    text: styles.resendCodeButtonText,
                   }}
                   text={profileTexts[lang].resend}
                   onPress={handleResendPress}

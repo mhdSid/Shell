@@ -1,7 +1,7 @@
 import React from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, ScrollView, View, Text} from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './about.style';
 import {Toolbar, Icon} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {about} from '../../constants/Texts';
@@ -13,120 +13,81 @@ const About = props => {
   };
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView
-        style={[
-          sharedStyles.container,
-          sharedStyles.aboutSafeViewContainer,
-          sharedStyles.rootSafeAreaView,
-        ]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <Toolbar
-            style={{container: sharedStyles.toolbarContainer}}
+            style={{container: styles.toolbarContainer}}
             leftElement={'arrow-back'}
             onLeftElementPress={handleCloseModal}
             centerElement={about[lang].howTo}
           />
           <ScrollView
-            style={sharedStyles.aboutContainer}
-            contentContainerStyle={sharedStyles.aboutScrollViewContainer}
+            style={styles.scrollViewContainer}
+            contentContainerStyle={styles.scrollViewContentContainer}
             showsVerticalScrollIndicator={false}>
-            <View style={sharedStyles.aboutIconTextContainer}>
+            <View style={styles.iconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="store" />
-              <Text style={sharedStyles.aboutIconText}>{about[lang].sell}</Text>
+              <Text style={styles.iconText}>{about[lang].sell}</Text>
             </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text
-                style={[
-                  sharedStyles.aboutFirstSectionText,
-                  sharedStyles.aboutFirstSectionTextMargin,
-                ]}>
+            <View style={styles.aboutSectionContainer}>
+              <Text style={[styles.sectionText, styles.sectionTextMargin]}>
                 {about[lang].howToUseFirst}
               </Text>
-              <Text
-                style={[
-                  sharedStyles.aboutFirstSectionText,
-                  sharedStyles.aboutFirstSectionTextMargin,
-                ]}>
+              <Text style={[styles.sectionText, styles.sectionTextMargin]}>
                 {about[lang].howToUseSecond}
               </Text>
-              <Text
-                style={[
-                  sharedStyles.aboutFirstSectionText,
-                  sharedStyles.aboutFirstSectionTextMargin,
-                ]}>
+              <Text style={[styles.sectionText, styles.sectionTextMargin]}>
                 {about[lang].howToUseThird}
               </Text>
-              <Text
-                style={[
-                  sharedStyles.aboutFirstSectionText,
-                  sharedStyles.aboutFirstSectionTextMargin,
-                ]}>
+              <Text style={[styles.sectionText, styles.sectionTextMargin]}>
                 {about[lang].howToUseFourth}
               </Text>
-              <Text
-                style={[
-                  sharedStyles.aboutFirstSectionText,
-                  sharedStyles.aboutFirstSectionTextMargin,
-                ]}>
+              <Text style={[styles.sectionText, styles.sectionTextMargin]}>
                 {about[lang].howToUseFifth}
               </Text>
-              <Text
-                style={[
-                  sharedStyles.aboutFirstSectionText,
-                  sharedStyles.aboutFirstSectionTextMargin,
-                ]}>
+              <Text style={[styles.sectionText, styles.sectionTextMargin]}>
                 {about[lang].howToUseSixth}
               </Text>
-              <Text style={sharedStyles.aboutFirstSectionText}>
+              <Text style={styles.sectionText}>
                 {about[lang].howToUseSeventh}
               </Text>
             </View>
-            <View style={sharedStyles.aboutSeparatorSection}>
-              <Text style={sharedStyles.aboutSeparatorSectionText}>
-                {about[lang].or}
-              </Text>
+            <View style={styles.sectionSeparatorContainer}>
+              <Text style={styles.sectionSeparatorText}>{about[lang].or}</Text>
             </View>
-            <View style={sharedStyles.aboutIconTextContainer}>
+            <View style={styles.iconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="explore" />
-              <Text style={sharedStyles.aboutIconText}>
-                {about[lang].browse}
-              </Text>
+              <Text style={styles.iconText}>{about[lang].browse}</Text>
             </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionText}>
                 {about[lang].howtoUseEigtth}
               </Text>
             </View>
-            <View style={sharedStyles.aboutIconTextContainer}>
+            <View style={styles.iconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="remove-red-eye" />
-              <Text style={sharedStyles.aboutIconText}>
-                {about[lang].choose}
-              </Text>
+              <Text style={styles.iconText}>{about[lang].choose}</Text>
             </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionText}>
                 {about[lang].howToUseNineth}
               </Text>
             </View>
-            <View style={sharedStyles.aboutIconTextContainer}>
+            <View style={styles.iconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="receipt" />
-              <Text style={sharedStyles.aboutIconText}>
-                {about[lang].enterLottery}
-              </Text>
+              <Text style={styles.iconText}>{about[lang].enterLottery}</Text>
             </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionText}>
                 {about[lang].howToUseTenth}
               </Text>
             </View>
-            <View style={sharedStyles.aboutIconTextContainer}>
+            <View style={styles.iconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="star" />
-              <Text style={sharedStyles.aboutIconText}>
-                {about[lang].joinLottery}
-              </Text>
+              <Text style={styles.iconText}>{about[lang].joinLottery}</Text>
             </View>
-            <View style={sharedStyles.aboutFirstSectionTextContainer}>
-              <Text style={sharedStyles.aboutFirstSectionText}>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionText}>
                 {about[lang].howToUseEleventh}
               </Text>
             </View>

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {CachedImage} from '../../lib/CachedImage/react-native-cached-image';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './userProfile.style';
 import {View, Text, ActionSheetIOS} from 'react-native';
 import {Button, Drawer, Avatar, Icon} from 'react-native-material-ui';
 import {Loading, loadingPopup} from '../Loading';
@@ -138,9 +138,9 @@ const UserProfile = props => {
   return (
     <>
       {userProfileModal && userProfileModals[userProfileModal]()}
-      <View style={sharedStyles.fullheightView}>
+      <View style={styles.userProfileContainer}>
         {loading && loadingPopup}
-        <View style={sharedStyles.loggedInContainer}>
+        <View style={styles.userProfileInnerContainer}>
           <Drawer>
             <Drawer.Header
               image={
@@ -149,25 +149,25 @@ const UserProfile = props => {
                   <CachedImage
                     blurRadius={250}
                     source={{uri: user.image}}
-                    style={sharedStyles.profileBlurredImage}>
-                    <View style={sharedStyles.profileBlur} />
+                    style={styles.userProfileBlurredImage}>
+                    <View style={styles.userProfileBlurredView} />
                   </CachedImage>
                 )
               }
               style={{
-                contentContainer: sharedStyles.profileHeaderContentContainer,
+                contentContainer: styles.userProfileHeaderContentContainer,
               }}>
               <Drawer.Header.Account
                 style={{
-                  container: sharedStyles.profileHeaderContainer,
-                  avatarsContainer: sharedStyles.profileAvatarContainer,
+                  container: styles.userProfileHeaderContainer,
+                  avatarsContainer: styles.userProfileAvatarContainer,
                 }}
                 avatar={
                   <Avatar
                     image={
                       isAuthenticated && user.image ? (
                         <FastImage
-                          style={sharedStyles.profileImage}
+                          style={styles.userProfileImage}
                           source={{
                             uri: user.image,
                             priority: FastImage.priority.high,
@@ -187,12 +187,12 @@ const UserProfile = props => {
                         dense: true,
                         centerElement: {
                           primaryText: (
-                            <Text style={sharedStyles.profileUserText}>
+                            <Text style={styles.userProfileUserInfoText}>
                               {`${user.email}`}
                             </Text>
                           ),
                           secondaryText: (
-                            <Text style={sharedStyles.profileUserText}>
+                            <Text style={styles.userProfileUserInfoText}>
                               {`${userGameStatus} • ${userGamePoints} ${
                                 profile[lang].points
                               }`}

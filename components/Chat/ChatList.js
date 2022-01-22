@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, VirtualizedList, Text} from 'react-native';
 import {connect} from 'react-redux';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './chatList.style';
 import {LoadingComponent, loadingPopup} from '../Loading';
 import PropTypes from 'prop-types';
 import {Toolbar} from 'react-native-material-ui';
@@ -100,9 +100,9 @@ const ChatList = props => {
   }
 
   return (
-    <View style={sharedStyles.fullheightView}>
+    <View style={styles.chatListViewContainer}>
       <Toolbar
-        style={{container: sharedStyles.toolbarContainer}}
+        style={{container: styles.toolbarContainer}}
         centerElement={chatTexts[lang].chat}
       />
       {isShowChatCOnversationModal ? (
@@ -138,8 +138,8 @@ const ChatList = props => {
         renderItem={renderListItem}
         ListEmptyComponent={
           !loading ? (
-            <View style={sharedStyles.homeEmptySearchResultsView}>
-              <Text style={sharedStyles.emptySearchResultsText}>
+            <View style={styles.emptyChatListViewContainer}>
+              <Text style={styles.emptyChatListViewContainerText}>
                 {lotteriesTexts[lang].emptyLotteries}
               </Text>
             </View>

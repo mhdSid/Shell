@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './noAuth.style';
 import {Button} from 'react-native-material-ui';
 import {navigate} from '../MainContainer';
 import {noAuth, loginSignup} from '../../constants/Texts';
@@ -13,15 +13,9 @@ const NoAuth = props => {
   };
 
   return (
-    <View
-      style={[
-        sharedStyles.importAdContainerNoAuth,
-        sharedStyles.importAdNoAuthContainer,
-      ]}>
-      <Text style={[sharedStyles.label, sharedStyles.verificationLabel]}>
-        {noAuth[lang].loginSignup}
-      </Text>
-      <View style={sharedStyles.loginBtn}>
+    <View style={styles.noAuthViewContainer}>
+      <Text style={styles.label}>{noAuth[lang].loginSignup}</Text>
+      <View style={styles.noAuthButtonViewContainer}>
         <Button
           raised={true}
           primary

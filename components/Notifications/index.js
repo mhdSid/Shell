@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, ScrollView, View} from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './notifications.style';
 import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {loadingPopup} from '../Loading';
@@ -17,24 +17,17 @@ const Notifications = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <Toolbar
-            style={{container: sharedStyles.toolbarContainer}}
+            style={{container: styles.toolbarContainer}}
             leftElement="arrow-back"
             centerElement={notifications[lang].notifications}
             onLeftElementPress={handleCloseModal}
           />
           {loading && loadingPopup}
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View
-              style={[
-                sharedStyles.signupView,
-                sharedStyles.loginContainer,
-                sharedStyles.updateUserContainer,
-              ]}
-            />
+            <View style={styles.scrollViewContainer} />
           </ScrollView>
         </View>
       </SafeAreaView>

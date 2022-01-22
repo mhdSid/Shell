@@ -2,11 +2,7 @@ import React, {PureComponent} from 'react';
 import {View, Text} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import Carousel from 'react-native-snap-carousel';
-import {
-  sliderStyles,
-  sliderWidth,
-  itemWidth,
-} from '../../assets/styles/sliderEntry';
+import {sliderStyles, sliderWidth, itemWidth} from './carousel.style';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
 import FastImage from 'react-native-fast-image';

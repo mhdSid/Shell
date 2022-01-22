@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Button, Icon, Toolbar} from 'react-native-material-ui';
 import {TextField} from 'react-native-material-textfield';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './editLottery.style';
 import ImagePicker from 'react-native-image-picker';
 import {prefectures, cities, currencies} from '../../constants/Countries';
 import {
@@ -297,13 +297,12 @@ const EditLottery = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <View>
             <Toolbar
               style={{
-                container: sharedStyles.toolbarContainerPadding,
+                container: styles.toolbarContainer,
               }}
               centerElement={importLotteryTexts[lang].updateLottery}
               leftElement="arrow-back"
@@ -311,9 +310,9 @@ const EditLottery = props => {
             />
           </View>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={sharedStyles.importAdContainer}>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>
+            <View style={styles.scrollViewContainer}>
+              <View style={styles.sectionBlockContainer}>
+                <Text style={styles.label}>
                   {importLotteryTexts[lang].productName}
                 </Text>
                 <TextField
@@ -332,8 +331,8 @@ const EditLottery = props => {
                   ref={adNameRef}
                 />
               </View>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>
+              <View style={styles.sectionBlockContainer}>
+                <Text style={styles.label}>
                   {importLotteryTexts[lang].description}
                 </Text>
                 <TextField
@@ -353,15 +352,13 @@ const EditLottery = props => {
                   ref={descriptionRef}
                 />
               </View>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>
+              <View style={styles.sectionBlockContainer}>
+                <Text style={styles.label}>
                   {importLotteryTexts[lang].price}
                 </Text>
-                <View style={sharedStyles.priceContainer}>
-                  <Text style={sharedStyles.currencyLabel}>
-                    {currencies.JP}
-                  </Text>
-                  <View style={sharedStyles.adPriceTextfieldContainer}>
+                <View style={styles.sectionBlockPriceViewContainer}>
+                  <Text style={styles.currencyLabel}>{currencies.JP}</Text>
+                  <View style={styles.priceTextFieldViewContainer}>
                     <TextField
                       autoCapitalize={false}
                       autoCorrect={false}
@@ -381,26 +378,26 @@ const EditLottery = props => {
                   </View>
                 </View>
               </View>
-              <View style={sharedStyles.mobileContainer}>
-                <Text style={sharedStyles.label}>
+              <View style={styles.sectionBlockContainer}>
+                <Text style={styles.label}>
                   {importLotteryTexts[lang].images}
                 </Text>
-                <View style={sharedStyles.imageBtnContainer}>
+                <View style={styles.importImageButtonsViewContainer}>
                   {images.map((value, index) => (
                     <TouchableBounce
                       key={value}
                       onPress={handleChoosePhoto(index)}
                       style={[
-                        sharedStyles.imageBtn,
+                        styles.importImageButton,
                         (index === 4 || index === 9) &&
-                          sharedStyles.imageBtnLast,
+                          styles.importImageButtonListItem,
                       ]}>
                       {isNumber(value) ? (
                         <Icon name="image" size={35} color="white" />
                       ) : null}
                       {!isNumber(value) && value ? (
                         <FastImage
-                          style={sharedStyles.adImage}
+                          style={styles.importedImage}
                           source={{
                             uri: value,
                             priority: FastImage.priority.high,
@@ -413,8 +410,8 @@ const EditLottery = props => {
                   ))}
                 </View>
               </View>
-              <Text style={sharedStyles.label}>{profile[lang].prefecture}</Text>
-              <View style={sharedStyles.dropdownView}>
+              <Text style={styles.label}>{profile[lang].prefecture}</Text>
+              <View style={styles.dropdownView}>
                 <Dropdown
                   baseColor={'rgba(0,0,0,0.3)'}
                   label={profile[lang].enterPrefecture}
@@ -424,8 +421,8 @@ const EditLottery = props => {
                   value={prefecture}
                 />
               </View>
-              <Text style={sharedStyles.label}>{profile[lang].city}</Text>
-              <View style={sharedStyles.dropdownView}>
+              <Text style={styles.label}>{profile[lang].city}</Text>
+              <View style={styles.dropdownView}>
                 <Dropdown
                   baseColor={'rgba(0,0,0,0.3)'}
                   label={profile[lang].enterCity}
@@ -436,10 +433,10 @@ const EditLottery = props => {
                 />
               </View>
 
-              <Text style={sharedStyles.label}>
+              <Text style={styles.label}>
                 {importLotteryTexts[lang].category}
               </Text>
-              <View style={sharedStyles.dropdownView}>
+              <View style={styles.dropdownView}>
                 <Dropdown
                   label={importLotteryTexts[lang].enterCategory}
                   baseColor={'rgba(0,0,0,0.3)'}
@@ -449,10 +446,10 @@ const EditLottery = props => {
                   value={itemCategory}
                 />
               </View>
-              <Text style={sharedStyles.label}>
+              <Text style={styles.label}>
                 {importLotteryTexts[lang].condition}
               </Text>
-              <View style={sharedStyles.dropdownView}>
+              <View style={styles.dropdownView}>
                 <Dropdown
                   baseColor={'rgba(0,0,0,0.3)'}
                   label={importLotteryTexts[lang].enterCondition}
@@ -464,13 +461,13 @@ const EditLottery = props => {
               </View>
             </View>
           </ScrollView>
-          <View style={sharedStyles.editLotteryBottomToolBar}>
+          <View style={styles.editLotteryBottomToolBarViewContainer}>
             <Button
               disabled={!lotteryDataChanged}
               raised={true}
               primary
               icon="done-all"
-              style={{container: sharedStyles.mainButtonContainer}}
+              style={{container: styles.editLotteryButtonContainer}}
               text={importLotteryTexts[lang].updateLottery}
               onPress={updateLottery}
             />

@@ -3,7 +3,7 @@ import {Dimensions, View} from 'react-native';
 import ImageZoom from 'react-native-image-pan-zoom';
 import {Modal, SafeAreaView} from 'react-native';
 import {Button} from 'react-native-material-ui';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './imageViewer.style';
 import PropTypes from 'prop-types';
 import invoke from 'lodash/invoke';
 import FastImage from 'react-native-fast-image';
@@ -18,10 +18,9 @@ const ImagesViewer = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView
-        style={[sharedStyles.fullheightView, sharedStyles.rootSafeAreaView]}>
-        <View style={[sharedStyles.fullheightView, sharedStyles.imageViewer]}>
-          <View style={sharedStyles.imageViewerBtnContainer}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
+          <View style={styles.imageViewerBackButtonViewContainer}>
             <Button
               icon="arrow-back"
               color="white"
@@ -29,17 +28,17 @@ const ImagesViewer = props => {
               raised={false}
               primary
               text={''}
-              style={sharedStyles.imageViewButton}
+              style={styles.imageViewerButton}
             />
           </View>
           <ImageZoom
             cropWidth={cropWidth}
             cropHeight={cropHeight}
-            style={sharedStyles.imageViewerZoom}
+            style={styles.imageViewerZoomContainer}
             imageWidth={cropWidth - 30}
             imageHeight={cropWidth - 30}>
             <FastImage
-              style={sharedStyles.imageViewerImage}
+              style={styles.imageViewerImage}
               source={{
                 uri,
                 priority: FastImage.priority.high,

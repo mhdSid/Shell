@@ -1,51 +1,35 @@
 import React from 'react';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
 import PropTypes from 'prop-types';
-import sharedStyles from '../../assets/styles/sharedStyles';
-import {Text, View} from 'react-native';
+import styles from './lotteryDetailsUserListItem.style';
+import {View} from 'react-native';
 import {Icon} from 'react-native-material-ui';
 import FastImage from 'react-native-fast-image';
 
 const LotteryDetailsUserListItem = props => {
-  const {user, withNotificationNum, largeImage, winnerUserId} = props;
+  const {user, largeImage, winnerUserId} = props;
 
   if (user) {
     return (
       <TouchableBounce
         style={[
-          sharedStyles.lotteryDetailsUsersListItemContainer,
-          largeImage
-            ? sharedStyles.lotteryDetailsUsersListItemLargeContainer
-            : null,
+          styles.userListItemViewContainer,
+          largeImage ? styles.userListItemLargeViewContainer : null,
         ]}>
-        {withNotificationNum && user.userJoinedLotteryCount > 1 && (
-          <View
-            style={[
-              sharedStyles.userJoinedLotteryCountContainer,
-              largeImage &&
-                sharedStyles.userJoinedLotteryCountContainerWithLargeImage,
-            ]}>
-            <Text
-              numberOfLines={1}
-              style={sharedStyles.userJoinedLotteryCountText}>
-              {user.userJoinedLotteryCount}
-            </Text>
-          </View>
-        )}
         {user.image ? (
           <View
             style={[
               user.id === winnerUserId &&
-                sharedStyles.lotteryDetailsUsersListItemWinnerContainer,
+                styles.userListItemWinnerImageViewContainer,
               largeImage
-                ? sharedStyles.lotteryDetailsUsersListItemLargeImageContainer
-                : sharedStyles.lotteryDetailsUsersListItemImageContainer,
+                ? styles.userListItemLargeImageViewContainer
+                : styles.userListItemImageViewContainer,
             ]}>
             <FastImage
               style={
                 largeImage
-                  ? sharedStyles.lotteryDetailsUsersListItemLargeImage
-                  : sharedStyles.lotteryDetailsUsersListItemImage
+                  ? styles.userListItemLargeImage
+                  : styles.userListItemImage
               }
               source={{
                 uri: user.image,
@@ -62,7 +46,7 @@ const LotteryDetailsUserListItem = props => {
     );
   }
   return (
-    <View style={sharedStyles.lotteryDetailsUsersListItemContainer}>
+    <View style={styles.userListItemViewContainer}>
       <Icon name="face" size={40} />
     </View>
   );

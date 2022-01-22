@@ -1,12 +1,14 @@
 import React from 'react';
 import {ActivityIndicator, SafeAreaView, View} from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './loading.style';
 
-const SimpleLoader = <ActivityIndicator style={sharedStyles.simpleLoader} />;
+const SimpleLoader = (
+  <ActivityIndicator style={styles.simpleLoaderAlignedCenter} />
+);
 const SimpleLoaderDefault = <ActivityIndicator color="white" />;
 
 const Loading = (
-  <SafeAreaView style={sharedStyles.loading}>
+  <SafeAreaView style={styles.loadingSafeAreaView}>
     <ActivityIndicator />
   </SafeAreaView>
 );
@@ -16,7 +18,7 @@ const LoadingComponent = () => {
 };
 
 const loadingPopup = (
-  <View style={sharedStyles.loadingPopup}>
+  <View style={styles.loadingPopupViewContainer}>
     <LoadingComponent />
   </View>
 );

@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Button, Icon, Toolbar} from 'react-native-material-ui';
 import {TextField} from 'react-native-material-textfield';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './importLottery.style';
 import ImagePicker from 'react-native-image-picker';
 import {prefectures, cities, currencies} from '../../constants/Countries';
 import {
@@ -403,7 +403,7 @@ const ImportLottery = props => {
 
   if (loggedIn === true && user) {
     return (
-      <View style={sharedStyles.fullheightView}>
+      <View style={styles.importLotteryViewContainer}>
         {showSuccessConfirmationModal ? (
           <SuccessConfirmationModal
             title={successConfirmationModalTexts[lang].importLottery.title}
@@ -423,30 +423,17 @@ const ImportLottery = props => {
         <View>
           <Toolbar
             style={{
-              container: sharedStyles.toolbarContainerPadding,
+              container: styles.toolbarContainer,
             }}
             centerElement={importLotteryTexts[lang].createLottery}
             leftElement={'cloud-upload'}
             onLeftElementPress={handleShowUploadLotteryProgressModal}
-            // rightElement={
-            //   <Button
-            //     onPress={handleUploadLottery}
-            //     disabled={!lotteryDataChanged}
-            //     raised
-            //     text={importLotteryTexts[lang].create}
-            //     style={{
-            //       container: sharedStyles.mainButtonContainer,
-            //       text: {color: '#b69cf6'},
-            //     }}
-            //     icon="done-all"
-            //   />
-            // }
           />
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={sharedStyles.importAdContainer}>
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>
+          <View style={styles.scrollViewContainer}>
+            <View style={styles.sectionBlockContainer}>
+              <Text style={styles.label}>
                 {importLotteryTexts[lang].productName}
               </Text>
               <TextField
@@ -464,8 +451,8 @@ const ImportLottery = props => {
                 ref={adNameRef}
               />
             </View>
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>
+            <View style={styles.sectionBlockContainer}>
+              <Text style={styles.label}>
                 {importLotteryTexts[lang].description}
               </Text>
               <TextField
@@ -484,10 +471,10 @@ const ImportLottery = props => {
                 ref={descriptionRef}
               />
             </View>
-            <Text style={sharedStyles.label}>
+            <Text style={styles.label}>
               {importLotteryTexts[lang].category}
             </Text>
-            <View style={sharedStyles.dropdownView}>
+            <View style={styles.dropdownView}>
               <Dropdown
                 label={importLotteryTexts[lang].enterCategory}
                 baseColor={'rgba(0,0,0,0.3)'}
@@ -497,10 +484,10 @@ const ImportLottery = props => {
                 value={itemCategory}
               />
             </View>
-            <Text style={sharedStyles.label}>
+            <Text style={styles.label}>
               {importLotteryTexts[lang].condition}
             </Text>
-            <View style={sharedStyles.dropdownView}>
+            <View style={styles.dropdownView}>
               <Dropdown
                 baseColor={'rgba(0,0,0,0.3)'}
                 label={importLotteryTexts[lang].enterCondition}
@@ -510,13 +497,11 @@ const ImportLottery = props => {
                 value={itemCondition}
               />
             </View>
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>
-                {importLotteryTexts[lang].price}
-              </Text>
-              <View style={sharedStyles.priceContainer}>
-                <Text style={sharedStyles.currencyLabel}>{userCurrency}</Text>
-                <View style={sharedStyles.adPriceTextfieldContainer}>
+            <View style={styles.sectionBlockContainer}>
+              <Text style={styles.label}>{importLotteryTexts[lang].price}</Text>
+              <View style={styles.sectionBlockPriceViewContainer}>
+                <Text style={styles.currencyLabel}>{userCurrency}</Text>
+                <View style={styles.priceTextFieldViewContainer}>
                   <TextField
                     placeholder={importLotteryTexts[lang].enterPrice}
                     autoCapitalize={false}
@@ -535,20 +520,21 @@ const ImportLottery = props => {
                 </View>
               </View>
             </View>
-            <View style={sharedStyles.mobileContainer}>
-              <Text style={sharedStyles.label}>
+            <View style={styles.sectionBlockContainer}>
+              <Text style={styles.label}>
                 {importLotteryTexts[lang].images}
               </Text>
-              <View style={sharedStyles.imageBtnContainer}>
+              <View style={styles.importImageButtonsViewContainer}>
                 {adImages.map(index => (
                   <TouchableBounce
                     key={index}
                     onPress={handleChoosePhoto(index)}
                     style={[
-                      sharedStyles.imageBtn,
-                      (index === 4 || index === 9) && sharedStyles.imageBtnLast,
+                      styles.importImageButton,
+                      (index === 4 || index === 9) &&
+                        styles.importImageButtonLast,
                       index === 0 && errors.images
-                        ? sharedStyles.imageBtnError
+                        ? styles.importImageButtonError
                         : '',
                     ]}>
                     {!images[index] && (
@@ -556,7 +542,7 @@ const ImportLottery = props => {
                     )}
                     {images[index] && (
                       <FastImage
-                        style={sharedStyles.adImage}
+                        style={styles.importedImage}
                         source={{
                           uri: images[index],
                           priority: FastImage.priority.high,
@@ -569,8 +555,8 @@ const ImportLottery = props => {
                 ))}
               </View>
             </View>
-            <Text style={sharedStyles.label}>{profile[lang].prefecture}</Text>
-            <View style={sharedStyles.dropdownView}>
+            <Text style={styles.label}>{profile[lang].prefecture}</Text>
+            <View style={styles.dropdownView}>
               <Dropdown
                 baseColor={'rgba(0,0,0,0.3)'}
                 label={profile[lang].enterPrefecture}
@@ -580,8 +566,8 @@ const ImportLottery = props => {
                 value={prefecture}
               />
             </View>
-            <Text style={sharedStyles.label}>{profile[lang].city}</Text>
-            <View style={sharedStyles.dropdownView}>
+            <Text style={styles.label}>{profile[lang].city}</Text>
+            <View style={styles.dropdownView}>
               <Dropdown
                 baseColor={'rgba(0,0,0,0.3)'}
                 label={profile[lang].enterCity}
@@ -593,17 +579,13 @@ const ImportLottery = props => {
             </View>
           </View>
         </ScrollView>
-        <View
-          style={[
-            sharedStyles.lotteryDetailsBottomToolbar,
-            {backgroundColor: 'white'},
-          ]}>
+        <View style={styles.bottomToolBarViewContainer}>
           <Button
             disabled={!lotteryDataChanged}
             raised={true}
             primary
             icon="done-all"
-            style={{container: sharedStyles.mainButtonContainer}}
+            style={{container: styles.importButtonContainer}}
             text={importLotteryTexts[lang].createLottery}
             onPress={handleUploadLottery}
           />
@@ -611,7 +593,7 @@ const ImportLottery = props => {
         {/* {animatedImages.map(animatedImage => (
             <Animated.View
               style={[
-                sharedStyles.animatedImage,
+                styles.animatedImage,
                 {
                   transform: [
                     {

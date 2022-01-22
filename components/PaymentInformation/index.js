@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, ScrollView, View} from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './paymentInformation.style';
 import {Toolbar, Button} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {loadingPopup} from '../Loading';
@@ -125,15 +125,11 @@ const PaymentInformation = props => {
       animationType="slide"
       onShow={onShowModal}
       onRequestClose={handleCloseModal}>
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <Toolbar
             style={{
-              container: [
-                sharedStyles.toolbarContainer,
-                sharedStyles.toolbarContainerPadding,
-              ],
+              container: styles.toolbarContainer,
             }}
             leftElement="arrow-back"
             centerElement={paymentInformation[lang].creditCard}
@@ -141,26 +137,21 @@ const PaymentInformation = props => {
           />
           {loading && loadingPopup}
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View
-              style={[
-                sharedStyles.paymentInfoContainer,
-                sharedStyles.loginContainer,
-                sharedStyles.updateUserContainer,
-              ]}>
-              <View style={sharedStyles.creditContainer}>
+            <View style={styles.scrollViewContainer}>
+              <View style={styles.creditCardInputViewContainer}>
                 <CreditCardInput
                   ref={creditCardInputRef}
                   allowScroll={true}
-                  inputStyle={sharedStyles.creditInput}
+                  inputStyle={styles.creditCardInputContainer}
                   onChange={onCreditChange}
                 />
               </View>
-              <View style={sharedStyles.loginBtn}>
+              <View style={styles.submitButtonViewContainer}>
                 <Button
                   disabled={loading || !userDataChanged || !isValid}
                   raised={true}
                   primary
-                  style={{container: sharedStyles.mainButtonContainer}}
+                  style={{container: styles.submitButtonContainer}}
                   text={paymentInformation[lang].submit}
                   onPress={handleUpdateUserPaymentInfo}
                 />

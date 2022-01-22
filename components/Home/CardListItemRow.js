@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View} from 'react-native';
 import PropTypes from 'prop-types';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './cardListItemRow.style';
 import CardListItem from './CardListItem';
 
 export default class CardListItemRow extends Component {
@@ -23,14 +23,14 @@ export default class CardListItemRow extends Component {
   }
   render() {
     return (
-      <View style={sharedStyles.homeCardListItemRow}>
-        {this.props.data.data.map((listItem, index) => (
+      <View style={styles.cardListItemRowRootViewContainer}>
+        {this.props.data.data.map((listItem, index, array) => (
           <View
             key={`${listItem.id + index}`}
             style={[
-              sharedStyles.homeCardListItemContainer,
-              index === this.props.data.data.length - 1 &&
-                sharedStyles.homeCardListItemContainerNoMargin,
+              styles.cardListItemRowViewContainer,
+              index === array.length - 1 &&
+                styles.cardListItemRowViewContainerNoMargin,
             ]}>
             <CardListItem
               key={`${listItem.id + index}`}

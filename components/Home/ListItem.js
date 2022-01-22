@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {ActionSheetIOS, View} from 'react-native';
 import PropTypes from 'prop-types';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './listItem.style';
 import {invoke} from 'lodash';
 import {IconToggle, ListItem} from 'react-native-material-ui';
 import {loadingPopup} from '../Loading';
@@ -153,22 +153,22 @@ class ListItemCommon extends Component {
     return (
       <View
         style={[
-          !this.props.disableBorder && sharedStyles.listComponentContainer,
+          !this.props.disableBorder && styles.listItemViewContainer,
           this.props.index === this.props.listLength - 1 &&
-            sharedStyles.homeListItemMargin,
+            styles.listItemViewContainerMargin,
         ]}>
         {this.props.showUploadProgress ? loadingPopup : null}
         <ListItem
           divider
           style={{
             container: {
-              ...(this.props.rounded && sharedStyles.listItemRounded),
+              ...(this.props.rounded && styles.listItemContainerRounded),
             },
           }}
           leftElement={
             this.props.item.images && this.props.item.images[0] ? (
               <FastImage
-                style={sharedStyles.homeListItemImage}
+                style={styles.listItemImage}
                 source={{
                   uri: this.props.item.images[0],
                   priority: FastImage.priority.high,
@@ -236,7 +236,7 @@ class ListItemCommon extends Component {
                         ? this.handleNotShippedPress
                         : this.handleShippedPress
                     }
-                    style={{container: sharedStyles.listItemNotReceivedIcon}}
+                    style={{container: styles.listItemNotReceivedIconContainer}}
                   />
                 ) : null}
               </>

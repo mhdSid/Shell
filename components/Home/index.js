@@ -4,7 +4,7 @@ import {Animated, Text, View, VirtualizedList} from 'react-native';
 import {connect} from 'react-redux';
 import invoke from 'lodash/invoke';
 import PropTypes from 'prop-types';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './home.style';
 import {handleFetchLotteries} from '../../redux/Home/FetchLotteries';
 import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
 import {setHomeViewStyle} from '../../redux/Settings/actions';
@@ -210,14 +210,14 @@ const HomeComponent = props => {
   }, []);
 
   return (
-    <View style={sharedStyles.fullheightView}>
+    <View style={styles.homeViewContainer}>
       {showLotteryProgressModal && (
         <UploadLotteryProgressModal
           onClose={handleCloseUploadLotteryProgressModal}
         />
       )}
       <Toolbar
-        style={{container: sharedStyles.toolbarContainer}}
+        style={{container: styles.toolbarContainer}}
         centerElement={home[lang].appName}
         rightElement={[
           'search',
@@ -247,10 +247,7 @@ const HomeComponent = props => {
           primary
           text={'Reset Search'}
           style={{
-            container: [
-              sharedStyles.mainButtonContainer,
-              sharedStyles.homeResetSearchBtn,
-            ],
+            container: styles.resetSearchButtonContainer,
           }}
           icon="youtube-searched-for"
           onPress={handleResetSearchFilters}
@@ -272,8 +269,8 @@ const HomeComponent = props => {
         refreshing={loading}
         ListEmptyComponent={
           !loading ? (
-            <View style={sharedStyles.homeEmptySearchResultsView}>
-              <Text style={sharedStyles.emptySearchResultsText}>
+            <View style={styles.homeListEmptyViewContainer}>
+              <Text style={styles.homeListEmptyViewContainerText}>
                 {lotteriesTexts[lang].emptyLotteries}
               </Text>
             </View>
@@ -287,7 +284,9 @@ const HomeComponent = props => {
         data={isCard ? lotteryCardList : lotteries}
         getItem={getItem}
         getItemCount={isCard ? getItemCount : getListItemCount}
-        contentContainerStyle={isCard && sharedStyles.homeLotteriesContainer}
+        contentContainerStyle={
+          isCard && styles.virtualizedListCardContentContainer
+        }
         keyExtractor={isCard ? getItemKey : getListItemKey}
         renderItem={isCard ? renderCardListItemRow : renderListItem}
       />

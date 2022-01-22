@@ -85,10 +85,6 @@ const sharedStyles = StyleSheet.create({
   searchBoxDivision: {
     display: 'flex',
     flex: 1,
-    // marginBottom: 5,
-  },
-  searchBoxTextInput: {
-    // height: 30,
   },
   searchBoxDivisionFirst: {
     marginRight: 10,
@@ -99,11 +95,6 @@ const sharedStyles = StyleSheet.create({
   resetButtonView: {
     width: '35%',
     marginLeft: 10,
-  },
-  toolbarBackButton: {
-    width: 10,
-    height: 20,
-    color: 'white',
   },
   toolbarContainerPadding: {
     paddingHorizontal: 15,
@@ -127,6 +118,9 @@ const sharedStyles = StyleSheet.create({
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
+  },
+  importLotteryBottomToolbar: {
+    backgroundColor: 'white',
   },
   editLotteryBottomToolBar: {
     ...toolbarStyles,
@@ -160,11 +154,6 @@ const sharedStyles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 10,
   },
-  imageViewerToolbarContainer: {
-    ...toolbarStyles,
-    textAlign: 'center',
-    paddingRight: 15,
-  },
   /* End ToolBar */
 
   /* Loading */
@@ -196,28 +185,9 @@ const sharedStyles = StyleSheet.create({
     zIndex: 1111,
   },
   /* End Loading */
-
   fullheightView: {
     width: '100%',
     height: '100%',
-  },
-  importAdView: {
-    // paddingBottom: 10,
-    position: 'relative',
-  },
-  bottomNavigationLeftActionContainer: {
-    // paddingBottom: 12,
-    // paddingTop: 12,
-    // paddingLeft: 10,
-    // paddingRight: 0,
-    // paddingBottom: 5,
-    // paddingTop: 5,
-  },
-  bottomNavigationMiddleActionContainer: {
-    paddingBottom: 5,
-    paddingTop: 5,
-    // paddingLeft: 0,
-    // paddingRight: 0,
   },
   receiveLotteryTabNavigationContainer: {
     justifyContent: 'center',
@@ -230,12 +200,6 @@ const sharedStyles = StyleSheet.create({
     height: 45,
   },
   bottomNavigationRightActionContainer: {
-    // paddingBottom: 12,
-    // paddingTop: 12,
-    // paddingLeft: 0,
-    // paddingRight: 10,
-    // paddingBottom: 5,
-    // paddingTop: 5,
     justifyContent: 'center',
     alignItems: 'center',
     display: 'flex',
@@ -275,10 +239,6 @@ const sharedStyles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  pickerView: {
-    width: '70%',
-    alignSelf: 'center',
-  },
   imageBtnContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -295,11 +255,6 @@ const sharedStyles = StyleSheet.create({
     height: 27,
     borderRadius: 27 / 2,
     backgroundColor: '#f7f5fe',
-    // borderWidth: 2,
-    // borderColor: 'transparent',
-  },
-  bottomBarUserImageSelected: {
-    borderColor: '#000000',
   },
   userImageBtnContainer: {
     justifyContent: 'center',
@@ -348,23 +303,7 @@ const sharedStyles = StyleSheet.create({
   userImage: {
     borderRadius: 100 / 2,
   },
-  dobContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginBottom: 200,
-    top: 90,
-  },
-  genderContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginBottom: 30,
-  },
   mobileContainer: {
-    marginBottom: 30,
-  },
-  nameContainer: {
     marginBottom: 30,
   },
   importAdNoAuthContainer: {
@@ -377,16 +316,6 @@ const sharedStyles = StyleSheet.create({
   },
   dropdownView: {
     marginBottom: 20,
-  },
-  noAuthLabel: {
-    fontWeight: 'bold',
-    fontSize: 16,
-
-    textAlign: 'center',
-  },
-  signUpLabel: {
-    fontWeight: 'bold',
-    fontSize: 14,
   },
   currencyLabel: {
     fontWeight: 'bold',
@@ -406,36 +335,10 @@ const sharedStyles = StyleSheet.create({
     color: 'rgba(0,0,0,.5)',
     marginTop: 10,
   },
-  dobLabel: {
-    flex: 1,
-    alignSelf: 'flex-start',
-    top: -100,
-    justifyContent: 'center',
-  },
-  dobView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: 0,
-  },
-  genderView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  dobViewItem: {
-    flex: 1,
-    margin: 0,
-    padding: 0,
-  },
   lotteryDetailsContainer: {
     padding: 20,
     backgroundColor: 'rgba(0,0,0,.1)',
     ...flex,
-  },
-  lotteryResultDetailsContainer: {
-    marginTop: 188,
-    zIndex: 0,
   },
   aboutContainer: {
     paddingHorizontal: 20,
@@ -452,18 +355,6 @@ const sharedStyles = StyleSheet.create({
     marginVertical: 20,
     paddingBottom: 50,
   },
-  innerContainer: {
-    ...flex,
-    padding: 20,
-  },
-  lotteriesContainer: {
-    ...flex,
-    justifyContent: 'center',
-    textAlign: 'center',
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    // paddingBottom: 20,
-  },
   homeLotteriesContainer: {
     paddingTop: 10,
     paddingHorizontal: 10,
@@ -473,7 +364,6 @@ const sharedStyles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    // height: '100%',
   },
   importAdContainerNoAuth: {
     paddingTop: 40,
@@ -504,30 +394,11 @@ const sharedStyles = StyleSheet.create({
   signUpContainer: {
     height: '100%',
     width: '100%',
-    // justifyContent: 'center',
     alignSelf: 'center',
-    // marginTop: 50,
-    // textAlignVertical:
-    // alignItems: 'center',
   },
   relativeConatainer: {
     position: 'relative',
   },
-  // homeLotteriesContainer: {
-  //   paddingTop: 10,
-  //   paddingHorizontal: 10,
-  //   paddingBottom: 20,
-  //   display: 'flex',
-  //   flexDirection: 'column',
-  //   width: '100%',
-  //   justifyContent: 'center',
-  //   alignItems: 'flex-start',
-  // },
-  // listViewContainer: {
-  //   // paddingTop: 10,
-  //   // paddingHorizontal: 10,
-  //   // paddingBottom: 20,
-  // },
   homeListItemMargin: {
     marginBottom: 20,
   },
@@ -537,12 +408,6 @@ const sharedStyles = StyleSheet.create({
   },
   listItemRounded: {
     borderRadius: 20,
-  },
-  listItemNoBorder: {
-    borderBottomColor: 'transparent',
-    borderBottomWidth: 0,
-    borderWidth: 0,
-    backgroundColor: 'transparent',
   },
   lotteryDetailsUsersListItemContainer: {
     marginRight: 10,
@@ -583,22 +448,9 @@ const sharedStyles = StyleSheet.create({
     borderWidth: 4,
     borderStyle: 'solid',
   },
-  lotteryDetailsUsersListItemText: {
-    fontSize: 14,
-    marginTop: 5,
-    fontWeight: '100',
-    color: 'rgba(0,0,0,.55)',
-    width: 80,
-    alignSelf: 'center',
-    textAlign: 'center',
-  },
   updateUserContainer: {
     paddingTop: 10,
     marginBottom: 50,
-  },
-  receiveLotteryContainer: {
-    paddingLeft: 10,
-    paddingRight: 10,
   },
   updatePasswordContainer: {
     marginTop: 50,
@@ -619,12 +471,6 @@ const sharedStyles = StyleSheet.create({
   },
   loginBtn: {
     marginTop: 20,
-  },
-  signUpBtnContainer: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    display: 'flex',
   },
   loginBtnMargin: {
     marginTop: 20,
@@ -685,8 +531,6 @@ const sharedStyles = StyleSheet.create({
   homeCardItemIconHeart: {
     padding: 0,
     margin: 0,
-    // left: 0.2,
-    // top: 1.2,
   },
   homeCardListItemRow: {
     display: 'flex',
@@ -699,9 +543,6 @@ const sharedStyles = StyleSheet.create({
     width: (windowWidth - 20 - 20) / 3,
     flexDirection: 'column',
     marginRight: 10,
-  },
-  homeCardListItemContainerSingle: {
-    marginLeft: -5,
   },
   homeCardListItemContainerNoMargin: {
     marginRight: 0,
@@ -719,22 +560,8 @@ const sharedStyles = StyleSheet.create({
   listItemNotReceivedIcon: {
     transform: [{rotate: '180deg'}],
   },
-  listItemUserImage: {
-    borderRadius: 50 / 2,
-  },
   aboutSafeViewContainer: {
-    backgroundColor: 'rgba(0,0,0,0.1)',
     justifyContent: 'center',
-  },
-  paymentSafeViewContentContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...fullWidthHeight,
-  },
-  drawerContainer: {
-    borderRadius: 20,
-    marginBottom: 20,
   },
   aboutFirstSection: {
     paddingTop: 70,
@@ -767,7 +594,6 @@ const sharedStyles = StyleSheet.create({
     color: 'rgba(0,0,0,.8)',
     backgroundColor: 'white',
     borderRadius: 20,
-    // marginBottom: 20,
     padding: 20,
     lineHeight: 20,
     display: 'flex',
@@ -876,25 +702,11 @@ const sharedStyles = StyleSheet.create({
     flexDirection: 'row',
     display: 'flex',
   },
-  lotteryResultVirtualizedListTop: {
-    flexDirection: 'row',
-    display: 'flex',
-    backgroundColor: 'white',
-    paddingVertical: 30,
-    position: 'absolute',
-    top: 55,
-    left: 0,
-    paddingHorizontal: 5,
-    zIndex: 10,
-  },
   textAlignVertical: {
     textAlignVertical: 'center',
   },
   langChecked: {
     marginHorizontal: 10,
-  },
-  homeLoading: {
-    bottom: 70,
   },
   uploadProgressRelative: {
     ...uploadProgressContainer,
@@ -921,15 +733,10 @@ const sharedStyles = StyleSheet.create({
     marginTop: -130,
     textAlign: 'center',
   },
-  uploadProgressViewContainer: {
-    width: '100%',
-    height: '100%',
-  },
   emptySearchResultsText: {
     fontWeight: '500',
     fontSize: 16,
     color: 'rgba(0,0,0,.5)',
-    // marginTop: -111,
     textAlign: 'center',
   },
   homeEmptySearchResultsView: {
@@ -948,12 +755,6 @@ const sharedStyles = StyleSheet.create({
     alignItems: 'center',
     marginTop: '40%',
   },
-  uploadProgressModalView: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   progressItem: {
     backgroundColor: 'white',
     height: 5,
@@ -965,17 +766,6 @@ const sharedStyles = StyleSheet.create({
     backgroundColor: 'lightgrey',
     height: '100%',
     borderRadius: 7,
-  },
-  uploadProgressText: {
-    fontWeight: '500',
-    marginHorizontal: 10,
-    color: 'white',
-  },
-  closeModalBtn: {
-    position: 'absolute',
-    right: 0,
-    top: 10,
-    zIndex: 100,
   },
   imageViewer: {
     backgroundColor: 'black',
@@ -1034,15 +824,6 @@ const sharedStyles = StyleSheet.create({
   lotteryDetailsPaymentBtnContainer: {
     marginBottom: 20,
   },
-  paymentTitle: {
-    marginLeft: -20,
-    color: '#5014e5',
-    textShadowColor: 'white',
-    textShadowRadius: 1,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 26,
-  },
   userJoinedLotteryCountContainer: {
     backgroundColor: 'red',
     padding: 2,
@@ -1057,10 +838,6 @@ const sharedStyles = StyleSheet.create({
   },
   userJoinedLotteryCountText: {
     color: 'white',
-  },
-  uploadProgressView: {
-    width: '100%',
-    marginHorizontal: 20,
   },
   animatedImage: {
     position: 'absolute',
@@ -1132,9 +909,6 @@ const sharedStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: -100,
-  },
-  successConfirmationToolbar: {
-    backgroundColor: 'white',
   },
   successConfirmationIcon: {
     marginBottom: 20,
@@ -1249,7 +1023,6 @@ const sharedStyles = StyleSheet.create({
     height: 70,
   },
   chatListView: {
-    // paddingTop: 40,
     paddingBottom: 20,
     paddingLeft: 20,
     paddingRight: 20,
@@ -1286,9 +1059,6 @@ const sharedStyles = StyleSheet.create({
     borderColor: 'rgba(0,0,0,0.1)',
     textAlign: 'center',
     marginBottom: 20,
-  },
-  verificationCodeFocusCell: {
-    borderColor: '#000',
   },
   resendCodeButtonText: {
     color: 'rgba(0,0,0,.6)',

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, Text, TextInput, View} from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './chat.style';
 import {IconToggle, Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {loadingPopup} from '../Loading';
@@ -82,28 +82,30 @@ const ChatModal = props => {
   const getItem = (data, index) => data[index];
   const getItemCount = () => conversation.length;
   const getItemKey = item => item.id;
-  const renderListItem = ({item, index}) => (
-    <View
-      style={[
-        sharedStyles.chatListItem,
-        ((isWinner && item.userId === lotteryWinner.id) ||
-          (isLotteryPoster && item.userId === lotteryPoster.id)) &&
-          sharedStyles.chatListItemPullRight,
-      ]}>
+  const renderListItem = ({item}) => {
+    const pullRight =
+      (isWinner && item.userId === lotteryWinner.id) ||
+      (isLotteryPoster && item.userId === lotteryPoster.id);
+    return (
       <View
         style={[
-          sharedStyles.chatTextMessageContainer,
-          ((isWinner && item.userId === lotteryWinner.id) ||
-            (isLotteryPoster && item.userId === lotteryPoster.id)) &&
-            sharedStyles.chatTextMessagePullRight,
+          styles.chatConversationListItemViewContainer,
+          pullRight && styles.chatConversationListItemViewContainerPullRight,
         ]}>
-        <Text style={sharedStyles.chatTextMessage}>{item.message}</Text>
+        <View
+          style={[
+            styles.chatConversationTextMessageViewContainer,
+            pullRight &&
+              styles.chatConversationTextMessageViewContainerPullRight,
+          ]}>
+          <Text style={styles.chatConversationTextMessage}>{item.message}</Text>
+        </View>
+        <Text style={styles.chatConversationTextMessageDate}>
+          {formatDate(item.date, lang)}
+        </Text>
       </View>
-      <Text style={sharedStyles.chatTextMessageDate}>
-        {formatDate(item.date, lang)}
-      </Text>
-    </View>
-  );
+    );
+  };
 
   useEffect(() => {
     let showSubscription = null;
@@ -186,11 +188,10 @@ const ChatModal = props => {
       animationType="slide"
       onRequestClose={handleCloseModal}
       onShow={onShow}>
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.chatListView]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <Toolbar
-            style={{container: sharedStyles.toolbarContainer}}
+            style={{container: styles.toolbarContainer}}
             leftElement="arrow-back"
             centerElement={
               isWinner
@@ -202,10 +203,10 @@ const ChatModal = props => {
           {loading && loadingPopup}
           {!loading ? (
             <KeyboardAvoidingView
-              style={sharedStyles.chatListAnimatedView}
+              style={styles.chatAnimatedKeyboardAvoidingView}
               keyboardVerticalOffset={50}
               behavior={'padding'}>
-              <View style={sharedStyles.chatListContainer}>
+              <View style={styles.chatViewContainer}>
                 <VirtualizedList
                   initialNumToRender={conversation ? conversation.length : 20}
                   maxToRenderPerBatch={conversation ? conversation.length : 20}
@@ -215,7 +216,7 @@ const ChatModal = props => {
                   horizontal={false}
                   showsVerticalScrollIndicator={false}
                   contentContainerStyle={
-                    sharedStyles.chatVirtualizedListContainer
+                    styles.chatVirtualizedListContentContainer
                   }
                   data={conversation}
                   getItem={getItem}
@@ -225,8 +226,8 @@ const ChatModal = props => {
                   ref={virtualizedListRef}
                   ListEmptyComponent={
                     !loading ? (
-                      <View style={sharedStyles.emptySearchResultsView}>
-                        <Text style={sharedStyles.emptySearchResultsText}>
+                      <View style={styles.emptyChatViewContainer}>
+                        <Text style={styles.emptyChatViewContainerText}>
                           {chatText[lang].emptyChat}
                         </Text>
                       </View>
@@ -234,9 +235,9 @@ const ChatModal = props => {
                   }
                 />
               </View>
-              <View style={sharedStyles.chatBottomToolbar}>
+              <View style={styles.chatBottomToolbar}>
                 <TextInput
-                  style={sharedStyles.chatMessageInput}
+                  style={styles.chatMessageTextInput}
                   onChangeText={handleOnMessageChange}
                   value={chatMessage}
                   autoCorrect={false}

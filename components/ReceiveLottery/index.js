@@ -1,7 +1,7 @@
 import React, {useMemo, useState} from 'react';
 import {View, VirtualizedList, Text, SafeAreaView} from 'react-native';
 import {connect} from 'react-redux';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './receiveLottery.style';
 import {loadingPopup} from '../Loading';
 import PropTypes from 'prop-types';
 import {BottomNavigation, Toolbar} from 'react-native-material-ui';
@@ -147,15 +147,11 @@ const ReceiveLotteryModal = props => {
       onDismiss={handleCloseModal}
       onRequestClose={handleCloseModal}>
       {lotteryDetailsModal}
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <Toolbar
             style={{
-              container: [
-                sharedStyles.toolbarContainer,
-                sharedStyles.toolbarContainerPadding,
-              ],
+              container: styles.toolbarContainer,
             }}
             leftElement="arrow-back"
             centerElement={receiveLotteryTexts[lang].receiveLottery}
@@ -167,11 +163,11 @@ const ReceiveLotteryModal = props => {
           <BottomNavigation
             active={activeView}
             style={{
-              container: sharedStyles.bottomNavigationContainer,
+              container: styles.tabBarNavigationContainer,
             }}>
             <BottomNavigation.Action
               style={{
-                container: sharedStyles.receiveLotteryTabNavigationContainer,
+                container: styles.tabBarNavigationActionContainer,
                 icon: {
                   display: 'none',
                 },
@@ -188,7 +184,7 @@ const ReceiveLotteryModal = props => {
             />
             <BottomNavigation.Action
               style={{
-                container: sharedStyles.receiveLotteryTabNavigationContainer,
+                container: styles.tabBarNavigationActionContainer,
                 icon: {
                   display: 'none',
                 },
@@ -229,8 +225,8 @@ const ReceiveLotteryModal = props => {
             renderItem={renderListItem}
             ListEmptyComponent={
               !loading ? (
-                <View style={sharedStyles.emptySearchResultsView}>
-                  <Text style={sharedStyles.emptySearchResultsText}>
+                <View style={styles.emptyListViewContainer}>
+                  <Text style={styles.emptyListViewContainerText}>
                     {activeView === 'received'
                       ? receiveLotteryTexts[lang].noReceivedLotteries
                       : lotteriesTexts[lang].emptyLotteries}

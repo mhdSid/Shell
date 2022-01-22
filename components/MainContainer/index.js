@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native';
 import {BottomNavigation, Icon} from 'react-native-material-ui';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './mainContainer.style';
 import FastImage from 'react-native-fast-image';
 
 export let navigate;
@@ -59,20 +59,18 @@ const MainContainer = () => {
   navigate = handleSetActiveView;
   setUserBottomBarImage = setUserImage;
   return (
-    <SafeAreaView
-      style={[sharedStyles.fullheightView, sharedStyles.rootSafeAreaView]}>
-      <SafeAreaView
-        style={[sharedStyles.innerSafeAreaView, sharedStyles.container]}>
+    <SafeAreaView style={styles.rootSafeAreaView}>
+      <SafeAreaView style={styles.innerSafeAreaView}>
         {viewLoader[activeView]()}
       </SafeAreaView>
       <BottomNavigation
         active={activeView}
         style={{
-          container: sharedStyles.bottomNavigationContainer,
+          container: styles.bottomNavigatioBarnContainer,
         }}>
         <BottomNavigation.Action
           style={{
-            container: sharedStyles.bottomNavigationRightActionContainer,
+            container: styles.bottomNavigationBarRightActionContainer,
             icon: {
               color: activeView === 'home' ? 'white' : '#dacdfa',
             },
@@ -88,7 +86,7 @@ const MainContainer = () => {
         />
         <BottomNavigation.Action
           style={{
-            container: sharedStyles.bottomNavigationRightActionContainer,
+            container: styles.bottomNavigationBarRightActionContainer,
             icon: {
               color: activeView === 'importLottery' ? 'white' : '#dacdfa',
             },
@@ -104,7 +102,7 @@ const MainContainer = () => {
         />
         <BottomNavigation.Action
           style={{
-            container: sharedStyles.bottomNavigationRightActionContainer,
+            container: styles.bottomNavigationBarRightActionContainer,
             icon: {
               color: activeView === 'lotteries' ? 'white' : '#dacdfa',
             },
@@ -120,7 +118,7 @@ const MainContainer = () => {
         />
         <BottomNavigation.Action
           style={{
-            container: sharedStyles.bottomNavigationRightActionContainer,
+            container: styles.bottomNavigationBarRightActionContainer,
             icon: {
               color: activeView === 'chat' ? 'white' : '#dacdfa',
             },
@@ -136,7 +134,7 @@ const MainContainer = () => {
         />
         <BottomNavigation.Action
           style={{
-            container: sharedStyles.bottomNavigationRightActionContainer,
+            container: styles.bottomNavigationBarRightActionContainer,
             icon: {
               color: activeView === 'profile' ? 'white' : '#dacdfa',
             },
@@ -150,7 +148,7 @@ const MainContainer = () => {
             userImage ? (
               <>
                 <FastImage
-                  style={sharedStyles.bottomBarUserImage}
+                  style={styles.bottomNavigationBarUserImage}
                   source={{
                     uri: userImage,
                     priority: FastImage.priority.high,
