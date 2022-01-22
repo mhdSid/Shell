@@ -367,7 +367,7 @@ const SearchBox = props => {
               onPress={handleSearchPress}
             />
           </View>
-          <View style={styles.s}>
+          <View style={styles.searchBoxSectionBlockDivisionMarginLeft}>
             <Button
               disabled={!searchEventFired}
               raised={true}
