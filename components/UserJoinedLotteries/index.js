@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {View, VirtualizedList, Text} from 'react-native';
 import {connect} from 'react-redux';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './userJoinedLotteries.style';
 import NoAuth from '../NoAuth';
 import isUndefined from 'lodash/isUndefined';
 import {Loading, loadingPopup} from '../Loading';
@@ -162,9 +162,9 @@ const Lotteries = props => {
   }
 
   return (
-    <View style={sharedStyles.fullheightView}>
+    <View style={styles.userJoinedLotteriesViewContainer}>
       <Toolbar
-        style={{container: sharedStyles.toolbarContainer}}
+        style={{container: styles.toolbarContainer}}
         centerElement={lotteriesTexts[lang].lotteries}
         rightElement={isCard ? 'view-list' : 'view-comfy'}
         onRightElementPress={changeViewStyle}
@@ -189,17 +189,15 @@ const Lotteries = props => {
         horizontal={false}
         ListEmptyComponent={
           !loading ? (
-            <View style={sharedStyles.emptySearchResultsView}>
-              <Text style={sharedStyles.emptySearchResultsText}>
+            <View style={styles.emptyListViewContainer}>
+              <Text style={styles.emptyListViewContainerText}>
                 {lotteriesTexts[lang].emptyLotteries}
               </Text>
             </View>
           ) : null
         }
         contentContainerStyle={
-          isCard
-            ? sharedStyles.homeLotteriesContainer
-            : sharedStyles.listViewContainer
+          isCard && styles.virtualizedListCardItemContentContainer
         }
         showsVerticalScrollIndicator={false}
         data={

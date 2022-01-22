@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, ScrollView, View, Text} from 'react-native';
 import {connect} from 'react-redux';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './settings.style';
 import {Toolbar, Drawer, Icon} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {setLang} from '../../redux/Settings/actions';
@@ -83,23 +83,21 @@ const Settings = props => {
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
       {settingsModal && settingsModals[settingsModal]()}
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <Toolbar
-            style={{container: sharedStyles.toolbarContainer}}
+            style={{container: styles.toolbarContainer}}
             leftElement="arrow-back"
             centerElement={settings[lang].settings}
             onLeftElementPress={handleCloseModal}
           />
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={sharedStyles.settingsView}>
+            <View style={styles.scrollViewContainer}>
               <Drawer>
                 <Drawer.Section title={settings[lang].language} />
                 <Drawer.Section
                   style={{
-                    container: sharedStyles.settingsDrawerLanguageSection,
-                    icon: sharedStyles.langIcon,
+                    container: styles.drawerSectionContainer,
                   }}
                   items={[
                     {
@@ -107,16 +105,12 @@ const Settings = props => {
                       icon: <Flag id={'US'} width={30} height={30} />,
                       value:
                         lang === settings[lang].en ? (
-                          <View
-                            style={[
-                              sharedStyles.flexRow,
-                              sharedStyles.textAlignVertical,
-                            ]}>
-                            <Text style={sharedStyles.appText}>
+                          <View style={styles.listItemRowViewContainer}>
+                            <Text style={styles.listItemText}>
                               {settings[lang].english}
                             </Text>
                             <Icon
-                              style={sharedStyles.langChecked}
+                              style={styles.langIconChecked}
                               color="green"
                               name="check"
                               size={15}
@@ -132,12 +126,12 @@ const Settings = props => {
                       icon: <Flag id={'JP'} width={30} height={30} />,
                       value:
                         lang === settings[lang].jp ? (
-                          <View style={sharedStyles.flexRow}>
-                            <Text style={sharedStyles.appText}>
+                          <View style={styles.listItemRowViewContainer}>
+                            <Text style={styles.listItemText}>
                               {settings[lang].japanese}
                             </Text>
                             <Icon
-                              style={sharedStyles.langChecked}
+                              style={styles.langIconChecked}
                               color="green"
                               name="check"
                               size={15}
@@ -153,8 +147,7 @@ const Settings = props => {
                 <Drawer.Section title={settings[lang].privacy} />
                 <Drawer.Section
                   style={{
-                    container: sharedStyles.settingsDrawerLanguageSection,
-                    icon: sharedStyles.langIcon,
+                    container: styles.drawerSectionContainer,
                   }}
                   items={[
                     // {
@@ -194,8 +187,7 @@ const Settings = props => {
                     <Drawer.Section title={settings[lang].security} />
                     <Drawer.Section
                       style={{
-                        container: sharedStyles.settingsDrawerLanguageSection,
-                        icon: sharedStyles.langIcon,
+                        container: styles.drawerSectionContainer,
                       }}
                       items={[
                         {
@@ -219,7 +211,7 @@ const Settings = props => {
                   items={[
                     {
                       value: (
-                        <Text style={sharedStyles.appText}>{pkg.version}</Text>
+                        <Text style={styles.listItemText}>{pkg.version}</Text>
                       ),
                     },
                   ]}

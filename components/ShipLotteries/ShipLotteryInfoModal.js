@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, ScrollView, Text, View} from 'react-native';
-import sharedStyles, {stepImageWidth} from '../../assets/styles/sharedStyles';
+import styles, {stepImageWidth} from './shipLotteryInfoModal.style';
 import {Button, Icon, Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {loadingPopup} from '../Loading';
@@ -111,11 +111,10 @@ const ShipLotteryInfoModal = props => {
       onRequestClose={handleCloseModal}
       onShow={onShow}
       onDismiss={handleCloseModal}>
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <Toolbar
-            style={{container: sharedStyles.toolbarContainer}}
+            style={{container: styles.toolbarContainer}}
             leftElement="arrow-back"
             centerElement={shipLotteryTexts[lang].shipLottery}
             onLeftElementPress={handleCloseModal}
@@ -135,11 +134,11 @@ const ShipLotteryInfoModal = props => {
           {!loading && lotteryWinnerData ? (
             <>
               <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={sharedStyles.lotteryShipReceiveStepsContainer}>
-                  <View style={sharedStyles.lotteryShipReceiveStep}>
+                <View style={styles.topStepsViewContainer}>
+                  <View style={styles.topStepsSectionBlockContainer}>
                     {user.image ? (
                       <FastImage
-                        style={sharedStyles.stepImage}
+                        style={styles.topStepsSectionBlockContainerImage}
                         source={{
                           uri: user.image,
                           priority: FastImage.priority.high,
@@ -152,9 +151,9 @@ const ShipLotteryInfoModal = props => {
                     )}
                   </View>
                   <Icon name="arrow-forward" />
-                  <View style={sharedStyles.lotteryShipReceiveStep}>
+                  <View style={styles.topStepsSectionBlockContainer}>
                     <FastImage
-                      style={sharedStyles.stepImage}
+                      style={styles.topStepsSectionBlockContainerImage}
                       source={{
                         uri: shipLotteryDetails.images[0],
                         priority: FastImage.priority.high,
@@ -164,10 +163,10 @@ const ShipLotteryInfoModal = props => {
                     />
                   </View>
                   <Icon name="arrow-forward" />
-                  <View style={sharedStyles.lotteryShipReceiveStep}>
+                  <View style={styles.topStepsSectionBlockContainer}>
                     {lotteryWinnerData.image ? (
                       <FastImage
-                        style={sharedStyles.stepImage}
+                        style={styles.topStepsSectionBlockContainerImage}
                         source={{
                           uri: lotteryWinnerData.image,
                           priority: FastImage.priority.high,
@@ -182,7 +181,7 @@ const ShipLotteryInfoModal = props => {
                       primary
                       raised
                       style={{
-                        container: sharedStyles.stepButton,
+                        container: styles.topStepsSectionBlockContainerButton,
                       }}
                       icon={'chat'}
                       text={'Chat'}
@@ -190,121 +189,119 @@ const ShipLotteryInfoModal = props => {
                     />
                   </View>
                 </View>
-                <View style={sharedStyles.shipReceiveLotteryInfoContainer}>
+                <View style={styles.scrollViewContainer}>
                   <Icon name="notifications-active" color="black" />
-                  <Text style={sharedStyles.receiveLotteryAnnouncement}>
+                  <Text style={styles.receiveLotteryAnnouncementText}>
                     {shipLotteryTexts[lang].announcement}
                   </Text>
-                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                  <View style={styles.iconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="dns" />
-                    <Text style={sharedStyles.userDetailsText}>
+                    <Text style={styles.iconText}>
                       {lotteryDetailsTexts[lang].name}
                     </Text>
                   </View>
-                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                    <Text style={sharedStyles.aboutFirstSectionText}>
-                      {name}
-                    </Text>
+                  <View style={styles.sectionBlockContainer}>
+                    <Text style={styles.sectionBlockContainerText}>{name}</Text>
                   </View>
-                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                  <View style={styles.iconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="description" />
-                    <Text style={sharedStyles.userDetailsText}>
+                    <Text style={styles.iconText}>
                       {lotteryDetailsTexts[lang].description}
                     </Text>
                   </View>
-                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                    <Text style={sharedStyles.aboutFirstSectionText}>
+                  <View style={styles.sectionBlockContainer}>
+                    <Text style={styles.sectionBlockContainerText}>
                       {description}
                     </Text>
                   </View>
-                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                  <View style={styles.iconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="exposure" />
-                    <Text style={sharedStyles.userDetailsText}>
+                    <Text style={styles.iconText}>
                       {lotteryDetailsTexts[lang].condition}
                     </Text>
                   </View>
-                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                    <Text style={sharedStyles.aboutFirstSectionText}>
+                  <View style={styles.sectionBlockContainer}>
+                    <Text style={styles.sectionBlockContainerText}>
                       {condition}
                     </Text>
                   </View>
-                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                  <View style={styles.iconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="class" />
-                    <Text style={sharedStyles.userDetailsText}>
+                    <Text style={styles.iconText}>
                       {lotteryDetailsTexts[lang].category}
                     </Text>
                   </View>
-                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                    <Text style={sharedStyles.aboutFirstSectionText}>
+                  <View style={styles.sectionBlockContainer}>
+                    <Text style={styles.sectionBlockContainerText}>
                       {category}
                     </Text>
                   </View>
-                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                  <View style={styles.iconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="local-atm" />
-                    <Text style={sharedStyles.userDetailsText}>
+                    <Text style={styles.iconText}>
                       {lotteryDetailsTexts[lang].totalPrice}
                     </Text>
                   </View>
-                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                  <View style={styles.sectionBlockContainer}>
                     <Text
                       style={
-                        sharedStyles.aboutFirstSectionText
+                        styles.sectionBlockContainerText
                       }>{`${currency} ${price}`}</Text>
                   </View>
-                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                  <View style={styles.iconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="credit-card" />
-                    <Text style={sharedStyles.userDetailsText}>
+                    <Text style={styles.iconText}>
                       {lotteryDetailsTexts[lang].collectedPrice}
                     </Text>
                   </View>
-                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                  <View style={styles.sectionBlockContainer}>
                     <Text
                       style={
-                        sharedStyles.aboutFirstSectionText
+                        styles.sectionBlockContainerText
                       }>{`${currency} ${currentCollectedPrice || 0}`}</Text>
                   </View>
-                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                  <View style={styles.iconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="monetization-on" />
-                    <Text style={sharedStyles.userDetailsText}>
+                    <Text style={styles.iconText}>
                       {lotteryDetailsTexts[lang].payToWin}
                     </Text>
                   </View>
-                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
+                  <View style={styles.sectionBlockContainer}>
                     <Text
                       style={
-                        sharedStyles.aboutFirstSectionText
+                        styles.sectionBlockContainerText
                       }>{`${currency} ${'100'}`}</Text>
                   </View>
-                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                  <View style={styles.iconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="today" />
-                    <Text style={sharedStyles.userDetailsText}>
+                    <Text style={styles.iconText}>
                       {lotteryDetailsTexts[lang].publishDate}
                     </Text>
                   </View>
-                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                    <Text style={sharedStyles.aboutFirstSectionText}>
+                  <View style={styles.sectionBlockContainer}>
+                    <Text style={styles.sectionBlockContainerText}>
                       {formatDate(publishDate, lang)}
                     </Text>
                   </View>
-                  <View style={sharedStyles.userDetailsIconTextContainer}>
+                  <View style={styles.iconTextContainer}>
                     <Icon color="rgba(0,0,0,.55)" name="pin-drop" />
-                    <Text style={sharedStyles.userDetailsText}>
+                    <Text style={styles.iconText}>
                       {lotteryDetailsTexts[lang].location}
                     </Text>
                   </View>
-                  <View style={sharedStyles.aboutFirstSectionTextContainer}>
-                    <Text style={sharedStyles.aboutFirstSectionText}>
+                  <View style={styles.sectionBlockContainer}>
+                    <Text style={styles.sectionBlockContainerText}>
                       {`${country}, ${prefecture}, ${city}`}
                     </Text>
                   </View>
                 </View>
               </ScrollView>
-              <View style={sharedStyles.lotteryDetailsBottomToolbar}>
+              <View style={styles.bottomToolbarViewContainer}>
                 <Button
                   primary
                   raised
                   style={{
-                    container: sharedStyles.bottomToolbarActionButtonContainer,
+                    container: styles.markAsShippedButtonContainer,
                   }}
                   icon={'markunread-mailbox'}
                   text={shipLotteryTexts[lang].markAsShipped}

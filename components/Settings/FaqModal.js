@@ -1,7 +1,7 @@
 import React from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, ScrollView, View} from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './faqModal.style';
 import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {settings} from '../../Constants/Texts';
@@ -14,11 +14,10 @@ const FaqModal = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <Toolbar
-            style={{container: sharedStyles.toolbarContainer}}
+            style={{container: styles.toolbarContainer}}
             leftElement="arrow-back"
             centerElement={settings[lang].faq}
             onLeftElementPress={handleCloseModal}

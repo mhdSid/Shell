@@ -8,7 +8,7 @@ import {
   Text,
   KeyboardAvoidingView,
 } from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './updateUser.style';
 import {Toolbar, Icon, Button} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import ImagePicker from 'react-native-image-picker';
@@ -125,11 +125,10 @@ const UpdateUser = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <Toolbar
-            style={{container: sharedStyles.toolbarContainerPaddingRight}}
+            style={{container: styles.toolbarContainer}}
             leftElement="arrow-back"
             onLeftElementPress={handleCloseModal}
             centerElement={updateUserr[lang].updateProfile}
@@ -140,25 +139,18 @@ const UpdateUser = props => {
             enabled
             keyboardVerticalOffset={25}>
             <ScrollView showsVerticalScrollIndicator={false}>
-              <View
-                style={[
-                  sharedStyles.loginContainer,
-                  sharedStyles.updateUserContainer,
-                ]}>
-                <View style={sharedStyles.mobileContainer}>
-                  <View style={sharedStyles.userImageBtnContainer}>
+              <View style={styles.scrollViewContainer}>
+                <View style={styles.sectionBlockContainer}>
+                  <View style={styles.userImageButtonViewContainer}>
                     <TouchableBounce
                       onPress={handleChoosePhoto}
-                      style={[
-                        sharedStyles.imageBtn,
-                        sharedStyles.updateUserImgBtn,
-                      ]}>
+                      style={styles.userImageButtonContainer}>
                       {!image && !user.image ? (
                         <Icon name="image" size={35} color="white" />
                       ) : null}
                       {image || user.image ? (
                         <FastImage
-                          style={[sharedStyles.adImage, sharedStyles.userImage]}
+                          style={styles.userImage}
                           source={{
                             uri: image || user.image,
                             priority: FastImage.priority.high,
@@ -168,15 +160,13 @@ const UpdateUser = props => {
                         />
                       ) : null}
                     </TouchableBounce>
-                    <Text style={sharedStyles.chooseProfileImageText}>
+                    <Text style={styles.chooseProfileImageText}>
                       {updateUserr[lang].choosePhoto}
                     </Text>
                   </View>
                 </View>
-                <Text style={sharedStyles.label}>
-                  {profile[lang].prefecture}
-                </Text>
-                <View style={sharedStyles.dropdownView}>
+                <Text style={styles.label}>{profile[lang].prefecture}</Text>
+                <View style={styles.dropdownView}>
                   <Dropdown
                     baseColor={'rgba(0,0,0,0.3)'}
                     label={profile[lang].enterPrefecture}
@@ -186,8 +176,8 @@ const UpdateUser = props => {
                     value={prefecture}
                   />
                 </View>
-                <Text style={sharedStyles.label}>{profile[lang].city}</Text>
-                <View style={sharedStyles.dropdownView}>
+                <Text style={styles.label}>{profile[lang].city}</Text>
+                <View style={styles.dropdownView}>
                   <Dropdown
                     label={profile[lang].enterCity}
                     baseColor={'rgba(0,0,0,0.3)'}
@@ -197,12 +187,12 @@ const UpdateUser = props => {
                     value={city}
                   />
                 </View>
-                <View style={sharedStyles.updateUserSbmtBtn}>
+                <View style={styles.updateUserButtonViewContainer}>
                   <Button
                     disabled={loading || !userDataChanged}
                     raised={true}
                     primary
-                    style={{container: sharedStyles.mainButtonContainer}}
+                    style={{container: styles.updateUserButtonContainer}}
                     text={updateUserr[lang].update}
                     onPress={handleUpdateUser}
                   />

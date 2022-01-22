@@ -239,7 +239,7 @@ const HomeComponent = props => {
       {/* <AdMobBanner
           adSize="fullBanner"
           adUnitID="ca-app-pub-5703846930890914/6105801245"
-          style={sharedStyles.adMobBanner}
+          style={styles.adMobBanner}
         /> */}
       {searchEventFired ? (
         <Button

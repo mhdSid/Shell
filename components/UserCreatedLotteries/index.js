@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, View, VirtualizedList} from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './userCreatedLotteries.style';
 import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {profile} from '../../constants/Texts';
@@ -182,11 +182,10 @@ const UserCreatedLotteries = props => {
       onShow={fetchMyLotteries}
       onRequestClose={handleCloseModal}>
       {lotteryDetailsModal}
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <Toolbar
-            style={{container: sharedStyles.toolbarContainer}}
+            style={{container: styles.toolbarContainer}}
             leftElement="arrow-back"
             centerElement={profile[lang].myCreatedLotteries}
             onLeftElementPress={handleCloseModal}
@@ -221,8 +220,8 @@ const UserCreatedLotteries = props => {
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
               !loading ? (
-                <View style={sharedStyles.emptySearchResultsView}>
-                  <Text style={sharedStyles.emptySearchResultsText}>
+                <View style={styles.emptyListViewContainer}>
+                  <Text style={styles.emptyListViewContainerText}>
                     {lotteriesTexts[lang].emptyLotteries}
                   </Text>
                 </View>
@@ -236,7 +235,7 @@ const UserCreatedLotteries = props => {
             getItem={getItem}
             getItemCount={isCard ? getRowItemCount : getItemCount}
             contentContainerStyle={
-              isCard && sharedStyles.homeLotteriesContainer
+              isCard && styles.virtualizedListCardItemContentContainer
             }
             keyExtractor={isCard ? getRowItemKey : getKeyExtractor}
             renderItem={isCard ? renderCardListItemRow : renderItem}

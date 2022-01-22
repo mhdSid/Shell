@@ -8,7 +8,7 @@ import {
   Text,
   KeyboardAvoidingView,
 } from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './changePassword.style';
 import {Toolbar, Button} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {TextField} from 'react-native-material-textfield';
@@ -113,11 +113,10 @@ const ChangePassword = props => {
 
   return (
     <Modal animationType="slide" onRequestClose={handleCloseModal}>
-      <SafeAreaView
-        style={[sharedStyles.rootSafeAreaView, sharedStyles.container]}>
-        <View style={sharedStyles.innerSafeAreaView}>
+      <SafeAreaView style={styles.rootSafeAreaView}>
+        <View style={styles.innerSafeAreaView}>
           <Toolbar
-            style={{container: sharedStyles.toolbarContainerPaddingRight}}
+            style={{container: styles.toolbarContainer}}
             leftElement="arrow-back"
             centerElement={settings[lang].changePassword}
             onLeftElementPress={handleCloseModal}
@@ -128,14 +127,9 @@ const ChangePassword = props => {
             enabled
             keyboardVerticalOffset={25}>
             <ScrollView showsVerticalScrollIndicator={false}>
-              <View
-                style={[
-                  sharedStyles.loginContainer,
-                  sharedStyles.updateUserContainer,
-                  sharedStyles.updatePasswordContainer,
-                ]}>
-                <View style={sharedStyles.mobileContainer}>
-                  <Text style={sharedStyles.label}>
+              <View style={styles.scrollViewContainer}>
+                <View style={styles.sectionBlockContainer}>
+                  <Text style={styles.label}>
                     {updateUserr[lang].currentPassword}
                   </Text>
                   <TextField
@@ -153,8 +147,8 @@ const ChangePassword = props => {
                     error={errors.currentPassword}
                   />
                 </View>
-                <View style={sharedStyles.mobileContainer}>
-                  <Text style={sharedStyles.label}>
+                <View style={styles.sectionBlockContainer}>
+                  <Text style={styles.label}>
                     {updateUserr[lang].newPassword}
                   </Text>
                   <TextField
@@ -172,13 +166,13 @@ const ChangePassword = props => {
                     error={errors.newPassword}
                   />
                 </View>
-                <View style={sharedStyles.updateUserSbmtBtn}>
+                <View style={styles.changePasswordButtonViewContainer}>
                   <Button
                     disabled={
                       loading || !(currentPasswordChanged && newPasswordChanged)
                     }
                     style={{
-                      container: sharedStyles.mainButtonContainer,
+                      container: styles.mainButtonContainer,
                     }}
                     raised={true}
                     primary

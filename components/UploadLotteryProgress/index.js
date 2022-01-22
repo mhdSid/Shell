@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getProgressItemsSelector} from './Selectors';
 import {View} from 'react-native';
-import sharedStyles from '../../assets/styles/sharedStyles';
+import styles from './uploadLotteryProgress.style';
 
 const UploadAdProgress = props => {
   const {progressItems, relative, id} = props;
@@ -18,13 +18,13 @@ const UploadAdProgress = props => {
     <View
       style={
         relative
-          ? sharedStyles.uploadProgressRelative
-          : sharedStyles.uploadProgressAbsolute
+          ? styles.uploadProgressRelativeContainer
+          : styles.uploadProgressAbsoluteContainer
       }>
-      <View style={sharedStyles.progressItem}>
+      <View style={styles.progressItemViewContainer}>
         <View
           style={[
-            sharedStyles.progressItemInner,
+            styles.progressItemInner,
             {width: `${progressItem.totalProgress}%`},
           ]}
         />

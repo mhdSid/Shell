@@ -17,7 +17,7 @@ const toolbarStyles = {
   zIndex: 1555,
 };
 
-const sharedStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   rootSafeAreaView: {
     paddingTop: 40,
     paddingBottom: 20,
@@ -93,4 +93,4 @@ const sharedStyles = StyleSheet.create({
   },
 });
 
-export default sharedStyles;
+export default styles;
