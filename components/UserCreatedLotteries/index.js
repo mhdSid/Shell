@@ -108,6 +108,7 @@ const UserCreatedLotteries = props => {
       item={selectedLottery}
     />
   );
+  const lotteryResultModal = lotteryResult && <LotteryResultModal />;
   const handleFilterChange = filterValue => {
     if (
       !filterValue ||
@@ -182,6 +183,7 @@ const UserCreatedLotteries = props => {
       onShow={fetchMyLotteries}
       onRequestClose={handleCloseModal}>
       {lotteryDetailsModal}
+      {lotteryResultModal}
       <SafeAreaView style={styles.rootSafeAreaView}>
         <View style={styles.innerSafeAreaView}>
           <Toolbar
@@ -192,15 +194,14 @@ const UserCreatedLotteries = props => {
             rightElement={isCard ? 'view-list' : 'view-comfy'}
             onRightElementPress={changeViewStyle}
           />
-          {lotteryResult && <LotteryResultModal />}
+          {userCreatedLotteries && userCreatedLotteries.length ? (
+            <Filter lang={lang} onFilterChange={handleFilterChange} />
+          ) : null}
           {(!userCreatedLotteries ||
             (userCreatedLotteries && userCreatedLotteries.length === 0)) &&
           loading
             ? loadingPopup
             : null}
-          {userCreatedLotteries && userCreatedLotteries.length ? (
-            <Filter lang={lang} onFilterChange={handleFilterChange} />
-          ) : null}
           <VirtualizedList
             initialNumToRender={10}
             windowSize={2}

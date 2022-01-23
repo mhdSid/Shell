@@ -152,6 +152,7 @@ const Lotteries = props => {
   const renderCardListItemRow = ({item}) => (
     <CardListItemRow data={item} onItemPress={handleCardItemPress} />
   );
+  const lotteryResultModal = lotteryResult && <LotteryResultModal />;
 
   if (isUndefined(loggedIn) && isUndefined(user)) {
     return Loading;
@@ -163,21 +164,21 @@ const Lotteries = props => {
 
   return (
     <View style={styles.userJoinedLotteriesViewContainer}>
+      {lotteryResultModal}
       <Toolbar
         style={{container: styles.toolbarContainer}}
         centerElement={lotteriesTexts[lang].lotteries}
         rightElement={isCard ? 'view-list' : 'view-comfy'}
         onRightElementPress={changeViewStyle}
       />
-      {lotteryResult && <LotteryResultModal />}
+      {userJoinedLotteries && userJoinedLotteries.length ? (
+        <Filter lang={lang} onFilterChange={handleFilterChange} />
+      ) : null}
       {(!userJoinedLotteries ||
         (userJoinedLotteries && userJoinedLotteries.length === 0)) &&
       loading
         ? loadingPopup
         : null}
-      {userJoinedLotteries && userJoinedLotteries.length ? (
-        <Filter lang={lang} onFilterChange={handleFilterChange} />
-      ) : null}
       <VirtualizedList
         initialNumToRender={10}
         windowSize={2}

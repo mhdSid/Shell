@@ -139,6 +139,9 @@ const ReceiveLotteryModal = props => {
       setActiveView(type);
     };
   };
+  const receiveLotteryInfoModal = isShowReceiveLotteryModal ? (
+    <ReceiveLotteryInfoModal onClose={handleReceiveLotteryModalClose} />
+  ) : null;
 
   return (
     <Modal
@@ -147,6 +150,7 @@ const ReceiveLotteryModal = props => {
       onDismiss={handleCloseModal}
       onRequestClose={handleCloseModal}>
       {lotteryDetailsModal}
+      {receiveLotteryInfoModal}
       <SafeAreaView style={styles.rootSafeAreaView}>
         <View style={styles.innerSafeAreaView}>
           <Toolbar
@@ -157,9 +161,6 @@ const ReceiveLotteryModal = props => {
             centerElement={receiveLotteryTexts[lang].receiveLottery}
             onLeftElementPress={handleCloseModal}
           />
-          {isShowReceiveLotteryModal ? (
-            <ReceiveLotteryInfoModal onClose={handleReceiveLotteryModalClose} />
-          ) : null}
           <BottomNavigation
             active={activeView}
             style={{
@@ -200,14 +201,14 @@ const ReceiveLotteryModal = props => {
               onPress={handleSetActiveView('notReceived')}
             />
           </BottomNavigation>
+          {userWonLotteries && userWonLotteries.length ? (
+            <Filter lang={lang} onFilterChange={handleFilterChange} />
+          ) : null}
           {(!userWonLotteries ||
             (userWonLotteries && userWonLotteries.length === 0)) &&
           loading
             ? loadingPopup
             : null}
-          {userWonLotteries && userWonLotteries.length ? (
-            <Filter lang={lang} onFilterChange={handleFilterChange} />
-          ) : null}
           <VirtualizedList
             initialNumToRender={10}
             windowSize={2}

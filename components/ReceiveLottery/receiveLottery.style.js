@@ -57,17 +57,21 @@ const styles = StyleSheet.create({
   },
   emptyListViewContainer: {
     width: '100%',
-    height: '89%',
+    height: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '40%',
+    marginTop: -30,
   },
   emptyListViewContainerText: {
     fontWeight: '500',
     fontSize: 16,
     color: 'rgba(0,0,0,.5)',
     textAlign: 'center',
+  },
+  virtualizedListItemContentContainer: {
+    width: '100%',
+    height: '100%',
   },
 });
 

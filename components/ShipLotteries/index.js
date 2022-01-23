@@ -141,6 +141,9 @@ const ShipLotteryModal = props => {
       setActiveView(type);
     };
   };
+  const shipLotteryInfoModal = isShowShipLotteryModal ? (
+    <ShipLotteryInfoModal onClose={handleShipLotteryModalClose} />
+  ) : null;
 
   return (
     <Modal
@@ -149,6 +152,7 @@ const ShipLotteryModal = props => {
       onDismiss={handleCloseModal}
       onRequestClose={handleCloseModal}>
       {lotteryDetailsModal}
+      {shipLotteryInfoModal}
       <SafeAreaView style={styles.rootSafeAreaView}>
         <View style={styles.innerSafeAreaView}>
           <Toolbar
@@ -159,9 +163,6 @@ const ShipLotteryModal = props => {
             centerElement={shipLotteryTexts[lang].shipLottery}
             onLeftElementPress={handleCloseModal}
           />
-          {isShowShipLotteryModal ? (
-            <ShipLotteryInfoModal onClose={handleShipLotteryModalClose} />
-          ) : null}
           <BottomNavigation
             active={activeView}
             style={{
@@ -202,15 +203,15 @@ const ShipLotteryModal = props => {
               onPress={handleSetActiveView('notShipped')}
             />
           </BottomNavigation>
+          {userCreatedWonLotteries && userCreatedWonLotteries.length ? (
+            <Filter lang={lang} onFilterChange={handleFilterChange} />
+          ) : null}
           {(!userCreatedWonLotteries ||
             (userCreatedWonLotteries &&
               userCreatedWonLotteries.length === 0)) &&
           loading
             ? loadingPopup
             : null}
-          {userCreatedWonLotteries && userCreatedWonLotteries.length ? (
-            <Filter lang={lang} onFilterChange={handleFilterChange} />
-          ) : null}
           <VirtualizedList
             initialNumToRender={10}
             windowSize={2}

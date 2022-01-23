@@ -57,11 +57,11 @@ const styles = StyleSheet.create({
   },
   emptyListViewContainer: {
     width: '100%',
-    height: '89%',
+    height: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '40%',
+    marginTop: -30,
   },
   emptyListViewContainerText: {
     fontWeight: '500',

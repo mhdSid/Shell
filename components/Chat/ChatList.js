@@ -26,8 +26,8 @@ const ChatList = props => {
   const [loading, setLoading] = useState(true);
   const [cancelHttpTag] = useState(55);
   const [
-    isShowChatCOnversationModal,
-    setIsShowChatCOnversationModal,
+    isShowChatConversationModal,
+    setIsShowChatConversationModal,
   ] = useState(false);
   const [selectedLottery, setSelectedLottery] = useState(null);
 
@@ -49,10 +49,10 @@ const ChatList = props => {
       },
       lottery: chattableLotteries[index],
     });
-    setIsShowChatCOnversationModal(true);
+    setIsShowChatConversationModal(true);
   };
   const handleChatModalClose = () => {
-    setIsShowChatCOnversationModal(false);
+    setIsShowChatConversationModal(false);
   };
   const renderListItem = ({item, index}) => (
     <ListItemCommon
@@ -105,7 +105,7 @@ const ChatList = props => {
         style={{container: styles.toolbarContainer}}
         centerElement={chatTexts[lang].chat}
       />
-      {isShowChatCOnversationModal ? (
+      {isShowChatConversationModal ? (
         <ChatModal
           onClose={handleChatModalClose}
           isWinner={selectedLottery.isWinner}

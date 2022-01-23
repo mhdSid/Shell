@@ -40,16 +40,15 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 16,
     color: 'rgba(0,0,0,.5)',
-    marginTop: -130,
     textAlign: 'center',
   },
   emptyListViewContainer: {
-    width: '100%',
     height: '100%',
+    width: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '40%',
+    marginTop: '45%',
   },
 });
 

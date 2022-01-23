@@ -10,6 +10,7 @@ import {getProgressItemsSelector} from './Selectors';
 import {VirtualizedList} from 'react-native';
 import ListItemCommon from '../Home/ListItem';
 import {getLangSelector} from '../Settings/Selectors';
+import { loadingPopup } from '../Loading';
 
 const UploadLotteryProgressModal = props => {
   const {progressItems, lang} = props;
@@ -43,28 +44,31 @@ const UploadLotteryProgressModal = props => {
             centerElement={uploadAdProgress[lang].uploading}
             onLeftElementPress={handleCloseModal}
           />
-          {Array.isArray(progressItems) && progressItems.length ? (
-            <VirtualizedList
-              initialNumToRender={5}
-              windowSize={2}
-              maxToRenderPerBatch={5}
-              updateCellsBatchingPeriod={0.0}
-              removeClippedSubviews={true}
-              refreshing={loading}
-              showsVerticalScrollIndicator={false}
-              data={progressItems}
-              getItem={getItem}
-              getItemCount={getItemCount}
-              keyExtractor={getKeyExtractor}
-              renderItem={renderItem}
-            />
-          ) : (
-            <View style={styles.emptyListViewContainer}>
-              <Text style={styles.emptyListViewContainerText}>
-                {uploadAdProgress[lang].noItems}
-              </Text>
-            </View>
-          )}
+          <VirtualizedList
+            initialNumToRender={5}
+            windowSize={2}
+            maxToRenderPerBatch={5}
+            updateCellsBatchingPeriod={0.0}
+            removeClippedSubviews={true}
+            refreshing={loading}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              loading ? (
+                loadingPopup
+              ) : (
+                <View style={styles.emptyListViewContainer}>
+                  <Text style={styles.emptyListViewContainerText}>
+                    {uploadAdProgress[lang].noItems}
+                  </Text>
+                </View>
+              )
+            }
+            data={progressItems}
+            getItem={getItem}
+            getItemCount={getItemCount}
+            keyExtractor={getKeyExtractor}
+            renderItem={renderItem}
+          />
         </View>
       </SafeAreaView>
     </Modal>
