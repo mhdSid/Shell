@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginHorizontal: 10,
   },
-  sectionContainer: {
+  sectionBlockContainer: {
     fontWeight: '500',
     color: 'rgba(0,0,0,.8)',
     backgroundColor: 'white',
@@ -72,14 +72,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },
-  sectionText: {
+  sectionBlockContainerText: {
     width: '100%',
     fontSize: 16,
     lineHeight: 22,
     fontWeight: '500',
     color: 'rgba(0,0,0,.8)',
   },
-  sectionTextMargin: {
+  sectionBlockContainerTextMargin: {
     marginBottom: 10,
   },
   sectionSeparatorContainer: {

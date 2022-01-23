@@ -165,7 +165,7 @@ const ShipLotteryModal = props => {
           <BottomNavigation
             active={activeView}
             style={{
-              container: styles.bottomNavigationContainer,
+              container: styles.tabBarNavigationContainer,
             }}>
             <BottomNavigation.Action
               style={{

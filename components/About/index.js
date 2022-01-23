@@ -29,26 +29,50 @@ const About = props => {
               <Icon color="rgba(0,0,0,.55)" name="store" />
               <Text style={styles.iconText}>{about[lang].sell}</Text>
             </View>
-            <View style={styles.sectionContainer}>
-              <Text style={[styles.sectionText, styles.sectionTextMargin]}>
+            <View style={styles.sectionBlockContainer}>
+              <Text
+                style={[
+                  styles.sectionBlockContainerText,
+                  styles.sectionBlockContainerTextMargin,
+                ]}>
                 {about[lang].howToUseFirst}
               </Text>
-              <Text style={[styles.sectionText, styles.sectionTextMargin]}>
+              <Text
+                style={[
+                  styles.sectionBlockContainerText,
+                  styles.sectionBlockContainerTextMargin,
+                ]}>
                 {about[lang].howToUseSecond}
               </Text>
-              <Text style={[styles.sectionText, styles.sectionTextMargin]}>
+              <Text
+                style={[
+                  styles.sectionBlockContainerText,
+                  styles.sectionBlockContainerTextMargin,
+                ]}>
                 {about[lang].howToUseThird}
               </Text>
-              <Text style={[styles.sectionText, styles.sectionTextMargin]}>
+              <Text
+                style={[
+                  styles.sectionBlockContainerText,
+                  styles.sectionBlockContainerTextMargin,
+                ]}>
                 {about[lang].howToUseFourth}
               </Text>
-              <Text style={[styles.sectionText, styles.sectionTextMargin]}>
+              <Text
+                style={[
+                  styles.sectionBlockContainerText,
+                  styles.sectionBlockContainerTextMargin,
+                ]}>
                 {about[lang].howToUseFifth}
               </Text>
-              <Text style={[styles.sectionText, styles.sectionTextMargin]}>
+              <Text
+                style={[
+                  styles.sectionBlockContainerText,
+                  styles.sectionBlockContainerTextMargin,
+                ]}>
                 {about[lang].howToUseSixth}
               </Text>
-              <Text style={styles.sectionText}>
+              <Text style={styles.sectionBlockContainerText}>
                 {about[lang].howToUseSeventh}
               </Text>
             </View>
@@ -59,8 +83,8 @@ const About = props => {
               <Icon color="rgba(0,0,0,.55)" name="explore" />
               <Text style={styles.iconText}>{about[lang].browse}</Text>
             </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionText}>
+            <View style={styles.sectionBlockContainer}>
+              <Text style={styles.sectionBlockContainerText}>
                 {about[lang].howtoUseEigtth}
               </Text>
             </View>
@@ -68,8 +92,8 @@ const About = props => {
               <Icon color="rgba(0,0,0,.55)" name="remove-red-eye" />
               <Text style={styles.iconText}>{about[lang].choose}</Text>
             </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionText}>
+            <View style={styles.sectionBlockContainer}>
+              <Text style={styles.sectionBlockContainerText}>
                 {about[lang].howToUseNineth}
               </Text>
             </View>
@@ -77,8 +101,8 @@ const About = props => {
               <Icon color="rgba(0,0,0,.55)" name="receipt" />
               <Text style={styles.iconText}>{about[lang].enterLottery}</Text>
             </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionText}>
+            <View style={styles.sectionBlockContainer}>
+              <Text style={styles.sectionBlockContainerText}>
                 {about[lang].howToUseTenth}
               </Text>
             </View>
@@ -86,8 +110,8 @@ const About = props => {
               <Icon color="rgba(0,0,0,.55)" name="star" />
               <Text style={styles.iconText}>{about[lang].joinLottery}</Text>
             </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionText}>
+            <View style={styles.sectionBlockContainer}>
+              <Text style={styles.sectionBlockContainerText}>
                 {about[lang].howToUseEleventh}
               </Text>
             </View>

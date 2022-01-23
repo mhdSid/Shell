@@ -121,6 +121,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },
+  sectionBlockContainerMargin: {
+    marginBottom: 50,
+  },
   sectionBlockContainerText: {
     width: '100%',
     fontSize: 16,

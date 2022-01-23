@@ -235,7 +235,7 @@ const Payment = props => {
             <View
               style={[
                 styles.sectionBlockContainer,
-                styles.currentCartInvoiceItemContainerMargin,
+                styles.sectionBlockContainerMargin,
               ]}>
               <Text style={styles.sectionBlockContainerText}>
                 {aboutTexts[lang].howToUseEleventh}
