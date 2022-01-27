@@ -6,7 +6,7 @@ import {navigate} from '../MainContainer';
 import {noAuth, loginSignup} from '../../constants/Texts';
 import PropTypes from 'prop-types';
 
-const NoAuth = props => {
+const NoAuth = React.memo(props => {
   const {lang} = props;
   const navigateToAuth = () => {
     navigate('profile')();
@@ -25,7 +25,7 @@ const NoAuth = props => {
       </View>
     </View>
   );
-};
+});
 
 NoAuth.propTypes = {
   lang: PropTypes.string,

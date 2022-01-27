@@ -49,6 +49,9 @@ const styles = StyleSheet.create({
   userProfileUserInfoText: {
     color: '#d9d9d9',
   },
+  personalSectionContainer: {
+    marginBottom: 20,
+  },
 });
 
 export default styles;

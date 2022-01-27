@@ -19,7 +19,7 @@ import {invoke} from 'lodash';
 import {handleResendVerificationCode} from '../../redux/Auth/ResendVerificationCode';
 import {getLangSelector} from '../Settings/Selectors';
 
-const VerifyUserCode = props => {
+const VerifyUserCode = React.memo(props => {
   const {email, passwordHash, lang} = props;
   const [verificationCode, setVerificationCode] = useState('');
   const [loading, setLoading] = useState(false);
@@ -131,7 +131,7 @@ const VerifyUserCode = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 VerifyUserCode.propTypes = {
   email: PropTypes.string,

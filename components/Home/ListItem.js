@@ -36,7 +36,7 @@ class ListItemCommon extends Component {
   constructor() {
     super();
   }
-  UNSAFE_shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps) {
     if (
       JSON.stringify(nextProps.item).toString() !==
         JSON.stringify(this.props.item).toString() ||
@@ -163,6 +163,12 @@ class ListItemCommon extends Component {
           style={{
             container: {
               ...(this.props.rounded && styles.listItemContainerRounded),
+            },
+            leftElementContainer: {
+              width: 75,
+              margin: 0,
+              padding: 0,
+              left: -7,
             },
           }}
           leftElement={

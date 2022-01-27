@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: -30,
+    marginTop: '40%',
   },
   emptyListViewContainerText: {
     fontWeight: '500',

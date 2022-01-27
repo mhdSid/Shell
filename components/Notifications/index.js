@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import {loadingPopup} from '../Loading';
 import {notifications} from '../../constants/Texts';
 
-const Notifications = props => {
+const Notifications = React.memo(props => {
   const {lang} = props;
   const [loading] = useState(false);
 
@@ -33,7 +33,7 @@ const Notifications = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 Notifications.propTypes = {
   onClose: PropTypes.func,

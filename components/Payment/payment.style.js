@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
     color: 'white',
     height: 50,
     fontWeight: 'bold',
+    borderRadius: 50,
   },
   iconTextContainer: {
     display: 'flex',
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   iconText: {
-    color: 'black',
+    color: 'rgba(0,0,0,.55)',
     fontWeight: 'bold',
     fontSize: 20,
     marginHorizontal: 10,

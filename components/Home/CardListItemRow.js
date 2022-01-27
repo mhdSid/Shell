@@ -12,7 +12,7 @@ export default class CardListItemRow extends Component {
   constructor() {
     super();
   }
-  UNSAFE_shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps) {
     if (
       JSON.stringify(nextProps.data).toString() !==
       JSON.stringify(this.props.data).toString()
@@ -23,7 +23,13 @@ export default class CardListItemRow extends Component {
   }
   render() {
     return (
-      <View style={styles.cardListItemRowRootViewContainer}>
+      <View
+        style={[
+          styles.cardListItemRowRootViewContainer,
+          (this.props.data.data.length === 1 ||
+            this.props.data.data.length === 2) &&
+            styles.cardListItemFlexStart,
+        ]}>
         {this.props.data.data.map((listItem, index, array) => (
           <View
             key={`${listItem.id + index}`}

@@ -21,8 +21,8 @@ import {isUndefined} from 'lodash';
 import NoAuth from '../NoAuth';
 import {getLangSelector} from '../Settings/Selectors';
 
-const ChatList = props => {
-  const {chattableLotteries, authUser, lang} = props;
+const ChatList = React.memo(props => {
+  const {chattableLotteries, authUser, lang, captureEvent} = props;
   const [loading, setLoading] = useState(true);
   const [cancelHttpTag] = useState(55);
   const [
@@ -82,6 +82,25 @@ const ChatList = props => {
       cancelTag: cancelHttpTag,
     });
   };
+
+  const chatModal = isShowChatConversationModal ? (
+    <ChatModal
+      onClose={handleChatModalClose}
+      isWinner={selectedLottery.isWinner}
+      isLotteryPoster={selectedLottery.isLotteryPoster}
+      lotteryWinner={selectedLottery.lotteryWinner}
+      lotteryPoster={selectedLottery.lotteryPoster}
+      authUserId={selectedLottery.authUserId}
+      lottery={selectedLottery.lottery}
+    />
+  ) : null;
+
+  useEffect(() => {
+    if (authUser) {
+      fetchLotteries();
+    }
+  }, [captureEvent]);
+
   useEffect(() => {
     if (authUser) {
       fetchLotteries();
@@ -101,21 +120,11 @@ const ChatList = props => {
 
   return (
     <View style={styles.chatListViewContainer}>
+      {chatModal}
       <Toolbar
         style={{container: styles.toolbarContainer}}
         centerElement={chatTexts[lang].chat}
       />
-      {isShowChatConversationModal ? (
-        <ChatModal
-          onClose={handleChatModalClose}
-          isWinner={selectedLottery.isWinner}
-          isLotteryPoster={selectedLottery.isLotteryPoster}
-          lotteryWinner={selectedLottery.lotteryWinner}
-          lotteryPoster={selectedLottery.lotteryPoster}
-          authUserId={selectedLottery.authUserId}
-          lottery={selectedLottery.lottery}
-        />
-      ) : null}
       {(!chattableLotteries ||
         (chattableLotteries && chattableLotteries.length === 0)) &&
       loading
@@ -123,19 +132,21 @@ const ChatList = props => {
         : null}
       <VirtualizedList
         initialNumToRender={10}
-        windowSize={2}
+        windowSize={100}
         maxToRenderPerBatch={10}
-        updateCellsBatchingPeriod={0.0}
+        contentInsetAdjustmentBehavior={'automatic'}
+        onEndReachedThreshold={0.4}
         removeClippedSubviews={true}
         refreshing={loading}
         onRefresh={fetchLotteries}
         horizontal={false}
-        showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={true}
         data={chattableLotteries}
         getItem={getItem}
         getItemCount={getItemCount}
         keyExtractor={getItemKey}
         renderItem={renderListItem}
+        contentContainerStyle={styles.virtualizedListContentContainer}
         ListEmptyComponent={
           !loading ? (
             <View style={styles.emptyChatListViewContainer}>
@@ -148,12 +159,13 @@ const ChatList = props => {
       />
     </View>
   );
-};
+});
 
 ChatList.propTypes = {
   chattableLotteries: PropTypes.array,
   authUser: PropTypes.object,
   lang: PropTypes.string,
+  captureEvent: PropTypes.object,
 };
 
 const mapStateToProps = state => {

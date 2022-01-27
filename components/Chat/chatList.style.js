@@ -27,6 +27,11 @@ const styles = StyleSheet.create({
     color: 'rgba(0,0,0,.5)',
     textAlign: 'center',
   },
+  virtualizedListContentContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+  },
 });
 
 export default styles;

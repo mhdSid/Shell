@@ -4,13 +4,21 @@ import invoke from 'lodash/invoke';
 import styles from './cardListItem.style';
 import {View, Text} from 'react-native';
 import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
-import {IconToggle} from 'react-native-material-ui';
+import {Icon, IconToggle} from 'react-native-material-ui';
 import {connect} from 'react-redux';
 import {handleLikeLottery} from '../../redux/Lotteries/HandleLikeLottery';
 import {handleDislikeLottery} from '../../redux/Lotteries/HandleDislikeLottery';
 import {getUserIdSelector} from '../Profile/Selectors';
 import {showLotteryResult} from '../../redux/LotteryResult/actions';
 import FastImage from 'react-native-fast-image';
+
+let testImages = [
+  'file:///var/mobile/Containers/Data/Application/08251AB1-3DAB-48B0-B646-8FE303E25B1B/Library/Caches/12F93341-8443-4D1C-8EB0-D3417C82BCFE.jpg',
+  'file:///var/mobile/Containers/Data/Application/08251AB1-3DAB-48B0-B646-8FE303E25B1B/Library/Caches/1D5E7D7D-A012-4504-95C6-CF29E521441E.jpg',
+  'file:///var/mobile/Containers/Data/Application/08251AB1-3DAB-48B0-B646-8FE303E25B1B/Library/Caches/EA43820F-2EF5-4339-A091-4B31BD827E35.jpg',
+  'file:///var/mobile/Containers/Data/Application/08251AB1-3DAB-48B0-B646-8FE303E25B1B/Library/Caches/437735B7-32DA-4EE3-9D40-E5672E634EFE.jpg',
+  'file:///var/mobile/Containers/Data/Application/08251AB1-3DAB-48B0-B646-8FE303E25B1B/Library/Caches/A39876F7-33BB-4968-82B0-1BE63ABEAF2F.jpg',
+]
 class CardListItem extends Component {
   static propTypes = {
     item: PropTypes.object,
@@ -28,7 +36,7 @@ class CardListItem extends Component {
     this.numOfLines = 1;
   }
 
-  UNSAFE_shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps) {
     if (
       JSON.stringify(nextProps.item).toString() !==
         JSON.stringify(this.props.item).toString() ||
@@ -69,7 +77,7 @@ class CardListItem extends Component {
     invoke(this.props, 'handleShowLotteryResult', this.props.item);
   };
 
-  cardMoreActions = () => {
+  renderMoreIcon = () => {
     const {authUserId} = this.props;
 
     return authUserId ? (
@@ -84,7 +92,7 @@ class CardListItem extends Component {
     ) : null;
   };
 
-  cardIcon = () => {
+  renderLikeIcon = () => {
     const {item, authUserId} = this.props;
 
     return !authUserId ? null : item.userId !== authUserId ? (
@@ -119,23 +127,30 @@ class CardListItem extends Component {
     ) : null;
   };
 
-  render() {
-    const {item, smallImage, horizontal} = this.props;
-    const image = item.images[0] ? (
+  dummyImage = () =>
+    `https://dummyimage.com/300/${(((1 << 24) * Math.random()) | 0).toString(
+      16,
+    )}/fff.jpg`;
+
+  renderImage = () => {
+    const {item, smallImage} = this.props;
+    return item.images[0] ? (
       <FastImage
         style={smallImage ? styles.cardItemImageSmall : styles.cardItemImage}
         source={{
-          uri: item.images[0],
+          uri: this.dummyImage(), // item.images[0], // testImages[Math.floor(Math.random()*testImages.length)], //item.images[0],
           cache: FastImage.cacheControl.immutable,
-          priority: FastImage.priority.high,
+          priority: FastImage.priority.low,
         }}
         resizeMode={FastImage.resizeMode.cover}
       />
-    ) : null;
-    const emptyImage = !item.images[0] ? (
+    ) : (
       <View style={styles.cardItemImage} />
-    ) : null;
+    );
+  };
 
+  render() {
+    const {item, horizontal} = this.props;
     return (
       <TouchableBounce
         style={
@@ -145,10 +160,9 @@ class CardListItem extends Component {
         }
         onPress={this.handleItemPress}>
         <View>
-          {image}
-          {emptyImage}
-          {this.cardIcon()}
-          {this.cardMoreActions()}
+          {this.renderImage()}
+          {this.renderLikeIcon()}
+          {this.renderMoreIcon()}
           <View style={styles.cardItemInfoViewContainer}>
             <Text
               numberOfLines={this.numOfLines}
@@ -156,12 +170,15 @@ class CardListItem extends Component {
               style={styles.cardItemText}>
               {item.name}
             </Text>
-            <Text
-              numberOfLines={this.numOfLines}
-              ellipsizeMode={this.ellipsizeMode}
-              style={styles.cardItemText}>
-              {item.category}
-            </Text>
+            <View style={styles.sectionBlockContainer}>
+              <Icon name="people-outline" size={20} color="black" />
+              <Text
+                numberOfLines={this.numOfLines}
+                ellipsizeMode={this.ellipsizeMode}
+                style={[styles.cardItemText, styles.cardItemTextMarginLeft]}>
+                {item.lotteryUsersLength}
+              </Text>
+            </View>
             <Text
               numberOfLines={this.numOfLines}
               ellipsizeMode={this.ellipsizeMode}

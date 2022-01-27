@@ -14,7 +14,7 @@ import {handleLogin} from '../../redux/Auth/Login';
 import {Text} from 'react-native';
 import {getLangSelector} from '../Settings/Selectors';
 
-const Login = props => {
+const Login = React.memo(props => {
   const {lang} = props;
   const [loading, setLoading] = useState(false);
   const [emailPassChanged, setEmailPassChanged] = useState(false);
@@ -188,7 +188,7 @@ const Login = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 Login.propTypes = {
   login: PropTypes.func,

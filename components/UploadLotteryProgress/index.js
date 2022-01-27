@@ -5,7 +5,7 @@ import {getProgressItemsSelector} from './Selectors';
 import {View} from 'react-native';
 import styles from './uploadLotteryProgress.style';
 
-const UploadAdProgress = props => {
+const UploadAdProgress = React.memo(props => {
   const {progressItems, relative, id} = props;
   if (progressItems.length === 0) {
     return null;
@@ -31,7 +31,7 @@ const UploadAdProgress = props => {
       </View>
     </View>
   );
-};
+});
 
 UploadAdProgress.propTypes = {
   progressItems: PropTypes.array,

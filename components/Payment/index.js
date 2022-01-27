@@ -21,7 +21,7 @@ import {getLangSelector} from '../Settings/Selectors';
 
 let SuccessConfirmationModal = null;
 
-const Payment = props => {
+const Payment = React.memo(props => {
   const {user, loggedIn, lotteryDetails, item, lang} = props;
   const lottery = item || lotteryDetails;
   const [loading, setLoading] = useState(false);
@@ -216,7 +216,7 @@ const Payment = props => {
               />
             </View>
             <View style={styles.iconTextContainer}>
-              <Icon color="black" name="receipt" />
+              <Icon color="rgba(0,0,0,.55)" name="receipt" />
               <Text style={styles.iconText}>
                 {aboutTexts[lang].enterLottery}
               </Text>
@@ -227,7 +227,7 @@ const Payment = props => {
               </Text>
             </View>
             <View style={styles.iconTextContainer}>
-              <Icon color="black" name="star" />
+              <Icon color="rgba(0,0,0,.55)" name="star" />
               <Text style={styles.iconText}>
                 {aboutTexts[lang].joinLottery}
               </Text>
@@ -246,7 +246,7 @@ const Payment = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 Payment.propTypes = {
   user: PropTypes.object,

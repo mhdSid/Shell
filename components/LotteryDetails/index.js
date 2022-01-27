@@ -54,7 +54,7 @@ let ReceiveLotteryModal = null;
 let ShipLotteryModal = null;
 let EditLotteryModal = null;
 
-const LotteryDetails = props => {
+const LotteryDetails = React.memo(props => {
   const {
     item,
     user: authUser,
@@ -436,9 +436,8 @@ const LotteryDetails = props => {
                     text={lotteryDetailsTexts[lang].enterDraw}
                     style={{
                       container:
-                        `${currentCollectedPrice}` === `${price}`
-                          ? null
-                          : styles.paymentButtonContainer,
+                        `${currentCollectedPrice}` !== `${price}` &&
+                        styles.paymentButtonContainer,
                     }}
                     onPress={handleEnterDraw}
                   />
@@ -633,13 +632,13 @@ const LotteryDetails = props => {
                 {userLotteriesLoading && SimpleLoader}
                 {!userLotteriesLoading && userLotteries && (
                   <VirtualizedList
-                    initialNumToRender={5}
-                    windowSize={1}
-                    maxToRenderPerBatch={5}
-                    updateCellsBatchingPeriod={0.0}
+                    initialNumToRender={10}
+                    windowSize={100}
+                    maxToRenderPerBatch={10}
+                    contentInsetAdjustmentBehavior={'automatic'}
                     removeClippedSubviews={true}
                     horizontal={true}
-                    showsHorizontalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={true}
                     data={userLotteries}
                     onEndReachedThreshold={0.1}
                     onEndReached={handleOnEndReached}
@@ -647,6 +646,9 @@ const LotteryDetails = props => {
                     getItemCount={getUserLotteriesCount}
                     keyExtractor={getVirtualKey}
                     renderItem={renderUserAdItem}
+                    contentContainerStyle={
+                      styles.virtualizedListContentContainer
+                    }
                   />
                 )}
                 {!userLotteriesLoading && !userLotteries && (
@@ -814,7 +816,7 @@ const LotteryDetails = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 LotteryDetails.propTypes = {
   item: PropTypes.object,

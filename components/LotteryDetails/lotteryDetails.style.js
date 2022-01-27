@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     color: 'white',
     height: 50,
     fontWeight: 'bold',
+    borderRadius: 40,
   },
   iconTextViewContainer: {
     display: 'flex',
@@ -104,8 +105,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     marginBottom: 20,
-    padding: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
     lineHeight: 20,
+  },
+  virtualizedListContentContainer: {
+    marginBottom: 1,
   },
   bottomToolbarViewContainer: {
     ...toolbarStyles,

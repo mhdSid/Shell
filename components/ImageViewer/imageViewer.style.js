@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   rootSafeAreaView: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#b69cf6',
+    backgroundColor: 'black',
     zIndex: 1000,
   },
   innerSafeAreaView: {
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignSelf: 'flex-start',
     color: 'white',
+    backgroundColor: 'transparent',
   },
   imageViewerZoomContainer: {
     marginTop: -100,

@@ -423,6 +423,8 @@ const importLottery = {
     adName: 'Name',
     description: 'Description',
     price: 'Price',
+    shippingInformation: 'Shipping information',
+    lotteryRules: 'Lottery rules',
     images: 'Images',
     prefecture: 'Prefecture',
     city: 'City',
@@ -432,7 +434,9 @@ const importLottery = {
     enterCondition: 'Enter condition',
     enterName: 'Enter name',
     enterDescription: 'Enter description',
+    enterShippingInformation: 'Enter shipping information',
     enterPrice: 'Enter price',
+    enterLotteryRules: 'Enter lottery rules',
   },
   jp: {
     sports: 'スポーツ',

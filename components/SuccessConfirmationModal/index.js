@@ -5,7 +5,7 @@ import styles from './successConfirmationModal.style';
 import PropTypes from 'prop-types';
 import {Button, Icon} from 'react-native-material-ui';
 
-const SuccessConfirmationModal = props => {
+const SuccessConfirmationModal = React.memo(props => {
   const {title, subtitle, actions} = props;
   const handleCloseModal = () => {
     invoke(props, 'onClose');
@@ -44,7 +44,7 @@ const SuccessConfirmationModal = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 SuccessConfirmationModal.propTypes = {
   onClose: PropTypes.func,

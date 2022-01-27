@@ -17,8 +17,8 @@ const slideHeight = viewportHeight * 0.67;
 const slideHeightImageOnly = viewportHeight * 0.4;
 const slideWidthImageOnly = wp(90);
 
-const slideWidth = wp(75);
-const itemHorizontalMargin = wp(2);
+const slideWidth = wp(100);
+const itemHorizontalMargin = wp(0);
 const entryBorderRadius = 8;
 
 export const sliderWidth = viewportWidth;
@@ -28,11 +28,11 @@ export const itemWidthImageOnly =
 
 export const sliderStyles = StyleSheet.create({
   slider: {
-    marginTop: 15,
+    // marginTop: 15,
     overflow: 'visible', // for custom animations
   },
   sliderContentContainer: {
-    paddingVertical: 10, // for custom animation
+    // paddingVertical: 10, // for custom animation
   },
   paginationDot: {
     width: 8,
@@ -49,14 +49,14 @@ export const sliderStyles = StyleSheet.create({
   slideInnerContainer: {
     width: itemWidth,
     height: slideHeight,
-    paddingHorizontal: itemHorizontalMargin,
+    // paddingHorizontal: itemHorizontalMargin,
     paddingBottom: 18, // needed for shadow
   },
   slideInnerContainerImageOnly: {
     width: itemWidth,
     height: slideHeightImageOnly,
-    paddingHorizontal: itemHorizontalMargin,
-    paddingBottom: 18, // needed for shadow
+    // paddingHorizontal: itemHorizontalMargin,
+    // paddingBottom: 18, // needed for shadow
     // borderRadius: entryBorderRadius,
   },
   // borderRadius: {
@@ -71,15 +71,15 @@ export const sliderStyles = StyleSheet.create({
     shadowColor: colors.black,
     shadowOpacity: 0.25,
     shadowOffset: {width: 0, height: 10},
-    shadowRadius: 10,
-    borderRadius: entryBorderRadius,
+    // shadowRadius: 10,
+    // borderRadius: entryBorderRadius,
   },
   imageContainer: {
     flex: 1,
     marginBottom: IS_IOS ? 0 : -1, // Prevent a random Android rendering issue
     backgroundColor: 'white',
-    borderTopLeftRadius: entryBorderRadius,
-    borderTopRightRadius: entryBorderRadius,
+    // borderTopLeftRadius: entryBorderRadius,
+    // borderTopRightRadius: entryBorderRadius,
   },
   imageContainerEven: {
     backgroundColor: 'white',
@@ -88,10 +88,10 @@ export const sliderStyles = StyleSheet.create({
     // backgroundColor: 'white',
     ...StyleSheet.absoluteFillObject,
     resizeMode: 'cover',
-    borderRadius: IS_IOS ? entryBorderRadius : 0,
-    borderTopLeftRadius: entryBorderRadius,
-    borderTopRightRadius: entryBorderRadius,
-    backgroundColor: '#f7f5fe',
+    // borderRadius: IS_IOS ? entryBorderRadius : 0,
+    // borderTopLeftRadius: entryBorderRadius,
+    // borderTopRightRadius: entryBorderRadius,
+    backgroundColor: 'white', // '#f7f5fe',
   },
   // image's border radius is buggy on iOS; let's hack it!
   radiusMask: {

@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
   scrollViewContainer: {
     paddingTop: 20,
     paddingBottom: 30,
-    paddingLeft: 30,
-    paddingRight: 30,
+    paddingLeft: 20,
+    paddingRight: 20,
     ...flex,
     justifyContent: 'flex-start',
     marginTop: 75,

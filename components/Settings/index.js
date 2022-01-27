@@ -18,7 +18,7 @@ let ContactUsModal = null;
 let TermsAndPrivacyPolicyModal = null;
 let UserAgreementModal = null;
 
-const Settings = props => {
+const Settings = React.memo(props => {
   const {lang, user, loggedIn} = props;
   const isAuthenticated = user && loggedIn;
   const [settingsModal, setSettingsModal] = useState(false);
@@ -223,7 +223,7 @@ const Settings = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 Settings.propTypes = {
   lang: PropTypes.string,

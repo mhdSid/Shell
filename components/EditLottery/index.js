@@ -25,7 +25,7 @@ import {isNumber} from 'lodash';
 import FastImage from 'react-native-fast-image';
 import {getLangSelector} from '../Settings/Selectors';
 
-const EditLottery = props => {
+const EditLottery = React.memo(props => {
   const {item: lotteryDetails, lang} = props;
   const {
     name: lotteryDetailsName,
@@ -476,7 +476,7 @@ const EditLottery = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 EditLottery.propTypes = {
   item: PropTypes.object,

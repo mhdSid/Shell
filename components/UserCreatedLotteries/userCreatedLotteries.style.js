@@ -38,11 +38,11 @@ const styles = StyleSheet.create({
   },
   emptyListViewContainer: {
     width: '100%',
-    height: '89%',
+    height: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '40%',
+    marginTop: '45%',
   },
   emptyListViewContainerText: {
     fontWeight: '500',
@@ -51,14 +51,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   virtualizedListCardItemContentContainer: {
-    paddingTop: 10,
-    paddingHorizontal: 10,
-    paddingBottom: 20,
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    paddingTop: 2.5,
   },
 });
 

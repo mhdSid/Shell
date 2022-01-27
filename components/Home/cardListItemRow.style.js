@@ -11,12 +11,16 @@ const styles = StyleSheet.create({
   },
   cardListItemRowViewContainer: {
     display: 'flex',
-    width: (windowWidth - 20 - 20) / 3,
+    width: (windowWidth - 5 - 5) / 3,
     flexDirection: 'column',
-    marginRight: 10,
+    marginRight: 2.5,
   },
   cardListItemRowViewContainerNoMargin: {
     marginRight: 0,
+  },
+  cardListItemFlexStart: {
+    justifyContent: 'flex-start',
+    left: 2.5,
   },
 });
 

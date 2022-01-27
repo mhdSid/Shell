@@ -26,7 +26,7 @@ import {Dropdown} from 'react-native-material-dropdown';
 import TermsAndPrivacyPolicyModal from '../Settings/TermsAndPrivacyPolicyModal';
 import {getLangSelector} from '../Settings/Selectors';
 
-const SignUp = props => {
+const SignUp = React.memo(props => {
   const {email, passwordHash, verificationCode, lang} = props;
   const [loading, setLoading] = useState(false);
   const [userDataChanged, setUserDataChanged] = useState(false);
@@ -173,7 +173,7 @@ const SignUp = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 SignUp.propTypes = {
   email: PropTypes.string,

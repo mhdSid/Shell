@@ -12,7 +12,7 @@ import ListItemCommon from '../Home/ListItem';
 import {getLangSelector} from '../Settings/Selectors';
 import { loadingPopup } from '../Loading';
 
-const UploadLotteryProgressModal = props => {
+const UploadLotteryProgressModal = React.memo(props => {
   const {progressItems, lang} = props;
 
   const [loading] = useState(false);
@@ -45,13 +45,14 @@ const UploadLotteryProgressModal = props => {
             onLeftElementPress={handleCloseModal}
           />
           <VirtualizedList
-            initialNumToRender={5}
-            windowSize={2}
-            maxToRenderPerBatch={5}
-            updateCellsBatchingPeriod={0.0}
+            initialNumToRender={10}
+            windowSize={100}
+            maxToRenderPerBatch={10}
+            contentInsetAdjustmentBehavior={'automatic'}
             removeClippedSubviews={true}
             refreshing={loading}
-            showsVerticalScrollIndicator={false}
+            onEndReachedThreshold={0.4}
+            showsVerticalScrollIndicator={true}
             ListEmptyComponent={
               loading ? (
                 loadingPopup
@@ -73,7 +74,7 @@ const UploadLotteryProgressModal = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 UploadLotteryProgressModal.propTypes = {
   onClose: PropTypes.func,

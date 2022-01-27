@@ -25,7 +25,7 @@ import FastImage from 'react-native-fast-image';
 import {getLangSelector} from '../Settings/Selectors';
 import {Alert} from 'react-native';
 
-const ReceiveLotteryInfoModal = props => {
+const ReceiveLotteryInfoModal = React.memo(props => {
   const {receiveLotteryDetails, user, lotteryPosterData, lang} = props;
   const {
     id: lotteryId,
@@ -320,7 +320,7 @@ const ReceiveLotteryInfoModal = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 ReceiveLotteryInfoModal.propTypes = {
   onClose: PropTypes.func,

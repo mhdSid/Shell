@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     backgroundColor: 'white',
-    opacity: 0.9,
     zIndex: 1111,
   },
 });

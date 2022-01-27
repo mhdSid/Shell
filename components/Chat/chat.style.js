@@ -52,6 +52,8 @@ const styles = StyleSheet.create({
   chatVirtualizedListContentContainer: {
     paddingTop: 20,
     width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
   },
   emptyChatViewContainer: {
     width: '100%',

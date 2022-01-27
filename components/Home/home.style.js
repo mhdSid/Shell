@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '40%',
+    marginTop: '50%',
   },
   homeListEmptyViewContainerText: {
     fontWeight: '500',
@@ -34,14 +34,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   virtualizedListCardContentContainer: {
-    paddingTop: 10,
-    paddingHorizontal: 10,
-    paddingBottom: 20,
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    paddingTop: 2.5,
   },
 });
 

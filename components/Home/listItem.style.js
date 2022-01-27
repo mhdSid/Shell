@@ -12,8 +12,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   listItemImage: {
-    width: 50,
-    height: 50,
+    width: 75,
+    height: 75,
+    borderRadius: 15,
     backgroundColor: '#f7f5fe',
   },
   listItemNotReceivedIconContainer: {

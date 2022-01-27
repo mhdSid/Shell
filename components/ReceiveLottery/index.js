@@ -21,7 +21,7 @@ import {getLangSelector} from '../Settings/Selectors';
 
 let LotteryDetails = null;
 
-const ReceiveLotteryModal = props => {
+const ReceiveLotteryModal = React.memo(props => {
   const {userWonLotteries: lotteries, authUserId, lang} = props;
   const [loading, setLoading] = useState(true);
   const [filteredLotteries, setFilteredLotteries] = useState(null);
@@ -142,6 +142,8 @@ const ReceiveLotteryModal = props => {
   const receiveLotteryInfoModal = isShowReceiveLotteryModal ? (
     <ReceiveLotteryInfoModal onClose={handleReceiveLotteryModalClose} />
   ) : null;
+  const isEmpty =
+    !userWonLotteries || (userWonLotteries && userWonLotteries.length === 0);
 
   return (
     <Modal
@@ -204,21 +206,18 @@ const ReceiveLotteryModal = props => {
           {userWonLotteries && userWonLotteries.length ? (
             <Filter lang={lang} onFilterChange={handleFilterChange} />
           ) : null}
-          {(!userWonLotteries ||
-            (userWonLotteries && userWonLotteries.length === 0)) &&
-          loading
-            ? loadingPopup
-            : null}
+          {isEmpty && loading ? loadingPopup : null}
           <VirtualizedList
             initialNumToRender={10}
-            windowSize={2}
+            windowSize={100}
             maxToRenderPerBatch={10}
-            updateCellsBatchingPeriod={0.0}
+            contentInsetAdjustmentBehavior={'automatic'}
+            onEndReachedThreshold={0.4}
             removeClippedSubviews={true}
             refreshing={loading}
             onRefresh={onShowModal}
             horizontal={false}
-            showsVerticalScrollIndicator={false}
+            showsVerticalScrollIndicator={true}
             data={filteredLotteries || userWonLotteries}
             getItem={getItem}
             getItemCount={getItemCount}
@@ -240,7 +239,7 @@ const ReceiveLotteryModal = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 ReceiveLotteryModal.propTypes = {
   userWonLotteries: PropTypes.any,

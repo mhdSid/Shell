@@ -33,7 +33,7 @@ import {getUserIdSelector} from '../Profile/Selectors';
 import {getLangSelector} from '../Settings/Selectors';
 import {resetHomeLotteries, setPageToken} from '../../redux/Home/actions';
 
-const SearchBox = props => {
+const SearchBox = React.memo(props => {
   const {searchFilters, style, searchEventFired, lang} = props;
   let searchFiltersPrefecture;
   if (searchFilters.prefecture) {
@@ -382,7 +382,7 @@ const SearchBox = props => {
       </View>
     </Animated.View>
   );
-};
+});
 
 SearchBox.propTypes = {
   style: PropTypes.object,

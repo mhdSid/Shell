@@ -10,8 +10,6 @@ import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
 import {setHomeViewStyle} from '../../redux/Settings/actions';
 import {
   getLotteriesSelector,
-  getIsListSelector,
-  getIsCardSelector,
   getIsCarouselSelector,
   getSearchEventFiredSelector,
   getEmptySearchResultsSelector,
@@ -23,7 +21,6 @@ import {home, lottteries as lotteriesTexts} from '../../constants/Texts';
 import SearchBox from './SearchBox';
 import UploadLotteryProgressModal from '../UploadLotteryProgress/UploadLotteryProgressModal';
 import CardListItemRow from './CardListItemRow';
-import ListItemCommon from './ListItem';
 import {handleSearch} from '../../redux/Search/Search';
 import {
   setSearchEventFired,
@@ -34,8 +31,10 @@ import cancellableFetch from 'react-native-cancelable-fetch';
 import {resetHomeLotteries, setPageToken} from '../../redux/Home/actions';
 import {getLangSelector} from '../Settings/Selectors';
 
-const HomeComponent = props => {
-  const {isList, isCard, lotteries, authUserId, searchEventFired, lang} = props;
+let cachedLotteryList = null;
+
+const HomeComponent = React.memo(props => {
+  const {lotteries, authUserId, searchEventFired, lang, captureEvent} = props;
   const [loading, setLoading] = useState(true);
   const [showLotteryProgressModal, setShowLotteryProgressModal] = useState(
     false,
@@ -45,16 +44,21 @@ const HomeComponent = props => {
   const [cancelHttpTag] = useState(15);
 
   const lotteryCardList = useMemo(() => {
-    if (isCard && Array.isArray(lotteries) && lotteries.length) {
-      return chunk(lotteries, 3).map(list => ({
+    if (Array.isArray(lotteries) && lotteries.length) {
+      cachedLotteryList = chunk(lotteries, 3).map((list, index) => ({
         data: list,
-        key: `_${Math.random()
-          .toString(36)
-          .substr(2, 9)}`,
+        key:
+          (cachedLotteryList &&
+            cachedLotteryList[index] &&
+            cachedLotteryList[index].key) ||
+          `_${Math.random()
+            .toString(36)
+            .substr(2, 9)}`,
       }));
+      return cachedLotteryList;
     }
     return [];
-  }, [isCard, lotteries]);
+  }, [lotteries]);
 
   const fetchLotteriesCallback = () => {
     setLoading(false);
@@ -94,18 +98,6 @@ const HomeComponent = props => {
       setShowLotteryProgressModal(true);
       return;
     }
-    if (isCard) {
-      invoke(props, 'setHomeViewStyle', {
-        isHomeCardStyle: false,
-        isHomeListStyle: true,
-      });
-    }
-    if (isList) {
-      invoke(props, 'setHomeViewStyle', {
-        isHomeCardStyle: true,
-        isHomeListStyle: false,
-      });
-    }
   };
 
   const handleOnSearch = () => {
@@ -123,10 +115,6 @@ const HomeComponent = props => {
 
   const handleCardItemPress = item => {
     invoke(props, 'showLotteryDetails', item);
-  };
-
-  const handleListItemPress = index => {
-    invoke(props, 'showLotteryDetails', lotteries[index]);
   };
 
   const handleCloseUploadLotteryProgressModal = () => {
@@ -152,25 +140,11 @@ const HomeComponent = props => {
     <CardListItemRow data={item} onItemPress={handleCardItemPress} />
   );
 
-  const renderListItem = ({item, index}) => (
-    <ListItemCommon
-      item={item}
-      index={index}
-      onItemPress={handleListItemPress}
-      showLotteryResult={!!authUserId}
-      listLength={lotteries.length}
-    />
-  );
-
   const getItem = (data, index) => data[index];
 
   const getItemCount = () => lotteryCardList.length || 0;
 
-  const getListItemCount = () => lotteries.length || 0;
-
   const getItemKey = item => `${item.key}`;
-
-  const getListItemKey = item => `${item.id}`;
 
   const handleOnEndReached = () => {
     if (!searchEventFired) {
@@ -179,7 +153,6 @@ const HomeComponent = props => {
   };
 
   const handleRefresh = () => {
-    invoke(props, 'handleSetPageToken', null);
     fetchLotteries();
   };
 
@@ -204,6 +177,10 @@ const HomeComponent = props => {
 
   useEffect(() => {
     fetchLotteries();
+  }, [captureEvent]);
+
+  useEffect(() => {
+    fetchLotteries();
     return () => {
       cancellableFetch.abort(cancelHttpTag);
     };
@@ -219,11 +196,7 @@ const HomeComponent = props => {
       <Toolbar
         style={{container: styles.toolbarContainer}}
         centerElement={home[lang].appName}
-        rightElement={[
-          'search',
-          authUserId && 'cloud-upload',
-          isCard ? 'view-list' : 'view-comfy',
-        ].filter(Boolean)}
+        rightElement={['search', authUserId && 'cloud-upload'].filter(Boolean)}
         onRightElementPress={changeViewStyle}
       />
       {searchable ? (
@@ -261,10 +234,9 @@ const HomeComponent = props => {
         : null}
       <VirtualizedList
         initialNumToRender={10}
-        windowSize={2}
-        contentInsetAdjustmentBehavior={'automatic'}
+        windowSize={100}
         maxToRenderPerBatch={10}
-        updateCellsBatchingPeriod={0.0}
+        contentInsetAdjustmentBehavior={'automatic'}
         removeClippedSubviews={true}
         refreshing={loading}
         ListEmptyComponent={
@@ -277,39 +249,34 @@ const HomeComponent = props => {
           ) : null
         }
         onRefresh={!searchEventFired && handleRefresh}
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={0.4}
         onEndReached={!searchEventFired && handleOnEndReached}
         horizontal={false}
-        showsVerticalScrollIndicator={false}
-        data={isCard ? lotteryCardList : lotteries}
+        showsVerticalScrollIndicator={true}
+        data={lotteryCardList}
         getItem={getItem}
-        getItemCount={isCard ? getItemCount : getListItemCount}
-        contentContainerStyle={
-          isCard && styles.virtualizedListCardContentContainer
-        }
-        keyExtractor={isCard ? getItemKey : getListItemKey}
-        renderItem={isCard ? renderCardListItemRow : renderListItem}
+        getItemCount={getItemCount}
+        contentContainerStyle={styles.virtualizedListCardContentContainer}
+        keyExtractor={getItemKey}
+        renderItem={renderCardListItemRow}
       />
     </View>
   );
-};
+});
 
 HomeComponent.propTypes = {
   lotteries: PropTypes.array,
-  isList: PropTypes.bool,
-  isCard: PropTypes.bool,
   isCarousel: PropTypes.bool,
   isLoggedIn: PropTypes.bool,
   searchEventFired: PropTypes.bool,
   authUserId: PropTypes.oneOfType([PropTypes.string, PropTypes.any]),
   lang: PropTypes.string,
+  captureEvent: PropTypes.object,
 };
 
 const mapStateToProps = state => {
   return {
     lotteries: getLotteriesSelector(state),
-    isList: getIsListSelector(state),
-    isCard: getIsCardSelector(state),
     isCarousel: getIsCarouselSelector(state),
     authUserId: getUserIdSelector(state),
     isLoggedIn: getLoggedInSelector(state),

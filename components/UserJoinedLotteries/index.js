@@ -22,26 +22,25 @@ import {showLotteryDetails} from '../../redux/LotteryDetails/actions';
 import {showLotteryResult} from '../../redux/LotteryResult/actions';
 import {getLotteryDetailsSelector} from '../Pinger/Selectors';
 import Filter from '../Filter';
-import {getIsCardSelector, getIsListSelector} from '../Home/Selectors';
 import {setHomeViewStyle} from '../../redux/Settings/actions';
 import {chunk} from 'lodash';
-import ListItemCommon from '../Home/ListItem';
 import CardListItemRow from '../Home/CardListItemRow';
 import {getLotteryResultSelector} from '../LotteryResult/Selectors';
 import LotteryResultModal from '../LotteryResult';
 import cancellableFetch from 'react-native-cancelable-fetch';
 import {getLangSelector} from '../Settings/Selectors';
 
-const Lotteries = props => {
+let cachedLotteryList = null;
+
+const Lotteries = React.memo(props => {
   const {
     loggedIn,
     userJoinedLotteries,
     user,
     lotteryDetails,
-    isList,
-    isCard,
     lotteryResult,
     lang,
+    captureEvent,
   } = props;
   const [loading, setLoading] = useState(true);
   const [filteredLotteries, setFilteredLotteries] = useState(null);
@@ -61,6 +60,12 @@ const Lotteries = props => {
   };
 
   useEffect(() => {
+    if (isUndefined(loggedIn) && isUndefined(user)) {
+      fetchLotteries();
+    }
+  }, [captureEvent]);
+
+  useEffect(() => {
     if (loggedIn && user) {
       fetchLotteries();
     }
@@ -71,39 +76,30 @@ const Lotteries = props => {
 
   const lotteryCardList = useMemo(() => {
     if (
-      isCard &&
       Array.isArray(filteredLotteries || userJoinedLotteries) &&
       (filteredLotteries || userJoinedLotteries).length
     ) {
-      return chunk(filteredLotteries || userJoinedLotteries, 3).map(list => ({
+      cachedLotteryList = chunk(
+        filteredLotteries || userJoinedLotteries,
+        3,
+      ).map((list, index) => ({
         data: list,
-        key: `_${Math.random()
-          .toString(36)
-          .substr(2, 9)}`,
+        key:
+          (cachedLotteryList &&
+            cachedLotteryList[index] &&
+            cachedLotteryList[index].key) ||
+          `_${Math.random()
+            .toString(36)
+            .substr(2, 9)}`,
       }));
+      return cachedLotteryList;
     }
     return [];
-  }, [isCard, filteredLotteries, userJoinedLotteries]);
+  }, [filteredLotteries, userJoinedLotteries]);
 
   const getItem = (data, index) => data[index];
-  const getItemCount = () => (filteredLotteries || userJoinedLotteries).length;
-  const getItemKey = item => item.id;
   const getRowItemKey = item => `${item.key}`;
   const getRowItemCount = () => lotteryCardList.length;
-  const onItemPress = index => {
-    invoke(props, 'showLotteryDetails', {
-      ...(filteredLotteries || userJoinedLotteries)[index]
-    });
-  };
-  const renderListItem = ({item, index}) => (
-    <ListItemCommon
-      item={item}
-      index={index}
-      onItemPress={onItemPress}
-      listLength={(filteredLotteries || userJoinedLotteries).length}
-      showLotteryResult={true}
-    />
-  );
   const handleFilterChange = filterValue => {
     if (
       !filterValue ||
@@ -132,20 +128,6 @@ const Lotteries = props => {
       );
     }
   };
-  const changeViewStyle = () => {
-    if (isCard) {
-      invoke(props, 'setHomeViewStyle', {
-        isHomeCardStyle: false,
-        isHomeListStyle: true,
-      });
-    }
-    if (isList) {
-      invoke(props, 'setHomeViewStyle', {
-        isHomeCardStyle: true,
-        isHomeListStyle: false,
-      });
-    }
-  };
   const handleCardItemPress = item => {
     invoke(props, 'showLotteryDetails', item);
   };
@@ -168,8 +150,6 @@ const Lotteries = props => {
       <Toolbar
         style={{container: styles.toolbarContainer}}
         centerElement={lotteriesTexts[lang].lotteries}
-        rightElement={isCard ? 'view-list' : 'view-comfy'}
-        onRightElementPress={changeViewStyle}
       />
       {userJoinedLotteries && userJoinedLotteries.length ? (
         <Filter lang={lang} onFilterChange={handleFilterChange} />
@@ -181,12 +161,15 @@ const Lotteries = props => {
         : null}
       <VirtualizedList
         initialNumToRender={10}
-        windowSize={2}
+        windowSize={100}
         maxToRenderPerBatch={10}
-        updateCellsBatchingPeriod={0.0}
+        contentInsetAdjustmentBehavior={'automatic'}
         removeClippedSubviews={true}
+        onEndReachedThreshold={0.4}
         refreshing={loading}
-        onRefresh={fetchLotteries}
+        onRefresh={
+          (!filteredLotteries || !filteredLotteries.length) && fetchLotteries
+        }
         horizontal={false}
         ListEmptyComponent={
           !loading ? (
@@ -197,21 +180,17 @@ const Lotteries = props => {
             </View>
           ) : null
         }
-        contentContainerStyle={
-          isCard && styles.virtualizedListCardItemContentContainer
-        }
-        showsVerticalScrollIndicator={false}
-        data={
-          isCard ? lotteryCardList : filteredLotteries || userJoinedLotteries
-        }
+        contentContainerStyle={styles.virtualizedListCardItemContentContainer}
+        showsVerticalScrollIndicator={true}
+        data={lotteryCardList}
         getItem={getItem}
-        getItemCount={isCard ? getRowItemCount : getItemCount}
-        keyExtractor={isCard ? getRowItemKey : getItemKey}
-        renderItem={isCard ? renderCardListItemRow : renderListItem}
+        getItemCount={getRowItemCount}
+        keyExtractor={getRowItemKey}
+        renderItem={renderCardListItemRow}
       />
     </View>
   );
-};
+});
 
 Lotteries.propTypes = {
   loggedIn: PropTypes.bool,
@@ -220,6 +199,7 @@ Lotteries.propTypes = {
   showLotteryResult: PropTypes.func,
   lotteryDetails: PropTypes.object,
   lang: PropTypes.string,
+  captureEvent: PropTypes.object,
 };
 
 const mapStateToProps = state => {
@@ -228,8 +208,6 @@ const mapStateToProps = state => {
     user: getUserSelector(state),
     userJoinedLotteries: getUserJoinedLotteriesSelector(state),
     lotteryDetails: getLotteryDetailsSelector(state),
-    isList: getIsListSelector(state),
-    isCard: getIsCardSelector(state),
     lotteryResult: getLotteryResultSelector(state),
     lang: getLangSelector(state),
   };

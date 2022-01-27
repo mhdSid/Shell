@@ -21,7 +21,7 @@ import sha256 from 'crypto-js/sha256';
 import {password as hashkey} from '../../services/Encrypt';
 import {getLangSelector} from './Selectors';
 
-const ChangePassword = props => {
+const ChangePassword = React.memo(props => {
   const {user, lang} = props;
   const currentPasswordRef = createRef();
   const newPasswordRef = createRef();
@@ -187,7 +187,7 @@ const ChangePassword = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 ChangePassword.propTypes = {
   user: PropTypes.object,

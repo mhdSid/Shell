@@ -24,7 +24,7 @@ import ImageResizer from 'react-native-image-resizer';
 import FastImage from 'react-native-fast-image';
 import {getLangSelector} from '../Settings/Selectors';
 
-const UpdateUser = props => {
+const UpdateUser = React.memo(props => {
   const {user, lang} = props;
   let userPrefecture;
   if (user) {
@@ -204,7 +204,7 @@ const UpdateUser = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 UpdateUser.propTypes = {
   user: PropTypes.object,

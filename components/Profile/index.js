@@ -21,7 +21,7 @@ let SignUp = null;
 let VerifyCode = null;
 let Login = null;
 
-const AuthComponent = props => {
+const AuthComponent = React.memo(props => {
   const {loggedIn, user, showSignup, verificationCode, onClose} = props;
   if (loggedIn && user) {
     invoke(props, 'onClose');
@@ -46,7 +46,7 @@ const AuthComponent = props => {
     Login = require('./Login').default;
   }
   return <Login onClose={onClose} />;
-};
+});
 
 AuthComponent.propTypes = {
   loggedIn: PropTypes.bool,

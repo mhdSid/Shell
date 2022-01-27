@@ -12,7 +12,7 @@ import {getUserSelector} from '../UpdateUser/Selectors';
 import {connect} from 'react-redux';
 import {getLangSelector} from '../Settings/Selectors';
 
-const PaymentInformation = props => {
+const PaymentInformation = React.memo(props => {
   const {user, lang} = props;
   const [loading, setLoading] = useState(false);
   const creditCardInputRef = useRef(null);
@@ -162,7 +162,7 @@ const PaymentInformation = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 paymentInformation.propTypes = {
   user: PropTypes.object,

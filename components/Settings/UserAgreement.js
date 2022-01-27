@@ -6,7 +6,7 @@ import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {settings} from '../../constants/Texts';
 
-const UserAgreement = props => {
+const UserAgreement = React.memo(props => {
   const {lang} = props;
   const handleCloseModal = () => {
     invoke(props, 'onClose');
@@ -27,7 +27,7 @@ const UserAgreement = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 UserAgreement.propTypes = {
   onClose: PropTypes.func,

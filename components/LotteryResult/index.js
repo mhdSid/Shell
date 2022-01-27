@@ -32,7 +32,7 @@ let ChatModal = null;
 let ReceiveLotteryModal = null;
 let ShipLotteryModal = null;
 
-const LotteryResult = props => {
+const LotteryResult = React.memo(props => {
   const {
     lotteryResult,
     user: authUser,
@@ -373,7 +373,7 @@ const LotteryResult = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 LotteryResult.propTypes = {
   lotteryResult: PropTypes.object,

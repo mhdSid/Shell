@@ -31,22 +31,25 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   bottomNavigationBarContainer: {
-    padding: 0,
-    margin: 0,
     shadowOpacity: 0,
     borderTopWidth: 0.5,
     backgroundColor: '#b69cf6',
-    height: 45,
+    padding: 0,
+    margin: 0,
+    height: 60,
   },
-  bottomNavigationBarRightActionContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    display: 'flex',
+  actionMarginRight: {
+    right: 10,
+  },
+  actionMarginLeft: {
+    left: 10,
+  },
+  actionContainer: {
     paddingBottom: 12,
     paddingTop: 8,
     paddingLeft: 12,
     paddingRight: 12,
-    height: 45,
+    height: 60,
   },
   bottomNavigationBarUserImage: {
     width: 27,

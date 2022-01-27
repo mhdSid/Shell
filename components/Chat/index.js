@@ -23,7 +23,7 @@ import {
 } from '../../redux/Chat/actions';
 import {getLangSelector} from '../Settings/Selectors';
 
-const ChatModal = props => {
+const ChatModal = React.memo(props => {
   const {
     isWinner,
     isLotteryPoster,
@@ -208,6 +208,7 @@ const ChatModal = props => {
               behavior={'padding'}>
               <View style={styles.chatViewContainer}>
                 <VirtualizedList
+                  windowSize={100}
                   initialNumToRender={conversation ? conversation.length : 20}
                   maxToRenderPerBatch={conversation ? conversation.length : 20}
                   removeClippedSubviews={true}
@@ -260,7 +261,7 @@ const ChatModal = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 ChatModal.propTypes = {
   onClose: PropTypes.func,

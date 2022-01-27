@@ -12,7 +12,7 @@ import {handleInitChatSocketCommunication} from '../../redux/Chat/actions';
 let LotteryDetails = null;
 let LotteryResult = null;
 
-const Pinger = props => {
+const Pinger = React.memo(props => {
   const {lotteryDetails, lotteryResult} = props;
   const onAdsDetailsClose = () => {
     invoke(props, 'showLotteryDetails', undefined);
@@ -42,7 +42,7 @@ const Pinger = props => {
     return <LotteryDetails onClose={onAdsDetailsClose} item={lotteryDetails} />;
   }
   return null;
-};
+});
 
 const mapStateToProps = state => {
   return {

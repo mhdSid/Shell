@@ -6,7 +6,7 @@ import {Toolbar, Icon} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {about} from '../../constants/Texts';
 
-const About = props => {
+const About = React.memo(props => {
   const {lang} = props;
   const handleCloseModal = () => {
     invoke(props, 'onClose');
@@ -120,7 +120,7 @@ const About = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 About.propTypes = {
   onClose: PropTypes.func,

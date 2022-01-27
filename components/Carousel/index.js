@@ -89,7 +89,7 @@ class CarouselItem extends PureComponent {
   }
 }
 
-const CarouselComponent = props => {
+const CarouselComponent = React.memo(props => {
   const {items, onItemPress, imageOnly} = props;
   const renderCarouselItem = ({item}) => (
     <CarouselItem onItemPress={onItemPress} item={item} imageOnly={imageOnly} />
@@ -103,13 +103,13 @@ const CarouselComponent = props => {
       itemWidth={itemWidth}
       hasParallaxImages={false}
       firstItem={0}
-      inactiveSlideScale={0.94}
-      inactiveSlideOpacity={0.7}
+      inactiveSlideScale={1}
+      inactiveSlideOpacity={1}
       containerCustomStyle={sliderStyles.slider}
       contentContainerCustomStyle={sliderStyles.sliderContentContainer}
     />
   );
-};
+});
 
 CarouselComponent.propTypes = {
   item: PropTypes.object,

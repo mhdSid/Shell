@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import invoke from 'lodash/invoke';
 import FastImage from 'react-native-fast-image';
 
-const ImagesViewer = props => {
+const ImagesViewer = React.memo(props => {
   const {uri} = props;
   const handleCloseModal = () => {
     invoke(props, 'onClose');
@@ -25,10 +25,14 @@ const ImagesViewer = props => {
               icon="arrow-back"
               color="white"
               onPress={handleCloseModal}
-              raised={false}
+              raised={true}
               primary
               text={''}
-              style={styles.imageViewerButton}
+              style={{
+                container: {
+                  backgroundColor: styles.imageViewerButton,
+                },
+              }}
             />
           </View>
           <ImageZoom
@@ -51,7 +55,7 @@ const ImagesViewer = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 ImagesViewer.proptTypes = {
   uri: PropTypes.string,

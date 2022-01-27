@@ -6,7 +6,7 @@ import {Toolbar} from 'react-native-material-ui';
 import PropTypes from 'prop-types';
 import {settings} from '../../constants/Texts';
 
-const ContactUsModal = props => {
+const ContactUsModal = React.memo(props => {
   const {lang} = props;
   const handleCloseModal = () => {
     invoke(props, 'onClose');
@@ -27,7 +27,7 @@ const ContactUsModal = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 ContactUsModal.propTypes = {
   onClose: PropTypes.func,

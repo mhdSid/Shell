@@ -9,49 +9,50 @@ export let setUserBottomBarImage;
 
 let HomeComponent = null;
 let AuthComponent = null;
-let Lotteries = null;
+let UserJoinedLotteries = null;
 let ImportLottery = null;
 let Chat = null;
-
 const viewLoader = {
-  lotteries: () => {
-    if (!Lotteries) {
-      Lotteries = require('../UserJoinedLotteries').default;
+  userJoinedLotteries: event => {
+    if (!UserJoinedLotteries) {
+      UserJoinedLotteries = require('../UserJoinedLotteries').default;
     }
-    return <Lotteries />;
+    return <UserJoinedLotteries captureEvent={event} />;
   },
-  profile: () => {
+  profile: event => {
     if (!AuthComponent) {
       AuthComponent = require('../Profile/UserProfile').default;
     }
-    return <AuthComponent />;
+    return <AuthComponent captureEvent={event} />;
   },
-  home: () => {
+  home: event => {
     if (!HomeComponent) {
       HomeComponent = require('../Home').default;
     }
-    return <HomeComponent />;
+    return <HomeComponent captureEvent={event} />;
   },
-  importLottery: () => {
+  importLottery: event => {
     if (!ImportLottery) {
       ImportLottery = require('../ImportLottery').default;
     }
-    return <ImportLottery />;
+    return <ImportLottery captureEvent={event} />;
   },
-  chat: () => {
+  chat: event => {
     if (!Chat) {
       Chat = require('../Chat/ChatList').default;
     }
-    return <Chat />;
+    return <Chat captureEvent={event} />;
   },
 };
 
-const MainContainer = () => {
+const MainContainer = React.memo(() => {
   const [activeView, setActiveView] = useState('home');
   const [userImage, setUserImage] = useState(null);
+  const [clickEventCount, setClickEventCount] = useState(0);
 
   const handleSetActiveView = type => {
     return () => {
+      setClickEventCount(clickEventCount + 1);
       setActiveView(type);
     };
   };
@@ -61,7 +62,7 @@ const MainContainer = () => {
   return (
     <SafeAreaView style={styles.rootSafeAreaView}>
       <SafeAreaView style={styles.innerSafeAreaView}>
-        {viewLoader[activeView]()}
+        {viewLoader[activeView](clickEventCount)}
       </SafeAreaView>
       <BottomNavigation
         active={activeView}
@@ -70,7 +71,7 @@ const MainContainer = () => {
         }}>
         <BottomNavigation.Action
           style={{
-            container: styles.bottomNavigationBarRightActionContainer,
+            container: [styles.actionContainer, styles.actionMarginLeft],
             icon: {
               color: activeView === 'home' ? 'white' : '#dacdfa',
             },
@@ -86,7 +87,7 @@ const MainContainer = () => {
         />
         <BottomNavigation.Action
           style={{
-            container: styles.bottomNavigationBarRightActionContainer,
+            container: styles.actionContainer,
             icon: {
               color: activeView === 'importLottery' ? 'white' : '#dacdfa',
             },
@@ -102,23 +103,23 @@ const MainContainer = () => {
         />
         <BottomNavigation.Action
           style={{
-            container: styles.bottomNavigationBarRightActionContainer,
+            container: styles.actionContainer,
             icon: {
-              color: activeView === 'lotteries' ? 'white' : '#dacdfa',
+              color: activeView === 'userJoinedLotteries' ? 'white' : '#dacdfa',
             },
             label: {
-              color: activeView === 'lotteries' ? 'white' : '#dacdfa',
+              color: activeView === 'userJoinedLotteries' ? 'white' : '#dacdfa',
               display: 'none',
             },
           }}
-          key="lotteries"
+          key="userJoinedLotteries"
           icon={<Icon name="grade" size={27} />}
-          active={activeView === 'lotteries'}
-          onPress={handleSetActiveView('lotteries')}
+          active={activeView === 'userJoinedLotteries'}
+          onPress={handleSetActiveView('userJoinedLotteries')}
         />
         <BottomNavigation.Action
           style={{
-            container: styles.bottomNavigationBarRightActionContainer,
+            container: styles.actionContainer,
             icon: {
               color: activeView === 'chat' ? 'white' : '#dacdfa',
             },
@@ -134,7 +135,7 @@ const MainContainer = () => {
         />
         <BottomNavigation.Action
           style={{
-            container: styles.bottomNavigationBarRightActionContainer,
+            container: [styles.actionContainer, styles.actionMarginRight],
             icon: {
               color: activeView === 'profile' ? 'white' : '#dacdfa',
             },
@@ -167,6 +168,6 @@ const MainContainer = () => {
       </BottomNavigation>
     </SafeAreaView>
   );
-};
+});
 
 export default MainContainer;

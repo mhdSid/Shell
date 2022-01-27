@@ -27,7 +27,7 @@ let UserReceivedLotteries = null;
 let UserShippedLotteries = null;
 let AuthenticateModal = null;
 
-const UserProfile = props => {
+const UserProfile = React.memo(props => {
   const {user, lang, loggedIn} = props;
   const isAuthenticated = user && loggedIn;
   const [userProfileModal, setUserProfileModal] = useState(false);
@@ -159,7 +159,6 @@ const UserProfile = props => {
               }}>
               <Drawer.Header.Account
                 style={{
-                  container: styles.userProfileHeaderContainer,
                   avatarsContainer: styles.userProfileAvatarContainer,
                 }}
                 avatar={
@@ -252,6 +251,9 @@ const UserProfile = props => {
             />
             <Drawer.Section
               title={profile[lang].personal}
+              style={{
+                container: styles.personalSectionContainer,
+              }}
               items={[
                 !isAuthenticated
                   ? {
@@ -286,7 +288,7 @@ const UserProfile = props => {
       </View>
     </>
   );
-};
+});
 
 UserProfile.propTypes = {
   user: PropTypes.object,

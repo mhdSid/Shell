@@ -21,7 +21,7 @@ import {getLangSelector} from '../Settings/Selectors';
 
 let LotteryDetails = null;
 
-const ShipLotteryModal = props => {
+const ShipLotteryModal = React.memo(props => {
   const {userCreatedWonLotteries: lotteries, authUserId, lang} = props;
   const [loading, setLoading] = useState(true);
   const [filteredLotteries, setFilteredLotteries] = useState(null);
@@ -144,6 +144,9 @@ const ShipLotteryModal = props => {
   const shipLotteryInfoModal = isShowShipLotteryModal ? (
     <ShipLotteryInfoModal onClose={handleShipLotteryModalClose} />
   ) : null;
+  const isEmpty =
+    !userCreatedWonLotteries ||
+    (userCreatedWonLotteries && userCreatedWonLotteries.length === 0);
 
   return (
     <Modal
@@ -206,22 +209,18 @@ const ShipLotteryModal = props => {
           {userCreatedWonLotteries && userCreatedWonLotteries.length ? (
             <Filter lang={lang} onFilterChange={handleFilterChange} />
           ) : null}
-          {(!userCreatedWonLotteries ||
-            (userCreatedWonLotteries &&
-              userCreatedWonLotteries.length === 0)) &&
-          loading
-            ? loadingPopup
-            : null}
+          {isEmpty && loading ? loadingPopup : null}
           <VirtualizedList
             initialNumToRender={10}
-            windowSize={2}
+            windowSize={100}
             maxToRenderPerBatch={10}
-            updateCellsBatchingPeriod={0.0}
+            contentInsetAdjustmentBehavior={'automatic'}
             removeClippedSubviews={true}
+            onEndReachedThreshold={0.4}
             refreshing={loading}
             onRefresh={onShowModal}
             horizontal={false}
-            showsVerticalScrollIndicator={false}
+            showsVerticalScrollIndicator={true}
             data={filteredLotteries || userCreatedWonLotteries}
             getItem={getItem}
             getItemCount={getItemCount}
@@ -243,7 +242,7 @@ const ShipLotteryModal = props => {
       </SafeAreaView>
     </Modal>
   );
-};
+});
 
 ShipLotteryModal.propTypes = {
   userCreatedWonLotteries: PropTypes.any,

@@ -6,7 +6,7 @@ import {filter as filterTexts} from '../../constants/Texts';
 import {View} from 'react-native';
 import styles from './filter.style';
 
-const Filter = props => {
+const Filter = React.memo(props => {
   const {lang} = props;
   const filterTextfieldRef = createRef();
   const handleChange = value => {
@@ -31,7 +31,7 @@ const Filter = props => {
       />
     </View>
   );
-};
+});
 
 Filter.propTypes = {
   onFilterChange: PropTypes.func,

@@ -42,7 +42,7 @@ import {getLangSelector} from '../Settings/Selectors';
 let SuccessConfirmationModal = null;
 let UploadLotteryProgressModal = null;
 
-const ImportLottery = props => {
+const ImportLottery = React.memo(props => {
   const {loggedIn, user, lang} = props;
   let userPrefecture;
   if (user) {
@@ -68,6 +68,10 @@ const ImportLottery = props => {
   const [imagesChanged, setImagesChanged] = useState(false);
   const [lotteryNameChanged, setLotteryNameChanged] = useState(false);
   const [descriptionChanged, setDescriptionChanged] = useState(false);
+  const [shippingInformationChanged, setShippingInformationChanged] = useState(
+    false,
+  );
+  const [lotteryRulesChanged, setLotteryRulesChanged] = useState(false);
   const [priceChanged, setPriceChanged] = useState(false);
   const [itemCategoryChanged, setItemCategoryChanged] = useState(false);
   const [itemConditionChanged, setItemConditionChanged] = useState(false);
@@ -95,13 +99,27 @@ const ImportLottery = props => {
     description: false,
     price: false,
     images: false,
+    shippingInformation: false,
+    lotteryRules: false,
   });
   const userCurrency = userCountry && currencies[userCountry];
   const adNameRef = createRef();
   const descriptionRef = createRef();
+  const shippingInformationRef = createRef();
+  const lotteryRulesRef = createRef();
   const priceRef = createRef();
   const adImages = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   const handleChange = {
+    shippingInformation: () => {
+      return value => {
+        
+      };
+    },
+    lotteryRules: () => {
+      return value => {
+        
+      };
+    },
     adName: () => {
       return value => {
         if (value && value.length >= 5 && value.length <= 30) {
@@ -159,9 +177,17 @@ const ImportLottery = props => {
       };
     },
   };
-  const setDefault = (nameField, descriptionField, priceField) => {
+  const setDefault = (
+    nameField,
+    descriptionField,
+    priceField,
+    shippingInformationField,
+    lotteryRulesField,
+  ) => {
     nameField.setValue('');
     descriptionField.setValue('');
+    shippingInformationField.setValue('');
+    lotteryRulesField.setValue('');
     priceField.setValue('');
     setImages([]);
     setImageFiles([]);
@@ -169,6 +195,8 @@ const ImportLottery = props => {
     setImagesChanged(false);
     setLotteryNameChanged(false);
     setDescriptionChanged(false);
+    setLotteryRulesChanged(false);
+    setShippingInformationChanged(false);
     setPriceChanged(false);
     setItemCategoryChanged(false);
     setItemConditionChanged(false);
@@ -223,9 +251,13 @@ const ImportLottery = props => {
     // startAnimation();
     const {current: nameField} = adNameRef;
     const {current: descriptionField} = descriptionRef;
+    const {current: shippingInformationField} = shippingInformationRef;
+    const {current: lotteryRulesField} = lotteryRulesRef;
     const {current: priceField} = priceRef;
     const name = nameField.value();
     const description = descriptionField.value();
+    const lotteryRules = lotteryRulesField.value();
+    const shippingInformation = shippingInformationField.value();
     const price = priceField.value();
     if (
       name &&
@@ -234,6 +266,8 @@ const ImportLottery = props => {
       prefecture &&
       city &&
       itemCondition &&
+      shippingInformation &&
+      lotteryRules &&
       itemCategory &&
       imageFiles &&
       userCurrency &&
@@ -245,6 +279,8 @@ const ImportLottery = props => {
         description,
         image: filteredImages[0],
         prefecture,
+        shippingInformation,
+        lotteryRules,
         city,
         category: itemCategory,
         condition: itemCondition,
@@ -256,7 +292,13 @@ const ImportLottery = props => {
         onSuccess: () => {},
         imageFiles: filteredImages,
       });
-      setDefault(nameField, descriptionField, priceField);
+      setDefault(
+        nameField,
+        descriptionField,
+        priceField,
+        shippingInformationField,
+        lotteryRulesField,
+      );
       if (!SuccessConfirmationModal) {
         SuccessConfirmationModal = require('../SuccessConfirmationModal')
           .default;
@@ -301,6 +343,7 @@ const ImportLottery = props => {
                 onlyScaleDown: true,
               },
             ).then(data => {
+              console.log(data)
               const imagesArray = [...images];
               const imagesFilesArray = [...imageFiles];
               imagesArray[index] = data.uri;
@@ -328,10 +371,15 @@ const ImportLottery = props => {
     return () => {
       const {current: nameField} = adNameRef;
       const {current: descriptionField} = descriptionRef;
+      const {current: shippingInformationField} = shippingInformationRef;
+      const {current: lotteryRulesField} = lotteryRulesRef;
       const {current: priceField} = priceRef;
       const values = {
         adName: nameField && nameField.value(),
         description: descriptionField && descriptionField.value(),
+        shippingInformation:
+          shippingInformationField && shippingInformationField.value(),
+        lotteryRules: lotteryRulesField && lotteryRulesField.value(),
         price: priceField && priceField.value(),
       };
       handleChange[fieldName]()(values[fieldName]);
@@ -380,6 +428,8 @@ const ImportLottery = props => {
       imagesChanged &&
         lotteryNameChanged &&
         descriptionChanged &&
+        shippingInformationChanged &&
+        lotteryRulesChanged &&
         priceChanged &&
         itemCategoryChanged &&
         itemConditionChanged,
@@ -387,6 +437,8 @@ const ImportLottery = props => {
   }, [
     imagesChanged,
     lotteryNameChanged,
+    shippingInformationChanged,
+    lotteryRulesChanged,
     descriptionChanged,
     priceChanged,
     itemCategoryChanged,
@@ -426,8 +478,8 @@ const ImportLottery = props => {
               container: styles.toolbarContainer,
             }}
             centerElement={importLotteryTexts[lang].createLottery}
-            leftElement={'cloud-upload'}
-            onLeftElementPress={handleShowUploadLotteryProgressModal}
+            rightElement={'cloud-upload'}
+            onRightElementPress={handleShowUploadLotteryProgressModal}
           />
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -522,6 +574,46 @@ const ImportLottery = props => {
             </View>
             <View style={styles.sectionBlockContainer}>
               <Text style={styles.label}>
+                {importLotteryTexts[lang].shippingInformation}
+              </Text>
+              <TextField
+                placeholder={importLotteryTexts[lang].enterShippingInformation}
+                autoCapitalize={false}
+                autoCorrect={false}
+                placeholderTextColor={'rgba(0,0,0,0.3)'}
+                onChangeText={handleChange.shippingInformation()}
+                maxLength={500}
+                multiline={true}
+                numberOfLines={5}
+                minLength={20}
+                tintColor={'#b69cf6'}
+                error={errors.shippingInformation}
+                onBlur={handleBlur('shippingInformation')}
+                ref={shippingInformationRef}
+              />
+            </View>
+            <View style={styles.sectionBlockContainer}>
+              <Text style={styles.label}>
+                {importLotteryTexts[lang].lotteryRules}
+              </Text>
+              <TextField
+                placeholder={importLotteryTexts[lang].enterLotteryRules}
+                autoCapitalize={false}
+                autoCorrect={false}
+                placeholderTextColor={'rgba(0,0,0,0.3)'}
+                onChangeText={handleChange.lotteryRules()}
+                maxLength={500}
+                multiline={true}
+                numberOfLines={5}
+                minLength={20}
+                tintColor={'#b69cf6'}
+                error={errors.lotteryRules}
+                onBlur={handleBlur('lotteryRules')}
+                ref={lotteryRulesRef}
+              />
+            </View>
+            <View style={styles.sectionBlockContainer}>
+              <Text style={styles.label}>
                 {importLotteryTexts[lang].images}
               </Text>
               <View style={styles.importImageButtonsViewContainer}>
@@ -610,7 +702,7 @@ const ImportLottery = props => {
       </View>
     );
   }
-};
+});
 
 ImportLottery.propTypes = {
   loggedIn: PropTypes.bool,
