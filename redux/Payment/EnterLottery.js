@@ -61,7 +61,7 @@ const handleEnterLottery = payload => {
           payload: updatedAd,
         });
       }
-      return invoke(payload, 'onSuccess');
+      return invoke(payload, 'onSuccess', updatedAd);
     };
     return enterLottery({
       adId,

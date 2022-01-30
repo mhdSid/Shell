@@ -77,8 +77,8 @@ const Payment = React.memo(props => {
   const onError = () => {
     setDefaultsDataChanged();
   };
-  const handlePaymentSuccess = () => {
-    if (item.winnerUserId || lotteryDetails.winnerUserId) {
+  const handlePaymentSuccess = updatedLottery => {
+    if (updatedLottery.winnerUserId) {
       return handleCloseModal();
     }
     setDefaultsDataChanged();
