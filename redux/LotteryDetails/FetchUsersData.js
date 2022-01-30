@@ -11,6 +11,7 @@ const handleFetchUsersData = payload => {
       userId,
       onEror,
       currentCollectedPrice,
+      price,
       cancelTag,
     } = payload;
     const onGetUsersDataSuccess = data => {
@@ -21,7 +22,10 @@ const handleFetchUsersData = payload => {
       users = users.filter(Boolean);
       if (Array.isArray(users) && users.length) {
         users.forEach(user => {
-          if (currentCollectedPrice > 0 && `${user.id}` === `${winnerUserId}`) {
+          if (
+            `${currentCollectedPrice}` === `${price}` &&
+            `${user.id}` === `${winnerUserId}`
+          ) {
             dispatch({
               type: lotteryDetailsActions.setWinnerUserData,
               payload: user,

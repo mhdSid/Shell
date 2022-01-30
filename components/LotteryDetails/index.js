@@ -89,6 +89,7 @@ const LotteryDetails = React.memo(props => {
     likedBy,
   } = lotteryDetails || item;
   const [usersDataLoading, setUsersDataLoading] = useState(true);
+  const [didCongratulateUser, setDidCongratulateUser] = useState(false);
   const [userLotteriesLoading, setUserLotteriesLoading] = useState(true);
   const [cancelHttpTag] = useState(10);
   const [showModal, setShowModal] = useState(null);
@@ -98,6 +99,12 @@ const LotteryDetails = React.memo(props => {
     authUser && authUser.id && `${userId}` === `${authUser.id}`;
   const isWinner =
     authUser && authUser.id && `${winnerUserId}` === `${authUser.id}`;
+  const canEnterLottery =
+    authUser &&
+    `${userId}` !== `${authUser.id}` &&
+    !cancelled &&
+    available &&
+    Number(currentCollectedPrice || 0) < Number(price);
   let confettiRef = useRef();
 
   const scrollViewRef = createRef();
@@ -109,17 +116,22 @@ const LotteryDetails = React.memo(props => {
     setUserLotteriesLoading(false);
   };
   const fetchUsersData = () => {
-    const users = [userId, winnerUserId || false].filter(Boolean);
+    const users = [
+      userId,
+      lotteryDetails.winnerUserId || item.winnerUserId || false,
+    ].filter(Boolean);
 
     if (users.length) {
       invoke(props, 'handleFetchUsersData', {
-        winnerUserId,
+        winnerUserId: lotteryDetails.winnerUserId || item.winnerUserId,
         userId,
         users,
         cancelTag: cancelHttpTag,
         onError: fetchUsersDataCallback,
         onSuccess: fetchUsersDataCallback,
-        currentCollectedPrice,
+        currentCollectedPrice:
+          lotteryDetails.currentCollectedPrice || item.currentCollectedPrice,
+        price,
       });
     }
   };
@@ -149,6 +161,9 @@ const LotteryDetails = React.memo(props => {
     cancellableFetch.abort(cancelHttpTag);
   };
   const handleEnterDraw = () => {
+    if (!canEnterLottery) {
+      return;
+    }
     if (!Payment) {
       Payment = require('../Payment').default;
     }
@@ -311,7 +326,8 @@ const LotteryDetails = React.memo(props => {
         });
       }
     },
-    [lotteryDetailsTexts[lang].actionOptions.win]: handleEnterDraw,
+    [lotteryDetailsTexts[lang].actionOptions.win]:
+      canEnterLottery && handleEnterDraw,
   };
   const handleEditLottery = () => {
     if (!EditLotteryModal) {
@@ -351,7 +367,7 @@ const LotteryDetails = React.memo(props => {
     shipLotteryModal: (
       <ShipLotteryModal onClose={handleShipLotteryModalClose} />
     ),
-    paymentModal: (
+    paymentModal: canEnterLottery && (
       <Payment onClose={onPaymentClose} item={lotteryDetails || item} />
     ),
   };
@@ -370,16 +386,15 @@ const LotteryDetails = React.memo(props => {
     });
   };
   const handleConfettiRef = node => {
-    if (node && node.startConfetti) {
+    if (node && node.startConfetti && !didCongratulateUser) {
       confettiRef = node;
       confettiRef.startConfetti();
+      setDidCongratulateUser(true);
       setTimeout(() => {
         confettiRef.stopConfetti();
       }, 15000);
     }
   };
-  const canEnterLottery =
-    authUser && `${userId}` !== `${authUser.id}` && !cancelled && available;
 
   useEffect(() => {
     onShow();
@@ -602,7 +617,9 @@ const LotteryDetails = React.memo(props => {
                   </View>
                   <View style={styles.sectionBlockContainer}>
                     {usersDataLoading && SimpleLoader}
-                    {!usersDataLoading && winnerUserData && winnerUserId ? (
+                    {!usersDataLoading &&
+                    winnerUserData &&
+                    (lotteryDetails.winnerUserId || item.winnerUserId) ? (
                       <LotteryDetailsUserListItem user={winnerUserData} />
                     ) : null}
                     {!usersDataLoading && (!winnerUserData || !winnerUserId) ? (

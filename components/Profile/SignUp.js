@@ -110,6 +110,7 @@ const SignUp = React.memo(props => {
           <KeyboardAvoidingView
             behavior="padding"
             enabled
+            style={styles.innerSafeAreaView}
             keyboardVerticalOffset={25}>
             <Toolbar
               style={{

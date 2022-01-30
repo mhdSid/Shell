@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import invoke from 'lodash/invoke';
 import {Modal, SafeAreaView, View, Text, ScrollView} from 'react-native';
 import styles from './payment.style';
@@ -34,7 +34,10 @@ const Payment = React.memo(props => {
   const [creditCardExpiryDate, setCreditCardExpiryDate] = useState(false);
   const [creditCardNumber, setCreditCardNumber] = useState(false);
   const [creditCardType, setCreditCardType] = useState(false);
-
+  const canEnterLottery =
+    !lottery.cancelled &&
+    lottery.available &&
+    Number(lottery.currentCollectedPrice || 0) < Number(lottery.price);
   const creditCardInputRef = useRef();
 
   const onShowModal = () => {
@@ -76,9 +79,16 @@ const Payment = React.memo(props => {
   };
   const onError = () => {
     setDefaultsDataChanged();
+    // TODO: check if should close modal by error code
   };
   const handlePaymentSuccess = updatedLottery => {
-    if (updatedLottery.winnerUserId) {
+    if (
+      updatedLottery.winnerUserId ||
+      updatedLottery.cancelled ||
+      !updatedLottery.available ||
+      `${updatedLottery.price}` === `${updatedLottery.currentCollectedPrice}` ||
+      !canEnterLottery
+    ) {
       return handleCloseModal();
     }
     setDefaultsDataChanged();
@@ -88,19 +98,21 @@ const Payment = React.memo(props => {
     setShowSuccessConfirmationModal(true);
   };
   const handlePayment = () => {
-    setLoading(true);
-    invoke(props, 'handleEnterLottery', {
-      onSuccess: handlePaymentSuccess,
-      onError: onError,
-      adId: lottery.id,
-      userId: user.id,
-      email: user.email,
-      passwordHash: user.passwordHash,
-      creditCardNumber,
-      creditCardCVC,
-      creditCardExpiryDate,
-      creditCardType,
-    });
+    if (canEnterLottery) {
+      setLoading(true);
+      invoke(props, 'handleEnterLottery', {
+        onSuccess: handlePaymentSuccess,
+        onError: onError,
+        adId: lottery.id,
+        userId: user.id,
+        email: user.email,
+        passwordHash: user.passwordHash,
+        creditCardNumber,
+        creditCardCVC,
+        creditCardExpiryDate,
+        creditCardType,
+      });
+    }
   };
   const handleSuccessConfirmationModalJoinAgain = () => {
     setShowSuccessConfirmationModal(false);
@@ -121,6 +133,17 @@ const Payment = React.memo(props => {
       onPress: handleSuccessConfirmationModalGoBack,
     },
   ];
+  useEffect(() => {
+    if (
+      !canEnterLottery ||
+      item.winnerUserId ||
+      lotteryDetails.winnerUserId ||
+      `${item.currentCollectedPrice}` === `${item.price}` ||
+      `${lotteryDetails.currentCollectedPrice}` === `${lotteryDetails.price}`
+    ) {
+      handleCloseModal();
+    }
+  }, [canEnterLottery, item, lotteryDetails])
 
   if (!loggedIn || !user) {
     return <NoAuth lang={lang} />;

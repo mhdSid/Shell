@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   toolbarContainer: {
-    paddingHorizontal: 15,
     ...toolbarStyles,
   },
   scrollViewContainer: {

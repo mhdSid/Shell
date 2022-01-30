@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
     marginTop: 75,
   },
   toolbarContainer: {
-    paddingHorizontal: 15,
     ...toolbarStyles,
   },
   innerSafeAreaView: {

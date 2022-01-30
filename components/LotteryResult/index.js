@@ -63,6 +63,7 @@ const LotteryResult = React.memo(props => {
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(null);
   const [cancelHttpTag] = useState(11);
+  const [didCongratulateUser, setDidCongratulateUser] = useState(false);
   let confettiRef = useRef();
 
   const handleCloseModal = () => {
@@ -157,9 +158,10 @@ const LotteryResult = React.memo(props => {
     }
   };
   const handleConfettiRef = node => {
-    if (node && node.startConfetti) {
+    if (node && node.startConfetti && !didCongratulateUser) {
       confettiRef = node;
       confettiRef.startConfetti();
+      setDidCongratulateUser(true);
       setTimeout(() => {
         confettiRef.stopConfetti();
       }, 15000);

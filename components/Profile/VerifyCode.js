@@ -18,6 +18,7 @@ import PropTypes from 'prop-types';
 import {invoke} from 'lodash';
 import {handleResendVerificationCode} from '../../redux/Auth/ResendVerificationCode';
 import {getLangSelector} from '../Settings/Selectors';
+import verifyCodeImage from '../../assets/images/verify-code.png';
 
 const VerifyUserCode = React.memo(props => {
   const {email, passwordHash, lang} = props;
@@ -94,13 +95,7 @@ const VerifyUserCode = React.memo(props => {
           {loading && loadingPopup}
           <ScrollView>
             <View style={styles.scrollViewContainer}>
-              <Image
-                style={styles.verificationIcon}
-                source={{
-                  uri:
-                    'https://user-images.githubusercontent.com/4661784/56352614-4631a680-61d8-11e9-880d-86ecb053413d.png',
-                }}
-              />
+              <Image style={styles.verificationIcon} source={verifyCodeImage} />
               <Text style={styles.verificationTitleSubTitle}>
                 {profileTexts[lang].verificationSubTitle}
               </Text>
@@ -117,9 +112,9 @@ const VerifyUserCode = React.memo(props => {
               <View style={styles.resendButtonViewContainer}>
                 <Button
                   raised={true}
+                  primary
                   style={{
                     container: styles.resendCodeButtonContainer,
-                    text: styles.resendCodeButtonText,
                   }}
                   text={profileTexts[lang].resend}
                   onPress={handleResendPress}

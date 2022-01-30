@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   toolbarContainer: {
-    paddingHorizontal: 15,
     ...toolbarStyles,
   },
   tabBarNavigationContainer: {

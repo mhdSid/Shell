@@ -25,7 +25,7 @@ const handleEnterLottery = payload => {
     const onEnterLotterySuccess = data => {
       const {error, updatedAd, updatedUser} = data;
       if (error) {
-        return handleError({error, onError}, getState);
+        handleError({error, onError}, getState);
       }
       if (updatedUser) {
         dispatch({
