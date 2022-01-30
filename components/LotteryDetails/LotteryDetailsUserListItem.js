@@ -19,7 +19,7 @@ const LotteryDetailsUserListItem = props => {
         {user.image ? (
           <View
             style={[
-              user.id === winnerUserId &&
+              `${user.id}` === `${winnerUserId}` &&
                 styles.userListItemWinnerImageViewContainer,
               largeImage
                 ? styles.userListItemLargeImageViewContainer

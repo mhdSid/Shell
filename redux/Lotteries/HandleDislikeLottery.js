@@ -38,13 +38,11 @@ const handleDislikeLottery = payload => {
           type: receiveLotteryActions.dislikeLottery,
           payload: dislikedLottery,
         });
-        dispatch({
+        return dispatch({
           type: chatActions.dislikeLottery,
           payload: dislikedLottery,
         });
-        return;
       }
-      return;
     };
     return dislikeLottery({userId, lotteryId, cancelTag}).then(
       onGetMyLotteriesSuccess,

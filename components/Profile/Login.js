@@ -129,7 +129,7 @@ const Login = React.memo(props => {
             onLeftElementPress={handleCloseModal}
           />
           {loading && loadingPopup}
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView>
             <View style={styles.scrollViewContainer}>
               <View style={styles.sectionBlockContainer}>
                 <Text style={styles.label}>{profile[lang].email}</Text>

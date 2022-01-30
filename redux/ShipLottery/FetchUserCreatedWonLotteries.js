@@ -11,11 +11,11 @@ const handleFetchUserCreatedWonLotteries = payload => {
       if (error) {
         return handleError({error, onError}, getState);
       }
-      invoke(payload, 'onSuccess');
-      return dispatch({
+      dispatch({
         type: shipLotteryActions.setUserCreatedWonLotteries,
         payload: lotteries,
       });
+      return invoke(payload, 'onSuccess');
     };
     return getUserCreatedWonLotteries({userId, cancelTag}).then(
       onGetLotteriesSuccess,

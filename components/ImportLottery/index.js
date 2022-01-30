@@ -112,12 +112,37 @@ const ImportLottery = React.memo(props => {
   const handleChange = {
     shippingInformation: () => {
       return value => {
-        
+        if (value && value.length >= 20 && value.length <= 500) {
+          setShippingInformationChanged(true);
+          setErrors({
+            ...errors,
+            shippingInformation: false,
+          });
+        } else {
+          setErrors({
+            ...errors,
+            shippingInformation:
+              validationMessages[lang].importLottery.shippingInformation,
+          });
+          setShippingInformationChanged(false);
+        }
       };
     },
     lotteryRules: () => {
       return value => {
-        
+        if (value && value.length >= 20 && value.length <= 500) {
+          setLotteryRulesChanged(true);
+          setErrors({
+            ...errors,
+            lotteryRules: false,
+          });
+        } else {
+          setErrors({
+            ...errors,
+            lotteryRules: validationMessages[lang].importLottery.lotteryRules,
+          });
+          setLotteryRulesChanged(false);
+        }
       };
     },
     adName: () => {
@@ -482,7 +507,7 @@ const ImportLottery = React.memo(props => {
             onRightElementPress={handleShowUploadLotteryProgressModal}
           />
         </View>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView>
           <View style={styles.scrollViewContainer}>
             <View style={styles.sectionBlockContainer}>
               <Text style={styles.label}>

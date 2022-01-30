@@ -17,6 +17,8 @@ const handleImportLottery = payload => {
       onError,
       name,
       description,
+      shippingInformation,
+      lotteryRules,
       image,
       prefecture,
       category,
@@ -30,7 +32,6 @@ const handleImportLottery = payload => {
     } = payload;
     const importAdSuccessBackground = data => {
       const {error, newAd} = data;
-      invoke(payload, 'onSuccess');
       if (error || !newAd) {
         dispatch({
           type: uploadProgressActions.removeProgressItem,
@@ -45,6 +46,7 @@ const handleImportLottery = payload => {
           getState,
         );
       }
+      invoke(payload, 'onSuccess');
       if (imageFiles && imageFiles.length) {
         const newImages = imageFiles
           .filter(Boolean)
@@ -130,6 +132,8 @@ const handleImportLottery = payload => {
         id: uniqId,
         name,
         description,
+        shippingInformation,
+        lotteryRules,
         city,
         images: imageFiles && imageFiles.map(item => item.uri),
         prefecture,
@@ -144,6 +148,8 @@ const handleImportLottery = payload => {
     return addBackgroundUpload({
       name,
       description,
+      shippingInformation,
+      lotteryRules,
       city,
       image,
       prefecture,

@@ -9,8 +9,8 @@ const getConversation = (state, props) => {
   if (
     chatList &&
     chatList[`${lotteryId}`] &&
-    chatList[`${lotteryId}`].lotteryPosterId === lotteryPosterId &&
-    chatList[`${lotteryId}`].winnerUserId === winnerUserId &&
+    `${chatList[`${lotteryId}`].lotteryPosterId}` === `${lotteryPosterId}` &&
+    `${chatList[`${lotteryId}`].winnerUserId}` === `${winnerUserId}` &&
     Array.isArray(chatList[`${lotteryId}`].conversation) &&
     chatList[lotteryId].conversation.length
   ) {

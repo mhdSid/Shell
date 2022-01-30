@@ -126,7 +126,7 @@ const ChangePassword = React.memo(props => {
             behavior="padding"
             enabled
             keyboardVerticalOffset={25}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView>
               <View style={styles.scrollViewContainer}>
                 <View style={styles.sectionBlockContainer}>
                   <Text style={styles.label}>

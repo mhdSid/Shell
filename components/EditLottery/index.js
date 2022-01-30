@@ -30,6 +30,8 @@ const EditLottery = React.memo(props => {
   const {
     name: lotteryDetailsName,
     description: lotteryDetailsDescription,
+    shippingInformation: lotteryDetailsShippingInformation,
+    lotteryRules: lotteryDetailsLotteryRules,
     price: lotteryDetailsPrice,
     images: lotteryDetailsImages,
     prefecture: lotteryDetailsPrefecture,
@@ -62,6 +64,10 @@ const EditLottery = React.memo(props => {
   const [prefectureChanged, setPrefectureChanged] = useState(false);
   const [lotteryNameChanged, setLotteryNameChanged] = useState(false);
   const [descriptionChanged, setDescriptionChanged] = useState(false);
+  const [lotteryRulesChanged, setLotteryRulesChanged] = useState(false);
+  const [shippingInformationChanged, setShippingInformationChanged] = useState(
+    false,
+  );
   const [priceChanged, setPriceChanged] = useState(false);
   const [itemCategoryChanged, setItemCategoryChanged] = useState(false);
   const [itemConditionChanged, setItemConditionChanged] = useState(false);
@@ -90,11 +96,52 @@ const EditLottery = React.memo(props => {
     adName: false,
     description: false,
     price: false,
+    shippingInformation: false,
+    lotteryRules: false,
   });
   const adNameRef = createRef();
   const descriptionRef = createRef();
+  const shippingInformationRef = createRef();
+  const lotteryRulesRef = createRef();
   const priceRef = createRef();
   const handleChange = {
+    shippingInformation: () => {
+      return value => {
+        if (value && value.length >= 20 && value.length <= 500) {
+          setShippingInformationChanged(
+            value !== lotteryDetailsShippingInformation,
+          );
+          setErrors({
+            ...errors,
+            shippingInformation: false,
+          });
+        } else {
+          setErrors({
+            ...errors,
+            shippingInformation:
+              validationMessages[lang].importLottery.shippingInformation,
+          });
+          setShippingInformationChanged(false);
+        }
+      };
+    },
+    lotteryRules: () => {
+      return value => {
+        if (value && value.length >= 20 && value.length <= 500) {
+          setLotteryRulesChanged(value !== lotteryDetailsLotteryRules);
+          setErrors({
+            ...errors,
+            lotteryRules: false,
+          });
+        } else {
+          setErrors({
+            ...errors,
+            lotteryRules: validationMessages[lang].importLottery.lotteryRules,
+          });
+          setLotteryRulesChanged(false);
+        }
+      };
+    },
     adName: () => {
       return value => {
         if (value && value.length >= 5 && value.length <= 30) {
@@ -156,14 +203,20 @@ const EditLottery = React.memo(props => {
   const updateLottery = () => {
     const {current: nameField} = adNameRef;
     const {current: descriptionField} = descriptionRef;
+    const {current: shippingInformationField} = shippingInformationRef;
+    const {current: lotteryRulesField} = lotteryRulesRef;
     const {current: priceField} = priceRef;
     const name = nameField.value();
     const description = descriptionField.value();
+    const lotteryRules = lotteryRulesField.value();
+    const shippingInformation = shippingInformationField.value();
     const price = priceField.value();
     const filteredImages = imageFiles.filter(Boolean);
     if (
       name ||
       description ||
+      lotteryRules ||
+      shippingInformation ||
       price ||
       prefecture ||
       city ||
@@ -175,6 +228,8 @@ const EditLottery = React.memo(props => {
       invoke(props, 'updateLottery', {
         name,
         description,
+        lotteryRules,
+        shippingInformation,
         prefecture,
         city,
         category: itemCategory,
@@ -185,6 +240,8 @@ const EditLottery = React.memo(props => {
         textDataChanged:
           lotteryNameChanged ||
           descriptionChanged ||
+          lotteryRulesChanged ||
+          shippingInformationChanged ||
           priceChanged ||
           priceChanged ||
           prefectureChanged ||
@@ -260,10 +317,15 @@ const EditLottery = React.memo(props => {
     return () => {
       const {current: nameField} = adNameRef;
       const {current: descriptionField} = descriptionRef;
+      const {current: shippingInformationField} = shippingInformationRef;
+      const {current: lotteryRulesField} = lotteryRulesRef;
       const {current: priceField} = priceRef;
       const values = {
         adName: nameField && nameField.value(),
         description: descriptionField && descriptionField.value(),
+        shippingInformation:
+          shippingInformationField && shippingInformationField.value(),
+        lotteryRules: lotteryRulesField && lotteryRulesField.value(),
         price: priceField && priceField.value(),
       };
       handleChange[fieldName]()(values[fieldName]);
@@ -274,6 +336,8 @@ const EditLottery = React.memo(props => {
       imagesChanged ||
         lotteryNameChanged ||
         descriptionChanged ||
+        lotteryRulesChanged ||
+        shippingInformationChanged ||
         priceChanged ||
         itemCategoryChanged ||
         cityChanged ||
@@ -284,6 +348,8 @@ const EditLottery = React.memo(props => {
     imagesChanged,
     lotteryNameChanged,
     descriptionChanged,
+    lotteryRulesChanged,
+    shippingInformationChanged,
     priceChanged,
     itemCategoryChanged,
     itemConditionChanged,
@@ -309,7 +375,7 @@ const EditLottery = React.memo(props => {
               onLeftElementPress={handleCloseModal}
             />
           </View>
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView>
             <View style={styles.scrollViewContainer}>
               <View style={styles.sectionBlockContainer}>
                 <Text style={styles.label}>
@@ -377,6 +443,48 @@ const EditLottery = React.memo(props => {
                     />
                   </View>
                 </View>
+              </View>
+              <View style={styles.sectionBlockContainer}>
+                <Text style={styles.label}>
+                  {importLotteryTexts[lang].shippingInformation}
+                </Text>
+                <TextField
+                  placeholder={
+                    importLotteryTexts[lang].enterShippingInformation
+                  }
+                  autoCapitalize={false}
+                  autoCorrect={false}
+                  placeholderTextColor={'rgba(0,0,0,0.3)'}
+                  onChangeText={handleChange.shippingInformation()}
+                  maxLength={500}
+                  multiline={true}
+                  numberOfLines={5}
+                  minLength={20}
+                  tintColor={'#b69cf6'}
+                  error={errors.shippingInformation}
+                  onBlur={handleBlur('shippingInformation')}
+                  ref={shippingInformationRef}
+                />
+              </View>
+              <View style={styles.sectionBlockContainer}>
+                <Text style={styles.label}>
+                  {importLotteryTexts[lang].lotteryRules}
+                </Text>
+                <TextField
+                  placeholder={importLotteryTexts[lang].enterLotteryRules}
+                  autoCapitalize={false}
+                  autoCorrect={false}
+                  placeholderTextColor={'rgba(0,0,0,0.3)'}
+                  onChangeText={handleChange.lotteryRules()}
+                  maxLength={500}
+                  multiline={true}
+                  numberOfLines={5}
+                  minLength={20}
+                  tintColor={'#b69cf6'}
+                  error={errors.lotteryRules}
+                  onBlur={handleBlur('lotteryRules')}
+                  ref={lotteryRulesRef}
+                />
               </View>
               <View style={styles.sectionBlockContainer}>
                 <Text style={styles.label}>

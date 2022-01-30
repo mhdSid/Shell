@@ -195,11 +195,13 @@ class ListItemCommon extends Component {
             !this.props.disableActions && (
               <>
                 {this.props.authUserId &&
-                this.props.item.userId !== this.props.authUserId ? (
+                `${this.props.item.userId}` !== `${this.props.authUserId}` ? (
                   <>
                     {Array.isArray(this.props.item.likedBy) &&
                     this.props.item.likedBy.length &&
-                    this.props.item.likedBy.includes(this.props.authUserId) ? (
+                    this.props.item.likedBy.find(
+                      val => `${val}` === `${this.props.authUserId}`,
+                    ) ? (
                       <IconToggle
                         name="favorite"
                         color="#e34977"
@@ -208,7 +210,9 @@ class ListItemCommon extends Component {
                     ) : null}
                     {!Array.isArray(this.props.item.likedBy) ||
                     !this.props.item.likedBy.length ||
-                    !this.props.item.likedBy.includes(this.props.authUserId) ? (
+                    !this.props.item.likedBy.find(
+                      val => `${val}` === `${this.props.authUserId}`,
+                    ) ? (
                       <IconToggle
                         name="favorite-border"
                         onPress={this.handleLikeLottery}

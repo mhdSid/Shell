@@ -205,6 +205,8 @@ const updateLotteryWithoutImage = async props => {
     condition,
     category,
     description,
+    shippingInformation,
+    lotteryRules,
     name,
   } = props;
   const data = await request({
@@ -217,6 +219,8 @@ const updateLotteryWithoutImage = async props => {
       condition,
       category,
       description,
+      shippingInformation,
+      lotteryRules,
       name,
       id,
       userId,
@@ -230,6 +234,8 @@ const updateLotteryWithoutImage = async props => {
         condition,
         category,
         description,
+        shippingInformation,
+        lotteryRules,
         hashkey,
       ).toString(),
     },
@@ -241,6 +247,8 @@ const addBackgroundUpload = async props => {
   const {
     name,
     description,
+    shippingInformation,
+    lotteryRules,
     image,
     category,
     prefecture,
@@ -264,6 +272,8 @@ const addBackgroundUpload = async props => {
     parameters: {
       name,
       description,
+      shippingInformation,
+      lotteryRules,
       category,
       prefecture,
       city,
@@ -275,6 +285,8 @@ const addBackgroundUpload = async props => {
       hash: sha256(
         name +
           description +
+          shippingInformation +
+          lotteryRules +
           category +
           prefecture +
           city +

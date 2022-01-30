@@ -78,6 +78,9 @@ const Payment = React.memo(props => {
     setDefaultsDataChanged();
   };
   const handlePaymentSuccess = () => {
+    if (item.winnerUserId || lotteryDetails.winnerUserId) {
+      return handleCloseModal();
+    }
     setDefaultsDataChanged();
     if (!SuccessConfirmationModal) {
       SuccessConfirmationModal = require('../SuccessConfirmationModal').default;
@@ -146,9 +149,7 @@ const Payment = React.memo(props => {
             onLeftElementPress={handleCloseModal}
           />
           {loading ? loadingPopup : null}
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={styles.scrollViewContainer}>
+          <ScrollView style={styles.scrollViewContainer}>
             <View style={styles.creditCardInputViewContainer}>
               <CreditCardInput
                 allowScroll={true}

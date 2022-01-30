@@ -92,7 +92,7 @@ const VerifyUserCode = React.memo(props => {
             onLeftElementPress={handleCloseModal}
           />
           {loading && loadingPopup}
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView>
             <View style={styles.scrollViewContainer}>
               <Image
                 style={styles.verificationIcon}

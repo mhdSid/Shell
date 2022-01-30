@@ -22,7 +22,7 @@ const ContactUsModal = React.memo(props => {
             centerElement={settings[lang].contactUs}
             onLeftElementPress={handleCloseModal}
           />
-          <ScrollView showsVerticalScrollIndicator={false} />
+          <ScrollView />
         </View>
       </SafeAreaView>
     </Modal>

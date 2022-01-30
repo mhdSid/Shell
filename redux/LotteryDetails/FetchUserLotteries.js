@@ -32,8 +32,7 @@ const handleFetchUserLotteries = payload => {
         },
       );
     }
-    invoke(payload, 'onSuccess');
-    return;
+    return invoke(payload, 'onSuccess');
   };
 };
 export {handleFetchUserLotteries};

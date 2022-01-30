@@ -22,7 +22,7 @@ const UserAgreement = React.memo(props => {
             centerElement={settings[lang].userAgreement}
             onLeftElementPress={handleCloseModal}
           />
-          <ScrollView showsVerticalScrollIndicator={false} />
+          <ScrollView />
         </View>
       </SafeAreaView>
     </Modal>

@@ -183,6 +183,10 @@ const validationMessages = {
       adName: 'Lottery name length should be between 5 and 30 characters.',
       description:
         'Lottery description length should be between 20 and 500 characters.',
+      shippingInformation:
+        'Shipping information length should be between 20 and 500 characters.',
+      lotteryRules:
+        'Lottery rules length should be between 20 and 500 characters.',
       price: 'Price should be be divisble by 100',
     },
     loginSignup: {
@@ -208,6 +212,8 @@ const validationMessages = {
       adName: '宝くじの名前の長さは5〜30文字にする必要があります。',
       description: '宝くじの説明の長さは20〜500文字である必要があります。',
       price: '価格は100で割り切れる必要があります',
+      shippingInformation: '配送情報の長さは20〜500文字である必要があります。',
+      lotteryRules: '宝くじのルールの長さは20〜500文字である必要があります。',
     },
     loginSignup: {
       email: '正しいメールアドレスを入力してください。',
@@ -302,6 +308,8 @@ const lotteryDetails = {
     winner: 'Winner',
     name: 'Name',
     description: 'Description',
+    lotteryRules: 'Lottery Rules',
+    shippingInformation: 'Shipping Information',
     condition: 'Condition',
     category: 'Category',
     publishDate: 'Publish Date',
@@ -316,6 +324,8 @@ const lotteryDetails = {
     reAddLottery: '宝くじを読んだ',
     shareLottery: '宝くじを共有する',
     areYouSureShare: '共有',
+    lotteryRules: '宝くじのルール',
+    shippingInformation: '出荷情報',
     cancelThisLottery: 'この宝くじをキャンセルする',
     reAddThisLottery: 'この宝くじを読む',
     close: '選ぶ',
@@ -419,7 +429,7 @@ const importLottery = {
     updateLottery: 'Update lottery',
     create: 'Create',
     update: 'Update',
-    productName: 'Item name',
+    productName: 'Lottery name',
     adName: 'Name',
     description: 'Description',
     price: 'Price',
@@ -445,7 +455,7 @@ const importLottery = {
     updateLottery: '宝くじを更新する',
     create: '作成',
     update: 'アップデート',
-    productName: '項目名',
+    productName: '宝くじの名前',
     adName: '名前',
     description: '説明',
     price: '価格',

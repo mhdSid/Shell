@@ -84,8 +84,8 @@ const ChatModal = React.memo(props => {
   const getItemKey = item => item.id;
   const renderListItem = ({item}) => {
     const pullRight =
-      (isWinner && item.userId === lotteryWinner.id) ||
-      (isLotteryPoster && item.userId === lotteryPoster.id);
+      (isWinner && `${item.userId}` === `${lotteryWinner.id}`) ||
+      (isLotteryPoster && `${item.userId}` === `${lotteryPoster.id}`);
     return (
       <View
         style={[
@@ -131,9 +131,9 @@ const ChatModal = React.memo(props => {
           } = data;
           if (
             Object.keys(messageObject).length &&
-            lotteryPosterId === lotteryPoster.id &&
-            lotteryId === lottery.id &&
-            winnerUserId === lotteryWinner.id
+            `${lotteryPosterId}` === `${lotteryPoster.id}` &&
+            `${lotteryId}` === `${lottery.id}` &&
+            `${winnerUserId}` === `${lotteryWinner.id}`
             // to === authUserId &&
             // ((isWinner && from === lotteryPoster.id) ||
             //   (isLotteryPoster && from === lotteryWinner.id))
@@ -215,7 +215,7 @@ const ChatModal = React.memo(props => {
                   refreshing={loading}
                   onRefresh={onShow}
                   horizontal={false}
-                  showsVerticalScrollIndicator={false}
+                  showsVerticalScrollIndicator={true}
                   contentContainerStyle={
                     styles.chatVirtualizedListContentContainer
                   }

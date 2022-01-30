@@ -38,13 +38,11 @@ const handleLikeLottery = payload => {
           type: receiveLotteryActions.likeLottery,
           payload: likedLottery,
         });
-        dispatch({
+        return dispatch({
           type: chatActions.likeLottery,
           payload: likedLottery,
         });
-        return;
       }
-      return;
     };
     return likeLottery({userId, lotteryId, cancelTag}).then(
       onGetMyLotteriesSuccess,

@@ -138,7 +138,7 @@ const UpdateUser = React.memo(props => {
             behavior="padding"
             enabled
             keyboardVerticalOffset={25}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView>
               <View style={styles.scrollViewContainer}>
                 <View style={styles.sectionBlockContainer}>
                   <View style={styles.userImageButtonViewContainer}>

@@ -12,13 +12,6 @@ import {getUserIdSelector} from '../Profile/Selectors';
 import {showLotteryResult} from '../../redux/LotteryResult/actions';
 import FastImage from 'react-native-fast-image';
 
-let testImages = [
-  'file:///var/mobile/Containers/Data/Application/08251AB1-3DAB-48B0-B646-8FE303E25B1B/Library/Caches/12F93341-8443-4D1C-8EB0-D3417C82BCFE.jpg',
-  'file:///var/mobile/Containers/Data/Application/08251AB1-3DAB-48B0-B646-8FE303E25B1B/Library/Caches/1D5E7D7D-A012-4504-95C6-CF29E521441E.jpg',
-  'file:///var/mobile/Containers/Data/Application/08251AB1-3DAB-48B0-B646-8FE303E25B1B/Library/Caches/EA43820F-2EF5-4339-A091-4B31BD827E35.jpg',
-  'file:///var/mobile/Containers/Data/Application/08251AB1-3DAB-48B0-B646-8FE303E25B1B/Library/Caches/437735B7-32DA-4EE3-9D40-E5672E634EFE.jpg',
-  'file:///var/mobile/Containers/Data/Application/08251AB1-3DAB-48B0-B646-8FE303E25B1B/Library/Caches/A39876F7-33BB-4968-82B0-1BE63ABEAF2F.jpg',
-]
 class CardListItem extends Component {
   static propTypes = {
     item: PropTypes.object,
@@ -95,11 +88,11 @@ class CardListItem extends Component {
   renderLikeIcon = () => {
     const {item, authUserId} = this.props;
 
-    return !authUserId ? null : item.userId !== authUserId ? (
+    return !authUserId ? null : `${item.userId}` !== `${authUserId}` ? (
       <View style={styles.cardIconViewContainer}>
         {Array.isArray(item.likedBy) &&
         item.likedBy.length &&
-        item.likedBy.includes(authUserId) ? (
+        item.likedBy.find(val => `${val}` === `${authUserId}`) ? (
           <IconToggle
             name="favorite"
             size={17}
@@ -112,7 +105,7 @@ class CardListItem extends Component {
         ) : null}
         {!Array.isArray(item.likedBy) ||
         !item.likedBy.length ||
-        !item.likedBy.includes(authUserId) ? (
+        !item.likedBy.find(val => `${val}` === `${authUserId}`) ? (
           <IconToggle
             name="favorite-border"
             color="white"

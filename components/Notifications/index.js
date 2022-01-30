@@ -26,7 +26,7 @@ const Notifications = React.memo(props => {
             onLeftElementPress={handleCloseModal}
           />
           {loading && loadingPopup}
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView>
             <View style={styles.scrollViewContainer} />
           </ScrollView>
         </View>

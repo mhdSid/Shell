@@ -23,8 +23,7 @@ const About = React.memo(props => {
           />
           <ScrollView
             style={styles.scrollViewContainer}
-            contentContainerStyle={styles.scrollViewContentContainer}
-            showsVerticalScrollIndicator={false}>
+            contentContainerStyle={styles.scrollViewContentContainer}>
             <View style={styles.iconTextContainer}>
               <Icon color="rgba(0,0,0,.55)" name="store" />
               <Text style={styles.iconText}>{about[lang].sell}</Text>

@@ -23,7 +23,6 @@ const handleEnterLottery = payload => {
       creditCardType,
     } = payload;
     const onEnterLotterySuccess = data => {
-      invoke(payload, 'onSuccess');
       const {error, updatedAd, updatedUser} = data;
       if (error) {
         return handleError({error, onError}, getState);
@@ -57,11 +56,12 @@ const handleEnterLottery = payload => {
           type: shipLotteryActions.enterLottery,
           payload: updatedAd,
         });
-        return dispatch({
+        dispatch({
           type: lotteryDetailsActions.showLotteryDetails,
           payload: updatedAd,
         });
       }
+      return invoke(payload, 'onSuccess');
     };
     return enterLottery({
       adId,

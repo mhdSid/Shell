@@ -126,7 +126,7 @@ const SignUp = React.memo(props => {
                 onClose={handlePrivacyModalClose}
               />
             )}
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView>
               <View style={styles.scrollViewContainer}>
                 <Text style={styles.label}>{profile[lang].prefecture}</Text>
                 <View style={styles.dropdownView}>

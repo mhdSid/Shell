@@ -22,7 +22,7 @@ const FaqModal = React.memo(props => {
             centerElement={settings[lang].faq}
             onLeftElementPress={handleCloseModal}
           />
-          <ScrollView showsVerticalScrollIndicator={false} />
+          <ScrollView />
         </View>
       </SafeAreaView>
     </Modal>

@@ -43,8 +43,8 @@ const ReceiveLotteryInfoModal = React.memo(props => {
     winnerUserId,
     currentCollectedPrice,
   } = receiveLotteryDetails;
-  const isWinner = user && user.id && winnerUserId === user.id;
-  const isLotteryPoster = user && userId === user.id;
+  const isWinner = user && user.id && `${winnerUserId}` === `${user.id}`;
+  const isLotteryPoster = user && `${userId}` === `${user.id}`;
   const [loading, setIsLoading] = useState(true);
   const [showChatModal, setShowChatModal] = useState(false);
   const [cancelHttpTag] = useState(22);
@@ -139,7 +139,7 @@ const ReceiveLotteryInfoModal = React.memo(props => {
           {loading && loadingPopup}
           {!loading && lotteryPosterData ? (
             <>
-              <ScrollView showsVerticalScrollIndicator={false}>
+              <ScrollView>
                 <View style={styles.topStepsViewContainer}>
                   <View style={styles.topStepsSectionBlockContainer}>
                     {lotteryPosterData.image ? (

@@ -22,7 +22,7 @@ const TermsAndPrivacyPolicyModal = props => {
             centerElement={settings[lang].privacyAndTerms}
             onLeftElementPress={handleCloseModal}
           />
-          <ScrollView showsVerticalScrollIndicator={false} />
+          <ScrollView />
         </View>
       </SafeAreaView>
     </Modal>

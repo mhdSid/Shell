@@ -91,7 +91,7 @@ const Settings = React.memo(props => {
             centerElement={settings[lang].settings}
             onLeftElementPress={handleCloseModal}
           />
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView>
             <View style={styles.scrollViewContainer}>
               <Drawer>
                 <Drawer.Section title={settings[lang].language} />

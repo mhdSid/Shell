@@ -24,7 +24,7 @@ const snackbarReducer = (state = initialState, action) => {
       let snackbarItems = [...state.snackbarItems];
       if (Array.isArray(snackbarItems) && snackbarItems.length) {
         snackbarItems = snackbarItems.filter(
-          item => item.id !== action.payload,
+          item => `${item.id}` !== `${action.payload}`,
         );
       }
       return {

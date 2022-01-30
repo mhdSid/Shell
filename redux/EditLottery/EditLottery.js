@@ -17,6 +17,8 @@ const handleUpdateLottery = payload => {
       onError,
       name,
       description,
+      shippingInformation,
+      lotteryRules,
       prefecture,
       category,
       condition,
@@ -35,6 +37,8 @@ const handleUpdateLottery = payload => {
         condition ||
         category ||
         description ||
+        shippingInformation ||
+        lotteryRules ||
         name)
     ) {
       const onUpdateUserSuccess = data => {
@@ -126,6 +130,8 @@ const handleUpdateLottery = payload => {
       return updateLotteryWithoutImage({
         name,
         description,
+        lotteryRules,
+        shippingInformation,
         city,
         id,
         prefecture,

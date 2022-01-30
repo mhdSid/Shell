@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import {loadingPopup} from '../Loading';
 import {paymentInformation} from '../../constants/Texts';
 import {CreditCardInput} from 'react-native-credit-card-input';
-import {handlerUpdateUserData} from '../../redux/Auth/UpdateUser';
+import {handleUpdateUserData} from '../../redux/Auth/UpdateUser';
 import {getUserSelector} from '../UpdateUser/Selectors';
 import {connect} from 'react-redux';
 import {getLangSelector} from '../Settings/Selectors';
@@ -136,7 +136,7 @@ const PaymentInformation = React.memo(props => {
             onLeftElementPress={handleCloseModal}
           />
           {loading && loadingPopup}
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView>
             <View style={styles.scrollViewContainer}>
               <View style={styles.creditCardInputViewContainer}>
                 <CreditCardInput
@@ -180,7 +180,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleUpdateUserData: payload => dispatch(handlerUpdateUserData(payload)),
+    handleUpdateUserData: payload => dispatch(handleUpdateUserData(payload)),
   };
 };
 

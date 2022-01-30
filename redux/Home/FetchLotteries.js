@@ -7,11 +7,11 @@ const handleFetchLotteries = payload => {
     const {onError, cancelTag, resetLotteries} = payload;
     const pageToken = getState().homeReducer.pageToken;
     const onGetAdsSuccess = data => {
-      invoke(payload, 'onSuccess');
       const {error, ads: lotteries, nextPageToken} = data;
       if (error) {
         return handleError({error, onError}, getState);
       }
+      invoke(payload, 'onSuccess');
       dispatch({
         type: homeActions.setPageToken,
         payload: nextPageToken,
@@ -37,8 +37,7 @@ const handleFetchLotteries = payload => {
         return handleError({error, onError}, getState);
       });
     }
-    invoke(payload, 'onSuccess');
-    return;
+    return invoke(payload, 'onSuccess');
   };
 };
 

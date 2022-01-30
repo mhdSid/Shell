@@ -67,6 +67,8 @@ const LotteryDetails = React.memo(props => {
   const {
     name,
     description,
+    shippingInformation,
+    lotteryRules,
     category,
     currency,
     price,
@@ -91,9 +93,11 @@ const LotteryDetails = React.memo(props => {
   const [cancelHttpTag] = useState(10);
   const [showModal, setShowModal] = useState(null);
   const [viewImageUri, setViewImageUri] = useState(images[0]);
-  const isVisitor = authUser && authUser.id && userId !== authUser.id;
-  const isLotteryPoster = authUser && authUser.id && userId === authUser.id;
-  const isWinner = authUser && authUser.id && winnerUserId === authUser.id;
+  const isVisitor = authUser && authUser.id && `${userId}` !== `${authUser.id}`;
+  const isLotteryPoster =
+    authUser && authUser.id && `${userId}` === `${authUser.id}`;
+  const isWinner =
+    authUser && authUser.id && `${winnerUserId}` === `${authUser.id}`;
   let confettiRef = useRef();
 
   const scrollViewRef = createRef();
@@ -417,7 +421,7 @@ const LotteryDetails = React.memo(props => {
               />
             </View>
           ) : null}
-          <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
+          <ScrollView ref={scrollViewRef}>
             <View style={styles.lotteryImagesViewContainer}>
               <CarouselComponent
                 onItemPress={handleShowImagesViewer}
@@ -495,6 +499,28 @@ const LotteryDetails = React.memo(props => {
               <View style={styles.sectionBlockContainer}>
                 <Text style={styles.sectionBlockContainerText}>
                   {description}
+                </Text>
+              </View>
+              <View style={styles.iconTextViewContainer}>
+                <Icon color="rgba(0,0,0,.55)" name="gavel" />
+                <Text style={styles.iconText}>
+                  {lotteryDetailsTexts[lang].lotteryRules}
+                </Text>
+              </View>
+              <View style={styles.sectionBlockContainer}>
+                <Text style={styles.sectionBlockContainerText}>
+                  {lotteryRules}
+                </Text>
+              </View>
+              <View style={styles.iconTextViewContainer}>
+                <Icon color="rgba(0,0,0,.55)" name="local-shipping" />
+                <Text style={styles.iconText}>
+                  {lotteryDetailsTexts[lang].shippingInformation}
+                </Text>
+              </View>
+              <View style={styles.sectionBlockContainer}>
+                <Text style={styles.sectionBlockContainerText}>
+                  {shippingInformation}
                 </Text>
               </View>
               <View style={styles.iconTextViewContainer}>
@@ -764,7 +790,7 @@ const LotteryDetails = React.memo(props => {
               {isVisitor &&
               Array.isArray(likedBy) &&
               likedBy.length &&
-              likedBy.includes(authUser.id) ? (
+              likedBy.find(val => `${val}` === `${authUser.id}`) ? (
                 <Button
                   primary
                   raised
@@ -791,7 +817,7 @@ const LotteryDetails = React.memo(props => {
               {isVisitor &&
               (!Array.isArray(likedBy) ||
                 !likedBy.length ||
-                !likedBy.includes(authUser.id)) ? (
+                !likedBy.find(val => `${val}` === `${authUser.id}`)) ? (
                 <Button
                   primary
                   raised

@@ -43,8 +43,8 @@ const ShipLotteryInfoModal = React.memo(props => {
     winnerUserId,
     currentCollectedPrice,
   } = shipLotteryDetails;
-  const isWinner = user && user.id && winnerUserId === user.id;
-  const isLotteryPoster = user && userId === user.id;
+  const isWinner = user && user.id && `${winnerUserId}` === `${user.id}`;
+  const isLotteryPoster = user && `${userId}` === `${user.id}`;
   const [loading, setIsLoading] = useState(true);
   const [showChatModal, setShowChatModal] = useState(false);
   const [cancelHttpTag] = useState(33);
@@ -133,7 +133,7 @@ const ShipLotteryInfoModal = React.memo(props => {
           ) : null}
           {!loading && lotteryWinnerData ? (
             <>
-              <ScrollView showsVerticalScrollIndicator={false}>
+              <ScrollView>
                 <View style={styles.topStepsViewContainer}>
                   <View style={styles.topStepsSectionBlockContainer}>
                     {user.image ? (
