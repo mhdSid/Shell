@@ -45,7 +45,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "socket.io-client": "^2.3.0",
-    "url-parse": "^1.5.0"
+    "url-parse": "^1.5.8"
   },
   "devDependencies": {
     "metro": "^0.65.0",
