@@ -11,6 +11,8 @@ const initialState = {
     toDate: '',
     category: '',
     condition: '',
+    minPrice: '',
+    maxPrice: '',
   },
 };
 
@@ -43,6 +45,8 @@ const searchReducer = (state = initialState, action) => {
           toDate: '',
           category: '',
           condition: '',
+          minPrice: '',
+          maxPrice: '',
         },
       };
     }

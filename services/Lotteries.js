@@ -455,6 +455,8 @@ const search = async props => {
     ? `${new Date(searchFilters.toDate)}`
     : '';
   const city = searchFilters.city || '';
+  const minPrice = searchFilters.minPrice || '';
+  const maxPrice = searchFilters.maxPrice || '';
   const prefecture = searchFilters.prefecture || '';
   const category = searchFilters.category || '';
   const condition = searchFilters.condition || '';
@@ -469,6 +471,8 @@ const search = async props => {
       prefecture,
       category,
       condition,
+      minPrice,
+      maxPrice,
       // pageToken,
       hash: sha256(
         searchText +
@@ -478,6 +482,8 @@ const search = async props => {
           city +
           category +
           condition +
+          minPrice +
+          maxPrice +
           hashkey,
       ).toString(),
     },

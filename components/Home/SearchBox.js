@@ -19,7 +19,7 @@ import {
   setSearchEventFired,
   setSearchFilters,
 } from '../../redux/Search/actions';
-import {invoke} from 'lodash';
+import {invoke, isNumber} from 'lodash';
 import {
   getSearchEventFiredSelector,
   getSearchFiltersSelector,
@@ -48,12 +48,26 @@ const SearchBox = React.memo(props => {
   );
   const fromDateRef = createRef();
   const toDateRef = createRef();
+  const minPriceRef = createRef();
+  const maxPriceRef = createRef();
   const searchQueryRef = createRef();
   const [errors, setErrors] = useState({
     fromDate: false,
     toDate: false,
     searchQuery: false,
+    minPrice: false,
+    maxPrice: false,
   });
+  const isSearchDisabled =
+    !searchFilters.searchText &&
+    !searchFilters.prefecture &&
+    !searchFilters.city &&
+    !searchFilters.fromDate &&
+    !searchFilters.toDate &&
+    !searchFilters.category &&
+    !searchFilters.minPrice &&
+    !searchFilters.maxPrice &&
+    !searchFilters.condition;
 
   const prefectureOnChangeText = (value, index) => {
     setCityDropdownData(
@@ -79,6 +93,72 @@ const SearchBox = React.memo(props => {
     value: item.kanji,
   }));
   const handleChange = {
+    minPrice: () => {
+      return value => {
+        invoke(props, 'handleSetSearchFilters', {minPrice: value});
+        const {current: maxPriceField} = maxPriceRef;
+        const maxPrice = maxPriceField.value();
+        if (value && isNumber(Number(value))) {
+          if (
+            maxPrice &&
+            isNumber(Number(maxPrice)) &&
+            Number(maxPrice) < Number(value)
+          ) {
+            setErrors({
+              ...errors,
+              minPrice:
+                validationMessages[lang].search.minPriceLessThanMaxPrice,
+            });
+          } else {
+            setErrors({
+              ...errors,
+              minPrice: false,
+              maxPrice:
+                maxPrice && isNumber(Number(maxPrice))
+                  ? false
+                  : errors.maxPrice,
+            });
+          }
+        } else {
+          setErrors({
+            ...errors,
+            minPrice:
+              value === '' ? false : validationMessages[lang].search.minPrice,
+          });
+        }
+      };
+    },
+    maxPrice: () => {
+      return value => {
+        invoke(props, 'handleSetSearchFilters', {maxPrice: value});
+        const {current: minPricefield} = minPriceRef;
+        const minPrice = minPricefield.value();
+        if (value && isNumber(Number(value))) {
+          if (minPrice && isNumber(Number(minPrice)) && minPrice > value) {
+            setErrors({
+              ...errors,
+              maxPrice:
+                validationMessages[lang].search.maxPriceLessThanMinPrice,
+            });
+          } else {
+            setErrors({
+              ...errors,
+              maxPrice: false,
+              minPrice:
+                minPrice && isNumber(Number(minPrice))
+                  ? false
+                  : errors.minPrice,
+            });
+          }
+        } else {
+          setErrors({
+            ...errors,
+            maxPrice:
+              value === '' ? false : validationMessages[lang].search.maxPrice,
+          });
+        }
+      };
+    },
     fromDate: () => {
       return value => {
         invoke(props, 'handleSetSearchFilters', {fromDate: value});
@@ -92,7 +172,8 @@ const SearchBox = React.memo(props => {
             if (toDate && toDate <= fromDate) {
               setErrors({
                 ...errors,
-                fromDate: validationMessages[lang].search.fromDateLessThanToDate,
+                fromDate:
+                  validationMessages[lang].search.fromDateLessThanToDate,
               });
             } else {
               setErrors({
@@ -107,6 +188,12 @@ const SearchBox = React.memo(props => {
               fromDate: validationMessages[lang].search.fromDate,
             });
           }
+        } else {
+          setErrors({
+            ...errors,
+            fromDate:
+              value === '' ? false : validationMessages[lang].search.fromDate,
+          });
         }
       };
     },
@@ -123,7 +210,8 @@ const SearchBox = React.memo(props => {
             if (fromDate && fromDate >= toDate) {
               setErrors({
                 ...errors,
-                toDate: validationMessages[lang].search.toDateGreaterThanFromDate,
+                toDate:
+                  validationMessages[lang].search.toDateGreaterThanFromDate,
               });
             } else {
               setErrors({
@@ -138,6 +226,12 @@ const SearchBox = React.memo(props => {
               toDate: validationMessages[lang].search.toDate,
             });
           }
+        } else {
+          setErrors({
+            ...errors,
+            toDate:
+              value === '' ? false : validationMessages[lang].search.toDate,
+          });
         }
       };
     },
@@ -165,10 +259,14 @@ const SearchBox = React.memo(props => {
       const {current: fromDateField} = fromDateRef;
       const {current: toDateField} = toDateRef;
       const {current: searchQueryField} = searchQueryRef;
+      const {current: minPricefield} = minPriceRef;
+      const {current: maxPriceField} = maxPriceRef;
       const values = {
         fromDate: fromDateField && fromDateField.value(),
         toDate: toDateField && toDateField.value(),
         searchQuery: searchQueryField && searchQueryField.value(),
+        minPrice: minPricefield && minPricefield.value(),
+        maxPrice: maxPriceField && maxPriceField.value(),
       };
       handleChange[fieldName]()(values[fieldName]);
     };
@@ -176,14 +274,18 @@ const SearchBox = React.memo(props => {
   const handleSearchPress = () => {
     fromDateRef.current.blur();
     toDateRef.current.blur();
+    minPriceRef.current.blur();
+    maxPriceRef.current.blur();
     searchQueryRef.current.blur();
-    invoke(props, 'handleSetPageToken', null);
-    invoke(props, 'handleSearch', {
-      onError: props.onSearchError,
-      onSuccess: props.onSearchSuccess,
-    });
-    invoke(props, 'handleSetSearchEventFired', true);
-    invoke(props, 'onSearchPress');
+    if (!isSearchDisabled) {
+      invoke(props, 'handleSetPageToken', null);
+      invoke(props, 'handleSearch', {
+        onError: props.onSearchError,
+        onSuccess: props.onSearchSuccess,
+      });
+      invoke(props, 'handleSetSearchEventFired', true);
+      invoke(props, 'onSearchPress');
+    }
   };
   const handleResetSearchFilters = () => {
     invoke(props, 'handleSetSearchFilters', {
@@ -194,6 +296,8 @@ const SearchBox = React.memo(props => {
       condition: '',
       fromDate: '',
       toDate: '',
+      minPrice: '',
+      maxPrice: '',
     });
     invoke(props, 'handleResetHomeLotteries', []);
     invoke(props, 'handleSetPageToken', null);
@@ -211,6 +315,30 @@ const SearchBox = React.memo(props => {
     <Animated.View style={[styles.searchBoxAnimatedViewContainer, {...style}]}>
       <View style={styles.searchBoxOverlayViewContainer} />
       <View style={[styles.searchBoxInnerViewContainer]}>
+        <View style={styles.searchBoxSectionBlockContainer}>
+          <View style={styles.searchBoxSectionBlockDivision}>
+            <TextField
+              outlined
+              autoCapitalize={false}
+              autoCorrect={false}
+              blurOnSubmit={true}
+              label={searchBoxTexts[lang].searchQueryLabel}
+              returnKeyType="done"
+              activeLineWidth={1}
+              placeholder={searchBoxTexts[lang].searchQueryPlaceholder}
+              onBlur={handleBlur('searchQuery')}
+              onSubmitEditing={handleSearchPress}
+              onChangeText={handleChange.searchQuery()}
+              tintColor={'rgba(0,0,0,0.38)'}
+              placeholderTextColor={'rgba(0,0,0,0.3)'}
+              maxLength={100}
+              minLength={2}
+              value={searchFilters.searchText}
+              error={errors.searchQuery}
+              ref={searchQueryRef}
+            />
+          </View>
+        </View>
         <View style={styles.searchBoxSectionBlockContainer}>
           <View
             style={[
@@ -238,6 +366,58 @@ const SearchBox = React.memo(props => {
               selectedItemColor={'rgba(0, 0, 0, .87)'}
               baseColor={'rgba(0,0,0,0.3)'}
               value={searchFilters.city}
+            />
+          </View>
+        </View>
+        <View style={styles.searchBoxSectionBlockContainer}>
+          <View
+            style={[
+              styles.searchBoxSectionBlockDivision,
+              styles.searchBoxSectionBlockDivisionMarginRight,
+            ]}>
+            <TextField
+              blurOnSubmit={true}
+              outlined
+              autoCapitalize={false}
+              autoCorrect={false}
+              returnKeyType="done"
+              activeLineWidth={1}
+              placeholder={searchBoxTexts[lang].minPrice}
+              label={searchBoxTexts[lang].minPrice}
+              value={searchFilters.minPrice}
+              onSubmitEditing={handleSearchPress}
+              keyboardType="numbers-and-punctuation"
+              onBlur={handleBlur('minPrice')}
+              tintColor={'rgba(0,0,0,0.3)'}
+              onChangeText={handleChange.minPrice()}
+              placeholderTextColor={'rgba(0,0,0,0.3)'}
+              error={errors.minPrice}
+              ref={minPriceRef}
+            />
+          </View>
+          <View
+            style={[
+              styles.searchBoxSectionBlockDivision,
+              styles.searchBoxSectionBlockDivisionMarginLeft,
+            ]}>
+            <TextField
+              outlined
+              autoCapitalize={false}
+              autoCorrect={false}
+              placeholder={searchBoxTexts[lang].maxPrice}
+              label={searchBoxTexts[lang].maxPrice}
+              returnKeyType="done"
+              onSubmitEditing={handleSearchPress}
+              activeLineWidth={1}
+              keyboardType="numbers-and-punctuation"
+              value={searchFilters.maxPrice}
+              blurOnSubmit={true}
+              onBlur={handleBlur('maxPrice')}
+              tintColor={'rgba(0,0,0,0.3)'}
+              onChangeText={handleChange.maxPrice()}
+              placeholderTextColor={'rgba(0,0,0,0.3)'}
+              error={errors.maxPrice}
+              ref={maxPriceRef}
             />
           </View>
         </View>
@@ -323,42 +503,10 @@ const SearchBox = React.memo(props => {
             />
           </View>
         </View>
-        <View style={styles.searchBoxSectionBlockContainer}>
-          <View style={styles.searchBoxSectionBlockDivision}>
-            <TextField
-              outlined
-              autoCapitalize={false}
-              autoCorrect={false}
-              blurOnSubmit={true}
-              label={searchBoxTexts[lang].searchQueryLabel}
-              returnKeyType="done"
-              activeLineWidth={1}
-              placeholder={searchBoxTexts[lang].searchQueryPlaceholder}
-              onBlur={handleBlur('searchQuery')}
-              onSubmitEditing={handleSearchPress}
-              onChangeText={handleChange.searchQuery()}
-              tintColor={'rgba(0,0,0,0.38)'}
-              placeholderTextColor={'rgba(0,0,0,0.3)'}
-              maxLength={100}
-              minLength={2}
-              value={searchFilters.searchText}
-              error={errors.searchQuery}
-              ref={searchQueryRef}
-            />
-          </View>
-        </View>
         <View style={styles.searchBoxBottomButtonViewContainer}>
           <View style={styles.searchBoxSectionBlockDivision}>
             <Button
-              disabled={
-                !searchFilters.searchText &&
-                !searchFilters.prefecture &&
-                !searchFilters.city &&
-                !searchFilters.fromDate &&
-                !searchFilters.toDate &&
-                !searchFilters.category &&
-                !searchFilters.condition
-              }
+              disabled={isSearchDisabled}
               raised={true}
               primary
               text={'Search'}

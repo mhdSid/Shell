@@ -132,6 +132,8 @@ const HomeComponent = React.memo(props => {
       condition: '',
       fromDate: '',
       toDate: '',
+      minPrice: '',
+      maxPrice: '',
     });
     fetchLotteries(true);
   };
@@ -170,6 +172,8 @@ const HomeComponent = React.memo(props => {
           condition: '',
           fromDate: '',
           toDate: '',
+          minPrice: '',
+          maxPrice: '',
         });
       }
     };

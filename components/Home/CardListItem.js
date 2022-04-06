@@ -131,7 +131,7 @@ class CardListItem extends Component {
       <FastImage
         style={smallImage ? styles.cardItemImageSmall : styles.cardItemImage}
         source={{
-          uri: this.dummyImage(), // item.images[0], // testImages[Math.floor(Math.random()*testImages.length)], //item.images[0],
+          uri: item.images[0], // testImages[Math.floor(Math.random()*testImages.length)], //item.images[0],
           cache: FastImage.cacheControl.immutable,
           priority: FastImage.priority.low,
         }}

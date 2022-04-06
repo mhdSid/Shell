@@ -175,9 +175,14 @@ const validationMessages = {
     search: {
       searchQuery: 'Search text length should be between 2 and 100 characters.',
       toDate: 'To date should be formatted like yyyy/mm/dd',
+      minPrice: 'Min price should be a number',
+      maxPrice: 'Max price should be a number',
       fromDate: 'From date should be formatted like yyyy/mm/dd',
       fromDateLessThanToDate: 'From date should be less than To date',
       toDateGreaterThanFromDate: 'To date should be greater than From date',
+      minPriceLessThanMaxPrice: 'Min price should be less than max price',
+      maxPriceLessThanMinPrice:
+        'Max price should be greater or equal to min price',
     },
     importLottery: {
       adName: 'Lottery name length should be between 5 and 30 characters.',
@@ -204,9 +209,14 @@ const validationMessages = {
       searchQuery: '検索テキストの長さは2〜100文字である必要があります。',
       toDate:
         '現在までは、yyyy / mm / ddのようにフォーマットする必要があります',
+      minPrice: '最低価格は数字でなければなりません',
+      maxPrice: '最高価格は数字でなければなりません',
       fromDate: '開始日はyyyy / mm / ddのようにフォーマットする必要があります',
       fromDateLessThanToDate: '開始日は終了日よりも短くする必要があります',
       toDateGreaterThanFromDate: '終了日は開始日よりも大きい必要があります',
+      minPriceLessThanMaxPrice:
+        '最低価格は最高価格よりも低くする必要があります',
+      maxPriceLessThanMinPrice: '最大価格は最小価格以上である必要があります',
     },
     importLottery: {
       adName: '宝くじの名前の長さは5〜30文字にする必要があります。',
@@ -814,6 +824,8 @@ const searchBox = {
     toDateLabel: 'To',
     fromDatePlaceholder: 'yyyy/mm/dd',
     fromDateLabel: 'From',
+    minPrice: 'Min price',
+    maxPrice: 'Max price',
   },
   jp: {
     searchQueryPlaceholder: '何を探していますか？',
@@ -822,6 +834,8 @@ const searchBox = {
     toDateLabel: 'に',
     fromDatePlaceholder: 'yyyy/mm/dd',
     fromDateLabel: 'から',
+    maxPrice: '最高価格',
+    minPrice: '最低価格',
   },
 };
 
