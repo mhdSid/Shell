@@ -2,9 +2,9 @@ import {request} from './Request';
 import sha256 from 'crypto-js/sha256';
 import {password as hashkey} from './Encrypt';
 
-const getConversation = async props => {
+export const getConversation = async props => {
   const {lotteryId, winnerUserId, lotteryPosterId, cancelTag} = props;
-  const data = await request({
+  return await request({
     endpoint: 'api/chat/conversation',
     method: 'POST',
     cancelTag,
@@ -17,12 +17,11 @@ const getConversation = async props => {
       ).toString(),
     },
   });
-  return data;
 };
 
-const sendChatMessage = async props => {
+export const sendChatMessage = async props => {
   const {lotteryId, winnerUserId, lotteryPosterId, message, cancelTag} = props;
-  const data = await request({
+  return await request({
     endpoint: 'api/chat/conversation',
     method: 'POST',
     cancelTag,
@@ -36,7 +35,4 @@ const sendChatMessage = async props => {
       ).toString(),
     },
   });
-  return data;
 };
-
-export {getConversation, sendChatMessage};

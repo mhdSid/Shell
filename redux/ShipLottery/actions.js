@@ -2,7 +2,7 @@ import {Alert} from 'react-native';
 import {errors} from '../../constants/Texts';
 import invoke from 'lodash/invoke';
 
-const shipLotteryActions = {
+export const shipLotteryActions = {
   showShipLotteryModal: 'SHOW_SHIP_LOTTERY_MODAL',
   setUserCreatedWonLotteries: 'SET_USER_CREATED_WON_LOTTERIES',
   setLotteryWinnerUserData: 'SHIP_LOTTERY_MODAL_SET_LOTTERY_WINNER_USER_DATA',
@@ -13,7 +13,7 @@ const shipLotteryActions = {
   enterLottery: 'SHIP_LOTTERY_ENTER_LOTTERY',
 };
 
-const showShipLotteryModal = payload => {
+export const showShipLotteryModal = payload => {
   return dispatch => {
     return dispatch({
       type: shipLotteryActions.showShipLotteryModal,
@@ -22,7 +22,7 @@ const showShipLotteryModal = payload => {
   };
 };
 
-const setUserCreatedWonLotteries = payload => {
+export const setUserCreatedWonLotteries = payload => {
   return dispatch => {
     return dispatch({
       type: shipLotteryActions.setUserCreatedWonLotteries,
@@ -31,7 +31,7 @@ const setUserCreatedWonLotteries = payload => {
   };
 };
 
-const handleError = (props, getState) => {
+export const handleError = (props, getState) => {
   const lang = getState().settingsReducer.lang;
   const {error} = props;
   const message = (error && error.message) || errors[lang].error;
@@ -40,11 +40,4 @@ const handleError = (props, getState) => {
     Alert.alert(message);
   }
   return;
-};
-
-export {
-  shipLotteryActions,
-  handleError,
-  showShipLotteryModal,
-  setUserCreatedWonLotteries,
 };

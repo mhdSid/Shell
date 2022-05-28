@@ -4,9 +4,9 @@ import invoke from 'lodash/invoke';
 import SocketIOClient from 'socket.io-client';
 import {apiRequest} from '../../constants/Api';
 
-let socket = null;
+export let socket = null;
 
-const chatActions = {
+export const chatActions = {
   setChatConversation: 'SET_CHAT_COVERSTATION',
   initChatSocketCommunication: 'INIT_SOCKET_CHAT_COMMUNICATION',
   disconnectChatSocketCommunication: 'DISCONNECT_SOCKET_CHAT_COMMUNICATION',
@@ -21,7 +21,7 @@ const chatActions = {
   enterLottery: 'CHAT_ENTER_LOTTERY',
 };
 
-const handleInitChatSocketCommunication = payload => {
+export const handleInitChatSocketCommunication = payload => {
   return (dispatch, getState) => {
     const {userId} = payload;
     if (userId) {
@@ -41,7 +41,7 @@ const handleInitChatSocketCommunication = payload => {
   };
 };
 
-const handleDisconnectChatSocketCommunication = payload => {
+export const handleDisconnectChatSocketCommunication = payload => {
   return (dispatch, getState) => {
     // const userId = getState().authReducer.user.id;
     // socket.emit('disconnect.userId', userId);
@@ -55,7 +55,7 @@ const handleDisconnectChatSocketCommunication = payload => {
   };
 };
 
-const handleReceiveChatMessage = payload => {
+export const handleReceiveChatMessage = payload => {
   return dispatch => {
     return dispatch({
       type: chatActions.receiveChatMessage,
@@ -64,7 +64,7 @@ const handleReceiveChatMessage = payload => {
   };
 };
 
-const handleSendChatMessage = payload => {
+export const handleSendChatMessage = payload => {
   return (dispatch, getState) => {
     const {
       lotteryPosterId,
@@ -86,7 +86,7 @@ const handleSendChatMessage = payload => {
   };
 };
 
-const handleError = (props, getState) => {
+export const handleError = (props, getState) => {
   const lang = getState().settingsReducer.lang;
   const {error} = props;
   const message = (error && error.message) || errors[lang].error;
@@ -95,14 +95,4 @@ const handleError = (props, getState) => {
     Alert.alert(message);
   }
   return;
-};
-
-export {
-  chatActions,
-  handleError,
-  handleInitChatSocketCommunication,
-  handleSendChatMessage,
-  handleReceiveChatMessage,
-  handleDisconnectChatSocketCommunication,
-  socket,
 };

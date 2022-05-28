@@ -9,35 +9,27 @@ const getUserCreatedLotteries = state =>
 const getUserLikedLotteries = state =>
   state.lotteriesReducer.userLikedLotteries;
 
-const getUserSelector = createSelector(
+export const getUserSelector = createSelector(
   [getUser],
   user => user,
 );
 
-const getLoggedInSelector = createSelector(
+export const getLoggedInSelector = createSelector(
   [getLoggedIn],
   loggedIn => loggedIn,
 );
 
-const getUserJoinedLotteriesSelector = createSelector(
+export const getUserJoinedLotteriesSelector = createSelector(
   [getUserJoinedLotteries],
   userJoinedLotteries => userJoinedLotteries,
 );
 
-const getUserCreatedLotteriesSelector = createSelector(
+export const getUserCreatedLotteriesSelector = createSelector(
   [getUserCreatedLotteries],
   userCreatedLotteries => userCreatedLotteries,
 );
 
-const getUserLikedLotteriesSelector = createSelector(
+export const getUserLikedLotteriesSelector = createSelector(
   [getUserLikedLotteries],
   userLikedLotteries => userLikedLotteries,
 );
-
-export {
-  getUserSelector,
-  getLoggedInSelector,
-  getUserJoinedLotteriesSelector,
-  getUserCreatedLotteriesSelector,
-  getUserLikedLotteriesSelector,
-};

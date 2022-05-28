@@ -2,7 +2,7 @@ import {Alert} from 'react-native';
 import {errors} from '../../constants/Texts';
 import invoke from 'lodash/invoke';
 
-const homeActions = {
+export const homeActions = {
   resetLotteries: 'HOME_RESET_LOTTERIES',
   setLotteries: 'HOME_SET_LOTTERIES',
   setHomeLotteries: 'SET_HOME_VIEW_LOTTERIES',
@@ -20,25 +20,25 @@ const homeActions = {
   enterLottery: 'HOME_ENTER_LOTTERY',
 };
 
-const updateLottery = payload => {
+export const updateLottery = payload => {
   return dispatch => {
     return dispatch({type: homeActions.updateLottery, payload});
   };
 };
 
-const setPageToken = payload => {
+export const setPageToken = payload => {
   return dispatch => {
     return dispatch({type: homeActions.setPageToken, payload});
   };
 };
 
-const resetHomeLotteries = payload => {
+export const resetHomeLotteries = payload => {
   return dispatch => {
     return dispatch({type: homeActions.resetHomeLotteries, payload});
   };
 };
 
-const handleError = (props, getState) => {
+export const handleError = (props, getState) => {
   const lang = getState().settingsReducer.lang;
   const {error} = props;
   const message = (error && error.message) || errors[lang].error;
@@ -47,12 +47,4 @@ const handleError = (props, getState) => {
     Alert.alert(message);
   }
   return;
-};
-
-export {
-  homeActions,
-  handleError,
-  updateLottery,
-  setPageToken,
-  resetHomeLotteries,
 };

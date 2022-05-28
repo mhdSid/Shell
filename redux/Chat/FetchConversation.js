@@ -3,7 +3,7 @@ import invoke from 'lodash/invoke';
 import {chatActions} from './actions';
 import {getConversation} from '../../services/Chat';
 
-const handleFetchConversation = payload => {
+export const handleFetchConversation = payload => {
   return (dispatch, getState) => {
     const {
       lotteryPosterId,
@@ -40,5 +40,3 @@ const handleFetchConversation = payload => {
     });
   };
 };
-
-export {handleFetchConversation};

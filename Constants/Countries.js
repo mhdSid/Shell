@@ -1,6 +1,6 @@
-const countries = ['Japan'];
+export const countries = ['Japan'];
 
-const prefectures = {
+export const prefectures = {
   Japan: [
     {name: 'Hokkaido', kanji: '北海道'},
     {name: 'Iwate', kanji: '岩手県'},
@@ -52,17 +52,17 @@ const prefectures = {
   ],
 };
 
-const prefecturesList = {
+export const prefecturesList = {
   Japan: 'Tokyo',
 };
 
-const countryCodeList = {
+export const countryCodeList = {
   JP: 'Japan',
   jp: 'Japan',
   Jp: 'Japan',
 };
 
-const cities = {
+export const cities = {
   Hokkaido: [
     '網走市',
     '安平町',
@@ -1876,7 +1876,8 @@ const cities = {
     '善通寺市',
   ],
 };
-const currencies = {
+
+export const currencies = {
   Japan: '¥',
   Lebanon: 'LBP',
   Egypt: 'EGP',
@@ -1887,13 +1888,4 @@ const currencies = {
   LB: 'LBP',
   Jp: '¥',
   Lb: 'LBP',
-};
-
-export {
-  cities,
-  countries,
-  prefectures,
-  prefecturesList,
-  countryCodeList,
-  currencies,
 };

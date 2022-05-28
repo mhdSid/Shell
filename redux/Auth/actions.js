@@ -2,31 +2,31 @@ import {errors} from '../../constants/Texts';
 import invoke from 'lodash/invoke';
 import {Alert} from 'react-native';
 
-const authActions = {
+export const authActions = {
   login: 'AUTH_LOGIN_ACTION',
   logout: 'AUTH_LOGOUT_ACTION',
   update: 'AUTH_UPDATE_ACTION',
 };
 
-const loginAction = payload => {
+export const loginAction = payload => {
   return dispatch => {
     return dispatch({type: authActions.login, payload});
   };
 };
 
-const logoutAction = payload => {
+export const logoutAction = payload => {
   return dispatch => {
     return dispatch({type: authActions.logout, payload});
   };
 };
 
-const updateAction = payload => {
+export const updateAction = payload => {
   return dispatch => {
     return dispatch({type: authActions.update, payload});
   };
 };
 
-const handleError = (props, getState) => {
+export const handleError = (props, getState) => {
   const lang = getState().settingsReducer.lang;
   const {error} = props;
   const message = (error && error.message) || errors[lang].error;
@@ -44,5 +44,3 @@ const handleError = (props, getState) => {
     },
   });
 };
-
-export {authActions, loginAction, logoutAction, updateAction, handleError};

@@ -1,11 +1,34 @@
-const about = {
+/*
+It's a mobile application that allows users to make a lottery about the items they want want to sell. The items that can be added as a lottery vary from electronic devices, fashion, vehicles - excluding selling of items that violate the law in Japan.
+
+Users enter the lottery by paying a fee of ¥100 to have a chance to win  items that other users have already uploaded to the system.
+
+The lottery is started once the total amount of the item is collected from users.
+
+The winner collects the item and the seller collects the price value of the item.
+
+
+
+This application allows users to purchase items they wish to sell by lottery. A variety of items can be added to the raffle, including electronics, fashion, vehicles, etc., but excluding items that violate Japanese law.
+
+Users pay a fee of 100 yen to participate in the raffle and have a chance to win items that have already been uploaded by other users.
+
+The drawing will begin when the total amount of items has been collected from users.
+
+The winner collects the item and the seller collects the price value of the item.
+
+Translated with www.DeepL.com/Translator (free version)
+
+*/
+
+export const about = {
   en: {
     howTo: 'How to use the App',
     sell: 'Sell',
     howToUseFirst:
       'Make a lottery about the item you want to sell - it could be anything you can think about!',
     howToUseSecond:
-      'Users enter the lottery by paying a fee of ¥100 to have a chance to win the item that you have upload.',
+      'Users enter the lottery by paying a fee of ¥100 to have a chance to win the item that you have uploaded.',
     howToUseThird: '10% of the fee amount is used to sponsor and fund NGOs.',
     howToUseFourth:
       '40% of the fee amount goes to our company to continue running this service.',
@@ -57,7 +80,7 @@ const about = {
   },
 };
 
-const errors = {
+export const errors = {
   en: {
     error: 'A error has occured. Please try again.',
   },
@@ -66,7 +89,7 @@ const errors = {
   },
 };
 
-const successConfirmationModal = {
+export const successConfirmationModal = {
   en: {
     importLottery: {
       title: 'YOUR LOTTERY HAS BEEN CREATED!',
@@ -133,7 +156,7 @@ const successConfirmationModal = {
   },
 };
 
-const lotteryResult = {
+export const lotteryResult = {
   en: {
     lotteryResult: 'Lottery Result',
     actionOptions: {
@@ -170,7 +193,7 @@ const lotteryResult = {
   },
 };
 
-const validationMessages = {
+export const validationMessages = {
   en: {
     search: {
       searchQuery: 'Search text length should be between 2 and 100 characters.',
@@ -237,7 +260,7 @@ const validationMessages = {
   },
 };
 
-const lotteryDetails = {
+export const lotteryDetails = {
   en: {
     cancelLottery: 'Cancel Lottery',
     reAddLottery: 'Readd Lottery',
@@ -422,7 +445,7 @@ const lotteryDetails = {
   },
 };
 
-const home = {
+export const home = {
   en: {
     appName: 'Shell',
   },
@@ -431,7 +454,7 @@ const home = {
   },
 };
 
-const importLottery = {
+export const importLottery = {
   en: {
     sports: 'Sports',
     noNoticableScratches: 'No Noticable Scratches or Dirt',
@@ -482,7 +505,7 @@ const importLottery = {
   },
 };
 
-const lottteries = {
+export const lottteries = {
   en: {
     lotteries: 'Joined lotteries',
     emptyLotteries: 'No Lotteries available.',
@@ -493,7 +516,7 @@ const lottteries = {
   },
 };
 
-const receiveLottery = {
+export const receiveLottery = {
   en: {
     cancel: 'Cancel',
     receiveAlertTitle: 'Mark lottery as received',
@@ -520,7 +543,7 @@ const receiveLottery = {
   },
 };
 
-const shipLottery = {
+export const shipLottery = {
   en: {
     cancel: 'Cancel',
     shipAlertTitle: 'Mark lottery as shipped',
@@ -547,11 +570,11 @@ const shipLottery = {
   },
 };
 
-const myyAds = {
+export const myyAds = {
   myAds: 'My Ads',
 };
 
-const myyLotteries = {
+export const myyLotteries = {
   en: {
     myLotteries: 'My Lotteries',
   },
@@ -560,7 +583,7 @@ const myyLotteries = {
   },
 };
 
-const noAuth = {
+export const noAuth = {
   en: {
     loginSignup: 'Please login or signup to add a new item.',
     importLottery: 'Please login or signup to create a new lottery.',
@@ -579,7 +602,7 @@ const noAuth = {
   },
 };
 
-const loginSignup = {
+export const loginSignup = {
   en: {
     loginSignup: 'Login / Sign up',
   },
@@ -588,7 +611,7 @@ const loginSignup = {
   },
 };
 
-const login = {
+export const login = {
   en: {
     login: 'Login',
   },
@@ -597,7 +620,7 @@ const login = {
   },
 };
 
-const signUp = {
+export const signUp = {
   en: {
     signUp: 'Sign up',
   },
@@ -606,7 +629,7 @@ const signUp = {
   },
 };
 
-const notifications = {
+export const notifications = {
   en: {
     notifications: 'Notifications',
   },
@@ -615,7 +638,7 @@ const notifications = {
   },
 };
 
-const chat = {
+export const chat = {
   en: {
     chat: 'Chat',
     chatWithOwner: 'Chat with lottery owner',
@@ -650,7 +673,7 @@ const chat = {
   },
 };
 
-const uploadAdProgress = {
+export const uploadAdProgress = {
   en: {
     uploading: 'Currently Uploading',
     noItems: 'No lotteries are currently being uploaded.',
@@ -661,7 +684,7 @@ const uploadAdProgress = {
   },
 };
 
-const paymentInformation = {
+export const paymentInformation = {
   en: {
     paymentInformation: 'Payment Information',
     submit: 'Save',
@@ -674,7 +697,7 @@ const paymentInformation = {
   },
 };
 
-const profile = {
+export const profile = {
   en: {
     japan: 'Japan',
     male: 'Male',
@@ -783,7 +806,7 @@ const profile = {
   },
 };
 
-const searchh = {
+export const searchh = {
   en: {
     search: 'Search',
   },
@@ -792,7 +815,7 @@ const searchh = {
   },
 };
 
-const listItemActions = {
+export const listItemActions = {
   en: {
     cancel: 'Cancel',
     goToLotteryDetails: 'Go to lottery details',
@@ -805,7 +828,7 @@ const listItemActions = {
   },
 };
 
-const userProfileLogoutActions = {
+export const userProfileLogoutActions = {
   en: {
     logout: 'Logout',
     cancel: 'Cancel',
@@ -816,7 +839,7 @@ const userProfileLogoutActions = {
   },
 };
 
-const searchBox = {
+export const searchBox = {
   en: {
     searchQueryPlaceholder: 'What are you looking for?',
     searchQueryLabel: 'Search',
@@ -839,7 +862,7 @@ const searchBox = {
   },
 };
 
-const filter = {
+export const filter = {
   en: {
     filterLabel: 'Search',
   },
@@ -848,7 +871,7 @@ const filter = {
   },
 };
 
-const settings = {
+export const settings = {
   en: {
     settings: 'Settings',
     changePassword: 'Change Password',
@@ -885,7 +908,7 @@ const settings = {
   },
 };
 
-const updateUserr = {
+export const updateUserr = {
   en: {
     updateProfile: 'Update Profile',
     choosePhoto: 'Choose a profile image',
@@ -930,7 +953,7 @@ const updateUserr = {
   },
 };
 
-const userDetails = {
+export const userDetails = {
   en: {
     name: 'Name',
     email: 'Email',
@@ -953,7 +976,7 @@ const userDetails = {
   },
 };
 
-const payment = {
+export const payment = {
   en: {
     title: 'Get a Chance to Win',
     submit: 'Pay fee of ¥100',
@@ -978,7 +1001,7 @@ const payment = {
   },
 };
 
-const uploadProgress = {
+export const uploadProgress = {
   en: {
     inProgress: length => `Uploading ${length} ${length > 1 ? 'Ads' : 'Ad'}`,
     uploadPgress: 'Upload in progress',
@@ -987,41 +1010,4 @@ const uploadProgress = {
     inProgress: length => `アップロード ${length} 広告`,
     uploadPgress: 'アップロード中',
   },
-};
-
-export {
-  about,
-  errors,
-  lotteryDetails,
-  home,
-  importLottery,
-  lottteries,
-  myyAds,
-  myyLotteries,
-  noAuth,
-  loginSignup,
-  notifications,
-  profile,
-  searchh,
-  settings,
-  updateUserr,
-  userDetails,
-  uploadProgress,
-  payment,
-  paymentInformation,
-  uploadAdProgress,
-  login,
-  signUp,
-  // orLogin,
-  // orSignUp,
-  lotteryResult,
-  successConfirmationModal,
-  receiveLottery,
-  chat,
-  validationMessages,
-  searchBox,
-  listItemActions,
-  filter,
-  userProfileLogoutActions,
-  shipLottery,
 };

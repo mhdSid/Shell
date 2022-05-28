@@ -2,7 +2,7 @@ import {authActions} from '../Auth/actions';
 import {ping} from '../../services/Auth';
 import invoke from 'lodash/invoke';
 
-const handlePing = payload => {
+export const handlePing = payload => {
   return dispatch => {
     const onPingError = ({error, country}) => {
       invoke(payload, 'onError');
@@ -31,5 +31,3 @@ const handlePing = payload => {
     });
   };
 };
-
-export {handlePing};

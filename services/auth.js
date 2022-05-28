@@ -4,10 +4,10 @@ import {encrypt, password as hashkey} from './Encrypt';
 import {apiRequest} from '../constants/Api';
 import Upload from 'react-native-background-upload';
 
-const login = async props => {
+export const login = async props => {
   const {email, password} = props;
   const passwordHash = sha256(password + hashkey).toString();
-  const data = await request({
+  return await request({
     endpoint: 'api/user/authenticate/email',
     method: 'POST',
     body: {
@@ -16,34 +16,31 @@ const login = async props => {
       hash: sha256(email + passwordHash + hashkey).toString(),
     },
   });
-  return data;
 };
 
-const logout = async () => {
-  const data = await request({
+export const logout = async () => {
+  return await request({
     endpoint: 'api/user/authenticate/logout',
     method: 'POST',
     body: {
       hash: sha256(hashkey).toString(),
     },
   });
-  return data;
 };
 
-const ping = async () => {
-  const data = await request({
+export const ping = async () => {
+  return await request({
     endpoint: 'api/user/authenticate/ping',
     method: 'POST',
     body: {
       hash: sha256(hashkey).toString(),
     },
   });
-  return data;
 };
 
-const verify = async props => {
+export const verify = async props => {
   const {email, passwordHash, verificationCode} = props;
-  const data = await request({
+  return await request({
     endpoint: 'api/user/authenticate/email/verify',
     method: 'POST',
     body: {
@@ -55,12 +52,11 @@ const verify = async props => {
       ).toString(),
     },
   });
-  return data;
 };
 
-const resendVerificationCode = async props => {
+export const resendVerificationCode = async props => {
   const {email, passwordHash} = props;
-  const data = await request({
+  return await request({
     endpoint: 'api/user/authenticate/email/verify/resend',
     method: 'POST',
     body: {
@@ -69,10 +65,9 @@ const resendVerificationCode = async props => {
       hash: sha256(email + passwordHash + hashkey).toString(),
     },
   });
-  return data;
 };
 
-const signup = async props => {
+export const signup = async props => {
   const {
     email,
     passwordHash,
@@ -81,7 +76,7 @@ const signup = async props => {
     prefecture,
     city,
   } = props;
-  const data = await request({
+  return await request({
     endpoint: 'api/user/authenticate/signup',
     method: 'POST',
     body: {
@@ -102,12 +97,11 @@ const signup = async props => {
       ).toString(),
     },
   });
-  return data;
 };
 
-const getUsersData = async props => {
+export const getUsersData = async props => {
   const {users, cancelTag} = props;
-  const data = await request({
+  return await request({
     endpoint: 'api/user/userData',
     method: 'POST',
     cancelTag,
@@ -116,10 +110,9 @@ const getUsersData = async props => {
       hash: sha256(JSON.stringify(users).toString() + hashkey).toString(),
     },
   });
-  return data;
 };
 
-const updateUserBackground = async props => {
+export const updateUserBackground = async props => {
   const {
     country,
     prefecture,
@@ -261,7 +254,7 @@ const updateUserBackground = async props => {
   });
 };
 
-const update = async props => {
+export const update = async props => {
   const {
     country,
     prefecture,
@@ -329,22 +322,9 @@ const update = async props => {
         hashkey,
     ).toString(),
   );
-  const data = await request({
+  return await request({
     endpoint: 'api/user/authenticate/update',
     method: 'POST',
     body: formData,
   });
-  return data;
-};
-
-export {
-  login,
-  logout,
-  ping,
-  verify,
-  signup,
-  update,
-  getUsersData,
-  updateUserBackground,
-  resendVerificationCode,
 };

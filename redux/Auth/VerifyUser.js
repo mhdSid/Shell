@@ -4,7 +4,7 @@ import invoke from 'lodash/invoke';
 import {errors} from '../../constants/Texts';
 import {Alert} from 'react-native';
 
-const handleVerifyUser = payload => {
+export const handleVerifyUser = payload => {
   return (dispatch, getState) => {
     const {email, passwordHash, verificationCode, onError} = payload;
     /*
@@ -43,5 +43,3 @@ const handleVerifyUser = payload => {
     }
   };
 };
-
-export {handleVerifyUser};

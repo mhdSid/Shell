@@ -1,4 +1,4 @@
-const lotteryResultActions = {
+export const lotteryResultActions = {
   showLotteryResult: 'SHOW_LOTTERY_RESULT',
   setWinnerUserData: 'SET_LOTTERY_RESULT_WINNER_USER_DATA',
   setAdPosterData: 'SET_LOTTREY_RESULT_AD_POSTER_DATA',
@@ -6,7 +6,7 @@ const lotteryResultActions = {
   resetState: 'LOTTERY_RESULT_RESET_STATE',
 };
 
-const showLotteryResult = payload => {
+export const showLotteryResult = payload => {
   return dispatch => {
     return dispatch({
       type: lotteryResultActions.showLotteryResult,
@@ -14,5 +14,3 @@ const showLotteryResult = payload => {
     });
   };
 };
-
-export {lotteryResultActions, showLotteryResult};

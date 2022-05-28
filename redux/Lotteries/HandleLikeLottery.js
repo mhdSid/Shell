@@ -7,7 +7,7 @@ import {lotteryDetailsActions} from '../LotteryDetails/actions';
 import {receiveLotteryActions} from '../ReceiveLottery/actions';
 import {chatActions} from '../Chat/actions';
 
-const handleLikeLottery = payload => {
+export const handleLikeLottery = payload => {
   return (dispatch, getState) => {
     const {userId, lotteryId, onError, showLotteryDetails, cancelTag} = payload;
     const onGetMyLotteriesSuccess = data => {
@@ -52,4 +52,3 @@ const handleLikeLottery = payload => {
     );
   };
 };
-export {handleLikeLottery};

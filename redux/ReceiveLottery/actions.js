@@ -2,7 +2,7 @@ import {Alert} from 'react-native';
 import {errors} from '../../constants/Texts';
 import invoke from 'lodash/invoke';
 
-const receiveLotteryActions = {
+export const receiveLotteryActions = {
   showReceiveLotteryModal: 'SHOW_RECEIVE_LOTTERY_MODAL',
   setUserWonLotteries: 'SET_USER_WON_LOTTERIES',
   setPageToken: 'RECEIVE_LOTTERIES_SET_PAGE_TOKEN',
@@ -15,7 +15,7 @@ const receiveLotteryActions = {
   enterLottery: 'RECEIVE_LOTTERY_ENTER_LOTTERY',
 };
 
-const showReceiveLotteryModal = payload => {
+export const showReceiveLotteryModal = payload => {
   return dispatch => {
     return dispatch({
       type: receiveLotteryActions.showReceiveLotteryModal,
@@ -24,7 +24,7 @@ const showReceiveLotteryModal = payload => {
   };
 };
 
-const setUserWonLotteries = payload => {
+export const setUserWonLotteries = payload => {
   return dispatch => {
     return dispatch({
       type: receiveLotteryActions.setUserWonLotteries,
@@ -33,7 +33,7 @@ const setUserWonLotteries = payload => {
   };
 };
 
-const handleError = (props, getState) => {
+export const handleError = (props, getState) => {
   const lang = getState().settingsReducer.lang;
   const {error} = props;
   const message = (error && error.message) || errors[lang].error;
@@ -42,11 +42,4 @@ const handleError = (props, getState) => {
     Alert.alert(message);
   }
   return;
-};
-
-export {
-  receiveLotteryActions,
-  handleError,
-  showReceiveLotteryModal,
-  setUserWonLotteries,
 };

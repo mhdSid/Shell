@@ -10,7 +10,7 @@ import {searchActions} from '../Search/actions';
 import {settingsActions} from '../Settings/actions';
 import {shipLotteryActions} from '../ShipLottery/actions';
 
-const handleLogout = payload => {
+export const handleLogout = payload => {
   return (dispatch, getState) => {
     const {onError} = payload;
     /*
@@ -59,5 +59,3 @@ const handleLogout = payload => {
     });
   };
 };
-
-export {handleLogout};

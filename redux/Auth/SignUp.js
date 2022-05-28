@@ -2,7 +2,7 @@ import {handleError, authActions} from './actions';
 import {signup} from '../../services/Auth';
 import invoke from 'lodash/invoke';
 
-const handleSignUp = payload => {
+export const handleSignUp = payload => {
   return (dispatch, getState) => {
     const {onError, newUser} = payload;
     const {verificationCode, email} = newUser;
@@ -52,5 +52,3 @@ const handleSignUp = payload => {
     });
   };
 };
-
-export {handleSignUp};

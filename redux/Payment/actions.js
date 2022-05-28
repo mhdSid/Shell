@@ -2,11 +2,11 @@ import {Alert} from 'react-native';
 import {errors} from '../../constants/Texts';
 import invoke from 'lodash/invoke';
 
-const paymentActions = {
+export const paymentActions = {
   enterLottery: 'PAYMENT_ENTERLOTTERY',
 };
 
-const handleError = (props, getState) => {
+export const handleError = (props, getState) => {
   const lang = getState().settingsReducer.lang;
   const {error} = props;
   const message = (error && error.message) || errors[lang].error;
@@ -16,5 +16,3 @@ const handleError = (props, getState) => {
   }
   return;
 };
-
-export {paymentActions, handleError};

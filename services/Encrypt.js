@@ -1,16 +1,14 @@
 import CryptoJS from 'crypto-js';
 
-const password = 'sippi44448888';
+export const password = '';
 
-const encrypt = str => {
+export const encrypt = str => {
   return CryptoJS.TripleDES.encrypt(str, password).toString();
 };
 
-const decrypt = (data, isObj) => {
+export const decrypt = (data, isObj) => {
   const bytes = CryptoJS.TripleDES.decrypt(data, password);
   return isObj
     ? JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
     : bytes.toString(CryptoJS.enc.Utf8);
 };
-
-export {encrypt, decrypt, password};

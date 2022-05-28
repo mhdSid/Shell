@@ -1,4 +1,4 @@
-const lotteryDetailsActions = {
+export const lotteryDetailsActions = {
   setWinnerUserData: 'LOTTERY_DETAILS_SET_WINNER_USER_DATA',
   setAdPosterData: 'LOTTERY_DETAILS_SET_AD_POSTER_DATA',
   showLotteryDetails: 'LOTTERY_DETAILS_SHOW',
@@ -8,7 +8,7 @@ const lotteryDetailsActions = {
   cancelLottery: 'LOTTERY_DETAILS_CANCEL_LOTTERY',
 };
 
-const showLotteryDetails = payload => {
+export const showLotteryDetails = payload => {
   return dispatch => {
     return dispatch({
       type: lotteryDetailsActions.showLotteryDetails,
@@ -17,7 +17,7 @@ const showLotteryDetails = payload => {
   };
 };
 
-const setUserLotteriesPageToken = payload => {
+export const setUserLotteriesPageToken = payload => {
   return dispatch => {
     return dispatch({
       type: lotteryDetailsActions.setUserLotteriesPageToken,
@@ -25,5 +25,3 @@ const setUserLotteriesPageToken = payload => {
     });
   };
 };
-
-export {lotteryDetailsActions, showLotteryDetails, setUserLotteriesPageToken};

@@ -8,7 +8,7 @@ import {receiveLotteryActions} from '../ReceiveLottery/actions';
 import {shipLotteryActions} from '../ShipLottery/actions';
 import {chatActions} from '../Chat/actions';
 
-const handleCancelLottery = payload => {
+export const handleCancelLottery = payload => {
   return (dispatch, getState) => {
     const {userId, lotteryId, onError, cancelTag, reAdd} = payload;
     const onCancelSuccess = data => {
@@ -54,4 +54,3 @@ const handleCancelLottery = payload => {
     });
   };
 };
-export {handleCancelLottery};

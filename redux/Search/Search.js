@@ -3,7 +3,7 @@ import {handleError} from '../Auth/actions';
 import invoke from 'lodash/invoke';
 import {homeActions} from '../Home/actions';
 
-const handleSearch = payload => {
+export const handleSearch = payload => {
   return (dispatch, getState) => {
     const {onError, cancelTag} = payload;
     const searchFilters = getState().searchReducer.searchFilters;
@@ -23,5 +23,3 @@ const handleSearch = payload => {
     });
   };
 };
-
-export {handleSearch};

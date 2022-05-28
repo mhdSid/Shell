@@ -2,7 +2,7 @@ import {handleError, homeActions} from './actions';
 import {getAds} from '../../services/Lotteries';
 import invoke from 'lodash/invoke';
 
-const handleFetchLotteries = payload => {
+export const handleFetchLotteries = payload => {
   return async (dispatch, getState) => {
     const {onError, cancelTag, resetLotteries} = payload;
     const pageToken = getState().homeReducer.pageToken;
@@ -40,5 +40,3 @@ const handleFetchLotteries = payload => {
     return invoke(payload, 'onSuccess');
   };
 };
-
-export {handleFetchLotteries};

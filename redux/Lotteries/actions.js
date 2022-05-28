@@ -1,4 +1,4 @@
-const lotteriesActions = {
+export const lotteriesActions = {
   setUserJoinedLotteries: 'SET_USER_JOINED_LOTTERIES',
   setUserCreatedLotteries: 'SET_USER_CREATED_LOTTERIES',
   setUserLikedLotteries: 'SET_USER_LIKED_LOTTERIES',
@@ -15,7 +15,7 @@ const lotteriesActions = {
   enterLottery: 'LOTTERIES_ENTER_LOTTERY',
 };
 
-const setUserCreatedLotteriesPageToken = payload => {
+export const setUserCreatedLotteriesPageToken = payload => {
   return dispatch => {
     return dispatch({
       type: lotteriesActions.setUserCreatedLotteriesPageToken,
@@ -23,5 +23,3 @@ const setUserCreatedLotteriesPageToken = payload => {
     });
   };
 };
-
-export {lotteriesActions, setUserCreatedLotteriesPageToken};

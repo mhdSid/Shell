@@ -8,7 +8,7 @@ import {lotteryDetailsActions} from '../LotteryDetails/actions';
 import {uploadProgressActions} from '../UploadProgress/actions';
 import {reject, uniq} from 'lodash';
 
-const handleImportLottery = payload => {
+export const handleImportLottery = payload => {
   return (dispatch, getState) => {
     const uniqId = `_${Math.random()
       .toString(36)
@@ -170,5 +170,3 @@ const handleImportLottery = payload => {
     });
   };
 };
-
-export {handleImportLottery};

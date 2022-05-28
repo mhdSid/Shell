@@ -9,21 +9,17 @@ const getUserWonLotteries = state =>
 const getLotteryPosterData = state =>
   state.receiveLotteryReducer.lotteryPosterData;
 
-const getReceiveLotteryDetailsSelector = createSelector(
+export const getReceiveLotteryDetailsSelector = createSelector(
   [getReceiveLotteryDetails],
   receiveLotteryDetails => receiveLotteryDetails,
 );
-const getUserWonLotteriesSelector = createSelector(
+
+export const getUserWonLotteriesSelector = createSelector(
   [getUserWonLotteries],
   userWonLotteries => userWonLotteries,
 );
-const getLotteryPosterDataSelector = createSelector(
+
+export const getLotteryPosterDataSelector = createSelector(
   [getLotteryPosterData],
   lotteryPosterData => lotteryPosterData,
 );
-
-export {
-  getReceiveLotteryDetailsSelector,
-  getUserWonLotteriesSelector,
-  getLotteryPosterDataSelector,
-};

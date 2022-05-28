@@ -8,53 +8,42 @@ const getVerificationCode = state => state.authReducer.verificationCode;
 const getCountry = state => state.authReducer.country;
 const getShowSignUp = state => state.authReducer.showSignup;
 
-const getUserSelector = createSelector(
+export const getUserSelector = createSelector(
   [getUser],
   user => user,
 );
 
-const getUserIdSelector = createSelector(
+export const getUserIdSelector = createSelector(
   [getUser],
   user => (user ? user.id : null),
 );
 
-const getLoggedInSelector = createSelector(
+export const getLoggedInSelector = createSelector(
   [getLoggedIn],
   loggedIn => loggedIn,
 );
 
-const getEmailSelector = createSelector(
+export const getEmailSelector = createSelector(
   [getEmail],
   email => email,
 );
 
-const getPasswordHashSelector = createSelector(
+export const getPasswordHashSelector = createSelector(
   [getPasswordHash],
   passwordHash => passwordHash,
 );
 
-const getVerificationCodeSelector = createSelector(
+export const getVerificationCodeSelector = createSelector(
   [getVerificationCode],
   verificationCode => verificationCode,
 );
 
-const getCountrySelector = createSelector(
+export const getCountrySelector = createSelector(
   [getCountry],
   country => country,
 );
 
-const getShowSignUpSelector = createSelector(
+export const getShowSignUpSelector = createSelector(
   [getShowSignUp],
   showSignup => showSignup,
 );
-
-export {
-  getUserSelector,
-  getLoggedInSelector,
-  getEmailSelector,
-  getPasswordHashSelector,
-  getVerificationCodeSelector,
-  getCountrySelector,
-  getShowSignUpSelector,
-  getUserIdSelector,
-};

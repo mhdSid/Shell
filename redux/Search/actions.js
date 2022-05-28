@@ -1,10 +1,10 @@
-const searchActions = {
+export const searchActions = {
   setSearchFilters: 'SET_SEARCH_FILTERS',
   setSearchEventFired: 'SET_SEARCH_EVENT_FIRED',
   resetState: 'SEARCH_RESET_STATE',
 };
 
-const setSearchFilters = payload => {
+export const setSearchFilters = payload => {
   return dispatch => {
     return dispatch({
       type: searchActions.setSearchFilters,
@@ -13,7 +13,7 @@ const setSearchFilters = payload => {
   };
 };
 
-const setSearchEventFired = payload => {
+export const setSearchEventFired = payload => {
   return dispatch => {
     return dispatch({
       type: searchActions.setSearchEventFired,
@@ -21,5 +21,3 @@ const setSearchEventFired = payload => {
     });
   };
 };
-
-export {searchActions, setSearchFilters, setSearchEventFired};

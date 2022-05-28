@@ -3,7 +3,7 @@ import {handleError} from '../Auth/actions';
 import invoke from 'lodash/invoke';
 import {lotteriesActions} from './actions';
 
-const handleFetchUserCreatedLotteries = payload => {
+export const handleFetchUserCreatedLotteries = payload => {
   return (dispatch, getState) => {
     const {userId, onError, cancelTag} = payload;
     const pageToken = getState().lotteriesReducer.userCreatedLotteriesPageToken;
@@ -35,4 +35,3 @@ const handleFetchUserCreatedLotteries = payload => {
     return invoke(payload, 'onSuccess');
   };
 };
-export {handleFetchUserCreatedLotteries};

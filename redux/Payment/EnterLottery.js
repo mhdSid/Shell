@@ -9,7 +9,7 @@ import {shipLotteryActions} from '../ShipLottery/actions';
 import {receiveLotteryActions} from '../ReceiveLottery/actions';
 import {authActions} from '../Auth/actions';
 
-const handleEnterLottery = payload => {
+export const handleEnterLottery = payload => {
   return (dispatch, getState) => {
     const {
       onError,
@@ -77,5 +77,3 @@ const handleEnterLottery = payload => {
     });
   };
 };
-
-export {handleEnterLottery};

@@ -1,7 +1,7 @@
 import {apiRequest} from '../constants/Api';
 import cancellableFetch from 'react-native-cancelable-fetch';
 
-const request = async options => {
+export const request = async options => {
   const {method, body, endpoint, cancelTag} = options;
   let reqData = {
     method,
@@ -35,5 +35,3 @@ const request = async options => {
   }
   return undefined;
 };
-
-export {request};

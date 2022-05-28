@@ -3,7 +3,7 @@ import {handleError} from '../Home/actions';
 import invoke from 'lodash/invoke';
 import {lotteryDetailsActions} from './actions';
 
-const handleFetchUsersData = payload => {
+export const handleFetchUsersData = payload => {
   return (dispatch, getState) => {
     const {
       users: adUsers,
@@ -48,5 +48,3 @@ const handleFetchUsersData = payload => {
     );
   };
 };
-
-export {handleFetchUsersData};

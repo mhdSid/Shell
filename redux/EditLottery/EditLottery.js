@@ -11,7 +11,7 @@ import {shipLotteryActions} from '../ShipLottery/actions';
 import {lotteriesActions} from '../Lotteries/actions';
 import {chatActions} from '../Chat/actions';
 
-const handleUpdateLottery = payload => {
+export const handleUpdateLottery = payload => {
   return (dispatch, getState) => {
     const {
       onError,
@@ -210,5 +210,3 @@ const handleUpdateLottery = payload => {
     }
   };
 };
-
-export {handleUpdateLottery};

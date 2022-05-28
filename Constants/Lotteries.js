@@ -1,4 +1,4 @@
-let lotteryItemCategories = {
+export let lotteryItemCategories = {
   en: [
     'Warehouse Deals',
     'Industrial & Scientific',
@@ -111,7 +111,7 @@ lotteryItemCategories.jp = [
   {value: '他の'},
 ];
 
-const lotteryItemTypes = {
+export const lotteryItemTypes = {
   'Home Appliances': [],
   Computer: [
     'Computer',
@@ -149,12 +149,12 @@ const lotteryItemTypes = {
   Sports: [],
 };
 
-const mimeTypes = {
+export const mimeTypes = {
   '.jpg': 'image/jpeg',
   '.png': 'image/png',
 };
 
-const lotteryItemConditions = {
+export const lotteryItemConditions = {
   en: [
     'New',
     'Used',
@@ -181,11 +181,4 @@ const lotteryItemConditions = {
   ]
     .sort()
     .map(item => ({value: item})),
-};
-
-export {
-  lotteryItemCategories,
-  lotteryItemConditions,
-  mimeTypes,
-  lotteryItemTypes,
 };

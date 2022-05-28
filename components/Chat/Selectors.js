@@ -21,25 +21,19 @@ const getConversation = (state, props) => {
 
 const getIsSocketInitiated = state => state.chatReducer.isSocketInitiated;
 
-const getConversationSelector = createSelector(
+export const getConversationSelector = createSelector(
   [getConversation],
   conversation => conversation,
 );
 
 const getChattableLotteries = state => state.chatReducer.chattableLotteries;
 
-const getChattableLotteriesSelector = createSelector(
+export const getChattableLotteriesSelector = createSelector(
   [getChattableLotteries],
   chattableLotteries => chattableLotteries,
 );
 
-const getIsSocketInitiatedSelector = createSelector(
+export const getIsSocketInitiatedSelector = createSelector(
   [getIsSocketInitiated],
   isSocketInitiated => isSocketInitiated,
 );
-
-export {
-  getConversationSelector,
-  getIsSocketInitiatedSelector,
-  getChattableLotteriesSelector,
-};

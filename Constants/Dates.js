@@ -1,4 +1,4 @@
-const months = {
+export const months = {
   en: [
     'January',
     'February',
@@ -28,7 +28,8 @@ const months = {
     '12月',
   ],
 };
-const monthsNumbers = {
+
+export const monthsNumbers = {
   en: {
     January: '1',
     February: '2',
@@ -59,14 +60,12 @@ const monthsNumbers = {
   },
 };
 
-let days = [];
+export let days = [];
 for (let i = 1; i <= 31; i += 1) {
   days = [...days, `${i}`];
 }
 
-let years = [];
+export let years = [];
 for (let i = 1940; i <= 2020; i += 1) {
   years = [...years, `${i}`];
 }
-
-export {months, days, years, monthsNumbers};
